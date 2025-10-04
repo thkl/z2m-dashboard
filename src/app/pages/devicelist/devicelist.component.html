@@ -1,0 +1,34 @@
+<table>
+    <thead>
+        <tr>
+            <td class="icon_cell"></td>
+            <td>Name</td>
+            <td>Status</td>
+            <td>Manufacturer</td>
+            <td>Model</td>
+            <td>LQI</td>
+            <td>Batterie</td>
+            <td>Last Seen</td>
+        </tr>
+    </thead>
+    <tbody>
+        @for(device of devices(); track $index) {
+            <tr>
+                <td class="icon_cell"><img alt="" crossorigin="anonymous" class="icon" src="https://www.zigbee2mqtt.io/images/devices/{{device.definition?.model}}.png"></td>
+                <td>{{device.friendly_name}}</td>
+                <td>{{device.availability}}</td>
+                <td>{{device.definition ? device.definition.vendor:''}}</td>
+                <td>{{device.definition ? device.definition.model:''}}</td>
+                <td>{{(device.state && device.state.linkquality) ? device.state.linkquality : '??'}}</td>
+                <td>
+                    @if(device.power_source && device.power_source.indexOf('Battery')>-1) {
+                        {{((device.state && device.state.battery) ? `${device.state.battery}%` :'')}}
+                    } @else {
+                         <span class="material-icons">power</span>
+                    }
+                </td>
+                <td>{{(device.state && device.state.last_seen) ? (device.state.last_seen | timeAgo) : '--'}}</td>
+            </tr>
+        }
+    </tbody>
+</table>

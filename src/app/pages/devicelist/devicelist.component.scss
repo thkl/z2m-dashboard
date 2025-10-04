@@ -1,0 +1,68 @@
+table {
+  min-width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 14px;
+  text-align: left;
+}
+
+thead {
+  color: #f9fafa;
+  font: 700 14px/20px UI Sans, Lato, Arial, sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+tr {
+  height: 33px;
+  position: relative;
+  border-bottom-width: 1px;
+  box-sizing: border-box;
+  border-bottom-color: rgb(45, 44, 44);
+  display: table-row;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: rgba(249, 250, 250, 0.02);
+  background-image: none;
+  background-origin: padding-box;
+  background-position-x: 0%;
+  background-position-y: 0%;
+  background-repeat: repeat;
+  background-size: auto;
+  color: rgb(222, 224, 227);
+  cursor: pointer;
+}
+
+td {
+  transition: opacity 0.2s;
+  display: table-cell;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-image: none;
+  background-origin: padding-box;
+  background-position-x: 0%;
+  background-position-y: 0%;
+  background-repeat: repeat;
+  background-size: auto;
+  border-collapse: collapse;
+  box-sizing: border-box;
+  color: rgb(222, 224, 227);
+  cursor: pointer;
+  display: table-cell;
+}
+
+tr:hover {
+  background: #1c1e21;
+}
+
+
+.icon {
+    max-width: 30px;
+}
+
+.icon_cell {
+    width: 50px;
+    padding: 4px 4px 4px 4px
+}

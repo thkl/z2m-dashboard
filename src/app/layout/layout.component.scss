@@ -1,0 +1,9 @@
+@tailwind utilities;
+
+:host {
+  @apply w-full h-full;
+}
+
+.material-icons {
+  font-size: 20px;
+}
