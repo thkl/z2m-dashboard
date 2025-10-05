@@ -1,10 +1,10 @@
-<div class="root">
+<div class="root_control">
     <button type="button" tabindex="0" class="trigger" (click)="toggle()">
-        <div class="root">
+        <div class="root_control">
             <div><span class="title">{{title()}}</span></div>
         </div>
         @if(isOpen()===false) {
-        <span class="material-symbols-outlined" >arrow_drop_down</span>
+        <span class="material-symbols-outlined">arrow_drop_down</span>
         } @else {
         <span class="material-symbols-outlined">arrow_drop_up</span>
         }
@@ -12,8 +12,20 @@
     <div class="content">
         @if(isOpen()) {
         <div class="options">
-            <ng-content></ng-content>
+            @if(hasSearch()===true) {
+            <div class="root_control">
+                <div>
+                    <app-searchinput></app-searchinput>
+                </div>
+                <div>
+                <ng-content></ng-content>
+                </div>
+            </div>
+            } @else {
+                <ng-content></ng-content>
+            }
+
         </div>
-    }
+        }
     </div>
 </div>

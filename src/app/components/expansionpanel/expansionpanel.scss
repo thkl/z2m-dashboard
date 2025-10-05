@@ -1,31 +1,9 @@
-.root {
-  border-bottom-color: rgb(52, 56, 61);
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-left-color: rgb(52, 56, 61);
-  border-left-style: solid;
-  border-left-width: 1px;
-  border-right-color: rgb(52, 56, 61);
-  border-right-style: solid;
-  border-right-width: 1px;
-  border-top-color: rgb(52, 56, 61);
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  box-sizing: border-box;
-  color: rgba(255, 255, 255, 0.65);
-  display: block;
-}
 
 .content > .options {
   padding: 7px;
-
 }
 
-.content > .options > .root {
+.content > .options > .root_control {
   border: none;
 }
 
@@ -46,17 +24,17 @@
 }
 
 .trigger:focus-within {
-      outline: 1px solid #0e65d8;
+  outline: 1px solid #0e65d8;
 }
 
-.trigger > .root {
+.trigger > .root_control {
     display: flex;
     gap: 4px;
     width: 100%;
     border:none;
 }
 
-.trigger > .root > .title {
+.trigger > .root_control > .title {
     display: flex;
     justify-content: flex-start;
     color: #f9fafa;

@@ -4,6 +4,7 @@ import { DeviceStore } from "../datastore/device.store";
 import { Device } from "../models/device";
 import { timeAgo } from "../utils/time.utils";
 import { TranslateService } from "@ngx-translate/core";
+import { ApplicationService } from "./app.service";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ import { TranslateService } from "@ngx-translate/core";
 export class DeviceService {
   private ws = inject(Websocket);
   protected readonly deviceStore = inject(DeviceStore);
+  protected readonly appService = inject(ApplicationService);
+
   private translate = inject(TranslateService);
 
   constructor() {
@@ -90,17 +93,16 @@ export class DeviceService {
   }
 
   private sendBridgeDeviceRequest(topic: string, device: Device, options: any) {
-    const message: any = {
-      payload: {
-        id: device.friendly_name,
-        transaction: crypto.randomUUID()
-      },
-      topic
+    const payload: any = {
+      id: device.friendly_name,
+      transaction: crypto.randomUUID()
     }
+
     if (options) {
-      message.payload.options = options;
+      payload.options = options;
     }
-    this.ws.sendMessage(JSON.stringify(message));
+
+    this.appService.sendBridgeRequest(topic, payload);
   }
 
   startInterview(device: Device): void {
@@ -113,7 +115,7 @@ export class DeviceService {
 
   changeDeviceDescription(device: Device): void {
     this.sendBridgeDeviceRequest("bridge/request/device/options", device, {
-      description:device.description
+      description: device.description
     });
   }
 }

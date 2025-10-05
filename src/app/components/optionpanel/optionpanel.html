@@ -1,0 +1,26 @@
+<app-expansionpanel [title]='title()'>
+    <div class="options">
+        @if(length()>maxShown()) {
+        <app-searchinput></app-searchinput>
+        }
+        <div class="panel scrollbar" [style.max-height.px]="maxShown() * 21">
+            @for (entity of entities(); track $index) {
+            <div class="item">
+                <div  style="display: contents;">
+                    <label class="root">
+                        <span
+                            style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;">
+                            <input type="checkbox" tabindex="0" title="">
+                        </span>
+                        <span class="indicator  indicator-dark"></span>
+                        <div class="root">
+                            <div><span class="label">{{entity}}</span></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            }
+        </div>
+    </div>
+</app-expansionpanel>

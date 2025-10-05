@@ -6,15 +6,17 @@ import { createStoreView } from '../../datastore/generic-store-view';
 import { SearchOperator } from '../../datastore/generic.store';
 import { CdkTableModule, DataSource } from '@angular/cdk/table';
 import { Device } from '../../models/device';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { CDKDataSource } from '../../datastore/generic-store-ui';
 import { TableSortDirective, SortEvent, SortDirection } from '../../directives/table-sort.directive';
 import { sortData } from '../../utils/sort.utils';
+import { filterData } from '../../utils/filter.utils';
+import { SearchInput } from '../../components/searchinput/searchinput';
+import { Optionpanel } from "../../components/optionpanel/optionpanel";
 @Component({
   selector: 'app-devicelist',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, Expansionpanel, CdkTableModule, TableSortDirective]
+  imports: [TranslateModule, Expansionpanel, CdkTableModule, TableSortDirective, SearchInput, Optionpanel]
 })
 export class DeviceListComponent {
 
@@ -25,19 +27,27 @@ export class DeviceListComponent {
   sortColumn = signal<string>('');
   sortDirection = signal<SortDirection>('');
 
+  // Filter state
+  searchText = signal<string>('');
+
   //Filter the coordinator from the devices
   devicesView = createStoreView(this.deviceStore, {
     criteria: [
       { property: "type", value: "Coordinator", operator: "not" }
     ],
     logicalOperator: SearchOperator.AND
-  }
-    , false, undefined);
+  }, false, undefined);
 
-  // Sorted devices
+  // Filtered and sorted devices
   devices = computed<Device[]>(() => {
-    return sortData<Device>(
+    const filtered = filterData<Device>(
       this.devicesView(),
+      this.searchText(),
+      (device) => this.getSearchableFields(device)
+    );
+
+    return sortData<Device>(
+      filtered,
       this.sortColumn(),
       this.sortDirection(),
       (device, column) => this.getDeviceValue(device, column)
@@ -46,10 +56,8 @@ export class DeviceListComponent {
 
   datasource: CDKDataSource<Device> = new CDKDataSource(this.devices);
 
-
-
   manufacturers = computed(() => {
-    return new Set(this.deviceStore.entities().map(entity => entity.definition ? entity.definition.vendor : undefined));
+    return new Set(this.deviceStore.entities().map(entity => entity.definition ? entity.definition.vendor : undefined).filter(e=>e!=='' && e!==undefined));
   });
 
 
@@ -96,6 +104,21 @@ export class DeviceListComponent {
       default:
         return '';
     }
+  }
+
+  applySearch(event: any): void {
+    this.searchText.set(event);
+  }
+
+  getSearchableFields(device: Device): any[] {
+    return [
+      device.friendly_name,
+      device.ieee_address,
+      device.definition?.model,
+      device.definition?.vendor,
+      device.definition?.description,
+      device.state?.availability
+    ];
   }
 
   selectDevice(deviceID: string) {

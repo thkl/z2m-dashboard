@@ -1,0 +1,16 @@
+<div class="containerToolbarSearch control">
+            <div class="backgroundToolbarSearch"></div>
+            <button class="control iconControl" type="button"><span class="material-symbols-outlined">search</span></button>
+            <div style="width: 176px;" class="containerToolbarSearchExpandable">
+                <div class="toolbarInputAndClearContainer" style="min-width: 72px;"><input class="toolbarInput"
+                        placeholder="Search" type="text" style="min-width: 20px;" tabindex="0" [value]="searchText()"
+                        (change)="applySearch($event)" /></div>
+                @if(searchText()!==null && searchText()!=='') {
+                <div class="wrap">
+                    <button data-testid="clear-button" class="textControl button small link">
+                        <span class="content" (click)="applySearch(null)">Reset</span>
+                    </button>
+                </div>
+                }
+            </div>
+        </div>

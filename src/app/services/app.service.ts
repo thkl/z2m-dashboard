@@ -3,7 +3,7 @@ import { Websocket } from "./websocket";
 
 export interface AppSettings {
     host: string;
-    secure:boolean;
+    secure: boolean;
 }
 
 
@@ -13,7 +13,7 @@ export interface AppSettings {
 export class ApplicationService {
 
     public settings?: AppSettings;
-    private ws = inject (Websocket);
+    private ws = inject(Websocket);
 
     constructor() {
         this.loadSettings();
@@ -27,7 +27,7 @@ export class ApplicationService {
                     this.settings = JSON.parse(saved) as AppSettings;
 
                     if (this.settings.host) {
-                          this.ws.connect(`${this.settings.secure?'wss':'ws'}://${this.settings.host}/api`);
+                        this.ws.connect(`${this.settings.secure ? 'wss' : 'ws'}://${this.settings.host}/api`);
 
                     }
 
@@ -41,9 +41,9 @@ export class ApplicationService {
 
     setHostName(host: string) {
         if (this.settings === undefined) {
-            this.settings = { host: '',secure:false }
+            this.settings = { host: '', secure: false }
         }
-        this.settings.host = host.replace('https://','').replace('http://','')
+        this.settings.host = host.replace('https://', '').replace('http://', '')
         this.settings.secure = (host.startsWith("https://"));
         this.saveSettings();
     }
@@ -54,5 +54,13 @@ export class ApplicationService {
         } catch (error) {
             console.warn('Failed to save to localStorage:', error);
         }
+    }
+
+    sendBridgeRequest(topic: string, payload: any) {
+        const message: any = {
+            payload,
+            topic
+        }
+        this.ws.sendMessage(JSON.stringify(message));
     }
 }

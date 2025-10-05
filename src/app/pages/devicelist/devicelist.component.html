@@ -1,15 +1,12 @@
 <div class="flex w-full">
     <div style="width: 270px;">
+        
+        <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
         <div class="mt-2">
-            <app-expansionpanel title='{{"MANUFACTURER" | translate}}'>
-                <div class="options">
-                    @for (manufacturer of manufacturers(); track $index) {
-                    <div class="root">
-                        <span class="label">{{manufacturer}}</span>
-                    </div>
-                    }
-                </div>
-            </app-expansionpanel>
+            <app-optionpanel title='{{"MANUFACTURER" | translate}}' [entities]="manufacturers()">
+
+            </app-optionpanel>
+           
         </div>
         <div class="mt-2">
             <app-expansionpanel title='{{"MODEL" | translate}}'>
@@ -50,93 +47,74 @@
 
 
             <ng-container cdkColumnDef="name">
-                <th cdk-header-cell *cdkHeaderCellDef
-                    appTableSort="name"
-                    [active]="sortColumn"
-                    [direction]="sortDirection"
-                    (sortChange)="onSort($event)">
+                <th cdk-header-cell *cdkHeaderCellDef appTableSort="name" [active]="sortColumn"
+                    [direction]="sortDirection" (sortChange)="onSort($event)">
                     {{"NAME" | translate}}
                 </th>
                 <td cdk-cell *cdkCellDef="let device">{{device.friendly_name}}</td>
             </ng-container>
 
             <ng-container cdkColumnDef="availability">
-                <th cdk-header-cell *cdkHeaderCellDef
-                    appTableSort="availability"
-                    [active]="sortColumn"
-                    [direction]="sortDirection"
-                    (sortChange)="onSort($event)">
+                <th cdk-header-cell *cdkHeaderCellDef appTableSort="availability" [active]="sortColumn"
+                    [direction]="sortDirection" (sortChange)="onSort($event)">
                     {{"STATUS" | translate}}
                 </th>
                 <td cdk-cell *cdkCellDef="let device">{{device.state.availability}}</td>
             </ng-container>
 
             <ng-container cdkColumnDef="vendor">
-                <th cdk-header-cell *cdkHeaderCellDef
-                    appTableSort="vendor"
-                    [active]="sortColumn"
-                    [direction]="sortDirection"
-                    (sortChange)="onSort($event)">
+                <th cdk-header-cell *cdkHeaderCellDef appTableSort="vendor" [active]="sortColumn"
+                    [direction]="sortDirection" (sortChange)="onSort($event)">
                     {{"MANUFACTURER" | translate}}
                 </th>
                 <td cdk-cell *cdkCellDef="let device">{{device.definition ? device.definition.vendor:''}}</td>
             </ng-container>
             <ng-container cdkColumnDef="model">
-                <th cdk-header-cell *cdkHeaderCellDef
-                    appTableSort="model"
-                    [active]="sortColumn"
-                    [direction]="sortDirection"
-                    (sortChange)="onSort($event)">
+                <th cdk-header-cell *cdkHeaderCellDef appTableSort="model" [active]="sortColumn"
+                    [direction]="sortDirection" (sortChange)="onSort($event)">
                     {{"MODEL" | translate}}
                 </th>
                 <td cdk-cell *cdkCellDef="let device">{{device.definition ? device.definition.model:''}}</td>
             </ng-container>
             <ng-container cdkColumnDef="linkquality">
-                <th cdk-header-cell *cdkHeaderCellDef
-                    appTableSort="linkquality"
-                    [active]="sortColumn"
-                    [direction]="sortDirection"
-                    (sortChange)="onSort($event)">
+                <th cdk-header-cell *cdkHeaderCellDef appTableSort="linkquality" [active]="sortColumn"
+                    [direction]="sortDirection" (sortChange)="onSort($event)">
                     {{"LQI" | translate}}
                 </th>
-                <td cdk-cell *cdkCellDef="let device">{{(device.state && device.state.linkquality) ? device.state.linkquality : '??'}}</td>
+                <td cdk-cell *cdkCellDef="let device">{{(device.state && device.state.linkquality) ?
+                    device.state.linkquality : '??'}}</td>
             </ng-container>
             <ng-container cdkColumnDef="battery">
-                <th cdk-header-cell *cdkHeaderCellDef
-                    appTableSort="battery"
-                    [active]="sortColumn"
-                    [direction]="sortDirection"
-                    (sortChange)="onSort($event)">
+                <th cdk-header-cell *cdkHeaderCellDef appTableSort="battery" [active]="sortColumn"
+                    [direction]="sortDirection" (sortChange)="onSort($event)">
                     {{"BATTERY" | translate}}
                 </th>
                 <td cdk-cell *cdkCellDef="let device">
                     @if(device.power_source && device.power_source.indexOf('Battery')>-1) {
-                        @if(device.state){
-                        <span [class.battery_ok]="device.state.battery>=50"
-                            [class.battery_warning]="device.state.battery<50 && device.state.battery>=20"
-                            [class.battery_low]="device.state.battery<20">
+                    @if(device.state){
+                    <span [class.battery_ok]="device.state.battery>=50"
+                        [class.battery_warning]="device.state.battery<50 && device.state.battery>=20"
+                        [class.battery_low]="device.state.battery<20">
 
-                            {{((device.state && device.state.battery) ? `${device.state.battery}%` :'')}}
-                        </span>
-                        }
-                        } @else {
-                        <span class="material-symbols-outlined">power</span>
-                        }
+                        {{((device.state && device.state.battery) ? `${device.state.battery}%` :'')}}
+                    </span>
+                    }
+                    } @else {
+                    <span class="material-symbols-outlined">power</span>
+                    }
                 </td>
             </ng-container>
             <ng-container cdkColumnDef="lastseenhuman">
-                <th cdk-header-cell *cdkHeaderCellDef
-                    appTableSort="lastseenhuman"
-                    [active]="sortColumn"
-                    [direction]="sortDirection"
-                    (sortChange)="onSort($event)">
+                <th cdk-header-cell *cdkHeaderCellDef appTableSort="lastseenhuman" [active]="sortColumn"
+                    [direction]="sortDirection" (sortChange)="onSort($event)">
                     {{"LAST_SEEN" | translate}}
                 </th>
                 <td cdk-cell *cdkCellDef="let device">{{ device.state.lastseenhuman || '--'}}</td>
             </ng-container>
 
             <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
-            <tr cdk-row *cdkRowDef="let row; columns: displayedColumns;"></tr>
+            <tr cdk-row *cdkRowDef="let device; columns: displayedColumns;" (click)="selectDevice(device.ieee_address)"
+                [class.selected]="device.ieee_address===selectedDevice()?.ieee_address"></tr>
         </table>
     </div>
 </div>
