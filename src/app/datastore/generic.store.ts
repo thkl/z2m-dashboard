@@ -15,6 +15,34 @@ export type UpdateRequest<T extends BaseEntity> = Partial<Omit<T, 'ieee_address'
 export type NewRequest<T extends BaseEntity> = Omit<T, 'ieee_address'> & { ieee_address: 'new' | ''; };
 
 
+// Search criteria types
+export enum SearchOperator {
+    AND = 'AND',
+    OR = 'OR'
+}
+
+export interface SearchCriteria<T extends BaseEntity> {
+    property: keyof T;
+    value: any;
+    operator?:
+        | 'equals'
+        | 'contains'
+        | 'startsWith'
+        | 'endsWith'
+        | 'greaterThan'
+        | 'lessThan'
+        | 'greaterThanOrEqual'
+        | 'lessThanOrEqual'
+        | 'not';
+    caseSensitive?: boolean;
+}
+
+export interface SearchByPropertiesOptions<T extends BaseEntity> {
+    criteria: SearchCriteria<T>[];
+    logicalOperator: SearchOperator;
+}
+
+
 export interface EntityState<T extends BaseEntity> {
     entities: T[];
     error: string | null;
@@ -102,6 +130,16 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
                     });
                 },
 
+                setSelectedEntity: (entity: T | null) => {
+                    patchState(store, { selectedEntity: entity });
+                },
+
+                setSelectedEntityById: (ieee_address:string) => {
+                    const entities = store.entities() || [];
+                    patchState(store, { selectedEntity: entities.find((e) => e.ieee_address === ieee_address)});
+                },
+
+
                 updatebyId: (updatedEntity: UpdateRequest<T>) => {
                     const entities = store.entities() || [];
                     const existingEntity = entities.find((e) => e.ieee_address === updatedEntity["ieee_address"]);
@@ -117,13 +155,51 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
                     });
                 },
 
+                update : (updatedEntity: UpdateRequest<T>) => {
+                    const entities = store.entities() || [];
+                    const existingEntity = entities.find((e) => e.ieee_address === updatedEntity.ieee_address);
+                    if (!existingEntity) {
+                        return;
+                    }
+                    const mergedEntity = { ...existingEntity, ...updatedEntity } as T;
+                    patchState(store, {
+                        entities: entities.map((e) => (e.ieee_address === updatedEntity.ieee_address ? mergedEntity : e)),
+                        lastUpdated: mergedEntity,
+                    });
+                },
+
                 updateBySearch: (property: string, newValue: any, field: string, search: string) => {
                     const entities = store.entities() || [];
                     const existingEntity = entities.find((e) => e[field] === search);
                     if (!existingEntity) {
                         return;
                     }
-                    const mergedEntity = { ...existingEntity, [property]: newValue } as T;
+
+                    let mergedEntity: T;
+
+                    // Handle nested property paths (e.g., "state/availability")
+                    if (property.includes('/')) {
+                        const keys = property.split('/');
+                        const updatedEntity = { ...existingEntity };
+                        let current: any = updatedEntity;
+
+                        // Navigate to the nested property, creating objects as needed
+                        for (let i = 0; i < keys.length - 1; i++) {
+                            if (!current[keys[i]] || typeof current[keys[i]] !== 'object') {
+                                current[keys[i]] = {};
+                            } else {
+                                current[keys[i]] = { ...current[keys[i]] };
+                            }
+                            current = current[keys[i]];
+                        }
+
+                        // Set the final property
+                        current[keys[keys.length - 1]] = newValue;
+                        mergedEntity = updatedEntity as T;
+                    } else {
+                        mergedEntity = { ...existingEntity, [property]: newValue } as T;
+                    }
+
                     patchState(store, {
                         entities: entities.map((e) => (e[field] === search ? mergedEntity : e)),
                         lastUpdated: mergedEntity,
@@ -138,11 +214,41 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
                     if (!existingEntity) {
                         return;
                     }
-                    const oldValue = existingEntity[property];
-                    const mergedValue = typeof newValue === 'object' && newValue !== null && typeof oldValue === 'object' && oldValue !== null
-                        ? { ...oldValue, ...newValue }
-                        : newValue;
-                    const mergedEntity = { ...existingEntity, [property]: mergedValue } as T;
+
+                    let mergedEntity: T;
+
+                    // Handle nested property paths (e.g., "state/availability")
+                    if (property.includes('/')) {
+                        const keys = property.split('/');
+                        const updatedEntity = { ...existingEntity };
+                        let current: any = updatedEntity;
+
+                        // Navigate to the nested property, creating objects as needed
+                        for (let i = 0; i < keys.length - 1; i++) {
+                            if (!current[keys[i]] || typeof current[keys[i]] !== 'object') {
+                                current[keys[i]] = {};
+                            } else {
+                                current[keys[i]] = { ...current[keys[i]] };
+                            }
+                            current = current[keys[i]];
+                        }
+
+                        // Get the old value and merge if both are objects
+                        const lastKey = keys[keys.length - 1];
+                        const oldValue = current[lastKey];
+                        const mergedValue = typeof newValue === 'object' && newValue !== null && typeof oldValue === 'object' && oldValue !== null
+                            ? { ...oldValue, ...newValue }
+                            : newValue;
+                        current[lastKey] = mergedValue;
+                        mergedEntity = updatedEntity as T;
+                    } else {
+                        const oldValue = existingEntity[property];
+                        const mergedValue = typeof newValue === 'object' && newValue !== null && typeof oldValue === 'object' && oldValue !== null
+                            ? { ...oldValue, ...newValue }
+                            : newValue;
+                        mergedEntity = { ...existingEntity, [property]: mergedValue } as T;
+                    }
+
                     patchState(store, {
                         entities: entities.map((e) => (e[field] === search ? mergedEntity : e)),
                         lastUpdated: mergedEntity,

@@ -16,16 +16,16 @@
         </div>
 
         <nav class="mt-4">
-            <a routerLink="/dashboard" routerLinkActive="bg-unifi-accent text-white"
+            <a routerLink="/dashboard" routerLinkActive="active text-white"
                 class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                <span class="material-icons">dashboard</span>
+                <span class="material-symbols-outlined">dashboard</span>
                 @if(sidebarOpen) {
                 <span>Dashboard</span>
                 }
             </a>
-            <a routerLink="/devices" routerLinkActive="bg-unifi-accent text-white"
+            <a routerLink="/devices" routerLinkActive="active text-white"
                 class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                <span class="material-icons">router</span>
+                <span class="material-symbols-outlined">router</span>
                 @if(sidebarOpen) {
                 <span>Devices</span>
                 }
@@ -38,16 +38,27 @@
         <!-- Topbar -->
         <header
             class="h-14 bg-white dark:bg-unifi-panel border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4">
-            <h1 class="text-lg font-semibold">ZigBee2MQTT Dashboard</h1>
+            <h1 class="text-lg font-semibold">{{"APP_TITLE" | translate }}</h1>
             <div class="flex items-center gap-2">
-                <span class="text-sm opacity-70">User</span>
-                <img src="https://placehold.co/32x32" alt="avatar" class="rounded-full">
+               {{host}}
             </div>
         </header>
 
         <!-- Page Content -->
-        <section class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-unifi-bg">
+        <section class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-unifi-bg scrollbar">
             <router-outlet></router-outlet>
         </section>
     </main>
+
+    <!-- Right Sidebar for Device Properties -->
+    <aside class="transition-all duration-300
+             bg-white
+              dark:bg-unifi-panel border-l
+               border-gray-200
+                dark:border-gray-700 
+                overflow-y-auto
+                scrollbar
+        " [class.sidebar-right-open]="rightSidebarOpen()" [class.w-0]="!rightSidebarOpen()">
+        <app-deviceprop></app-deviceprop>
+    </aside>
 </div>

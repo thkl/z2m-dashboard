@@ -1,32 +1,40 @@
-export function timeAgo(date: string | Date): string {
+import { TranslateService } from '@ngx-translate/core';
+
+export function timeAgo(date: string | Date, translate?: TranslateService): string {
   const now = new Date();
   const past = new Date(date);
   const seconds = Math.floor((now.getTime() - past.getTime()) / 1000);
 
   if (seconds < 60) {
-    return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
+    const key = seconds === 1 ? 'TIME_AGO_SECONDS_ONE' : 'TIME_AGO_SECONDS';
+    return translate ? translate.instant(key, { count: seconds }) : `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
   }
 
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) {
-    return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+    const key = minutes === 1 ? 'TIME_AGO_MINUTES_ONE' : 'TIME_AGO_MINUTES';
+    return translate ? translate.instant(key, { count: minutes }) : `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
   }
 
   const hours = Math.floor(minutes / 60);
   if (hours < 24) {
-    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+    const key = hours === 1 ? 'TIME_AGO_HOURS_ONE' : 'TIME_AGO_HOURS';
+    return translate ? translate.instant(key, { count: hours }) : `${hours} hour${hours !== 1 ? 's' : ''} ago`;
   }
 
   const days = Math.floor(hours / 24);
   if (days < 30) {
-    return `${days} day${days !== 1 ? 's' : ''} ago`;
+    const key = days === 1 ? 'TIME_AGO_DAYS_ONE' : 'TIME_AGO_DAYS';
+    return translate ? translate.instant(key, { count: days }) : `${days} day${days !== 1 ? 's' : ''} ago`;
   }
 
   const months = Math.floor(days / 30);
   if (months < 12) {
-    return `${months} month${months !== 1 ? 's' : ''} ago`;
+    const key = months === 1 ? 'TIME_AGO_MONTHS_ONE' : 'TIME_AGO_MONTHS';
+    return translate ? translate.instant(key, { count: months }) : `${months} month${months !== 1 ? 's' : ''} ago`;
   }
 
   const years = Math.floor(months / 12);
-  return `${years} year${years !== 1 ? 's' : ''} ago`;
+  const key = years === 1 ? 'TIME_AGO_YEARS_ONE' : 'TIME_AGO_YEARS';
+  return translate ? translate.instant(key, { count: years }) : `${years} year${years !== 1 ? 's' : ''} ago`;
 }

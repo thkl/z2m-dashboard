@@ -1,57 +1,119 @@
-import { effect, inject, Injectable, signal } from "@angular/core";
+import { computed, effect, inject, Injectable, signal } from "@angular/core";
 import { Websocket, WebSocketMessage } from "./websocket";
 import { DeviceStore } from "../datastore/device.store";
 import { Device } from "../models/device";
+import { timeAgo } from "../utils/time.utils";
+import { TranslateService } from "@ngx-translate/core";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class DeviceService {
-    private ws = inject(Websocket);
-    private devicesTopic = this.ws.subscribeTopic('bridge/devices');
-    protected readonly deviceStore = inject(DeviceStore);
+  private ws = inject(Websocket);
+  protected readonly deviceStore = inject(DeviceStore);
+  private translate = inject(TranslateService);
 
-    constructor() {
-        effect(() => {
-            const message: WebSocketMessage = this.devicesTopic();
-            if (message) {
-                const { payload } = message;
-                if ((payload !== null) && (Array.isArray(payload))) {
-                    this.addDevices(payload);
-                }
-            }
-        });
+  constructor() {
 
-        this.ws.subscribeTopicCallback('*/availability', (message) => {
-            const { topic, payload } = message;
-            this.updateAvailability(topic, payload.state);
-        });
+    this.ws.subscribeTopicCallback('bridge/devices', (message) => {
+      if (message) {
+        const { payload } = message;
+        if ((payload !== null) && (Array.isArray(payload))) {
+          this.addDevices(payload);
+        }
+      }
+    });
 
-        this.ws.subscribeCatchAllCallback((message) => {
-            const { topic, payload } = message;
-            this.updateState(topic, payload);
+    this.ws.subscribeTopicCallback('*/availability', (message) => {
+      const { topic, payload } = message;
+      this.updateAvailability(topic, payload.state);
+    });
 
-        });
+    this.ws.subscribeCatchAllCallback((message) => {
+      const { topic, payload } = message;
+      this.updateState(topic, payload);
+
+    });
+
+
+  }
+
+  updateAvailability(topic: string, status: string) {
+    // the device is the first in the topci
+    const deviceName = topic.split("/")[0];
+    this.deviceStore.mergeBySearch("state/availability", status, "friendly_name", deviceName);
+
+  }
+
+  updateState(topic: string, status: any) {
+    // the device is the first in the topci
+    const deviceName = topic.split("/")[0];
+    this.deviceStore.mergeBySearch("state", status, "friendly_name", deviceName);
+    this.setupUpdateInterval();
+  }
+
+
+  private setupUpdateInterval() {
+
+    for (const device of this.deviceStore.entities()) {
+      if (device.state?.last_seen) {
+        const lastseenhuman = timeAgo(device.state?.last_seen, this.translate);
+        const newState = { ...device.state, lastseenhuman };
+        this.deviceStore.mergeBySearch("state", newState, "ieee_address", device.ieee_address);
+      }
     }
+  }
 
-    updateAvailability(topic: string, status: string) {
-        // the device is the first in the topci
-        const deviceName = topic.split("/")[0];
-        this.deviceStore.updateBySearch("availability", status, "friendly_name", deviceName);
+  addDevices(deviceList: Device[]): void {
+    console.log("Set All Devices")
+    const devicelist = this.deviceStore.entities();
+    // copy the old state or create an empty one
+    deviceList.forEach(device => {
+      const oldDevice = devicelist.find(d => d.ieee_address === device.ieee_address);
+      if (oldDevice) {
+        device.state = oldDevice.state;
+      } else {
+        device.state = {
+          availability: "",
+          lastseenhuman: "",
+          last_seen: "", linkquality: 0, battery: 0
+        };
+      }
+    })
+
+    this.deviceStore.addAll(deviceList);
+
+    setTimeout(() => {
+      this.setupUpdateInterval();
+
+    }, 1000);
+  }
+
+  private sendBridgeDeviceRequest(topic: string, device: Device, options: any) {
+    const message: any = {
+      payload: {
+        id: device.friendly_name,
+        transaction: crypto.randomUUID()
+      },
+      topic
     }
-
-    updateState(topic: string, status: any) {
-        // the device is the first in the topci
-        const deviceName = topic.split("/")[0];
-        this.deviceStore.mergeBySearch("state", status, "friendly_name", deviceName);
+    if (options) {
+      message.payload.options = options;
     }
+    this.ws.sendMessage(JSON.stringify(message));
+  }
 
+  startInterview(device: Device): void {
+    this.sendBridgeDeviceRequest("bridge/request/device/interview", device, undefined);
+  }
 
-    addDevices(deviceList: Device[]): void {
-        this.deviceStore.reset();
-        this.deviceStore.addAll(deviceList);
-        //this.deviceStore.addLocal(device,device.ieee_address)
-    }
+  startReconfig(device: Device): void {
+    this.sendBridgeDeviceRequest("bridge/request/device/configure", device, undefined);
+  }
 
-
+  changeDeviceDescription(device: Device): void {
+    this.sendBridgeDeviceRequest("bridge/request/device/options", device, {
+      description:device.description
+    });
+  }
 }

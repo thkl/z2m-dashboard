@@ -1,68 +1,105 @@
 import { Component, computed, inject, signal, effect, OnDestroy } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
-import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { Expansionpanel } from '../../components/expansionpanel/expansionpanel';
+import { createStoreView } from '../../datastore/generic-store-view';
+import { SearchOperator } from '../../datastore/generic.store';
+import { CdkTableModule, DataSource } from '@angular/cdk/table';
+import { Device } from '../../models/device';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { CDKDataSource } from '../../datastore/generic-store-ui';
+import { TableSortDirective, SortEvent, SortDirection } from '../../directives/table-sort.directive';
+import { sortData } from '../../utils/sort.utils';
 @Component({
   selector: 'app-devicelist',
-  imports: [TimeAgoPipe],
   templateUrl: './devicelist.component.html',
-  styleUrl: './devicelist.component.scss'
+  styleUrl: './devicelist.component.scss',
+  imports: [TranslateModule, Expansionpanel, CdkTableModule, TableSortDirective]
 })
-export class DeviceListComponent implements OnDestroy {
+export class DeviceListComponent {
 
-    protected readonly deviceStore = inject(DeviceStore);
-    devices = computed(()=>{
-      console.log(".")
-      return this.deviceStore.entities();
+  protected readonly deviceStore = inject(DeviceStore);
+  displayedColumns = ['icon', 'name', 'model', 'vendor', 'availability', 'linkquality', 'battery', 'lastseenhuman'];
+
+  // Sorting state
+  sortColumn = signal<string>('');
+  sortDirection = signal<SortDirection>('');
+
+  //Filter the coordinator from the devices
+  devicesView = createStoreView(this.deviceStore, {
+    criteria: [
+      { property: "type", value: "Coordinator", operator: "not" }
+    ],
+    logicalOperator: SearchOperator.AND
+  }
+    , false, undefined);
+
+  // Sorted devices
+  devices = computed<Device[]>(() => {
+    return sortData<Device>(
+      this.devicesView(),
+      this.sortColumn(),
+      this.sortDirection(),
+      (device, column) => this.getDeviceValue(device, column)
+    );
+  });
+
+  datasource: CDKDataSource<Device> = new CDKDataSource(this.devices);
+
+
+
+  manufacturers = computed(() => {
+    return new Set(this.deviceStore.entities().map(entity => entity.definition ? entity.definition.vendor : undefined));
+  });
+
+
+  models = computed(() => {
+    return new Set(this.deviceStore.entities().map(entity => entity.definition ? entity.definition.model : undefined));
+  })
+
+  selectedDevice = computed(() => {
+    return this.deviceStore.selectedEntity();
+  })
+
+  constructor() {
+    effect(() => {
+      const devices = this.devices();
+
     });
+  }
 
-    private updateTrigger = signal(0);
-    private intervalId?: number;
+  trackByFn(index: number, item: Device): string {
+    return item.friendly_name || item.ieee_address; // Use unique identifier
+  }
 
-    constructor() {
-      effect(() => {
-        const devices = this.devices();
-        this.setupUpdateInterval(devices);
-      });
+  onSort(event: SortEvent) {
+    this.sortColumn.set(event.column);
+    this.sortDirection.set(event.direction);
+  }
+
+  getDeviceValue(device: Device, column: string): any {
+    switch (column) {
+      case 'name':
+        return device.friendly_name?.toLowerCase() || '';
+      case 'model':
+        return device.definition?.model?.toLowerCase() || '';
+      case 'vendor':
+        return device.definition?.vendor?.toLowerCase() || '';
+      case 'availability':
+        return device.state?.availability?.toLowerCase() || '';
+      case 'linkquality':
+        return device.state?.linkquality ?? -1;
+      case 'battery':
+        return device.state?.battery ?? -1;
+      case 'lastseenhuman':
+        return device.state?.last_seen ?? 0;
+      default:
+        return '';
     }
+  }
 
-    private setupUpdateInterval(devices: any[]) {
-      if (this.intervalId) {
-        clearInterval(this.intervalId);
-      }
-
-      // Find the shortest time difference
-      const now = new Date();
-      let minSeconds = Infinity;
-
-      for (const device of devices) {
-        if (device.state?.last_seen) {
-          const past = new Date(device.state.last_seen);
-          const seconds = Math.floor((now.getTime() - past.getTime()) / 1000);
-          minSeconds = Math.min(minSeconds, seconds);
-        }
-      }
-
-      // Determine update interval based on shortest time difference
-      let interval: number;
-      if (minSeconds < 60) {
-        interval = 5000; // Update every 5 seconds if any device was seen in last minute
-      } else if (minSeconds < 3600) {
-        interval = 30000; // Update every 30 seconds if any device was seen in last hour
-      } else if (minSeconds < 86400) {
-        interval = 300000; // Update every 5 minutes if any device was seen in last day
-      } else {
-        interval = 3600000; // Update every hour for older timestamps
-      }
-
-      this.intervalId = window.setInterval(() => {
-        this.updateTrigger.set(this.updateTrigger() + 1);
-      }, interval);
-    }
-
-    ngOnDestroy() {
-      if (this.intervalId) {
-        clearInterval(this.intervalId);
-      }
-    }
+  selectDevice(deviceID: string) {
+    this.deviceStore.setSelectedEntityById(deviceID);
+  }
 }
+

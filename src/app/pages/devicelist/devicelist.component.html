@@ -1,34 +1,142 @@
-<table>
-    <thead>
-        <tr>
-            <td class="icon_cell"></td>
-            <td>Name</td>
-            <td>Status</td>
-            <td>Manufacturer</td>
-            <td>Model</td>
-            <td>LQI</td>
-            <td>Batterie</td>
-            <td>Last Seen</td>
-        </tr>
-    </thead>
-    <tbody>
-        @for(device of devices(); track $index) {
-            <tr>
-                <td class="icon_cell"><img alt="" crossorigin="anonymous" class="icon" src="https://www.zigbee2mqtt.io/images/devices/{{device.definition?.model}}.png"></td>
-                <td>{{device.friendly_name}}</td>
-                <td>{{device.availability}}</td>
-                <td>{{device.definition ? device.definition.vendor:''}}</td>
-                <td>{{device.definition ? device.definition.model:''}}</td>
-                <td>{{(device.state && device.state.linkquality) ? device.state.linkquality : '??'}}</td>
-                <td>
-                    @if(device.power_source && device.power_source.indexOf('Battery')>-1) {
-                        {{((device.state && device.state.battery) ? `${device.state.battery}%` :'')}}
-                    } @else {
-                         <span class="material-icons">power</span>
+<div class="flex w-full">
+    <div style="width: 270px;">
+        <div class="mt-2">
+            <app-expansionpanel title='{{"MANUFACTURER" | translate}}'>
+                <div class="options">
+                    @for (manufacturer of manufacturers(); track $index) {
+                    <div class="root">
+                        <span class="label">{{manufacturer}}</span>
+                    </div>
                     }
+                </div>
+            </app-expansionpanel>
+        </div>
+        <div class="mt-2">
+            <app-expansionpanel title='{{"MODEL" | translate}}'>
+                <div class="options">
+                    @for (model of models(); track $index) {
+                    <div class="root">
+                        <span class="label">{{model}}</span>
+                    </div>
+                    }
+                </div>
+            </app-expansionpanel>
+        </div>
+        <div class="mt-2">
+            <app-expansionpanel title='{{"STATUS" | translate}}'>
+                <div class="options">
+
+                    <div class="root">
+                        <span class="label">Online</span>
+                    </div>
+                    <div class="root">
+                        <span class="label">Offline</span>
+                    </div>
+
+
+                </div>
+            </app-expansionpanel>
+        </div>
+
+    </div>
+    <div class="w-full ml-2">
+        <table cdk-table [dataSource]="datasource" [trackBy]="trackByFn">
+
+            <ng-container cdkColumnDef="icon">
+                <th cdk-header-cell *cdkHeaderCellDef class="icon_cell"></th>
+                <td cdk-cell *cdkCellDef="let device" class="icon_cell"><img alt="" crossorigin="anonymous" class="icon"
+                        src="https://www.zigbee2mqtt.io/images/devices/{{device.definition?.model}}.png"></td>
+            </ng-container>
+
+
+            <ng-container cdkColumnDef="name">
+                <th cdk-header-cell *cdkHeaderCellDef
+                    appTableSort="name"
+                    [active]="sortColumn"
+                    [direction]="sortDirection"
+                    (sortChange)="onSort($event)">
+                    {{"NAME" | translate}}
+                </th>
+                <td cdk-cell *cdkCellDef="let device">{{device.friendly_name}}</td>
+            </ng-container>
+
+            <ng-container cdkColumnDef="availability">
+                <th cdk-header-cell *cdkHeaderCellDef
+                    appTableSort="availability"
+                    [active]="sortColumn"
+                    [direction]="sortDirection"
+                    (sortChange)="onSort($event)">
+                    {{"STATUS" | translate}}
+                </th>
+                <td cdk-cell *cdkCellDef="let device">{{device.state.availability}}</td>
+            </ng-container>
+
+            <ng-container cdkColumnDef="vendor">
+                <th cdk-header-cell *cdkHeaderCellDef
+                    appTableSort="vendor"
+                    [active]="sortColumn"
+                    [direction]="sortDirection"
+                    (sortChange)="onSort($event)">
+                    {{"MANUFACTURER" | translate}}
+                </th>
+                <td cdk-cell *cdkCellDef="let device">{{device.definition ? device.definition.vendor:''}}</td>
+            </ng-container>
+            <ng-container cdkColumnDef="model">
+                <th cdk-header-cell *cdkHeaderCellDef
+                    appTableSort="model"
+                    [active]="sortColumn"
+                    [direction]="sortDirection"
+                    (sortChange)="onSort($event)">
+                    {{"MODEL" | translate}}
+                </th>
+                <td cdk-cell *cdkCellDef="let device">{{device.definition ? device.definition.model:''}}</td>
+            </ng-container>
+            <ng-container cdkColumnDef="linkquality">
+                <th cdk-header-cell *cdkHeaderCellDef
+                    appTableSort="linkquality"
+                    [active]="sortColumn"
+                    [direction]="sortDirection"
+                    (sortChange)="onSort($event)">
+                    {{"LQI" | translate}}
+                </th>
+                <td cdk-cell *cdkCellDef="let device">{{(device.state && device.state.linkquality) ? device.state.linkquality : '??'}}</td>
+            </ng-container>
+            <ng-container cdkColumnDef="battery">
+                <th cdk-header-cell *cdkHeaderCellDef
+                    appTableSort="battery"
+                    [active]="sortColumn"
+                    [direction]="sortDirection"
+                    (sortChange)="onSort($event)">
+                    {{"BATTERY" | translate}}
+                </th>
+                <td cdk-cell *cdkCellDef="let device">
+                    @if(device.power_source && device.power_source.indexOf('Battery')>-1) {
+                        @if(device.state){
+                        <span [class.battery_ok]="device.state.battery>=50"
+                            [class.battery_warning]="device.state.battery<50 && device.state.battery>=20"
+                            [class.battery_low]="device.state.battery<20">
+
+                            {{((device.state && device.state.battery) ? `${device.state.battery}%` :'')}}
+                        </span>
+                        }
+                        } @else {
+                        <span class="material-symbols-outlined">power</span>
+                        }
                 </td>
-                <td>{{(device.state && device.state.last_seen) ? (device.state.last_seen | timeAgo) : '--'}}</td>
-            </tr>
-        }
-    </tbody>
-</table>
+            </ng-container>
+            <ng-container cdkColumnDef="lastseenhuman">
+                <th cdk-header-cell *cdkHeaderCellDef
+                    appTableSort="lastseenhuman"
+                    [active]="sortColumn"
+                    [direction]="sortDirection"
+                    (sortChange)="onSort($event)">
+                    {{"LAST_SEEN" | translate}}
+                </th>
+                <td cdk-cell *cdkCellDef="let device">{{ device.state.lastseenhuman || '--'}}</td>
+            </ng-container>
+
+            <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
+            <tr cdk-row *cdkRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

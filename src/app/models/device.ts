@@ -32,10 +32,20 @@ export interface DeviceDefinition {
     vendor: string;
 }
 
+export interface DeviceState {
+    availability:string;   
+    lastseenhuman:string;
+    last_seen:string;
+    linkquality:number;
+    battery:number;
+    [key: string]: any;
+}
+
 
 export interface Device {
     date_code: string;
     definition: DeviceDefinition;
+    description:string;
     disabled: boolean;
     endpoints: any
     friendly_name: string;
@@ -50,7 +60,6 @@ export interface Device {
     software_build_id: string;
     supported: boolean;
     type: string;
-    state:any;
-    availability:string;   
+    state:DeviceState;
 }
 

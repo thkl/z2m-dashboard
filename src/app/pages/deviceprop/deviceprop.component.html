@@ -1,0 +1,133 @@
+@if(device()!==null){
+<header
+    class="h-14 bg-white dark:bg-unifi-panel border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4">
+    <h1 class="text-lg font-semibold">{{device()?.friendly_name}}</h1>
+</header>
+<nav>
+    <button class="navbutton" (click)="panel.set(1)" [class.navbutton-selected]="panel()===1">
+        <span class="material-symbols-outlined">dashboard</span>
+    </button>
+    <button class="navbutton" (click)="panel.set(2)" [class.navbutton-selected]="panel()===2">
+        <span class="material-symbols-outlined">tune</span>
+    </button>
+    <button class="navbutton" (click)="panel.set(3)" [class.navbutton-selected]="panel()===3">
+        <span class="material-symbols-outlined">settings</span>
+    </button>
+</nav>
+
+<div>
+    <div>
+        @if(panel()===1) {
+
+        <div class="wrapper">
+            <div class="container header">
+                <div class="device_icon"><img class="icon"
+                        src="https://www.zigbee2mqtt.io/images/devices/{{device()?.definition?.model}}.png"></div>
+                <div class="font-bold text-white">{{device()?.definition?.description}}</div>
+            </div>
+            <div class="container">
+                <div class="device_row">
+                    <span class="label">{{'FRIENDLY_NAME' | translate}}</span>
+                    <span class="value">{{device()?.friendly_name}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'DESCRIPTION' | translate}}</span>
+                    <span class="value">
+                        <div
+                            class="input-container active">
+                            <div class="input-content">
+                                <input (change)="changeDescriptions($event)" class="w-full text-right" [value]="device()?.description || ''">
+                            </div>
+                        </div>
+                    </span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'LAST_SEEN' | translate}}</span>
+                    <span class="value">{{device()!.state.lastseenhuman}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'AVAILABILITY' | translate}}</span>
+                    <span class="value">{{device()!.state.availability}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'DEVICE_TYPE' | translate}}</span>
+                    <span class="value">{{device()?.type}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'ZIGBEE_MODEL' | translate}}</span>
+                    <span class="value">{{device()?.model_id}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'ZIGBEE_MANUFACTURER' | translate}}</span>
+                    <span class="value">{{device()?.manufacturer}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'DESCRIPTION' | translate}}</span>
+                    <span class="value">{{device()?.definition?.description}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'SUPPORT_STATUS' | translate}}</span>
+                    <span class="value">{{device()?.supported}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'IEEE_ADDRESS' | translate}}</span>
+                    <span class="value">{{device()?.ieee_address}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'NETWORK_ADDRESS' | translate}}</span>
+                    <span class="value">{{device()?.network_address}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'FIRMWARE_BUILD_DATE' | translate}}</span>
+                    <span class="value">{{device()?.date_code}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'FIRMWARE_ID' | translate}}</span>
+                    <span class="value">{{device()?.software_build_id}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'MANUFACTURER' | translate}}</span>
+                    <span class="value">{{device()?.definition?.vendor}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'MODEL' | translate}}</span>
+                    <span class="value">{{device()?.definition?.model}}</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'POWER' | translate}}</span>
+                    <span class="value">@if(device()?.power_source && device()?.power_source!.indexOf('Battery')>-1) {
+                        <span [class.battery_ok]="device()?.state!.battery>=50"
+                            [class.battery_warning]="device()?.state!.battery<50 && device()?.state!.battery>=20"
+                            [class.battery_low]="device()?.state!.battery<20">
+
+                            {{((device()?.state && device()?.state!.battery) ? `${device()?.state!.battery}%` :'')}}
+                        </span>
+                        } @else {
+                        <span class="material-symbols-outlined">power</span>
+                        }</span>
+                </div>
+                <div class="device_row">
+                    <span class="label">{{'INTERVIEW_STATE' | translate}}</span>
+                    <span class="value">{{device()?.interview_state}}</span>
+                </div>
+
+                <div class="buttons mt-3">
+                    <div class="button">
+                        <button class="button-blue" (click)="startInterview()">{{'START_INTERVIEW' |
+                            translate}}</button>
+                    </div>
+                    <div class="button">
+                        <button class="button-blue" (click)="startReconfig()">{{'RECONFIGURE' | translate}}</button>
+                    </div>
+                    <div class="button">
+                        <button class="button-red">{{'DELETE' | translate}}</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        }
+    </div>
+</div>
+}

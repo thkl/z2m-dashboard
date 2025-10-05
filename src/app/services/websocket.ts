@@ -137,6 +137,12 @@ export class Websocket {
     }
   }
 
+  sendMessage(message:string) {
+    if (this.ws) {
+      this.ws.send(message);
+    }
+  }
+
   subscribeCatchAll(): Signal<WebSocketMessage | null> {
     return this.catchAllSignal.asReadonly();
   }

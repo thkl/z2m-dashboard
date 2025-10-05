@@ -1,0 +1,19 @@
+<div class="root">
+    <button type="button" tabindex="0" class="trigger" (click)="toggle()">
+        <div class="root">
+            <div><span class="title">{{title()}}</span></div>
+        </div>
+        @if(isOpen()===false) {
+        <span class="material-symbols-outlined" >arrow_drop_down</span>
+        } @else {
+        <span class="material-symbols-outlined">arrow_drop_up</span>
+        }
+    </button>
+    <div class="content">
+        @if(isOpen()) {
+        <div class="options">
+            <ng-content></ng-content>
+        </div>
+    }
+    </div>
+</div>

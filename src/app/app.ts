@@ -1,24 +1,32 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Websocket } from './services/websocket';
 import { DeviceService } from './services/device.service';
+import { ApplicationService } from './services/app.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  providers:[DeviceService],
+  imports: [RouterOutlet, TranslateModule],
+  providers:[DeviceService,ApplicationService],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
   protected readonly title = signal('sigbee2mqtt-dashboard');
   protected readonly ds = inject(DeviceService);
-  // In your component
-constructor(private ws: Websocket) {
+  protected readonly as = inject(ApplicationService);
+  private readonly translate = inject(TranslateService);
 
 
-  this.ws.connect('wss://zigbee.th-kl.de/api');
-  
-  
-}
+  constructor() {
+    this.as.setHostName("https://zigbee.th-kl.de");
+
+    // Setup translations
+    this.translate.setFallbackLang('en');
+
+    // Use browser language
+    const browserLang = this.translate.getBrowserLang();
+    this.translate.use(browserLang?.match(/en|de/) ? browserLang : 'en');
+  }
+
 }
