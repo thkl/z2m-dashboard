@@ -8,18 +8,31 @@ export interface DeviceOption {
     value_step: number;
 }
 
+export interface DeviceExposeVisual {
+    property:DeviceExpose;
+    value:any
+}
+
+export interface ExposurePreset {
+    description: string;
+    name:string;
+    value:any;
+}
 
 export interface DeviceExpose {
+    features?:DeviceExpose[]
     access: number;
     category: string;
     description: string;
     label: string;
     name: string;
     property: string;
-    type: string;
+    type: "binary" | "enum" | "numeric" 
     unit: string;
     value_max: number;
     value_min: number;
+    values?:any[];
+    presets?:ExposurePreset[];
 }
 
 export interface DeviceDefinition {

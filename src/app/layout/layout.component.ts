@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DeviceStore } from '../datastore/device.store';
-import { DevicePropertyComponent } from '../pages/deviceprop/deviceprop.component';
+import { DeviceInspectorComponent } from '../pages/deviceinspector/deviceinspector.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApplicationService } from '../services/app.service';
 
@@ -9,7 +9,7 @@ import { ApplicationService } from '../services/app.service';
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [RouterModule, DevicePropertyComponent,TranslateModule]
+  imports: [RouterModule, DeviceInspectorComponent,TranslateModule]
 })
 export class LayoutComponent {
   sidebarOpen = true;

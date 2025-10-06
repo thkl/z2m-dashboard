@@ -1,0 +1,15 @@
+:host {
+    flex:1;
+    display:flex;
+}
+
+.device_row {
+  display: flex;
+  min-height: 20px;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  gap: 8px;
+}

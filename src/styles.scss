@@ -304,6 +304,28 @@ th.sortable {
   margin-left: 5px;
 }
 
+
+.wrapper {
+  background-color: rgb(28, 30, 33);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin: 0.5em;
+  flex: 1;
+}
+
+.container {
+  box-sizing: border-box;
+  color: rgba(255, 255, 255, 0.65);
+  display: block;
+  line-height: 18.4px;
+  width: 100%;
+  padding: 0.5em;
+  -webkit-font-smoothing: antialiased;
+}
+
+
 .link {
   color: #277ff1;
 }
@@ -325,4 +347,32 @@ th.sortable {
 
 .indicator-dark {
   border-color: #737c87;
+}
+
+
+
+.container >.label {
+  box-sizing: border-box;
+  color: rgb(222, 224, 227);
+  display: block;
+  font-weight: 400;
+  font-size: 14px;
+  height: 24px;
+  line-height: 20px;
+  width: 40%;
+}
+
+.container >.value {
+  box-sizing: border-box;
+  color: rgb(183, 188, 194);
+  display: block;
+  height: 24px;
+  line-height: 20px;
+  max-width: 215px;
+  width: 60%;
+  text-align: right;
+}
+
+.sublabel {
+  font-size: 12px;
 }

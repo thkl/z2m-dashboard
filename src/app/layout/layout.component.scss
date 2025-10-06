@@ -12,3 +12,9 @@
     min-width: 450px;
     max-width: 450px;
 }
+
+aside {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* or any fixed height */
+}

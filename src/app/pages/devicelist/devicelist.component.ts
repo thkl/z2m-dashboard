@@ -1,10 +1,9 @@
-import { Component, computed, inject, signal, effect, OnDestroy } from '@angular/core';
+import { Component, computed, inject, signal, effect } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
-import { Expansionpanel } from '../../components/expansionpanel/expansionpanel';
 import { createStoreView } from '../../datastore/generic-store-view';
 import { SearchOperator } from '../../datastore/generic.store';
-import { CdkTableModule, DataSource } from '@angular/cdk/table';
+import { CdkTableModule } from '@angular/cdk/table';
 import { Device } from '../../models/device';
 import { CDKDataSource } from '../../datastore/generic-store-ui';
 import { TableSortDirective, SortEvent, SortDirection } from '../../directives/table-sort.directive';
@@ -16,7 +15,7 @@ import { Optionpanel, SelectOption } from "../../components/optionpanel/optionpa
   selector: 'app-devicelist',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, Expansionpanel, CdkTableModule, TableSortDirective, SearchInput, Optionpanel]
+  imports: [TranslateModule, CdkTableModule, TableSortDirective, SearchInput, Optionpanel]
 })
 export class DeviceListComponent {
 

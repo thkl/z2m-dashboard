@@ -1,0 +1,26 @@
+@if(device()!==null){
+<header
+    class="h-14 bg-white dark:bg-unifi-panel border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4">
+    <h1 class="text-lg font-semibold">{{device()?.friendly_name}}</h1>
+</header>
+<nav>
+    <button class="navbutton" (click)="panel.set(1)" [class.navbutton-selected]="panel()===1">
+        <span class="material-symbols-outlined">dashboard</span>
+    </button>
+    <button class="navbutton" (click)="panel.set(2)" [class.navbutton-selected]="panel()===2">
+        <span class="material-symbols-outlined">tune</span>
+    </button>
+    <button class="navbutton" (click)="panel.set(3)" [class.navbutton-selected]="panel()===3">
+        <span class="material-symbols-outlined">settings</span>
+    </button>
+</nav>
+
+<div class="flex-1 flex flex-col">
+    @if(panel()===1) {
+        <app-deviceproperties></app-deviceproperties>
+    }
+    @if (panel()===2) {
+        <app-deviceexposes></app-deviceexposes>
+    }
+</div>
+}

@@ -1,18 +1,17 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
-import { DeviceService } from '../../services/device.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { DeviceService } from '../../services/device.service';
 
 @Component({
-  selector: 'app-deviceprop',
+  selector: 'app-deviceproperties',
   imports: [TranslateModule],
-  templateUrl: './deviceprop.component.html',
-  styleUrl: './deviceprop.component.scss'
+  templateUrl: './deviceproperties.html',
+  styleUrl: './deviceproperties.scss'
 })
-export class DevicePropertyComponent {
+export class DeviceProperties {
     protected readonly deviceStore = inject(DeviceStore);
-    protected readonly deviceService = inject(DeviceService);
-    panel = signal<number>(1);
+     protected readonly deviceService = inject(DeviceService);
     
     device = computed(()=>{
       return this.deviceStore.selectedEntity();
@@ -37,4 +36,4 @@ export class DevicePropertyComponent {
         this.deviceService.changeDeviceDescription(changedDevice);
       }
     }
-  }
+}

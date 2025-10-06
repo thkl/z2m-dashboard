@@ -1,0 +1,16 @@
+<div class="wrapper">
+    <div class="container header">
+        <div class="font-bold text-white text-center mt-5">{{device()?.friendly_name}}</div>
+    </div>
+    <div class="container">
+        @for (item of deviceExposure(); track $index) {
+        <div class="device_row">
+            <div class="label flex flex-col">
+                <span title="{{item.property.type}}">{{item.property.name}}</span>
+                <span class="sublabel">{{item.property.description}}</span>
+            </div>
+            <span class="value">{{item.value}} {{item.property.unit}}</span>
+        </div>
+        }
+    </div>
+</div>
