@@ -26,6 +26,7 @@ export interface DeviceDefinition {
     description: string;
     exposes: DeviceExpose[];
     model: string;
+    image: string;
     options: DeviceOption[];
     source: string;
     supports_ota: boolean;

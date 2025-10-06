@@ -11,7 +11,7 @@ import { TableSortDirective, SortEvent, SortDirection } from '../../directives/t
 import { sortData } from '../../utils/sort.utils';
 import { filterData } from '../../utils/filter.utils';
 import { SearchInput } from '../../components/searchinput/searchinput';
-import { Optionpanel } from "../../components/optionpanel/optionpanel";
+import { Optionpanel, SelectOption } from "../../components/optionpanel/optionpanel";
 @Component({
   selector: 'app-devicelist',
   templateUrl: './devicelist.component.html',
@@ -29,6 +29,11 @@ export class DeviceListComponent {
 
   // Filter state
   searchText = signal<string>('');
+  selectedVendors = signal<SelectOption[]>([]);
+  selectedModels = signal<SelectOption[]>([]); 
+  selectedPowering = signal<SelectOption[]>([]); 
+  selectedAvailability = signal<SelectOption[]>([]); 
+
 
   //Filter the coordinator from the devices
   devicesView = createStoreView(this.deviceStore, {
@@ -41,7 +46,14 @@ export class DeviceListComponent {
   // Filtered and sorted devices
   devices = computed<Device[]>(() => {
     const filtered = filterData<Device>(
-      this.devicesView(),
+      this.devicesView().map((d:Device)=>{
+
+        if (d.definition && d.definition.model) {
+          d.definition.image = d.definition.model.replaceAll("/","-")
+        }
+        return d;
+
+      }),
       this.searchText(),
       (device) => this.getSearchableFields(device)
     );
@@ -54,16 +66,104 @@ export class DeviceListComponent {
     );
   });
 
-  datasource: CDKDataSource<Device> = new CDKDataSource(this.devices);
+  finalyFilter = computed(()=>{
+    let prefiltered = this.devices();
+    let selVendorNames = this.selectedVendors().map(v=>v.label);
+    let selModelNames = this.selectedModels().map(v=>v.label);
+    let selPowering = this.selectedPowering().map(v=>v.label);
+    let selAvailability = this.selectedAvailability().map(v=>v.label);
 
-  manufacturers = computed(() => {
-    return new Set(this.deviceStore.entities().map(entity => entity.definition ? entity.definition.vendor : undefined).filter(e=>e!=='' && e!==undefined));
+    if (selVendorNames.length > 0) {
+  
+      prefiltered = prefiltered.filter(d=>{
+        return selVendorNames.indexOf(d.definition?.vendor)!==-1
+      });
+    }
+
+
+    if (selModelNames.length > 0) {
+      prefiltered = prefiltered.filter(d=>{
+        return selModelNames.indexOf(d.definition?.model)!==-1
+      });
+    }
+
+    if (selPowering.length > 0) {
+      prefiltered = prefiltered.filter(d=>{
+        return selPowering.indexOf(d.power_source)!==-1
+      });
+    }
+
+    if (selAvailability.length > 0) {
+      prefiltered = prefiltered.filter(d=>{
+        return selAvailability.indexOf(d.state?.availability)!==-1
+      });
+    }
+
+    return prefiltered;
   });
 
 
-  models = computed(() => {
-    return new Set(this.deviceStore.entities().map(entity => entity.definition ? entity.definition.model : undefined));
-  })
+  datasource: CDKDataSource<Device> = new CDKDataSource(this.finalyFilter);
+
+  private vendorsMap = new Map<string, SelectOption>();
+  private modelMap = new Map<string,SelectOption>();
+  private powerMap = new Map<string,SelectOption>();
+  private avaliMap = new Map<string,SelectOption>();
+  
+  vendorList = computed(() => {
+    const entitys = Array.from(new Set(this.deviceStore.entities()
+      .map(entity => entity.definition ? entity.definition.vendor : undefined)
+      .filter((e): e is string => e !== '' && e !== undefined)));
+
+    return entitys.map(vendor => {
+      if (!this.vendorsMap.has(vendor)) {
+        this.vendorsMap.set(vendor, { label: vendor, isSelected: false });
+      }
+      return this.vendorsMap.get(vendor)!;
+    });
+  });
+
+  modelList = computed(() => {
+    const entitys = Array.from(new Set(this.deviceStore.entities()
+      .map(entity => entity.definition ? entity.definition.model : undefined)
+      .filter((e): e is string => e !== '' && e !== undefined)));
+
+    return entitys.map(model => {
+      if (!this.modelMap.has(model)) {
+        this.modelMap.set(model, { label: model, isSelected: false });
+      }
+      return this.modelMap.get(model)!;
+    });
+  });
+
+
+  powerOptionList = computed(() => {
+    const entitys = Array.from(new Set(this.deviceStore.entities()
+      .map(entity => entity.power_source)
+      .filter((e): e is string => e !== '' && e !== undefined)));
+
+    return entitys.map(pwsr => {
+      if (!this.powerMap.has(pwsr)) {
+        this.powerMap.set(pwsr, { label: pwsr, isSelected: false });
+      }
+      return this.powerMap.get(pwsr)!;
+    });
+  });
+
+  availabilityList = computed(() => {
+    const entitys = Array.from(new Set(this.deviceStore.entities()
+      .map(entity => entity.state?.availability)
+      .filter((e): e is string => e !== '' && e !== undefined)));
+
+    return entitys.map(avent => {
+      if (!this.avaliMap.has(avent)) {
+        this.avaliMap.set(avent, { label: avent, isSelected: false });
+      }
+      return this.avaliMap.get(avent)!;
+    });
+  });
+
+   
 
   selectedDevice = computed(() => {
     return this.deviceStore.selectedEntity();
@@ -123,6 +223,22 @@ export class DeviceListComponent {
 
   selectDevice(deviceID: string) {
     this.deviceStore.setSelectedEntityById(deviceID);
+  }
+
+  vendorsSelectionChanged(event:SelectOption[]) {
+    this.selectedVendors.set(event.filter(v=>v.isSelected));
+  }
+
+  modelSelectionChanged(event:SelectOption[]) {
+    this.selectedModels.set(event.filter(v=>v.isSelected));
+  }
+
+  powerSelectionChanged(event:SelectOption[]) {
+    this.selectedPowering.set(event.filter(v=>v.isSelected));
+  }
+
+  availabilitySelectionChanged(event:SelectOption[]) {
+    this.selectedAvailability.set(event.filter(v=>v.isSelected));
   }
 }
 

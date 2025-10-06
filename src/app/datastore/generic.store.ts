@@ -1,6 +1,23 @@
 import { computed, Signal } from "@angular/core";
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 
+function deepMerge(target: any, source: any): any {
+    if (typeof source !== 'object' || source === null) {
+        return source;
+    }
+    if (typeof target !== 'object' || target === null) {
+        return source;
+    }
+
+    const result = { ...target };
+    for (const key in source) {
+        if (source.hasOwnProperty(key)) {
+            result[key] = deepMerge(target[key], source[key]);
+        }
+    }
+    return result;
+}
+
 export interface BaseEntity {
     ieee_address: string;
     [key: string]: any;
@@ -236,16 +253,12 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
                         // Get the old value and merge if both are objects
                         const lastKey = keys[keys.length - 1];
                         const oldValue = current[lastKey];
-                        const mergedValue = typeof newValue === 'object' && newValue !== null && typeof oldValue === 'object' && oldValue !== null
-                            ? { ...oldValue, ...newValue }
-                            : newValue;
+                        const mergedValue = deepMerge(oldValue, newValue);
                         current[lastKey] = mergedValue;
                         mergedEntity = updatedEntity as T;
                     } else {
                         const oldValue = existingEntity[property];
-                        const mergedValue = typeof newValue === 'object' && newValue !== null && typeof oldValue === 'object' && oldValue !== null
-                            ? { ...oldValue, ...newValue }
-                            : newValue;
+                        const mergedValue = deepMerge(oldValue, newValue);
                         mergedEntity = { ...existingEntity, [property]: mergedValue } as T;
                     }
 

@@ -21,3 +21,11 @@ label.root {
 .label {
     margin-left: 5px;
 }
+
+.indicator.selected {
+    background: #4797ff;
+    border-color: #4797ff;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+}

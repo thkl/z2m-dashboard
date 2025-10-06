@@ -49,10 +49,16 @@ export class DeviceService {
   }
 
   updateState(topic: string, status: any) {
-    // the device is the first in the topci
-    const deviceName = topic.split("/")[0];
-    this.deviceStore.mergeBySearch("state", status, "friendly_name", deviceName);
-    this.setupUpdateInterval();
+    const splits = topic.split("/");
+    if (splits.length === 1) {
+      // the device is the first in the topic
+      const deviceName = splits[0];
+      if (deviceName === 'WZ_LightButtonDesk') {
+        console.log(status);
+      }
+      this.deviceStore.mergeBySearch("state", status, "friendly_name", deviceName);
+      this.setupUpdateInterval();
+    }
   }
 
 

@@ -3,38 +3,18 @@
         
         <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
         <div class="mt-2">
-            <app-optionpanel title='{{"MANUFACTURER" | translate}}' [entities]="manufacturers()">
-
-            </app-optionpanel>
-           
+            <app-optionpanel title='{{"MANUFACTURER" | translate}}' [entities]="vendorList()" (optionsChanged)="vendorsSelectionChanged($event)"></app-optionpanel>
         </div>
         <div class="mt-2">
-            <app-expansionpanel title='{{"MODEL" | translate}}'>
-                <div class="options">
-                    @for (model of models(); track $index) {
-                    <div class="root">
-                        <span class="label">{{model}}</span>
-                    </div>
-                    }
-                </div>
-            </app-expansionpanel>
+            <app-optionpanel title='{{"MODEL" | translate}}' [entities]="modelList()" [maxShown]="10" (optionsChanged)="modelSelectionChanged($event)"></app-optionpanel>
+        </div>
+        
+        <div class="mt-2">
+            <app-optionpanel title='{{"STATUS" | translate}}' [entities]="availabilityList()" [maxShown]="10" (optionsChanged)="availabilitySelectionChanged($event)"></app-optionpanel>
         </div>
         <div class="mt-2">
-            <app-expansionpanel title='{{"STATUS" | translate}}'>
-                <div class="options">
-
-                    <div class="root">
-                        <span class="label">Online</span>
-                    </div>
-                    <div class="root">
-                        <span class="label">Offline</span>
-                    </div>
-
-
-                </div>
-            </app-expansionpanel>
+            <app-optionpanel title='{{"POWER" | translate}}' [entities]="powerOptionList()" (optionsChanged)="powerSelectionChanged($event)"></app-optionpanel>
         </div>
-
     </div>
     <div class="w-full ml-2">
         <table cdk-table [dataSource]="datasource" [trackBy]="trackByFn">
@@ -42,7 +22,7 @@
             <ng-container cdkColumnDef="icon">
                 <th cdk-header-cell *cdkHeaderCellDef class="icon_cell"></th>
                 <td cdk-cell *cdkCellDef="let device" class="icon_cell"><img alt="" crossorigin="anonymous" class="icon"
-                        src="https://www.zigbee2mqtt.io/images/devices/{{device.definition?.model}}.png"></td>
+                        src="https://www.zigbee2mqtt.io/images/devices/{{device.definition?.image}}.png"></td>
             </ng-container>
 
 
