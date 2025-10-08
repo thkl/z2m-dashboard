@@ -1,4 +1,4 @@
-<div class="root_control">
+<div class="root_control flex flex-col" [class.panel-open]="isOpen()">
     <button type="button" tabindex="0" class="trigger" (click)="toggle()">
         <div class="root_control">
             <div><span class="title">{{title()}}</span></div>
@@ -9,9 +9,9 @@
         <span class="material-symbols-outlined">arrow_drop_up</span>
         }
     </button>
-    <div class="content">
+    <div class="content  flex flex-col" style="flex-grow: inherit;">
         @if(isOpen()) {
-        <div class="options">
+        <div class="options flex flex-col"  style="flex-grow: inherit;">
             @if(hasSearch()===true) {
             <div class="root_control">
                 <div>

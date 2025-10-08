@@ -1,5 +1,5 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
-import { Expansionpanel } from '../expansionpanel/expansionpanel';
+import { ExpansionPanelComponent } from '../expansionpanel/expansionpanel';
 import { SearchInput } from '../searchinput/searchinput';
 
 export interface SelectOption {
@@ -9,12 +9,12 @@ export interface SelectOption {
 }
 
 @Component({
-  selector: 'app-optionpanel',
-  imports: [Expansionpanel, SearchInput],
+  selector: 'OptionPanelComponent',
+  imports: [ExpansionPanelComponent, SearchInput],
   templateUrl: './optionpanel.html',
   styleUrl: './optionpanel.scss'
 })
-export class Optionpanel {
+export class OptionPanelComponent {
   title = input.required<string>();
   maxShown = input<number>(5);
   entities = input.required<SelectOption[]>();

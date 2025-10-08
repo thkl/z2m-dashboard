@@ -1,0 +1,49 @@
+.input {
+  position: relative;
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+.inputContainer {
+  margin-top: 4px;
+  height: 16px;
+  width: 32px;
+  align-items: center;
+  border-radius: 32px;
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+  transition: background-color 0.2s ease;
+  background-color: #737c87;
+}
+.inputContainer.active  {
+    background-color: #4797ff;
+}
+
+.indicator {
+  position: absolute;
+  transform: scale(0);
+  transition: transform 0.15s cubic-bezier(0.8, 0, 0.7, 1) 50ms;
+  border: none;
+}
+
+.indicator.active {
+    transform: scale(1);
+}
+
+.switcher {
+  background-color: #fff;
+  border-radius: 100%;
+  pointer-events: none;
+  position: absolute;
+  transition: all 0.25s cubic-bezier(0.8, 0, 0.6, 1.4);
+  z-index: 1;
+  height: 14px;
+  left: 1px;
+  width: 14px;
+}
+
+.switcher.active  {
+    transform: translateX(calc(-100% - 1px));
+    left: 100%;
+}

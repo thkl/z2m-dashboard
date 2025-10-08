@@ -1,7 +1,7 @@
 import { computed, effect, inject, Injectable, signal } from "@angular/core";
 import { Websocket, WebSocketMessage } from "./websocket";
 import { DeviceStore } from "../datastore/device.store";
-import { Device } from "../models/device";
+import { Device, DeviceTargetState, DeviceFeature } from "../models/device";
 import { timeAgo } from "../utils/time.utils";
 import { TranslateService } from "@ngx-translate/core";
 import { ApplicationService } from "./app.service";
@@ -34,7 +34,7 @@ export class DeviceService {
 
     this.ws.subscribeCatchAllCallback((message) => {
       const { topic, payload } = message;
-      this.updateState(topic, payload);
+      this.doupdateState(topic, payload);
 
     });
 
@@ -48,22 +48,22 @@ export class DeviceService {
 
   }
 
-  updateState(topic: string, status: any) {
+  private doupdateState(topic: string, status: any) {
     const splits = topic.split("/");
     if (splits.length === 1) {
       // the device is the first in the topic
       const deviceName = splits[0];
-      if (deviceName === 'WZ_LightButtonDesk') {
-        console.log(status);
-      }
       this.deviceStore.mergeBySearch("state", status, "friendly_name", deviceName);
       this.setupUpdateInterval();
     }
   }
 
+  public updateDeviceState(device:string, data:DeviceTargetState):void {
+    const topic = `${device}/set`;
+    this.appService.sendBridgeRequest(topic, data);
+  }
 
   private setupUpdateInterval() {
-
     for (const device of this.deviceStore.entities()) {
       if (device.state?.last_seen) {
         const lastseenhuman = timeAgo(device.state?.last_seen, this.translate);
@@ -124,4 +124,5 @@ export class DeviceService {
       description: device.description
     });
   }
+
 }

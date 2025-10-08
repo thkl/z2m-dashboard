@@ -1,4 +1,4 @@
-<app-expansionpanel [title]='title()'>
+<ExpansionPanelComponent [title]='title()'>
     <div class="options">
         @if(length()>maxShown()) {
         <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
@@ -24,4 +24,4 @@
             }
         </div>
     </div>
-</app-expansionpanel>
+</ExpansionPanelComponent>

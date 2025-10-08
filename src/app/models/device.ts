@@ -8,8 +8,8 @@ export interface DeviceOption {
     value_step: number;
 }
 
-export interface DeviceExposeVisual {
-    property:DeviceExpose;
+export interface DeviceFeatureVisual {
+    property:DeviceFeature;
     value:any
 }
 
@@ -19,25 +19,58 @@ export interface ExposurePreset {
     value:any;
 }
 
-export interface DeviceExpose {
-    features?:DeviceExpose[]
+export enum AccessMode {
+    /**
+     * Bit 0: The property can be found in the published state of this device
+     */
+    STATE = 0b001,
+    /**
+     * Bit 1: The property can be set with a /set command
+     */
+    SET = 0b010,
+    /**
+     * Bit 2: The property can be retrieved with a /get command
+     */
+    GET = 0b100,
+    /**
+     * Bitwise inclusive OR of STATE and SET : 0b001 | 0b010
+     */
+    STATE_SET = 0b011,
+    /**
+     * Bitwise inclusive OR of STATE and GET : 0b001 | 0b100
+     */
+    STATE_GET = 0b101,
+    /**
+     * Bitwise inclusive OR of STATE and GET and SET : 0b001 | 0b100 | 0b010
+     */
+    ALL = 0b111,
+}
+
+
+export interface DeviceFeature {
+    features?:DeviceFeature[]
     access: number;
     category: string;
     description: string;
     label: string;
     name: string;
     property: string;
-    type: "binary" | "enum" | "numeric" 
+    type: "binary" | "list" | "numeric" | "enum" | "text" | "composite";
+    subtype: "switch" | "lock" | "composite" | "light" | "cover" | "fan" | "climate";
     unit: string;
-    value_max: number;
-    value_min: number;
+    value_max?: number;
+    value_min?: number;
+    value_on?:string;
+    value_off?:string;
+    value_toggle?:string;
     values?:any[];
     presets?:ExposurePreset[];
+    hidden:boolean;
 }
 
 export interface DeviceDefinition {
     description: string;
-    exposes: DeviceExpose[];
+    exposes: DeviceFeature[];
     model: string;
     image: string;
     options: DeviceOption[];
@@ -55,6 +88,9 @@ export interface DeviceState {
     [key: string]: any;
 }
 
+export interface DeviceTargetState {
+        [key: string]: any;
+}
 
 export interface Device {
     date_code: string;

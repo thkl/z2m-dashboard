@@ -1,0 +1,7 @@
+<div class="switchComponent" [class.active]="active()">
+    <div class="itemwrapper">
+        <label [class.active]="controlItem().isActive" (click)="event()">
+            <div class="labelcontent">{{controlItem().label}}</div>
+        </label>
+    </div>
+</div>

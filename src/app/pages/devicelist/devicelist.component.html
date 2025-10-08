@@ -3,17 +3,17 @@
         
         <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
         <div class="mt-2">
-            <app-optionpanel title='{{"MANUFACTURER" | translate}}' [entities]="vendorList()" (optionsChanged)="vendorsSelectionChanged($event)"></app-optionpanel>
+            <OptionPanelComponent title='{{"MANUFACTURER" | translate}}' [entities]="vendorList()" (optionsChanged)="vendorsSelectionChanged($event)"></OptionPanelComponent>
         </div>
         <div class="mt-2">
-            <app-optionpanel title='{{"MODEL" | translate}}' [entities]="modelList()" [maxShown]="10" (optionsChanged)="modelSelectionChanged($event)"></app-optionpanel>
+            <OptionPanelComponent title='{{"MODEL" | translate}}' [entities]="modelList()" [maxShown]="10" (optionsChanged)="modelSelectionChanged($event)"></OptionPanelComponent>
         </div>
         
         <div class="mt-2">
-            <app-optionpanel title='{{"STATUS" | translate}}' [entities]="availabilityList()" [maxShown]="10" (optionsChanged)="availabilitySelectionChanged($event)"></app-optionpanel>
+            <OptionPanelComponent title='{{"STATUS" | translate}}' [entities]="availabilityList()" [maxShown]="10" (optionsChanged)="availabilitySelectionChanged($event)"></OptionPanelComponent>
         </div>
         <div class="mt-2">
-            <app-optionpanel title='{{"POWER" | translate}}' [entities]="powerOptionList()" (optionsChanged)="powerSelectionChanged($event)"></app-optionpanel>
+            <OptionPanelComponent title='{{"POWER" | translate}}' [entities]="powerOptionList()" (optionsChanged)="powerSelectionChanged($event)"></OptionPanelComponent>
         </div>
     </div>
     <div class="w-full ml-2">

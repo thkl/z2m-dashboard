@@ -10,12 +10,12 @@ import { TableSortDirective, SortEvent, SortDirection } from '../../directives/t
 import { sortData } from '../../utils/sort.utils';
 import { filterData } from '../../utils/filter.utils';
 import { SearchInput } from '../../components/searchinput/searchinput';
-import { Optionpanel, SelectOption } from "../../components/optionpanel/optionpanel";
+import { OptionPanelComponent, SelectOption } from "../../components/optionpanel/optionpanel";
 @Component({
   selector: 'app-devicelist',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, CdkTableModule, TableSortDirective, SearchInput, Optionpanel]
+  imports: [TranslateModule, CdkTableModule, TableSortDirective, SearchInput, OptionPanelComponent]
 })
 export class DeviceListComponent {
 

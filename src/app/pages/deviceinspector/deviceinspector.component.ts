@@ -3,11 +3,11 @@ import { DeviceStore } from '../../datastore/device.store';
 import { DeviceService } from '../../services/device.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { DeviceProperties } from '../../components/deviceproperties/deviceproperties';
-import { DeviceExposes } from '../../components/deviceexposes/deviceexposes';
+import { DeviceFeaturesComponent } from '../../components/devicefeatures/devicefeatures';
 
 @Component({
   selector: 'app-deviceinspector',
-  imports: [TranslateModule,DeviceProperties,DeviceExposes],
+  imports: [TranslateModule,DeviceProperties,DeviceFeaturesComponent],
   templateUrl: './deviceinspector.component.html',
   styleUrl: './deviceinspector.component.scss'
 })

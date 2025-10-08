@@ -1,4 +1,12 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
 
+.container {
+  display: flex;
+  flex-direction: column;
+}
 .content > .options {
   padding: 7px;
 }
@@ -44,4 +52,12 @@
 
     font-size: 16px;
     font-weight: 400;
+}
+
+.root_control {
+  display: flex;
+}
+
+.panel-open {
+  flex-grow: inherit;
 }

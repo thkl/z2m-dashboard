@@ -1,0 +1,41 @@
+<div class="color-picker">
+  <div class="dropdown">
+    <button class="btn btn-outline-secondary dropdown-toggle color-selector-btn"
+            [class.btn-sm]="size() === 'sm'"
+            [class.btn-lg]="size() === 'lg'"
+            (click)="toggleDropdown()"
+            type="button">
+      <span class="color-preview"
+            [style.background-color]="selectedColor()"></span>
+      {{ buttonText() }}
+    </button>
+
+    @if(isOpen()) {
+    <div class="dropdown-menu color-dropdown">
+      <h6 class="dropdown-header">Preset Colors</h6>
+      @for(color of presetColors; track color.value) {
+      <button class="dropdown-item color-option"
+              (click)="selectColor(color.value)"
+              type="button">
+        <span class="color-bar" [style.background-color]="color.value"></span>
+        {{color.name}}
+      </button>
+      }
+      <div class="dropdown-divider"></div>
+      <h6 class="dropdown-header">Custom Color</h6>
+      <div class="custom-color-picker">
+        <input type="color"
+               class="form-control form-control-color"
+               [value]="selectedColor()"
+               (input)="onCustomColorChange($any($event.target).value)"
+               title="Choose custom color">
+        <label class="form-label">Custom</label>
+      </div>
+    </div>
+    }
+  </div>
+
+  @if(isOpen()) {
+  <div class="backdrop" (click)="closeDropdown()"></div>
+  }
+</div>
