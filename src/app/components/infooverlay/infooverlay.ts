@@ -3,6 +3,7 @@ import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'InfoOverlayComponent',
+  standalone: true,
   imports: [OverlayModule],
   templateUrl: './infooverlay.html',
   styleUrl: './infooverlay.scss'
@@ -17,38 +18,76 @@ export class InfoOverlayComponent {
   positions: ConnectedPosition[] = [
     {
       originX: 'center',
-      originY: 'center',
-      overlayX: 'start',
-      overlayY: 'center',
-      offsetX: -100,
-      offsetY: 20
+      originY: 'top',
+      overlayX: 'center',
+      overlayY: 'bottom',
+      offsetY: -8
     },
     {
       originX: 'center',
-      originY: 'center',
-      overlayX: 'end',
-      overlayY: 'center',
-      offsetX: 800
+      originY: 'bottom',
+      overlayX: 'center',
+      overlayY: 'top',
+      offsetY: 8
     }
   ];
+
+  toggle():void {
+    if (this.isOpen) {
+      this.closeImmediate();
+    } else {
+      this.openImmediate();
+    }
+  }
+
+  openImmediate():void {
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout);
+      this.closeTimeout = undefined;
+    }
+    if (this.openTimeout) {
+      clearTimeout(this.openTimeout);
+      this.openTimeout = undefined;
+    }
+    this.isOpen = true;
+  }
+
+  closeImmediate():void {
+    if (this.openTimeout) {
+      clearTimeout(this.openTimeout);
+      this.openTimeout = undefined;
+    }
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout);
+      this.closeTimeout = undefined;
+    }
+    this.isOpen = false;
+  }
 
   open():void {
     if (this.closeTimeout) {
       clearTimeout(this.closeTimeout);
       this.closeTimeout = undefined;
     }
+    if (this.openTimeout) {
+      clearTimeout(this.openTimeout);
+    }
     this.openTimeout = setTimeout(() => {
       this.isOpen = true;
-    }, 100);
+    }, 200);
   }
+
  close():void {
     if (this.openTimeout) {
       clearTimeout(this.openTimeout);
       this.openTimeout = undefined;
     }
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout);
+    }
     this.closeTimeout = setTimeout(() => {
       this.isOpen = false;
-    }, 100);
+    }, 300);
   }
 
   pos(event:any) {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, computed, effect, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 
 export interface RadioElement {
   label:string;
@@ -18,30 +18,29 @@ export class RadiolistComponent {
   active = input<boolean>(false);
   selected = output<RadioElement>();
 
-  controlItems = signal<RadioElement[]>([]);
-  private clicked = false;
+  controlItems = computed(() => {
+    return this.items().map((item, idx) => ({...item, _id: idx}));
+  });
 
-    constructor(private cdr: ChangeDetectorRef) {
-    effect(()=>{
-      const newValues = this.items().map((item, idx) => ({...item, _id: idx}));
-      setTimeout(()=>{
-        this.controlItems.set(newValues);
-        this.clicked = false;
-      },(this.clicked) ? 1000:0)
-    })
+  private clickedIndex = signal<number | null>(null);
+  private clickTimeout?: ReturnType<typeof setTimeout>;
+
+  isItemActive(item: RadioElement, index: number): boolean {
+    return item.isActive || this.clickedIndex() === index;
   }
 
   click(index: number):void {
     if (this.active()===true) {
-      const newItems = this.controlItems().map((i, idx) => ({
-        ...i,
-        isActive: idx === index,
-        _id: idx
-      }));
-      this.controlItems.set(newItems);
-      this.clicked = true;
-      this.cdr.detectChanges();
+      if (this.clickTimeout) {
+        clearTimeout(this.clickTimeout);
+      }
+
+      this.clickedIndex.set(index);
       this.selected.emit(this.controlItems()[index]);
+
+      this.clickTimeout = setTimeout(() => {
+        this.clickedIndex.set(null);
+      }, 500);
     }
   }
 }

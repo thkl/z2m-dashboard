@@ -1,7 +1,7 @@
 <div class="radioList" [class.active]="active()">
     @for (item of controlItems(); track item._id; let idx = $index) {
     <div class="itemwrapper">
-        <label [class.active]="item.isActive" (click)="click(idx)">
+        <label [class.active]="isItemActive(item, idx)" (click)="click(idx)">
             <div class="labelcontent">{{item.label}}</div>
         </label>
     </div>

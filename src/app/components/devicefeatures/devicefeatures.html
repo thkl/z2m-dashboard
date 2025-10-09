@@ -9,7 +9,8 @@
 
             <div class="label flex flex-col">
                 <span>{{item.property.label || item.property.name}}
-                    @if(item.property.description){<InfoOverlayComponent [message]="item.property.description">
+                    @if(item.property.description){<InfoOverlayComponent [message]="item.property.description"
+                        style="min-width: 30px;">
                     </InfoOverlayComponent>}</span>
             </div>
 
@@ -21,12 +22,13 @@
                 [item]="{label:item.property.value_on ?? 'ON',isActive:item.value==='ON'}"
                 (clicked)="switch(item.property,$event)"></OptionComponent>
             } @else {
-                <span>{{item.value}}</span>
+            <span>{{item.value}}</span>
             }
             }
 
             @case ("enum") {
             @if (hasAccess(item.property.access, AccessMode.SET)) {
+
             <RadiolistComponent [items]="radioItems(item.property,item.value)"
                 [active]="(hasAccess(item.property.access, AccessMode.SET))"
                 (selected)="enumClick(item.property,$event)"></RadiolistComponent>
@@ -40,15 +42,20 @@
             @switch (item.property.property) {
             @case("color_temp") {
             <span>{{item.value}} {{item.property.unit}}</span>
+
             <ColorTemperatureSelectorComponent [selectedMireds]="item.value"
                 [presetTemperatures]="item.property.presets || []"
                 (temperatureChange)="temperatureChange(item.property,$event)"></ColorTemperatureSelectorComponent>
+
+
             }
             @case ("color_temp_startup") {
             <span>{{item.value}} {{item.property.unit}}</span>
+
             <ColorTemperatureSelectorComponent [selectedMireds]="item.value"
                 [presetTemperatures]="item.property.presets || []"
                 (temperatureChange)="temperatureChange(item.property,$event)"></ColorTemperatureSelectorComponent>
+
             }
             @default {
             <span>{{item.value}} {{item.property.unit}}</span>
@@ -63,6 +70,7 @@
             @switch (item.property.property) {
             @case ("color") {
             {{item.helper}}
+
             <ColorSelectorComponent [selectedColor]="item.helper" (colorChange)="colorChange(item.property,$event)">
             </ColorSelectorComponent>
             }

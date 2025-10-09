@@ -1,17 +1,25 @@
+.infoicon {
+  color: #4797ff;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 0.5em;
+  position: relative;
+  z-index: 10001;
+}
+
 .tooltip {
   background-color: #2b2b2b;
   border-radius: 4px;
   color: #fafafa;
   line-height: 16px;
   padding: 8px 16px;
-  position: absolute;
-  transform: none;
-  z-index: 3000;
   box-shadow: 0 8px 24px 0 #000, 0 0 1px 0 hsla(214, 8%, 98%, 0.08);
-  transition: opacity 0.1s;
-  transition-timing-function: cubic-bezier(1, 0, 0.6, 0.8);
-  min-width: 200px
+  min-width: 200px;
+  max-width: 300px;
+  word-wrap: break-word;
+  white-space: normal;
 }
+
 .tooltip::before {
   background-color: #2b2b2b;
   border-top-left-radius: 4px;
@@ -23,26 +31,18 @@
 }
 
 .tooltip-top::before {
-      bottom: -6px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%) rotate(-135deg);
 }
 
 .tooltip-bottom::before {
-left: 50%;
-top: -6px;
-transform: translateX(-50%) rotate(45deg);
+  left: 50%;
+  top: -6px;
+  transform: translateX(-50%) rotate(45deg);
 }
 
-.text {
-  color: #e0e0e0;
-  width: 100%;
-  word-wrap: break-word;
-}
-
-.infoicon {
-  color: #4797ff;
-  font-size: 20px;
-  cursor: pointer;
-  margin-left: 0.5em;
+::ng-deep .info-overlay-panel {
+  z-index: 10000 !important;
+  pointer-events: auto !important;
 }

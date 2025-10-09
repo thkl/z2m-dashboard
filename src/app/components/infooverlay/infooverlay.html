@@ -1,11 +1,13 @@
 
-<span  (mouseenter)="open()" (mouseleave)="close()"  cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="infoicon material-symbols-outlined">info</span>
+<span (mouseenter)="open()" (mouseleave)="close()" (click)="toggle()" cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="infoicon material-symbols-outlined">info</span>
 
-<!-- This template displays the overlay  content and is connected to the button -->
 <ng-template
-  (positionChange) = "pos($event)"
+  (positionChange)="pos($event)"
   cdkConnectedOverlay
   [cdkConnectedOverlayOrigin]="trigger"
   [cdkConnectedOverlayOpen]="isOpen"
   [cdkConnectedOverlayPositions]="positions"
-  (detach)="isOpen = false"><span  class="tooltip {{pointer}}" >{{message()}}</span></ng-template>
+  [cdkConnectedOverlayPanelClass]="'info-overlay-panel'"
+  (detach)="isOpen = false">
+  <span class="tooltip {{pointer}}" (mouseenter)="open()" (mouseleave)="close()">{{message()}}</span>
+</ng-template>
