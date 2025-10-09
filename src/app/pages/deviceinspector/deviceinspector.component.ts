@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
 import { DeviceService } from '../../services/device.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -14,11 +14,16 @@ import { DeviceFeaturesComponent } from '../../components/devicefeatures/devicef
 export class DeviceInspectorComponent {
     protected readonly deviceStore = inject(DeviceStore);
     protected readonly deviceService = inject(DeviceService);
+    closed = output<void>();
+
     panel = signal<number>(1);
     
     device = computed(()=>{
       return this.deviceStore.selectedEntity();
     })
 
+    closeSidebar():void {
+      this.closed.emit();
+    }
     
   }

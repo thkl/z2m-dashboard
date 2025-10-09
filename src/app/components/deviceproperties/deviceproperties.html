@@ -46,7 +46,7 @@
                 </div>
                 <div class="device_row">
                     <span class="label">{{'SUPPORT_STATUS' | translate}}</span>
-                    <span class="value">{{device()?.supported}}</span>
+                    <span class="value">{{device()?.supported | human}} {{device()?.definition ? device()?.definition!.source :''}}</span>
                 </div>
                 <div class="device_row">
                     <span class="label">{{'IEEE_ADDRESS' | translate}}</span>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="device_row">
                     <span class="label">{{'NETWORK_ADDRESS' | translate}}</span>
-                    <span class="value">{{device()?.network_address}}</span>
+                    <span class="value">{{device()?.network_address ?? 0 | toHex}} / {{device()?.network_address ?? 0}}</span>
                 </div>
                 <div class="device_row">
                     <span class="label">{{'FIRMWARE_BUILD_DATE' | translate}}</span>

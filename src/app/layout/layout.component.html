@@ -51,7 +51,9 @@
     </main>
 
     <!-- Right Sidebar for Device Properties -->
-    <aside class="transition-all duration-300 border-l overflow-y-auto scrollbar" [class.sidebar-right-open]="rightSidebarOpen()" [class.w-0]="!rightSidebarOpen()">
-        <app-deviceinspector style="flex: 1; /* Takes all available space */"></app-deviceinspector>
+    <aside class="transition-all duration-300 border-l overflow-hidden scrollbar" [class.w-[450px]]="rightSidebarOpen()" [class.overflow-y-auto]="rightSidebarOpen()" [class.w-0]="!rightSidebarOpen()">
+        @if(rightSidebarOpen()) {
+        <app-deviceinspector style="flex: 1; /* Takes all available space */" (closed)="closeRightSidebar()"></app-deviceinspector>
+        }
     </aside>
 </div>

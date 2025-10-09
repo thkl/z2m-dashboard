@@ -1,6 +1,6 @@
 <div class="wrapper" style="display: flex;flex-direction: column;">
     <div class="container header">
-        <div class="font-bold  text-center mt-5">{{device()?.friendly_name}} {{"BINDINGS" | translate}}</div>
+        <div class="font-bold  text-center mt-5">{{"DETAILS" | translate}}</div>
     </div>
     <div class="container">
         @for (item of deviceExposure(); track $index) {
@@ -79,7 +79,7 @@
     </div>
     <div class="pl-2 pr-2 flex flex-col grow">
         <ExpansionPanelComponent title="Raw Data" style="flex-grow: inherit;">
-            <textarea class="scrollbar w-full bg-transparent grow">{{deviceExposure() | json : "" : 2}}</textarea>
+            <textarea class="scrollbar w-full bg-transparent grow">{{deviceExposure() | human : "" : 2}}</textarea>
         </ExpansionPanelComponent>
     </div>
 </div>

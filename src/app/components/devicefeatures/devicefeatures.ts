@@ -2,21 +2,22 @@ import { Component, computed, effect, inject, signal, Signal } from '@angular/co
 import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccessMode, DeviceFeature, DeviceFeatureVisual, DeviceTargetState } from '../../models/device';
-import { JSONStringifyPipe } from '../../pipes/json.pipe';
+ 
 import { DeviceService } from '../../services/device.service';
 import { InfoOverlayComponent } from '../infooverlay/infooverlay';
 import { ExpansionPanelComponent } from "../expansionpanel/expansionpanel";
 import { RadioElement, RadiolistComponent } from '../radiolist/radiolist';
-import { SwitchComponent } from '../switch/switch';
+ 
 import { OptionComponent } from '../option/option';
 import { SwitchElement } from '../../models/types';
 import { ColorSelectorComponent } from '../colorselector/colorselector';
 import { hsvToHtmlRgb, xyToHtmlRgb, htmlRgbToHsv, htmlRgbToXy } from '../../utils/color.util';
 import { ColorTemperatureSelectorComponent } from '../colortemperatureselector/colortemperatureselector';
+import { HumanReadablePipe } from '../../pipes/human.pipe';
 
 @Component({
   selector: 'DeviceFeaturesComponent',
-  imports: [TranslateModule, JSONStringifyPipe, InfoOverlayComponent, ExpansionPanelComponent, RadiolistComponent, OptionComponent, ColorSelectorComponent, ColorTemperatureSelectorComponent],
+  imports: [TranslateModule, HumanReadablePipe, InfoOverlayComponent, ExpansionPanelComponent, RadiolistComponent, OptionComponent, ColorSelectorComponent, ColorTemperatureSelectorComponent],
   templateUrl: './devicefeatures.html',
   styleUrl: './devicefeatures.scss'
 })

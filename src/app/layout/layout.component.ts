@@ -29,5 +29,9 @@ export class LayoutComponent {
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
   }
+
+  closeRightSidebar(){
+    this.deviceStore.setSelectedEntity(null);
+  }
  
 }

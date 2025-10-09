@@ -46,5 +46,8 @@
   "TIME_AGO_MONTHS": "vor {{count}} Monaten",
   "TIME_AGO_MONTHS_ONE": "vor {{count}} Monat",
   "TIME_AGO_YEARS": "vor {{count}} Jahren",
-  "TIME_AGO_YEARS_ONE": "vor {{count}} Jahr"
+  "TIME_AGO_YEARS_ONE": "vor {{count}} Jahr",
+  "YES":"Ja",
+  "NO":"Nein",
+  "DETAILS":"Details"
 }

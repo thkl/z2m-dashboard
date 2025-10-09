@@ -2,10 +2,12 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
 import { DeviceService } from '../../services/device.service';
+import { HexPipe } from '../../pipes/hex.pipe';
+import { HumanReadablePipe } from '../../pipes/human.pipe';
 
 @Component({
   selector: 'app-deviceproperties',
-  imports: [TranslateModule],
+  imports: [TranslateModule,HexPipe,HumanReadablePipe],
   templateUrl: './deviceproperties.html',
   styleUrl: './deviceproperties.scss'
 })
