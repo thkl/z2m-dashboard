@@ -7,7 +7,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, TranslateModule],
-  providers:[DeviceService,ApplicationService],
+  providers: [DeviceService, ApplicationService],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
@@ -16,7 +16,8 @@ export class App {
   protected readonly ds = inject(DeviceService);
   protected readonly as = inject(ApplicationService);
   private readonly translate = inject(TranslateService);
-
+  private readonly darkClass = 'dark-theme';
+  private readonly storageKey = 'theme';
 
   constructor() {
     this.as.setHostName("https://zigbee.th-kl.de");
@@ -27,6 +28,17 @@ export class App {
     // Use browser language
     const browserLang = this.translate.getBrowserLang();
     this.translate.use(browserLang?.match(/en|de/) ? browserLang : 'en');
+
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersDark.matches) {
+      this.enableDarkMode();
+    }
   }
 
+
+  enableDarkMode(): void {
+    document.body.classList.add(this.darkClass);
+    localStorage.setItem(this.storageKey, 'dark');
+  }
 }

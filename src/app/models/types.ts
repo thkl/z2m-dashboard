@@ -13,3 +13,13 @@ export interface ColorOption {
   /** Hexadecimal color value */
   value: string;
 }
+
+/**
+ * Represents a predefined color temperature option
+ */
+export interface ColorTemperatureOption {
+  /** Display name of the temperature preset */
+  name: string;
+  /** Color temperature in mireds */
+  value: number;
+}

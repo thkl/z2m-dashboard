@@ -11,9 +11,10 @@ export interface DeviceOption {
 export interface DeviceFeatureVisual {
     property:DeviceFeature;
     value:any
+    helper:any
 }
 
-export interface ExposurePreset {
+export interface FeaturePreset {
     description: string;
     name:string;
     value:any;
@@ -64,7 +65,7 @@ export interface DeviceFeature {
     value_off?:string;
     value_toggle?:string;
     values?:any[];
-    presets?:ExposurePreset[];
+    presets?:FeaturePreset[];
     hidden:boolean;
 }
 

@@ -1,0 +1,57 @@
+<div class="color-temp-picker">
+  <div class="dropdown">
+    <button class="btn btn-outline-secondary dropdown-toggle color-temp-selector-btn" [class.btn-sm]="size() === 'sm'"
+      [class.btn-lg]="size() === 'lg'" (click)="toggleDropdown()" type="button">
+      @if(selectedMireds() !== 65535) {
+        <span class="temp-preview" [style.background-color]="getTemperatureColor(selectedMireds())"></span>
+      } @else {
+      <span class="temp-preview"></span>
+      }
+      <span class="ml-1 button-text">{{ buttonText() }}</span>
+
+    </button>
+
+    @if(isOpen()) {
+    <div class="dropdown-menu temp-dropdown">
+      @if(presetTemperatures().length > 0) {
+      <h6 class="dropdown-header">Preset Temperatures</h6>
+      @for(temp of presetTemperatures(); track temp.value) {
+      <button class="dropdown-item temp-option" (click)="selectTemperature(temp.value)" type="button">
+        @if(temp.value !== 65535) {
+        <span class="temp-bar" [style.background-color]="getTemperatureColor(temp.value)"></span>
+        } @else {
+          <span class="temp-bar prevoius-styling"></span>
+        }
+        <span class="temp-info">
+          <span class="temp-name">{{temp.name}}</span>
+          @if(temp.value !== 65535) {
+          <span class="temp-value">{{getTemperatureKelvin(temp.value)}}K</span>
+          }
+        </span>
+      </button>
+      }
+      <div class="dropdown-divider"></div>
+      }
+      <h6 class="dropdown-header">Custom Temperature</h6>
+      <div class="custom-temp-picker">
+        <div class="temp-slider-container">
+          <input type="range" class="temp-slider" [value]="selectedMireds()"
+            (input)="onCustomTemperatureChange(+$any($event.target).value)" min="153" max="500" step="1">
+          <div class="temp-labels">
+            <span class="label-cool">Cool</span>
+            <span class="label-warm">Warm</span>
+          </div>
+        </div>
+        <div class="temp-display">
+          <span class="temp-kelvin">{{getTemperatureKelvin(selectedMireds())}}K</span>
+          <span class="temp-mireds">{{selectedMireds()}} mireds</span>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  @if(isOpen()) {
+  <div class="backdrop" (click)="closeDropdown()"></div>
+  }
+</div>

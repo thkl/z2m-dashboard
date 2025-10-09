@@ -7,7 +7,9 @@
             type="button">
       <span class="color-preview"
             [style.background-color]="selectedColor()"></span>
-      {{ buttonText() }}
+            <span class="ml-1 button-text">
+              {{ buttonText() }}
+            </span>
     </button>
 
     @if(isOpen()) {

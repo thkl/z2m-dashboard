@@ -2,6 +2,26 @@
 
 :host {
   @apply w-full h-full;
+  background-color: var(--app-background-raised-color);
+}
+
+.layout_root {
+  background-color: var(--app-background-raised-color);
+}
+
+aside {
+  background-color: var(--app-background-raised-color);
+  border-color: var(--app-border-color);
+}
+
+.layout_header {
+  background-color: var(--app-background-raised-color);
+  border-color: var(--app-border-color);
+}
+
+.layout_section {
+  background-color: var(--app-background-color);
+  border-color: var(--app-border-color);
 }
 
 .material-icons {

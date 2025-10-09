@@ -19,14 +19,15 @@ export class RadiolistComponent {
   selected = output<RadioElement>();
 
   controlItems = signal<RadioElement[]>([]);
-  private initialized = false;
+  private clicked = false;
 
     constructor(private cdr: ChangeDetectorRef) {
     effect(()=>{
-      if (!this.initialized) {
-        this.controlItems.set(this.items().map((item, idx) => ({...item, _id: idx})));
-        this.initialized = true;
-      }
+      const newValues = this.items().map((item, idx) => ({...item, _id: idx}));
+      setTimeout(()=>{
+        this.controlItems.set(newValues);
+        this.clicked = false;
+      },(this.clicked) ? 1000:0)
     })
   }
 
@@ -38,6 +39,7 @@ export class RadiolistComponent {
         _id: idx
       }));
       this.controlItems.set(newItems);
+      this.clicked = true;
       this.cdr.detectChanges();
       this.selected.emit(this.controlItems()[index]);
     }

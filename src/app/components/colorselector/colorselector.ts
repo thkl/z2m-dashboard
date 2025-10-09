@@ -16,6 +16,8 @@ export class ColorSelectorComponent {
 
   isOpen = signal(false);
 
+  private debounceTimer: any = null;
+
   presetColors: ColorOption[] = [
     { name: 'Blue', value: '#007bff' },
     { name: 'Green', value: '#28a745' },
@@ -43,7 +45,15 @@ export class ColorSelectorComponent {
 
   onCustomColorChange(color: string) {
     this.selectedColor.set(color);
-    this.colorChange.emit(color);
+
+    // Debounce the color change event
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+
+    this.debounceTimer = setTimeout(() => {
+      this.colorChange.emit(color);
+    }, 500);
   }
 
   closeDropdown() {
