@@ -9,7 +9,7 @@
     "test": "ng test"
   },
   "prettier": {
-    "printWidth": 100,
+    "printWidth": 180,
     "singleQuote": true,
     "overrides": [
       {

@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { DeviceService } from './services/device.service';
 import { ApplicationService } from './services/app.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { BridgeService } from './services/bridge.service';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 })
 export class App {
   protected readonly title = signal('sigbee2mqtt-dashboard');
+  protected readonly bs = inject(BridgeService);
   protected readonly ds = inject(DeviceService);
   protected readonly as = inject(ApplicationService);
   private readonly translate = inject(TranslateService);

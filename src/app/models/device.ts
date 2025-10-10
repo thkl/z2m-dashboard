@@ -98,7 +98,7 @@ export interface Device {
     definition: DeviceDefinition;
     description:string;
     disabled: boolean;
-    endpoints: any
+    endpoints: { [key: string]: Endpoint };
     friendly_name: string;
     ieee_address: string;
     interview_completed: boolean;
@@ -114,3 +114,14 @@ export interface Device {
     state:DeviceState;
 }
 
+export interface Endpoint {
+    bindings:              any[];
+    clusters:              Clusters;
+    configured_reportings: any[];
+    scenes:                any[];
+}
+
+export interface Clusters {
+    input:  string[];
+    output: string[];
+}

@@ -22,10 +22,13 @@
 
   <div class="flex-1 flex flex-col">
     @if (panel() === 1) {
-      <app-deviceproperties [ieee_address]="device()?.ieee_address"></app-deviceproperties>
+      <DeviceInfoComponent [ieee_address]="device()?.ieee_address"></DeviceInfoComponent>
     }
     @if (panel() === 2) {
       <DeviceFeaturesComponent [ieee_address]="device()?.ieee_address"></DeviceFeaturesComponent>
+    }
+    @if (panel() === 3) {
+      <DevicePropertiesComponent [ieee_address]="device()?.ieee_address"></DevicePropertiesComponent>
     }
   </div>
 }

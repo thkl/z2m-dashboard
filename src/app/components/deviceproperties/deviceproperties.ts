@@ -1,24 +1,20 @@
-import { Component, computed, inject, input, Signal, signal } from '@angular/core';
-import { DeviceStore } from '../../datastore/device.store';
-import { TranslateModule } from '@ngx-translate/core';
-import { DeviceService } from '../../services/device.service';
-import { HexPipe } from '../../pipes/hex.pipe';
-import { HumanReadablePipe } from '../../pipes/human.pipe';
+import { Component, computed, inject, input, Signal } from '@angular/core';
 import { Device } from '../../models/device';
 import { createStoreView } from '../../datastore/generic-store-view';
+import { DeviceStore } from '../../datastore/device.store';
 import { SearchOperator } from '../../datastore/generic.store';
+import { DeviceEndpointComponent } from '../endpoints/endpoints';
+import { ExpansionPanelComponent } from '../expansionpanel/expansionpanel';
 
 @Component({
-  selector: 'app-deviceproperties',
-  imports: [TranslateModule, HexPipe, HumanReadablePipe],
+  selector: 'DevicePropertiesComponent',
+  imports: [DeviceEndpointComponent,ExpansionPanelComponent],
   templateUrl: './deviceproperties.html',
   styleUrl: './deviceproperties.scss'
 })
-export class DeviceProperties {
-  protected readonly deviceStore = inject(DeviceStore);
-  protected readonly deviceService = inject(DeviceService);
-
+export class DevicePropertiesComponent {
   ieee_address = input.required<string | undefined>();
+  protected readonly deviceStore = inject(DeviceStore);
   device = computed(() => {
     //Filter the coordinator from the devices
     let devicesView: Signal<Device[]> = createStoreView(this.deviceStore, {
@@ -32,23 +28,4 @@ export class DeviceProperties {
   });
 
 
-  startInterview() {
-    if (this.device() !== null) {
-      this.deviceService.startInterview(this.device()!);
-    }
-  }
-
-  startReconfig() {
-    if (this.device() !== null) {
-      this.deviceService.startReconfig(this.device()!);
-    }
-  }
-
-  changeDescriptions(event: any) {
-    const description = event.target.value;
-    if (this.device() !== null) {
-      const changedDevice = { ...this.device()!, description };
-      this.deviceService.changeDeviceDescription(changedDevice);
-    }
-  }
 }

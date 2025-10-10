@@ -2,12 +2,12 @@ import { Component, computed, effect, inject, input, model, signal, Signal } fro
 import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccessMode, Device, DeviceFeature, DeviceFeatureVisual, DeviceTargetState } from '../../models/device';
- 
+
 import { DeviceService } from '../../services/device.service';
 import { InfoOverlayComponent } from '../infooverlay/infooverlay';
 import { ExpansionPanelComponent } from "../expansionpanel/expansionpanel";
 import { RadioElement, RadiolistComponent } from '../radiolist/radiolist';
- 
+
 import { OptionComponent } from '../option/option';
 import { SwitchElement } from '../../models/types';
 import { ColorSelectorComponent } from '../colorselector/colorselector';
@@ -29,22 +29,22 @@ export class DeviceFeaturesComponent {
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly deviceService = inject(DeviceService);
   readonly AccessMode = AccessMode;
-  
-  deviceFeastures = signal<DeviceFeatureVisual[]>([]);
-  
-  levelMarks: LevelMarkOption[] = [{percent:0,label:"0"},{percent:50,label:"50"},{percent:100,label:"100"}];
 
-  ieee_address = input.required<string|undefined>();
+  deviceFeastures = signal<DeviceFeatureVisual[]>([]);
+
+  levelMarks: LevelMarkOption[] = [{ percent: 0, label: "0" },{ percent: 25, label: "25" }, { percent: 50, label: "50" },{ percent: 75, label: "75" }, { percent: 100, label: "100" }];
+
+  ieee_address = input.required<string | undefined>();
   device = computed(() => {
-     //Filter the coordinator from the devices
-      let devicesView : Signal<Device[]> = createStoreView(this.deviceStore, {
-        criteria: [
-          { property: "ieee_address", value: this.ieee_address(), operator: "equals" }
-        ],
-        logicalOperator: SearchOperator.AND
-      }, false, undefined);
-      
-    return devicesView().length > 0 ? devicesView()[0] :null
+    //Filter the coordinator from the devices
+    let devicesView: Signal<Device[]> = createStoreView(this.deviceStore, {
+      criteria: [
+        { property: "ieee_address", value: this.ieee_address(), operator: "equals" }
+      ],
+      logicalOperator: SearchOperator.AND
+    }, false, undefined);
+
+    return devicesView().length > 0 ? devicesView()[0] : null
   });
 
   constructor() {
@@ -204,13 +204,13 @@ export class DeviceFeaturesComponent {
   }
 
   valueChange(property: DeviceFeature, newValue: number): void {
-  if (this.device()) {
-        const state: DeviceTargetState = {};
-        state[property.property] = newValue;
-        this.deviceService.updateDeviceState(this.device()!.friendly_name, state);
-      }
+    if (this.device()) {
+      const state: DeviceTargetState = {};
+      state[property.property] = newValue;
+      this.deviceService.updateDeviceState(this.device()!.friendly_name, state);
+    }
   }
-  
+
   hasAccess(access: number, mode: AccessMode): boolean {
     return (access & mode) !== 0;
   }

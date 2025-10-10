@@ -1,0 +1,115 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.box {
+   min-width: 30px;
+  border-color: var(--app-text-color);
+  border-width: 1px;
+  border-style: solid;
+  padding: 0.5em 1em;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--app-background-color, transparent);
+  color: var(--app-text-color);
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: var(--app-text-color);
+    color: var(--app-background-raised-color);
+    cursor: pointer;
+  }
+}
+
+.endpoint {
+  margin-top: 10px;
+}
+
+.ep-types-container {
+  position: relative;
+  margin-left: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding-left: 15px;
+
+  // Vertical line connecting all ep-type groups
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    bottom: 1em;
+    width: 1px;
+    background-color: var(--app-text-color);
+  }
+}
+
+.ep-type-group {
+  margin-top:10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.ep_type {
+  // Horizontal line to parent
+  &::before {
+    content: '';
+    position: absolute;
+    left: -15px;
+    top: 50%;
+    width: 15px;
+    height: 1px;
+    background-color: var(--app-text-color);
+  }
+
+  &:not(:empty)::after {
+    content: '';
+    position: absolute;
+    left: 29px;
+    top: 100%;
+    width: 1px;
+    height: 15px;
+    background-color: var(--app-text-color);
+  }
+
+}
+
+.clusters-container {
+  position: relative;
+  margin-left: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding-left: 15px;
+
+  // Vertical line connecting all clusters
+  &:not(:empty)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 1em;
+    width: 1px;
+    background-color: var(--app-text-color);
+  }
+}
+
+.cluster {
+  // Horizontal line to parent
+  &::before {
+    content: '';
+    position: absolute;
+    left: -15px;
+    top: 50%;
+    width: 14px;
+    height: 1px;
+    background-color: var(--app-text-color);
+  }
+}

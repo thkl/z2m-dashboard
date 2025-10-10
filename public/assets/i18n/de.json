@@ -49,5 +49,6 @@
   "TIME_AGO_YEARS_ONE": "vor {{count}} Jahr",
   "YES":"Ja",
   "NO":"Nein",
-  "DETAILS":"Details"
+  "DETAILS":"Details",
+  "ENDPOINT":"Endpunkt"
 }
