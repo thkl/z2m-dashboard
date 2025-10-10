@@ -3,15 +3,14 @@
     <div class="font-bold text-center mt-5">{{ 'DETAILS' | translate }}</div>
   </div>
   <div class="container">
-    @for (item of deviceFeastures(); track $index) {
+    @for (item of deviceFeatures(); track $index) {
       @if (item.property.hidden === false) {
         <div class="device_row">
           <div class="label flex flex-col">
             <span
               >{{ item.property.label || item.property.name }}
               @if (item.property.description) {
-                <InfoOverlayComponent [message]="item.property.description" style="min-width: 30px">
-                </InfoOverlayComponent>
+                <InfoOverlayComponent [message]="item.property.description" style="min-width: 30px"> </InfoOverlayComponent>
               }
             </span>
           </div>
@@ -86,11 +85,7 @@
                   @case ('color') {
                     {{ item.helper }}
 
-                    <ColorSelectorComponent
-                      [selectedColor]="item.helper"
-                      (colorChange)="colorChange(item.property, $event)"
-                    >
-                    </ColorSelectorComponent>
+                    <ColorSelectorComponent [selectedColor]="item.helper" (colorChange)="colorChange(item.property, $event)"> </ColorSelectorComponent>
                   }
                 }
               }
@@ -101,10 +96,8 @@
     }
   </div>
   <div class="pl-2 pr-2 flex flex-col grow">
-    <ExpansionPanelComponent title="Raw Data" style="flex-grow: inherit">
-      <textarea class="scrollbar w-full bg-transparent grow">{{
-        deviceFeastures() | human: '' : 2
-      }}</textarea>
+    <ExpansionPanelComponent label="Raw Data" style="flex-grow: inherit">
+      <textarea class="scrollbar w-full bg-transparent grow">{{ deviceFeatures() | human: '' : 2 }}</textarea>
     </ExpansionPanelComponent>
   </div>
 </div>

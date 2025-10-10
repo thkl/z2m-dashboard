@@ -30,7 +30,7 @@ export class DeviceFeaturesComponent {
   protected readonly deviceService = inject(DeviceService);
   readonly AccessMode = AccessMode;
 
-  deviceFeastures = signal<DeviceFeatureVisual[]>([]);
+  deviceFeatures = signal<DeviceFeatureVisual[]>([]);
 
   levelMarks: LevelMarkOption[] = [{ percent: 0, label: "0" },{ percent: 25, label: "25" }, { percent: 50, label: "50" },{ percent: 75, label: "75" }, { percent: 100, label: "100" }];
 
@@ -52,7 +52,7 @@ export class DeviceFeaturesComponent {
       const expos = this.device()?.definition.exposes;
       const states = this.device()?.state;
       const result = this.flattenExposures(expos || [], states || []);
-      this.deviceFeastures.set(result);
+      this.deviceFeatures.set(result);
     })
   }
 

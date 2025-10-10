@@ -5,6 +5,7 @@ import { Device, DeviceTargetState, DeviceFeature } from "../models/device";
 import { timeAgo } from "../utils/time.utils";
 import { TranslateService } from "@ngx-translate/core";
 import { ApplicationService } from "./app.service";
+import { BridgeService } from "./bridge.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class DeviceService {
   private ws = inject(Websocket);
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly appService = inject(ApplicationService);
+  protected readonly bridgeService = inject(BridgeService);
 
   private translate = inject(TranslateService);
 
@@ -58,7 +60,7 @@ export class DeviceService {
     }
   }
 
-  public updateDeviceState(device:string, data:DeviceTargetState):void {
+  public updateDeviceState(device: string, data: DeviceTargetState): void {
     const topic = `${device}/set`;
     this.appService.sendBridgeRequest(topic, data);
   }
@@ -76,8 +78,16 @@ export class DeviceService {
   addDevices(deviceList: Device[]): void {
     console.log("Set All Devices")
     const devicelist = this.deviceStore.entities();
+    const bridgeInfo = this.bridgeService.getBridgeInfo();
     // copy the old state or create an empty one
     deviceList.forEach(device => {
+      // set the device option values from the bridge info devices 
+      const bridgeDevice = bridgeInfo()?.config.devices[device.ieee_address];
+      if (bridgeDevice) {
+        device.options = bridgeDevice;
+      } else {
+        console.log("NF",device.ieee_address)
+      }
       const oldDevice = devicelist.find(d => d.ieee_address === device.ieee_address);
       if (oldDevice) {
         device.state = oldDevice.state;

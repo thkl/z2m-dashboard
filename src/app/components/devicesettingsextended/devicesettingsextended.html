@@ -1,0 +1,26 @@
+<div class="wrapper" style="display: flex; flex-direction: column">
+  @for (option of deviceOptions(); track $index) {
+    <div class="device_row">
+      <div class="label flex flex-col">
+        <span>
+          {{ option.label }}
+          @if (option.description) {
+            <InfoOverlayComponent [message]="option.description" style="min-width: 30px"> </InfoOverlayComponent>
+          }
+        </span>
+      </div>
+      @switch (option.type) {
+        @case ('binary') {
+          @if (hasAccess(option.access, AccessMode.SET)) {
+            <OptionComponent [active]="hasAccess(option.access, AccessMode.SET)" [item]="{ label: option.value_on ?? 'ON', isActive: option.value === true }"></OptionComponent>
+          } @else {
+            <span>{{ option.value }}</span>
+          }
+        }
+        @case ('numeric') {
+          <input class="w-full text-right" [value]="option.value" />
+        }
+      }
+    </div>
+  }
+</div>

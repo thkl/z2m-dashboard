@@ -1,27 +1,27 @@
-<ExpansionPanelComponent [title]='title()'>
-    <div class="options">
-        @if(length()>maxShown()) {
-        <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
-        }
-        <div class="panel scrollbar" [style.max-height.px]="maxShown() * 30">
-            @for (entity of internalEntites; track entity) {
-            <div class="item">
-                <div style="display: contents;">
-                    <label class="root cursor-pointer" (click)="toggle(entity!); $event.preventDefault(); $event.stopPropagation()">
-                        @if(entity?.isSelected) {
-                        <span class="indicator selected indicator-dark material-symbols-outlined">check</span>
-                        } @else {
-                        <span class="indicator indicator-dark"></span>
-                        }
-                        <div class="root">
-                            <div><span class="label">{{entity?.label}}</span></div>
-                        </div>
-
-                    </label>
+<ExpansionPanelComponent [label]="title()">
+  <div class="options">
+    @if (length() > maxShown()) {
+      <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
+    }
+    <div class="panel scrollbar" [style.max-height.px]="maxShown() * 30">
+      @for (entity of internalEntites; track entity) {
+        <div class="item">
+          <div style="display: contents">
+            <label class="root cursor-pointer" (click)="toggle(entity!); $event.preventDefault(); $event.stopPropagation()">
+              @if (entity?.isSelected) {
+                <span class="indicator selected indicator-dark material-symbols-outlined">check</span>
+              } @else {
+                <span class="indicator indicator-dark"></span>
+              }
+              <div class="root">
+                <div>
+                  <span class="label">{{ entity?.label }}</span>
                 </div>
-            </div>
-
-            }
+              </div>
+            </label>
+          </div>
         </div>
+      }
     </div>
+  </div>
 </ExpansionPanelComponent>

@@ -1,9 +1,15 @@
 <div class="container">
-  <ExpansionPanelComponent title="Cluster" style="flex-grow: inherit" class="panel">
-    <DeviceEndpointComponent [endpoints]="device()?.endpoints ?? {}"></DeviceEndpointComponent>
+  <ExpansionPanelComponent label="Cluster" style="flex-grow: inherit" class="panel">
+    <div class="wrapper">
+      <DeviceEndpointComponent [endpoints]="device()?.endpoints ?? {}"></DeviceEndpointComponent>
+    </div>
   </ExpansionPanelComponent>
 
-  <ExpansionPanelComponent title="Settings" style="flex-grow: inherit" class="panel"> </ExpansionPanelComponent>
+  <ExpansionPanelComponent label="Settings" style="flex-grow: inherit" class="panel"> </ExpansionPanelComponent>
 
-  <ExpansionPanelComponent title="Extended Settings" style="flex-grow: inherit" class="panel"> </ExpansionPanelComponent>
+  <ExpansionPanelComponent label="Extended Settings" style="flex-grow: inherit" class="panel">
+    <div class="wrapper">
+      <DeviceSettingsExtended [device]="device()"></DeviceSettingsExtended>
+    </div>
+  </ExpansionPanelComponent>
 </div>

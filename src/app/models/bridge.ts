@@ -58,7 +58,7 @@ export interface Advanced {
 }
 
 export interface ConfigSchema {
-    
+      [key: string]: any;
 }
 
 export interface Availability {

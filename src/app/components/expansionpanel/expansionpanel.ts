@@ -8,7 +8,7 @@ import { SearchInput } from '../searchinput/searchinput';
   styleUrl: './expansionpanel.scss'
 })
 export class ExpansionPanelComponent {
-  title = input.required<string>();
+  label = input.required<string>();
   hasSearch = input<boolean>();
   isOpen = signal(false);
 

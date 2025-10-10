@@ -5,7 +5,10 @@ export interface DeviceOption {
     name: string;
     property: string;
     type: string;
-    value_step: number;
+    value_step?: number;
+    value_on?:string;
+    value_off?:string;
+    value:any;
 }
 
 export interface DeviceFeatureVisual {
@@ -93,6 +96,8 @@ export interface DeviceTargetState {
         [key: string]: any;
 }
 
+
+
 export interface Device {
     date_code: string;
     definition: DeviceDefinition;
@@ -112,6 +117,7 @@ export interface Device {
     supported: boolean;
     type: string;
     state:DeviceState;
+    options: {[key: string]: any};
 }
 
 export interface Endpoint {

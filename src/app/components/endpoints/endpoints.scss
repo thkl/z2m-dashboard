@@ -5,7 +5,7 @@
 }
 
 .box {
-   min-width: 30px;
+  min-width: 30px;
   border-color: var(--app-text-color);
   border-width: 1px;
   border-style: solid;
@@ -17,7 +17,7 @@
   background-color: var(--app-background-color, transparent);
   color: var(--app-text-color);
   transition: background-color 0.2s, color 0.2s;
-
+  max-width: calc(100% - 2em);
   &:hover {
     background-color: var(--app-text-color);
     color: var(--app-background-raised-color);
@@ -26,6 +26,7 @@
 }
 
 .endpoint {
+  margin-left: 10px;
   margin-top: 10px;
 }
 
@@ -103,6 +104,8 @@
 
 .cluster {
   // Horizontal line to parent
+
+  
   &::before {
     content: '';
     position: absolute;

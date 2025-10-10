@@ -5,10 +5,11 @@ import { DeviceStore } from '../../datastore/device.store';
 import { SearchOperator } from '../../datastore/generic.store';
 import { DeviceEndpointComponent } from '../endpoints/endpoints';
 import { ExpansionPanelComponent } from '../expansionpanel/expansionpanel';
+import { DeviceSettingsExtended } from '../devicesettingsextended/devicesettingsextended';
 
 @Component({
   selector: 'DevicePropertiesComponent',
-  imports: [DeviceEndpointComponent,ExpansionPanelComponent],
+  imports: [DeviceEndpointComponent,ExpansionPanelComponent,DeviceSettingsExtended],
   templateUrl: './deviceproperties.html',
   styleUrl: './deviceproperties.scss'
 })
