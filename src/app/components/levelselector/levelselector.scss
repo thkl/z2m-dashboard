@@ -1,0 +1,108 @@
+
+.root {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.marks {
+    padding-left:10px;
+    padding-right: 10px;
+}
+
+.formatContainer {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%
+}
+.inputContainer {
+  transform: translate(-6px, -50%);
+  width: 100%;
+  border-radius: 2px;
+  height: 8px;
+  position: absolute;
+  top: 50%;
+  background-color: var(--button-text-color);
+}
+
+.inputContainer::before {
+  background-color: transparent;
+  content: '';
+  height: 24px;
+  position: absolute;
+  transform: translateY(-50%);
+  width: 100%;
+  z-index: -1;
+}
+
+.valueMark {
+  background-color: var(--button-text-color);
+  border-radius: 8px;
+  height: 4px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mark {
+  left: -6px;
+  top: 4px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.track {
+  padding: 4px 0;
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+}
+
+.markShape {
+  background-color: var( --app-text-color);
+  border-radius: 8px;
+  height: 6px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 6px;
+}
+
+.start {
+}
+
+.thumb {
+  position: absolute;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  touch-action: none;
+}
+
+ 
+
+.thumbIcon {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  height: 12px;
+  top:4px;
+  width: 12px;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.captionContainer {
+}
+
+.caption {
+  margin-top: 8px;
+  position: absolute;
+  transform: translate(-40%);
+  white-space: nowrap;
+}

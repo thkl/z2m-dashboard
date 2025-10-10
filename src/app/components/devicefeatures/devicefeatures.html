@@ -1,93 +1,110 @@
-<div class="wrapper" style="display: flex;flex-direction: column;">
-    <div class="container header">
-        <div class="font-bold  text-center mt-5">{{"DETAILS" | translate}}</div>
-    </div>
-    <div class="container">
-        @for (item of deviceExposure(); track $index) {
-        @if(item.property.hidden === false) {
+<div class="wrapper" style="display: flex; flex-direction: column">
+  <div class="container header">
+    <div class="font-bold text-center mt-5">{{ 'DETAILS' | translate }}</div>
+  </div>
+  <div class="container">
+    @for (item of deviceFeastures(); track $index) {
+      @if (item.property.hidden === false) {
         <div class="device_row">
+          <div class="label flex flex-col">
+            <span
+              >{{ item.property.label || item.property.name }}
+              @if (item.property.description) {
+                <InfoOverlayComponent [message]="item.property.description" style="min-width: 30px">
+                </InfoOverlayComponent>
+              }
+            </span>
+          </div>
 
-            <div class="label flex flex-col">
-                <span>{{item.property.label || item.property.name}}
-                    @if(item.property.description){<InfoOverlayComponent [message]="item.property.description"
-                        style="min-width: 30px;">
-                    </InfoOverlayComponent>}</span>
-            </div>
-
-            @switch (item.property.type) {
-            @case ("binary") {
-
-            @if (hasAccess(item.property.access, AccessMode.SET)) {
-            <OptionComponent [active]="(hasAccess(item.property.access, AccessMode.SET))"
-                [item]="{label:item.property.value_on ?? 'ON',isActive:item.value==='ON'}"
-                (clicked)="switch(item.property,$event)"></OptionComponent>
-            } @else {
-            <span>{{item.value}}</span>
-            }
-            }
-
-            @case ("enum") {
-            @if (hasAccess(item.property.access, AccessMode.SET)) {
-
-            <RadiolistComponent [items]="radioItems(item.property,item.value)"
-                [active]="(hasAccess(item.property.access, AccessMode.SET))"
-                (selected)="enumClick(item.property,$event)"></RadiolistComponent>
-            } @else {
-            <span> - {{item.value}}</span>
+          @switch (item.property.type) {
+            @case ('binary') {
+              @if (hasAccess(item.property.access, AccessMode.SET)) {
+                <OptionComponent
+                  [active]="hasAccess(item.property.access, AccessMode.SET)"
+                  [item]="{ label: item.property.value_on ?? 'ON', isActive: item.value === 'ON' }"
+                  (clicked)="switch(item.property, $event)"
+                ></OptionComponent>
+              } @else {
+                <span>{{ item.value }}</span>
+              }
             }
 
+            @case ('enum') {
+              @if (hasAccess(item.property.access, AccessMode.SET)) {
+                <RadiolistComponent
+                  [items]="radioItems(item.property, item.value)"
+                  [active]="hasAccess(item.property.access, AccessMode.SET)"
+                  (selected)="enumClick(item.property, $event)"
+                ></RadiolistComponent>
+              } @else {
+                <span> - {{ item.value }}</span>
+              }
             }
 
-            @case ("numeric") {
-            @switch (item.property.property) {
-            @case("color_temp") {
-            <span>{{item.value}} {{item.property.unit}}</span>
+            @case ('numeric') {
+              @switch (item.property.property) {
+                @case ('color_temp') {
+                  <span>{{ item.value }} {{ item.property.unit }}</span>
 
-            <ColorTemperatureSelectorComponent [selectedMireds]="item.value"
-                [presetTemperatures]="item.property.presets || []"
-                (temperatureChange)="temperatureChange(item.property,$event)"></ColorTemperatureSelectorComponent>
+                  <ColorTemperatureSelectorComponent
+                    [selectedMireds]="item.value"
+                    [presetTemperatures]="item.property.presets || []"
+                    (temperatureChange)="colorTemperatureChange(item.property, $event)"
+                  ></ColorTemperatureSelectorComponent>
+                }
+                @case ('color_temp_startup') {
+                  <span>{{ item.value }} {{ item.property.unit }}</span>
 
-
-            }
-            @case ("color_temp_startup") {
-            <span>{{item.value}} {{item.property.unit}}</span>
-
-            <ColorTemperatureSelectorComponent [selectedMireds]="item.value"
-                [presetTemperatures]="item.property.presets || []"
-                (temperatureChange)="temperatureChange(item.property,$event)"></ColorTemperatureSelectorComponent>
-
-            }
-            @default {
-            <span>{{item.value}} {{item.property.unit}}</span>
-            }
-            }
-
-
-            }
-
-            @case ("composite") {
-            @if (hasAccess(item.property.access, AccessMode.SET)) {
-            @switch (item.property.property) {
-            @case ("color") {
-            {{item.helper}}
-
-            <ColorSelectorComponent [selectedColor]="item.helper" (colorChange)="colorChange(item.property,$event)">
-            </ColorSelectorComponent>
-            }
-            }
-            }
-            }
+                  <ColorTemperatureSelectorComponent
+                    [selectedMireds]="item.value"
+                    [presetTemperatures]="item.property.presets || []"
+                    (temperatureChange)="colorTemperatureChange(item.property, $event)"
+                  ></ColorTemperatureSelectorComponent>
+                }
+                @default {
+                  @if (hasAccess(item.property.access, AccessMode.SET)) {
+                    <div class="w-full flex-1 ml-6">
+                      <LevelSelectorComponent
+                        [marks]="levelMarks"
+                        style="width: 100%"
+                        [value]="item.value"
+                        [min]="item.property.value_min ?? 0"
+                        [max]="item.property.value_max ?? 100"
+                        (valueChange)="valueChange(item.property, $event)"
+                      ></LevelSelectorComponent>
+                    </div>
+                  } @else {
+                    <span>{{ item.value }} {{ item.property.unit }}</span>
+                  }
+                }
+              }
             }
 
+            @case ('composite') {
+              @if (hasAccess(item.property.access, AccessMode.SET)) {
+                @switch (item.property.property) {
+                  @case ('color') {
+                    {{ item.helper }}
 
-
+                    <ColorSelectorComponent
+                      [selectedColor]="item.helper"
+                      (colorChange)="colorChange(item.property, $event)"
+                    >
+                    </ColorSelectorComponent>
+                  }
+                }
+              }
+            }
+          }
         </div>
-        }
-        }
-    </div>
-    <div class="pl-2 pr-2 flex flex-col grow">
-        <ExpansionPanelComponent title="Raw Data" style="flex-grow: inherit;">
-            <textarea class="scrollbar w-full bg-transparent grow">{{deviceExposure() | human : "" : 2}}</textarea>
-        </ExpansionPanelComponent>
-    </div>
+      }
+    }
+  </div>
+  <div class="pl-2 pr-2 flex flex-col grow">
+    <ExpansionPanelComponent title="Raw Data" style="flex-grow: inherit">
+      <textarea class="scrollbar w-full bg-transparent grow">{{
+        deviceFeastures() | human: '' : 2
+      }}</textarea>
+    </ExpansionPanelComponent>
+  </div>
 </div>

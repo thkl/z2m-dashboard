@@ -1,30 +1,31 @@
-@if(device()!==null){
-<header class="h-14 flex items-center justify-between px-4">
-    <h1 class="text-lg font-semibold">{{device()?.friendly_name}}</h1>
-    <div class="wrap"><button type="button"
-            class="headerButton" (click)="closeSidebar()"><span
-                class="material-symbols-outlined">close</span>
-            <div class="stateIcon"></div>
-        </button></div>
-</header>
-<nav>
-    <button class="navbutton" (click)="panel.set(1)" [class.navbutton-selected]="panel()===1">
-        <span class="material-symbols-outlined">dashboard</span>
+@if (device() !== null) {
+  <header class="h-14 flex items-center justify-between px-4">
+    <h1 class="text-lg font-semibold">{{ device()?.friendly_name }}</h1>
+    <div class="wrap">
+      <button type="button" class="headerButton" (click)="closeSidebar()">
+        <span class="material-symbols-outlined">close</span>
+        <div class="stateIcon"></div>
+      </button>
+    </div>
+  </header>
+  <nav>
+    <button class="navbutton" (click)="panel.set(1)" [class.navbutton-selected]="panel() === 1">
+      <span class="material-symbols-outlined">dashboard</span>
     </button>
-    <button class="navbutton" (click)="panel.set(2)" [class.navbutton-selected]="panel()===2">
-        <span class="material-symbols-outlined">tune</span>
+    <button class="navbutton" (click)="panel.set(2)" [class.navbutton-selected]="panel() === 2">
+      <span class="material-symbols-outlined">tune</span>
     </button>
-    <button class="navbutton" (click)="panel.set(3)" [class.navbutton-selected]="panel()===3">
-        <span class="material-symbols-outlined">settings</span>
+    <button class="navbutton" (click)="panel.set(3)" [class.navbutton-selected]="panel() === 3">
+      <span class="material-symbols-outlined">settings</span>
     </button>
-</nav>
+  </nav>
 
-<div class="flex-1 flex flex-col">
-    @if(panel()===1) {
-    <app-deviceproperties></app-deviceproperties>
+  <div class="flex-1 flex flex-col">
+    @if (panel() === 1) {
+      <app-deviceproperties [ieee_address]="device()?.ieee_address"></app-deviceproperties>
     }
-    @if (panel()===2) {
-    <DeviceFeaturesComponent></DeviceFeaturesComponent>
+    @if (panel() === 2) {
+      <DeviceFeaturesComponent [ieee_address]="device()?.ieee_address"></DeviceFeaturesComponent>
     }
-</div>
+  </div>
 }

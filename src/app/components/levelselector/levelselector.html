@@ -1,0 +1,52 @@
+<div aria-label="Slider" class="root">
+  <div class="formatContainer">
+    <div #track class="track" (click)="onTrackClick($event)">
+      <div class="inputContainer">
+        <div class="marks">
+          @for (mark of marks(); track $index) {
+            <div class="mark" [style.left.%]="mark.percent">
+              <span class="markShape"></span>
+              <p class="caption">{{ mark.label }}</p>
+            </div>
+          }
+        </div>
+        <div
+          class="thumb"
+          [style.top.px]="4"
+          [style.left.%]="currentValue()"
+          (mousedown)="onThumbMouseDown($event)"
+          (touchstart)="onThumbTouchStart($event)"
+        >
+          <div
+            style="
+              border: 0px;
+              clip: rect(0px, 0px, 0px, 0px);
+              clip-path: inset(50%);
+              height: 1px;
+              margin: -1px;
+              overflow: hidden;
+              padding: 0px;
+              position: absolute;
+              width: 1px;
+              white-space: nowrap;
+            "
+          >
+            <input
+              tabindex="0"
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              aria-orientation="horizontal"
+              [attr.aria-valuetext]="currentValue()"
+              aria-describedby=""
+              aria-details=""
+              [value]="currentValue()"
+            />
+          </div>
+          <div class="thumbIcon"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,7 @@
-import { Component, computed, effect, inject, signal, Signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model, signal, Signal } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
-import { AccessMode, DeviceFeature, DeviceFeatureVisual, DeviceTargetState } from '../../models/device';
+import { AccessMode, Device, DeviceFeature, DeviceFeatureVisual, DeviceTargetState } from '../../models/device';
  
 import { DeviceService } from '../../services/device.service';
 import { InfoOverlayComponent } from '../infooverlay/infooverlay';
@@ -14,10 +14,13 @@ import { ColorSelectorComponent } from '../colorselector/colorselector';
 import { hsvToHtmlRgb, xyToHtmlRgb, htmlRgbToHsv, htmlRgbToXy } from '../../utils/color.util';
 import { ColorTemperatureSelectorComponent } from '../colortemperatureselector/colortemperatureselector';
 import { HumanReadablePipe } from '../../pipes/human.pipe';
+import { createStoreView } from '../../datastore/generic-store-view';
+import { SearchOperator } from '../../datastore/generic.store';
+import { LevelMarkOption, LevelSelectorComponent } from '../levelselector/levelselector';
 
 @Component({
   selector: 'DeviceFeaturesComponent',
-  imports: [TranslateModule, HumanReadablePipe, InfoOverlayComponent, ExpansionPanelComponent, RadiolistComponent, OptionComponent, ColorSelectorComponent, ColorTemperatureSelectorComponent],
+  imports: [TranslateModule, HumanReadablePipe, LevelSelectorComponent, InfoOverlayComponent, ExpansionPanelComponent, RadiolistComponent, OptionComponent, ColorSelectorComponent, ColorTemperatureSelectorComponent],
   templateUrl: './devicefeatures.html',
   styleUrl: './devicefeatures.scss'
 })
@@ -26,19 +29,30 @@ export class DeviceFeaturesComponent {
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly deviceService = inject(DeviceService);
   readonly AccessMode = AccessMode;
+  
+  deviceFeastures = signal<DeviceFeatureVisual[]>([]);
+  
+  levelMarks: LevelMarkOption[] = [{percent:0,label:"0"},{percent:50,label:"50"},{percent:100,label:"100"}];
 
-  deviceExposure = signal<DeviceFeatureVisual[]>([]);
-
+  ieee_address = input.required<string|undefined>();
   device = computed(() => {
-    return this.deviceStore.selectedEntity();
-  })
+     //Filter the coordinator from the devices
+      let devicesView : Signal<Device[]> = createStoreView(this.deviceStore, {
+        criteria: [
+          { property: "ieee_address", value: this.ieee_address(), operator: "equals" }
+        ],
+        logicalOperator: SearchOperator.AND
+      }, false, undefined);
+      
+    return devicesView().length > 0 ? devicesView()[0] :null
+  });
 
   constructor() {
     effect(() => {
       const expos = this.device()?.definition.exposes;
       const states = this.device()?.state;
       const result = this.flattenExposures(expos || [], states || []);
-      this.deviceExposure.set(result);
+      this.deviceFeastures.set(result);
     })
   }
 
@@ -168,7 +182,7 @@ export class DeviceFeaturesComponent {
     }
   }
 
-  temperatureChange(property: DeviceFeature, newTemp: number): void {
+  colorTemperatureChange(property: DeviceFeature, newTemp: number): void {
     if (this.device()) {
       const device = this.device()!;
       const state: DeviceTargetState = {};
@@ -182,41 +196,6 @@ export class DeviceFeaturesComponent {
     if (property && property.type === "composite" && property.features) {
       const state: DeviceTargetState = {};
       state[property.property] = { "hex": newColor }
-
-      /*
-      // Check which color properties are available
-      const hueFeature = property.features.find(f => f.property === "hue");
-      const saturationFeature = property.features.find(f => f.property === "saturation");
-      const xFeature = property.features.find(f => f.property === "x");
-      const yFeature = property.features.find(f => f.property === "y");
-
-      if (hueFeature && saturationFeature) {
-        // Convert to HSV (Hue/Saturation/Value)
-        const hsv = htmlRgbToHsv(newColor);
-        console.log('Converting to Hue/Saturation:', hsv);
-
-        const colorValue: any = {};
-        colorValue[hueFeature.property] =  Math.round((hsv.h / 100) * 254);  
-        colorValue[saturationFeature.property] = Math.round((hsv.s / 100) * 254 );  
-
-        const state: DeviceTargetState = {};
-        state[property.property] = colorValue;
-
-        if (this.device()) {
-          this.deviceService.updateDeviceState(this.device()!.friendly_name, state);
-        }
-      } else if (xFeature && yFeature) {
-        // Convert to XY color space
-        const xy = htmlRgbToXy(newColor);
-        console.log('Converting to XY:', xy);
-
-        const colorValue: any = {};
-        colorValue[xFeature.property] = xy.x;
-        colorValue[yFeature.property] = xy.y;
-
-        const state: DeviceTargetState = {};
-        state[property.property] = colorValue;
-*/
       if (this.device()) {
         this.deviceService.updateDeviceState(this.device()!.friendly_name, state);
       }
@@ -224,6 +203,14 @@ export class DeviceFeaturesComponent {
 
   }
 
+  valueChange(property: DeviceFeature, newValue: number): void {
+  if (this.device()) {
+        const state: DeviceTargetState = {};
+        state[property.property] = newValue;
+        this.deviceService.updateDeviceState(this.device()!.friendly_name, state);
+      }
+  }
+  
   hasAccess(access: number, mode: AccessMode): boolean {
     return (access & mode) !== 0;
   }
