@@ -28,7 +28,7 @@ export class DeviceSettingsExtended {
       
       flattend.forEach((option:DeviceOption)=> {
         if (states) {
-          option.value = states[option.name]
+          option.value = states[option.name] ?? '?'
         } 
       });
 

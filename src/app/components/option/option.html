@@ -1,7 +1,11 @@
-<div class="input" [class.active]="controlItem().isActive" (click)="event()">
-    <div
-        class="inputContainer"  [class.active]="controlItem().isActive">
-        <div class="indicator"  [class.active]="controlItem().isActive"></div>
-        <div class="switcher"  [class.active]="controlItem().isActive" ></div>
+<div class="flex flex-col">
+  <div class="input flex" [class.active]="controlItem().isActive" (click)="event()">
+    <div class="inputContainer" [class.active]="controlItem().isActive">
+      <div class="indicator" [class.active]="controlItem().isActive"></div>
+      <div class="switcher" [class.active]="controlItem().isActive"></div>
     </div>
+    @if (controlItem().label) {
+      <div class="ml-2">{{ controlItem().label }}</div>
+    }
+  </div>
 </div>

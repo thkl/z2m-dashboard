@@ -3,18 +3,19 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('assets/colors.scss');
+@import url('styles/colors.scss');
+@import url('styles/modal.scss');
 
 html,
 body {
-  @apply h-full ;
+  @apply h-full;
   font-family: 'Inter', sans-serif;
   font-feature-settings: normal;
   font-size: 14px;
   background-color: var(--app-background-color);
   margin: 0px;
-  padding:0px;
-  border:none;
+  padding: 0px;
+  border: none;
 }
 
 input {
@@ -31,7 +32,7 @@ input {
   animation-timing-function: ease;
   appearance: auto;
   background-color: var(--app-background-color);
-  border-bottom-color: rgb(249, 250, 250);
+  border-bottom-color: var(--app-text-color);
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   border-bottom-style: none;
@@ -41,20 +42,20 @@ input {
   border-image-slice: 100%;
   border-image-source: none;
   border-image-width: 1;
-  border-left-color: rgb(249, 250, 250);
+  border-left-color: var(--app-text-color);
   border-left-style: none;
   border-left-width: 0px;
-  border-right-color: rgb(249, 250, 250);
+  border-right-color: var(--app-text-color);
   border-right-style: none;
   border-right-width: 0px;
-  border-top-color: rgb(249, 250, 250);
+  border-top-color: var(--app-text-color);
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   border-top-style: none;
   border-top-width: 0px;
   box-sizing: border-box;
-  caret-color: rgb(249, 250, 250);
-  color: rgb(249, 250, 250);
+  caret-color: var(--app-text-color);
+  color: var(--app-text-color);
   cursor: auto;
   display: block;
   flex-basis: 0%;
@@ -85,7 +86,7 @@ input {
   margin-left: 0px;
   margin-right: 0px;
   margin-top: 0px;
-  outline-color: rgb(249, 250, 250);
+  outline-color: var(--app-text-color);
   outline-style: none;
   outline-width: 0px;
   overflow-x: visible;
@@ -294,10 +295,15 @@ th.sortable {
   flex-direction: row;
   flex-shrink: 0;
   justify-content: center;
-  opacity: 1;
-  transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out 0.15s;
+  transition:
+    opacity 0.15s ease-in-out,
+    visibility 0.15s ease-in-out 0.15s;
   visibility: visible;
   white-space: nowrap;
+}
+
+.margin_left_auto {
+  margin-left: auto;
 }
 
 .wrap {
@@ -309,7 +315,6 @@ th.sortable {
   margin-right: 5px;
   margin-left: 5px;
 }
-
 
 .wrapper {
   background-color: var(--app-panel-color);
@@ -330,7 +335,6 @@ th.sortable {
   padding: 0.5em;
   -webkit-font-smoothing: antialiased;
 }
-
 
 .link {
   color: #277ff1;
@@ -355,9 +359,7 @@ th.sortable {
   border-color: #737c87;
 }
 
-
-
-.container >.label {
+.container > .label {
   box-sizing: border-box;
   color: rgb(222, 224, 227);
   display: block;
@@ -368,7 +370,7 @@ th.sortable {
   width: 40%;
 }
 
-.container >.value {
+.container > .value {
   box-sizing: border-box;
   color: rgb(183, 188, 194);
   display: block;
@@ -383,7 +385,91 @@ th.sortable {
   font-size: 12px;
 }
 
-
 ::-webkit-resizer {
   display: none;
+}
+
+.overlay {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  opacity: 0;
+  overflow: hidden;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: opacity 0.1s ease-in;
+  z-index: 1000;
+  background-color: hsla(0, 0%, 8%, 0.6);
+  opacity: 1;
+}
+
+.panel {
+  background-color: var(--app-background-transparent) !important;
+}
+
+.primary {
+  background-color: var(--button-text-color);
+  border: 1px solid var(--button-text-color);
+  color: var(--app-text-color);
+}
+
+.danger {
+  background-color: rgb(248, 3, 3);
+  border: 1px solid rgb(248, 3, 3);
+  color: var(--app-text-color);
+}
+
+button {
+  align-items: center;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  font-size: 16px;
+  justify-content: center;
+  letter-spacing: 0.25px;
+  overflow: hidden;
+  position: relative;
+  padding: 4px;
+  min-height: 25px;
+}
+
+button.left {
+  align-items: start;
+  justify-content: left;
+}
+
+button.right {
+  align-items: end;
+  justify-content: right;
+}
+
+.buttonGroup {
+  align-items: center;
+  display: flex;
+  gap: 2em;
+  margin: 1em;
+}
+
+.statusIcon {
+  border-radius: 50%;
+  flex: none;
+  text-align: start;
+  height: 8px;
+  width: 8px;
+}
+
+.statusIcon.green {
+  background-color: #37be5f;
+}
+
+.statusIcon.red {
+  background-color: #f71d1d;
+}
+
+.statusIcon.yellow {
+  background-color: #c1f71f;
 }

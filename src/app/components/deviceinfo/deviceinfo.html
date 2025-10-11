@@ -6,14 +6,16 @@
   <div class="container">
     <div class="device_row">
       <span class="label">{{ 'FRIENDLY_NAME' | translate }}</span>
-      <span class="value">{{ device()?.friendly_name }}</span>
+      <span class="value flex flex-row"
+        >{{ device()?.friendly_name }}<span class="material-symbols-outlined edit_icon mr-2 ml-2 cursor-pointer" (click)="renameDevice()">edit_square</span></span
+      >
     </div>
     <div class="device_row">
       <span class="label">{{ 'DESCRIPTION' | translate }}</span>
       <span class="value">
         <div class="input-container active">
           <div class="input-content">
-            <input (change)="changeDescriptions($event)" class="w-full text-right" [value]="device()?.description || ''" />
+            <input (change)="changeDescriptions($event)" class="w-full text-right panel" [value]="device()?.description || ''" />
           </div>
         </div>
       </span>
@@ -91,15 +93,15 @@
       <span class="value">{{ device()?.interview_state }}</span>
     </div>
 
-    <div class="buttonBar mt-3">
+    <div class="buttonBar mt-3 panel">
       <div class="button">
-        <button class="button-blue" (click)="startInterview()">{{ 'START_INTERVIEW' | translate }}</button>
+        <button class="button-blue left" (click)="startInterview()">{{ 'START_INTERVIEW' | translate }}</button>
       </div>
       <div class="button">
-        <button class="button-blue" (click)="startReconfig()">{{ 'RECONFIGURE' | translate }}</button>
+        <button class="button-blue left" (click)="startReconfig()">{{ 'RECONFIGURE' | translate }}</button>
       </div>
       <div class="button">
-        <button class="button-red">{{ 'DELETE' | translate }}</button>
+        <button class="button-red left" (click)="deleteDevice()">{{ 'DELETE' | translate }}</button>
       </div>
     </div>
   </div>

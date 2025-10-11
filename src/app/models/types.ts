@@ -1,7 +1,9 @@
+import { Device } from "./device";
+
 export interface SwitchElement {
-  label:string;
-  value?:string;
-  isActive:boolean;
+  label: string;
+  value?: string;
+  isActive: boolean;
 }
 
 /**
@@ -22,4 +24,17 @@ export interface ColorTemperatureOption {
   name: string;
   /** Color temperature in mireds */
   value: number;
+}
+
+
+export interface RenameDeviceOptions {
+  device: Device,
+  newName: string,
+  renameHomeAssiatant: boolean;
+}
+
+export interface RemoveDeviceOptions {
+  device: Device,
+  blockDevice: boolean,
+  forceDelete: boolean
 }

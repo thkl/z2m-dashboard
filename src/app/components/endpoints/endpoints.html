@@ -1,24 +1,24 @@
 @for (ep of endpointsArray(); track ep.key) {
-  <div class="root">
-    <span class="endpoint box">{{ 'ENDPOINT' | translate }}:{{ ep.key }}</span>
+  <div class="root panel">
+    <span class="endpoint box panel">{{ 'ENDPOINT' | translate }}:{{ ep.key }}</span>
     <div class="ep-types-container">
       <div class="ep-type-group">
-        <span class="ep_type box">Input</span>
+        <span class="ep_type box panel">Input</span>
         @if (ep.endpoint.clusters.input.length > 0) {
-          <div class="clusters-container">
+          <div class="clusters-container panel">
             @for (cluster of ep.endpoint.clusters.input; track $index) {
-              <span class="cluster box">{{ cluster }}</span>
+              <span class="cluster box panel">{{ cluster }}</span>
             }
           </div>
         }
       </div>
 
       <div class="ep-type-group">
-        <span class="ep_type box">Output</span>
+        <span class="ep_type box panel">Output</span>
         @if (ep.endpoint.clusters.output.length > 0) {
           <div class="clusters-container">
             @for (cluster of ep.endpoint.clusters.output; track $index) {
-              <span class="cluster box">{{ cluster }}</span>
+              <span class="cluster box panel">{{ cluster }}</span>
             }
           </div>
         }

@@ -8,6 +8,7 @@ export interface Bridge {
     network:                    Network;
     os:                         OS;
     permit_join:                boolean;
+    permit_join_end?:           number;
     restart_required:           boolean;
     version:                    string;
     zigbee_herdsman:            ZigbeeHerdsman;

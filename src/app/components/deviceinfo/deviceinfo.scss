@@ -4,13 +4,13 @@
 }
 
 .buttonBar {
-  background-color: rgb(28, 30, 33);
+  background-color: var(--app-background-raised-color);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   box-sizing: border-box;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--app-text-color);
   display: flex;
   flex-basis: 0%;
   flex-direction: column;
@@ -71,4 +71,9 @@
   margin-top: 0.5em;
   gap: 8px;
   color: #f9fafa;
+}
+
+.edit_icon {
+  max-width: 13px;
+  color: var(--app-link-color);
 }

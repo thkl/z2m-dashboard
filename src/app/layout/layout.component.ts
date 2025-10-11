@@ -4,12 +4,14 @@ import { DeviceStore } from '../datastore/device.store';
 import { DeviceInspectorComponent } from '../pages/deviceinspector/deviceinspector.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApplicationService } from '../services/app.service';
+import { BridgeService } from '../services/bridge.service';
+import { TimeToPipe } from '../pipes/time-togo.pipe';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [RouterModule, DeviceInspectorComponent,TranslateModule]
+  imports: [RouterModule, DeviceInspectorComponent, TranslateModule,TimeToPipe]
 })
 export class LayoutComponent {
   sidebarOpen = true;
@@ -17,9 +19,16 @@ export class LayoutComponent {
 
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly as = inject(ApplicationService);
+  protected readonly bs = inject(BridgeService);
 
-  rightSidebarOpen = computed(()=>{
-    return this.deviceStore.selectedEntity()!==null;
+
+  info = computed(() => {
+    const bi = this.bs.getBridgeInfo();
+    return bi();
+  })
+
+  rightSidebarOpen = computed(() => {
+    return this.deviceStore.selectedEntity() !== null;
   })
 
   constructor() {
@@ -30,8 +39,12 @@ export class LayoutComponent {
     this.sidebarOpen = !this.sidebarOpen;
   }
 
-  closeRightSidebar(){
+  closeRightSidebar() {
     this.deviceStore.setSelectedEntity(null);
   }
- 
+
+  permitJoin() {
+    this.bs.permitJoin(this.info()?.permit_join ? 0: 254);
+  }
+
 }

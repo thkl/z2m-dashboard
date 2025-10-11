@@ -20,7 +20,7 @@
   border-radius: 4px 0 0 4px;
 }
 
-label {
+.switchComponent >label {
   border: 1px solid transparent;
   color: #737c87;
   border-color: #737c87;
@@ -29,7 +29,7 @@ label {
   font-size: 14px;
 }
 
-label >.labelcontent {
+.switchComponent >label >.labelcontent {
   align-items: flex-start;
   display: flex;
   flex: 1;
@@ -42,7 +42,7 @@ label >.labelcontent {
   width: 100%;
 }
 
-label.active {
+.switchComponent >label.active {
   border-color: #0b4ead;
   color: #0b4ead;
 }

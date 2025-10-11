@@ -1,0 +1,22 @@
+<div class="modal">
+  <header>
+    <div class="title">{{ 'RENAME DEVICE' | translate: { name: data.device.friendly_name } }}</div>
+  </header>
+  <div class="message">
+    <div class="input-container">
+      <input class="w-full text-left panel" (change)="changeName($event)" [value]="deviceName" />
+    </div>
+    <div class="mt-3">
+      <OptionComponent [item]="homeAssistantSwitch" [active]="true" (clicked)="haOptionChanged($event)"></OptionComponent>
+    </div>
+  </div>
+  <footer>
+    <div class="buttonGroup">
+      <div class="warp"></div>
+      <div class="ml-auto flex flex-row gap-2">
+        <button class="primary min-w-20" (click)="ok()">{{ 'RENAME' | translate }}</button>
+        <button class="primary min-w-20" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+      </div>
+    </div>
+  </footer>
+</div>

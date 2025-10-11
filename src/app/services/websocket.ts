@@ -16,17 +16,23 @@ export class Websocket {
   private wildcardCallbacks = new Map<string, ((msg: WebSocketMessage) => void)[]>();
   private catchAllSignal = signal<WebSocketMessage | null>(null);
   private catchAllCallbacks: ((msg: WebSocketMessage) => void)[] = [];
+  private isConntected = false;
+  private timeout = 0;
+  private url?: string;
+  private timer?:number;
 
   connect(url: string): void {
+    this.url = url;
     this.ws = new WebSocket(url);
 
     this.ws.onmessage = (event) => {
+      this.timeout = 0;
       const message: WebSocketMessage = JSON.parse(event.data);
 
       // Check for exact topic match
       const topicSignal = this.topicSignals.get(message.topic);
       if (topicSignal) {
-        topicSignal.set({...message});
+        topicSignal.set({ ...message });
       }
 
       // Trigger exact topic callbacks
@@ -39,7 +45,7 @@ export class Websocket {
       let wildcardMatched = false;
       for (const [pattern, signal] of this.wildcardSignals.entries()) {
         if (this.matchesWildcard(message.topic, pattern)) {
-          signal.set({...message});
+          signal.set({ ...message });
           wildcardMatched = true;
         }
       }
@@ -54,18 +60,37 @@ export class Websocket {
 
       // If no exact match or wildcard match, trigger catch-all
       if (!topicSignal && !wildcardMatched) {
-        this.catchAllSignal.set({...message});
+        this.catchAllSignal.set({ ...message });
         this.catchAllCallbacks.forEach(cb => cb(message));
       }
     };
 
     this.ws.onerror = (error) => {
       console.error('WebSocket error:', error);
+
     };
 
     this.ws.onclose = () => {
       console.log('WebSocket connection closed');
+      this.reconnect();
     };
+
+    this.setWatchdog();
+  }
+
+  private setWatchdog(): void {
+    this.timer = setInterval(() => {
+      this.timeout = this.timeout + 1;
+      if (this.timeout > 60) {
+        this.reconnect();
+      }
+    }, 1000);
+  }
+
+  private clearWatchdog(): void {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
   }
 
   subscribeTopic(topic: string): Signal<any> {
@@ -81,6 +106,14 @@ export class Websocket {
       }
       return this.topicSignals.get(topic)!.asReadonly();
     }
+  }
+
+  private reconnect(): void {
+    setTimeout(() => {
+      if ((this.url) && (this.isConntected)) {
+        this.ws = new WebSocket(this.url);
+      }
+    }, 1000);
   }
 
   private matchesWildcard(topic: string, pattern: string): boolean {
@@ -137,7 +170,7 @@ export class Websocket {
     }
   }
 
-  sendMessage(message:string) {
+  sendMessage(message: string) {
     if (this.ws) {
       this.ws.send(message);
     }
@@ -163,6 +196,8 @@ export class Websocket {
     if (this.ws) {
       this.ws.close();
       this.ws = null;
+      this.isConntected = false;
+      this.clearWatchdog();
     }
   }
 }

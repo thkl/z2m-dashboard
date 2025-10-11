@@ -48,6 +48,10 @@
   "TIME_AGO_YEARS_ONE": "{{count}} year ago",
   "YES": "Yes",
   "NO": "No",
-  "DETAILS":"Details",
-  "ENDPOINT":"Endpoint"
+  "DETAILS": "Details",
+  "ENDPOINT": "Endpoint",
+  "REMOVE_DEVICE_MESSAGE": "Are you sure, you want to delete the device {{name}} ?",
+  "REMOVE_DEVICE_CAPTION": "Remove {{name}}",
+  "RENAME DEVICE": "Rename {{name}} ...",
+  "RENAME HOMEASSISTANT": "also rename the Homeassistant entity"
 }

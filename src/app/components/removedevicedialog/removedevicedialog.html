@@ -1,0 +1,23 @@
+<div class="modal">
+  <header>
+    <div class="title">{{ 'REMOVE_DEVICE_CAPTION' | translate: { name: data.device.friendly_name } }}</div>
+  </header>
+  <div class="message">
+    <span>{{ 'REMOVE_DEVICE_MESSAGE' | translate: { name: data.device.friendly_name } }}</span>
+    <div class="mt-3">
+      <OptionComponent [item]="forceDelete" [active]="true" (clicked)="forceDeleteChanged($event)"></OptionComponent>
+    </div>
+    <div class="mt-3">
+      <OptionComponent [item]="blockDevice" [active]="true" (clicked)="blockDeviceChanged($event)"></OptionComponent>
+    </div>
+  </div>
+  <footer>
+    <div class="buttonGroup">
+      <div class="warp"></div>
+      <div class="ml-auto flex flex-row gap-2">
+        <button class="danger min-w-20" (click)="ok()">{{ 'DELETE' | translate }}</button>
+        <button class="primary min-w-20" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+      </div>
+    </div>
+  </footer>
+</div>

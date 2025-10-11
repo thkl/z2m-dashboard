@@ -6,6 +6,7 @@ import { timeAgo } from "../utils/time.utils";
 import { TranslateService } from "@ngx-translate/core";
 import { ApplicationService } from "./app.service";
 import { BridgeService } from "./bridge.service";
+import { RemoveDeviceOptions, RenameDeviceOptions } from "../models/types";
 
 @Injectable({
   providedIn: 'root'
@@ -85,8 +86,6 @@ export class DeviceService {
       const bridgeDevice = bridgeInfo()?.config.devices[device.ieee_address];
       if (bridgeDevice) {
         device.options = bridgeDevice;
-      } else {
-        console.log("NF",device.ieee_address)
       }
       const oldDevice = devicelist.find(d => d.ieee_address === device.ieee_address);
       if (oldDevice) {
@@ -108,31 +107,42 @@ export class DeviceService {
     }, 1000);
   }
 
-  private sendBridgeDeviceRequest(topic: string, device: Device, options: any) {
+  private sendBridgeDeviceRequest(topic: string, parameters: { [key: string]: any }) {
     const payload: any = {
-      id: device.friendly_name,
       transaction: crypto.randomUUID()
     }
 
-    if (options) {
-      payload.options = options;
-    }
+    Object.keys(parameters).forEach(key => {
+      payload[key] = parameters[key];
+    })
 
     this.appService.sendBridgeRequest(topic, payload);
   }
 
   startInterview(device: Device): void {
-    this.sendBridgeDeviceRequest("bridge/request/device/interview", device, undefined);
+    this.sendBridgeDeviceRequest("bridge/request/device/interview", {
+      id: device.friendly_name,
+    });
   }
 
   startReconfig(device: Device): void {
-    this.sendBridgeDeviceRequest("bridge/request/device/configure", device, undefined);
+    this.sendBridgeDeviceRequest("bridge/request/device/configure", {
+      id: device.friendly_name,
+    });
+  }
+
+  removeDevice(options:RemoveDeviceOptions): void {
+    this.sendBridgeDeviceRequest("bridge/request/device/remove",  {id:options.device.friendly_name, block:options.blockDevice,force:options.forceDelete });
   }
 
   changeDeviceDescription(device: Device): void {
-    this.sendBridgeDeviceRequest("bridge/request/device/options", device, {
-      description: device.description
+    this.sendBridgeDeviceRequest("bridge/request/device/options", {id: device.friendly_name,
+      options: {description: device.description}
     });
+  }
+
+  renameDevice(renameOptions: RenameDeviceOptions): void {
+    this.sendBridgeDeviceRequest("bridge/request/device/rename",{from:renameOptions.device.friendly_name,to:renameOptions.newName,homeassistant_rename:renameOptions.renameHomeAssiatant});
   }
 
 }

@@ -20,11 +20,11 @@ import { OptionPanelComponent, SelectOption } from "../../components/optionpanel
 export class DeviceListComponent {
 
   protected readonly deviceStore = inject(DeviceStore);
-  displayedColumns = ['icon', 'name', 'model', 'vendor', 'availability', 'linkquality', 'battery', 'lastseenhuman'];
+  displayedColumns = ['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman'];
 
   // Sorting state
-  sortColumn = signal<string>('');
-  sortDirection = signal<SortDirection>('');
+  sortColumn = signal<string>('name');
+  sortDirection = signal<SortDirection>('asc');
 
   // Filter state
   searchText = signal<string>('');

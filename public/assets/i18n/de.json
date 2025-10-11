@@ -47,8 +47,16 @@
   "TIME_AGO_MONTHS_ONE": "vor {{count}} Monat",
   "TIME_AGO_YEARS": "vor {{count}} Jahren",
   "TIME_AGO_YEARS_ONE": "vor {{count}} Jahr",
-  "YES":"Ja",
-  "NO":"Nein",
-  "DETAILS":"Details",
-  "ENDPOINT":"Endpunkt"
+  "YES": "Ja",
+  "NO": "Nein",
+  "DETAILS": "Details",
+  "ENDPOINT": "Endpunkt",
+  "CANCEL":"Abbrechen",
+  "RENAME":"Umbenennen",
+  "REMOVE_DEVICE_MESSAGE": "Bist du sicher, dass du {{name}} löschen möchtest ?",
+  "REMOVE_DEVICE_CAPTION": "{{name}} löschen",
+  "RENAME DEVICE": "Gerät {{name}} umbenennen....",
+  "RENAME HOMEASSISTANT":"Die Homeassistant Entität auch umbenennen",
+  "DELETE_BLOCK_DEVICE":"Wiederanlernen blockieren",
+  "DELETE_FORCE_DELETE":"Löschen erzwingen"
 }

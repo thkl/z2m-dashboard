@@ -1,0 +1,19 @@
+<div class="modal">
+  <header>
+    <div class="title">{{ data.title }}</div>
+  </header>
+  <div class="message">
+    {{ data.message }}
+  </div>
+  <footer>
+    <div class="buttonGroup">
+      <div class="warp"></div>
+      <div class="ml-auto flex flex-row gap-2">
+        <button class="{{ data.okClass ?? 'primary' }} min-w-20" (click)="ok()">{{ data.okMessage ?? 'OK' }}</button>
+        @if (data.showCancel) {
+          <button class="{{ data.cancelClass ?? 'primary' }} min-w-20" (click)="cancel()">{{ data.cancelMessage ?? 'Cancel' }}</button>
+        }
+      </div>
+    </div>
+  </footer>
+</div>

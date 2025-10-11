@@ -20,7 +20,7 @@
               @if (hasAccess(item.property.access, AccessMode.SET)) {
                 <OptionComponent
                   [active]="hasAccess(item.property.access, AccessMode.SET)"
-                  [item]="{ label: item.property.value_on ?? 'ON', isActive: item.value === 'ON' }"
+                  [item]="{ label: '', isActive: item.value === 'ON' }"
                   (clicked)="switch(item.property, $event)"
                 ></OptionComponent>
               } @else {

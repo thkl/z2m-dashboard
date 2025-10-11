@@ -1,0 +1,45 @@
+
+.modal {
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: inherit;
+  outline: none;
+  position: relative;
+  background-color: var(--app-background-raised-color);
+  box-shadow: 0 12px 48px 0 var(--app-background-color) 0 0 1px 0 hsla(214, 8%, 98%, 0.08);
+  color: var(--app-text-color);
+  border: 1px solid var(--app-border-color);
+}
+
+.modal >header {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--app-border-color);
+  align-items: center;
+  display: flex;
+  margin-top: 0;
+  margin: 0px 20px;
+  padding: 20px 0px 16px !important;
+}
+
+.modal >footer {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: rgb(52, 56, 61);
+}
+
+.modal >.title {
+  align-items: center;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  line-height: 20px;
+  width: 0;
+}
+
+.modal >.message {
+  margin-top: 0;
+  margin: 0px 20px;
+  padding: 20px 0px 16px !important;
+}

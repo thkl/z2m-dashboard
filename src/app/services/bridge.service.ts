@@ -27,4 +27,9 @@ export class BridgeService {
   getBridgeInfo(): Signal<Bridge|null>{
     return this.bridgeInfo;
   }
+
+  permitJoin(time?:number):void {
+       this.appService.sendBridgeRequest("bridge/request/permit_join", {device: null,time:time??254});
+  }
+ 
 }
