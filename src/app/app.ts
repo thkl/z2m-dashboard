@@ -31,7 +31,6 @@ export class App {
     const browserLang = this.translate.getBrowserLang();
     this.translate.use(browserLang?.match(/en|de/) ? browserLang : 'en');
 
-
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
     if (prefersDark.matches) {
       this.enableDarkMode();

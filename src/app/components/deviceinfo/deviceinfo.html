@@ -90,7 +90,7 @@
     </div>
     <div class="device_row">
       <span class="label">{{ 'INTERVIEW_STATE' | translate }}</span>
-      <span class="value">{{ device()?.interview_state }}</span>
+      <span class="value">{{ `zigbee.${device()?.interview_state}` | translate }}</span>
     </div>
 
     <div class="buttonBar mt-3 panel">

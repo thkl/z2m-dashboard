@@ -1,6 +1,6 @@
 @if (device() !== null) {
   <header class="h-14 flex items-center justify-between px-4">
-    <h1 class="text-lg font-semibold">{{ device()?.friendly_name }}</h1>
+    <h1 class="text-lg font-semibold w-full text-center">{{ device()?.friendly_name }}</h1>
     <div class="wrap">
       <button type="button" class="headerButton" (click)="closeSidebar()">
         <span class="material-symbols-outlined">close</span>
