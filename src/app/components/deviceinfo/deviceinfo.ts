@@ -7,11 +7,11 @@ import { HumanReadablePipe } from '../../pipes/human.pipe';
 import { Device } from '../../models/device';
 import { createStoreView } from '../../datastore/generic-store-view';
 import { SearchOperator } from '../../datastore/generic.store';
-import { ModalDialog, ModalDialogData } from '../modaldialog/modaldialog';
+import { ModalDialog, ModalDialogData } from '../controls/modaldialog/modaldialog';
 import { Dialog } from '@angular/cdk/dialog';
 import { RenamedeviceDialog } from '../renamedevicedialog/renamedevicedialog';
 import { RemoveDeviceOptions, RenameDeviceOptions } from '../../models/types';
-import { RemoveDeviceDialog } from '../removedevicedialog/removedevicedialog';
+import { RemoveDeviceDialog } from '../dialogs/removedevicedialog';
 
 @Component({
   selector: 'DeviceInfoComponent',

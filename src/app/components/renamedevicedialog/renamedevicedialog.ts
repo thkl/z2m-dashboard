@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { RenameDeviceOptions, SwitchElement } from '../../models/types';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { OptionComponent } from '../option/option';
+import { OptionComponent } from '../controls/option/option';
 
 
 

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "unifi-dashboard": {
+    "zigbee2mqtt-ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -30,7 +30,6 @@
               }
             ],
             "styles": [
-              "src/assets/colors.scss",
               "src/styles.scss"
             ]
           },
@@ -62,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "unifi-dashboard:build:production"
+              "buildTarget": "zigbee2mqtt-ui:build:production"
             },
             "development": {
-              "buildTarget": "unifi-dashboard:build:development"
+              "buildTarget": "zigbee2mqtt-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -89,7 +88,6 @@
               }
             ],
             "styles": [
-              "src/assets/colors.scss",
               "src/styles.scss"
             ]
           }

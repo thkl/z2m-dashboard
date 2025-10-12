@@ -20,7 +20,7 @@ export class ApplicationService {
     }
 
     public loadSettings() {
-        const saved = localStorage.getItem('nextui-settings');
+        const saved = localStorage.getItem('ui-settings');
         if (saved) {
             if (saved) {
                 try {
@@ -50,7 +50,7 @@ export class ApplicationService {
 
     saveSettings() {
         try {
-            localStorage.setItem('nextui-settings', JSON.stringify(this.settings));
+            localStorage.setItem('ui-settings', JSON.stringify(this.settings));
         } catch (error) {
             console.warn('Failed to save to localStorage:', error);
         }

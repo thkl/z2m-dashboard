@@ -1,10 +1,10 @@
-.input {
+OptionComponent.input {
   position: relative;
   margin-left: 8px;
   margin-right: 0;
 }
 
-.inputContainer {
+OptionComponent.inputContainer {
   margin-top: 4px;
   height: 16px;
   width: 32px;
@@ -16,22 +16,22 @@
   transition: background-color 0.2s ease;
   background-color: #737c87;
 }
-.inputContainer.active  {
+OptionComponent.inputContainer.active  {
     background-color: #4797ff;
 }
 
-.indicator {
+OptionComponent.indicator {
   position: absolute;
   transform: scale(0);
   transition: transform 0.15s cubic-bezier(0.8, 0, 0.7, 1) 50ms;
   border: none;
 }
 
-.indicator.active {
+OptionComponent.indicator.active {
     transform: scale(1);
 }
 
-.switcher {
+OptionComponent.switcher {
   background-color: #fff;
   border-radius: 100%;
   pointer-events: none;
@@ -43,7 +43,7 @@
   width: 14px;
 }
 
-.switcher.active  {
+OptionComponent.switcher.active  {
     transform: translateX(calc(-100% - 1px));
     left: 100%;
 }

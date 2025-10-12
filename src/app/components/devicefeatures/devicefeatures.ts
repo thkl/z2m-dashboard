@@ -4,19 +4,19 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AccessMode, Device, DeviceFeature, DeviceFeatureVisual, DeviceTargetState } from '../../models/device';
 
 import { DeviceService } from '../../services/device.service';
-import { InfoOverlayComponent } from '../infooverlay/infooverlay';
-import { ExpansionPanelComponent } from "../expansionpanel/expansionpanel";
-import { RadioElement, RadiolistComponent } from '../radiolist/radiolist';
+import { InfoOverlayComponent } from '../controls/infooverlay/infooverlay';
+import { RadioElement, RadiolistComponent } from '../controls/radiolist/radiolist';
 
-import { OptionComponent } from '../option/option';
+import { OptionComponent } from '../controls/option/option';
 import { SwitchElement } from '../../models/types';
-import { ColorSelectorComponent } from '../colorselector/colorselector';
 import { hsvToHtmlRgb, xyToHtmlRgb, htmlRgbToHsv, htmlRgbToXy } from '../../utils/color.util';
-import { ColorTemperatureSelectorComponent } from '../colortemperatureselector/colortemperatureselector';
 import { HumanReadablePipe } from '../../pipes/human.pipe';
 import { createStoreView } from '../../datastore/generic-store-view';
 import { SearchOperator } from '../../datastore/generic.store';
-import { LevelMarkOption, LevelSelectorComponent } from '../levelselector/levelselector';
+import { LevelMarkOption, LevelSelectorComponent } from '../controls/levelselector/levelselector';
+import { ExpansionPanelComponent } from '../controls/expansionpanel/expansionpanel';
+import { ColorSelectorComponent } from '../controls/colorselector/colorselector';
+import { ColorTemperatureSelectorComponent } from '../controls/colortemperatureselector/colortemperatureselector';
 
 @Component({
   selector: 'DeviceFeaturesComponent',

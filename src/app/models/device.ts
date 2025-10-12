@@ -9,6 +9,7 @@ export interface DeviceOption {
     value_on?:string;
     value_off?:string;
     value:any;
+    enum?:any[];
 }
 
 export interface DeviceFeatureVisual {

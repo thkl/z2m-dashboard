@@ -1,0 +1,63 @@
+radiolistcomponent > .radioList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: auto;
+  align-items: flex-start;
+  margin: 0px;
+  min-height: 24px;
+}
+
+radiolistcomponent > .radioList.active {
+    cursor: pointer;
+}
+
+radiolistcomponent > .radioList > .itemwrapper {
+    margin-left: 0.2em;
+}
+
+radiolistcomponent > .radioList > .itemwrapper > label {
+  margin: 0px;
+  padding: 4px 8px;
+  -webkit-box-align: center;
+  align-items: center;
+  border-radius: 4px 0 0 4px;
+}
+
+radiolistcomponent > .radioList.active >.itemwrapper >label{
+    cursor: pointer;
+}
+
+radiolistcomponent > .radioList > .itemwrapper > label {
+  border: 1px solid transparent;
+  color: var(--app-text-color);
+  border-color: var(--app-text-color-inactive);
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+}
+
+radiolistcomponent > .radioList > .itemwrapper > label:hover {
+  color: var(--app-text-color);
+  border-color: var(--app-text-color);
+}
+
+radiolistcomponent > .radioList > .itemwrapper > label >.labelcontent {
+  align-items: flex-start;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  font-size: 14px;
+  justify-content: flex-start;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  width: 100%;
+}
+
+radiolistcomponent .radioList > .itemwrapper > label.active {
+  border-color: var(--button-frame-color);
+  color: var(--button-text-color);
+}
+
+

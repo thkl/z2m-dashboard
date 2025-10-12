@@ -10,12 +10,21 @@
         </span>
       </div>
       @switch (option.type) {
+        @case ('boolean') {
+          <OptionComponent [active]="hasAccess(option.access, AccessMode.SET)" [item]="{ label: '', isActive: option.value === true }"></OptionComponent>
+        }
         @case ('binary') {
           @if (hasAccess(option.access, AccessMode.SET)) {
             <OptionComponent [active]="hasAccess(option.access, AccessMode.SET)" [item]="{ label: option.value_on ?? 'ON', isActive: option.value === true }"></OptionComponent>
           } @else {
             <span>{{ option.value }}</span>
           }
+        }
+        @case ('string') {
+          <input class="w-full text-right panel" [value]="option.value" />
+        }
+        @case ('Array.number') {
+          {{ option.enum }}
         }
         @case ('numeric') {
           <input class="w-full text-right panel" [value]="option.value" />

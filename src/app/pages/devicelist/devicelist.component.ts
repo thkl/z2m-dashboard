@@ -9,8 +9,8 @@ import { CDKDataSource } from '../../datastore/generic-store-ui';
 import { TableSortDirective, SortEvent, SortDirection } from '../../directives/table-sort.directive';
 import { sortData } from '../../utils/sort.utils';
 import { filterData } from '../../utils/filter.utils';
-import { SearchInput } from '../../components/searchinput/searchinput';
-import { OptionPanelComponent, SelectOption } from "../../components/optionpanel/optionpanel";
+import { SearchInput } from '../../components/controls/searchinput/searchinput';
+import { OptionPanelComponent, SelectOption } from "../../components/controls/optionpanel/optionpanel";
 @Component({
   selector: 'app-devicelist',
   templateUrl: './devicelist.component.html',

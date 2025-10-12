@@ -1,7 +1,7 @@
 export interface Bridge {
     commit:                     string;
     config:                     Config;
-    config_schema:              ConfigSchema;
+    config_schema:              {definitions:BridgeConfigSchema};
     coordinator:                Coordinator;
     log_level:                  string;
     mqtt:                       BridgeMqtt;
@@ -57,6 +57,74 @@ export interface Advanced {
     pan_id:                      number;
     timestamp_format:            string;
 }
+
+export interface BridgeConfigSchema {
+    device: DeviceConfigSchema;
+    group:  Group;
+}
+
+export interface DeviceConfigSchema {
+    properties: DevicePropertySchema;
+    required:   string[];
+    type:       string;
+}
+
+export interface DevicePropertySchema {
+    [key: string]: BridgeDeviceProperty;
+}
+
+export interface BridgeDeviceProperty {
+    description : string;
+    requiresRestart: boolean;
+    title: string;
+    type: string;
+    examples?:any[];
+    items?:any[];
+    enum?:any[];
+    properties?:BridgeDeviceProperty
+}
+ 
+
+export interface FriendlyName {
+    type: string;
+}
+ 
+export interface Qos {
+    description: string;
+    enum:        number[];
+    title:       string;
+    type:        string[];
+}
+
+export interface Group {
+    properties: GroupProperties;
+    required:   string[];
+    type:       string;
+}
+
+export interface GroupProperties {
+    filtered_attributes: FilteredAttributes;
+    friendly_name:       FriendlyName;
+    off_state:           OffState;
+    optimistic:          FriendlyName;
+    qos:                 Qos;
+    retain:              FriendlyName;
+}
+
+export interface FilteredAttributes {
+    items: FriendlyName;
+    type:  string;
+}
+
+export interface OffState {
+    default:         string;
+    description:     string;
+    enum:            string[];
+    requiresRestart: boolean;
+    title:           string;
+    type:            string[];
+}
+
 
 export interface ConfigSchema {
       [key: string]: any;

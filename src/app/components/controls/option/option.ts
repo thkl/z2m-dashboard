@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, effect, input, output, signal } from '@angular/core';
-import { SwitchElement } from '../../models/types';
+import { SwitchElement } from '../../../models/types';
 
 @Component({
   selector: 'OptionComponent',

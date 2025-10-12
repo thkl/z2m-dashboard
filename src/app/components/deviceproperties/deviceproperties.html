@@ -5,11 +5,15 @@
     </div>
   </ExpansionPanelComponent>
 
-  <ExpansionPanelComponent label="Settings" style="flex-grow: inherit" class="panel"> </ExpansionPanelComponent>
+  <ExpansionPanelComponent label="Settings" style="flex-grow: inherit" class="panel">
+    <div class="wrapper">
+      <DeviceSettings [device]="device()" [section]="bridgeDeviceOptions()"></DeviceSettings>
+    </div>
+  </ExpansionPanelComponent>
 
   <ExpansionPanelComponent label="Extended Settings" style="flex-grow: inherit" class="panel">
     <div class="wrapper">
-      <DeviceSettingsExtended [device]="device()"></DeviceSettingsExtended>
+      <DeviceSettings [device]="device()" [section]="device()?.definition?.options ?? []"></DeviceSettings>
     </div>
   </ExpansionPanelComponent>
 </div>

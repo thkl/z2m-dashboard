@@ -11,7 +11,6 @@ export interface RadioElement {
   selector: 'RadiolistComponent',
   imports: [],
   templateUrl: './radiolist.html',
-  styleUrl: './radiolist.scss'
 })
 export class RadiolistComponent {
   items = input.required<RadioElement[]>();
