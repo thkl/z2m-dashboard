@@ -6,7 +6,7 @@
     @for (item of deviceFeatures(); track $index) {
       @if (item.property.hidden === false) {
         <div class="device_row">
-          <div class="label flex flex-col">
+          <div class="label flex flex-col mt-auto mb-auto">
             <span
               >{{ item.property.label || item.property.name }}
               @if (item.property.description) {
@@ -30,11 +30,15 @@
 
             @case ('enum') {
               @if (hasAccess(item.property.access, AccessMode.SET)) {
-                <RadiolistComponent
-                  [items]="radioItems(item.property, item.value)"
-                  [active]="hasAccess(item.property.access, AccessMode.SET)"
-                  (selected)="enumClick(item.property, $event)"
-                ></RadiolistComponent>
+                @if (radioItems(item.property, item.value).length > 5) {
+                  <DropdownComponent [items]="selectItems(item.property, item.value)" (selected)="optionClick(item.property, $event)"></DropdownComponent>
+                } @else {
+                  <RadiolistComponent
+                    [items]="radioItems(item.property, item.value)"
+                    [active]="hasAccess(item.property.access, AccessMode.SET)"
+                    (selected)="enumClick(item.property, $event)"
+                  ></RadiolistComponent>
+                }
               } @else {
                 <span> - {{ item.value }}</span>
               }

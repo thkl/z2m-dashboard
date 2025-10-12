@@ -8,7 +8,7 @@ import { InfoOverlayComponent } from '../controls/infooverlay/infooverlay';
 import { RadioElement, RadiolistComponent } from '../controls/radiolist/radiolist';
 
 import { OptionComponent } from '../controls/option/option';
-import { SwitchElement } from '../../models/types';
+import { SelectOption, SwitchElement } from '../../models/types';
 import { hsvToHtmlRgb, xyToHtmlRgb, htmlRgbToHsv, htmlRgbToXy } from '../../utils/color.util';
 import { HumanReadablePipe } from '../../pipes/human.pipe';
 import { createStoreView } from '../../datastore/generic-store-view';
@@ -17,10 +17,11 @@ import { LevelMarkOption, LevelSelectorComponent } from '../controls/levelselect
 import { ExpansionPanelComponent } from '../controls/expansionpanel/expansionpanel';
 import { ColorSelectorComponent } from '../controls/colorselector/colorselector';
 import { ColorTemperatureSelectorComponent } from '../controls/colortemperatureselector/colortemperatureselector';
+import { DropdownComponent } from '../controls/dropdown/dropdown';
 
 @Component({
   selector: 'DeviceFeaturesComponent',
-  imports: [TranslateModule, HumanReadablePipe, LevelSelectorComponent, InfoOverlayComponent, ExpansionPanelComponent, RadiolistComponent, OptionComponent, ColorSelectorComponent, ColorTemperatureSelectorComponent],
+  imports: [TranslateModule, HumanReadablePipe, LevelSelectorComponent, InfoOverlayComponent, ExpansionPanelComponent, RadiolistComponent, OptionComponent, ColorSelectorComponent, ColorTemperatureSelectorComponent,DropdownComponent],
   templateUrl: './devicefeatures.html',
   styleUrl: './devicefeatures.scss'
 })
@@ -164,6 +165,10 @@ export class DeviceFeaturesComponent {
     return property.values ? property.values.map(v => { return { label: v, isActive: v === currentValue } }) : [];
   }
 
+  selectItems(property: DeviceFeature, currentValue: any): SelectOption[] {
+    return property.values ? property.values.map(v => { return { label: v, isSelected: v === currentValue } }) : [];
+  }
+
   switch(property: DeviceFeature, item: SwitchElement): void {
     if (this.device()) {
       const device = this.device()!;
@@ -174,6 +179,15 @@ export class DeviceFeaturesComponent {
   }
 
   enumClick(property: DeviceFeature, item: RadioElement): void {
+    if (this.device()) {
+      const device = this.device()!;
+      const state: DeviceTargetState = {};
+      state[property.name] = item ? item.label : ''
+      this.deviceService.updateDeviceState(device.friendly_name, state)
+    }
+  }
+
+  optionClick(property: DeviceFeature, item: SelectOption): void {
     if (this.device()) {
       const device = this.device()!;
       const state: DeviceTargetState = {};

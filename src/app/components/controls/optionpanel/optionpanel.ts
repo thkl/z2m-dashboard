@@ -1,12 +1,7 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { ExpansionPanelComponent } from '../expansionpanel/expansionpanel';
 import { SearchInput } from '../searchinput/searchinput';
-
-export interface SelectOption {
-  isSelected:boolean;
-  label:string;
-  value?:string
-}
+import { SelectOption } from '../../../models/types';
 
 @Component({
   selector: 'OptionPanelComponent',

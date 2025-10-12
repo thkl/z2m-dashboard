@@ -38,3 +38,9 @@ export interface RemoveDeviceOptions {
   blockDevice: boolean,
   forceDelete: boolean
 }
+
+export interface SelectOption {
+  isSelected:boolean;
+  label:string;
+  value?:string
+}

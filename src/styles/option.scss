@@ -1,10 +1,10 @@
-OptionComponent.input {
+optioncomponent > .root > .input {
   position: relative;
   margin-left: 8px;
   margin-right: 0;
 }
 
-OptionComponent.inputContainer {
+optioncomponent > .root > .input > .inputContainer {
   margin-top: 4px;
   height: 16px;
   width: 32px;
@@ -14,25 +14,26 @@ OptionComponent.inputContainer {
   flex-shrink: 0;
   position: relative;
   transition: background-color 0.2s ease;
-  background-color: #737c87;
-}
-OptionComponent.inputContainer.active  {
-    background-color: #4797ff;
+  background-color: var(--app-text-color-inactive);
 }
 
-OptionComponent.indicator {
+optioncomponent > .root > .input >.inputContainer.active  {
+  background-color: var(--button-text-color);
+}
+
+optioncomponent > .root > .input >.inputContainer >.indicator {
   position: absolute;
   transform: scale(0);
   transition: transform 0.15s cubic-bezier(0.8, 0, 0.7, 1) 50ms;
   border: none;
 }
 
-OptionComponent.indicator.active {
+optioncomponent > .root > .input >.inputContainer >.indicator.active {
     transform: scale(1);
 }
 
-OptionComponent.switcher {
-  background-color: #fff;
+optioncomponent > .root > .input >.inputContainer >.switcher {
+  background-color: var(--app-text-color);
   border-radius: 100%;
   pointer-events: none;
   position: absolute;
@@ -43,7 +44,7 @@ OptionComponent.switcher {
   width: 14px;
 }
 
-OptionComponent.switcher.active  {
+optioncomponent > .root > .input >.inputContainer >.switcher.active  {
     transform: translateX(calc(-100% - 1px));
     left: 100%;
 }

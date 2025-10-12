@@ -10,7 +10,8 @@ import { TableSortDirective, SortEvent, SortDirection } from '../../directives/t
 import { sortData } from '../../utils/sort.utils';
 import { filterData } from '../../utils/filter.utils';
 import { SearchInput } from '../../components/controls/searchinput/searchinput';
-import { OptionPanelComponent, SelectOption } from "../../components/controls/optionpanel/optionpanel";
+import { OptionPanelComponent } from "../../components/controls/optionpanel/optionpanel";
+import { SelectOption } from '../../models/types';
 @Component({
   selector: 'app-devicelist',
   templateUrl: './devicelist.component.html',

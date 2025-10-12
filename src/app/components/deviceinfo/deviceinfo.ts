@@ -9,9 +9,9 @@ import { createStoreView } from '../../datastore/generic-store-view';
 import { SearchOperator } from '../../datastore/generic.store';
 import { ModalDialog, ModalDialogData } from '../controls/modaldialog/modaldialog';
 import { Dialog } from '@angular/cdk/dialog';
-import { RenamedeviceDialog } from '../renamedevicedialog/renamedevicedialog';
 import { RemoveDeviceOptions, RenameDeviceOptions } from '../../models/types';
-import { RemoveDeviceDialog } from '../dialogs/removedevicedialog';
+import { RemoveDeviceDialog } from '../dialogs/removedevicedialog/removedevicedialog';
+import { RenamedeviceDialog } from '../dialogs/renamedevicedialog/renamedevicedialog';
 
 @Component({
   selector: 'DeviceInfoComponent',

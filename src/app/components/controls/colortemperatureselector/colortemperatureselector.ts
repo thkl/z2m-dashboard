@@ -1,7 +1,7 @@
 import { Component, effect, input, model, output, signal } from '@angular/core';
-import { ColorTemperatureOption } from '../../models/types';
-import { miredToHtmlRgb, miredToKelvin } from '../../utils/color.util';
-
+import { ColorTemperatureOption } from '../../../models/types';
+import { miredToHtmlRgb, miredToKelvin } from '../../../utils/color.util';
+ 
 @Component({
   selector: 'ColorTemperatureSelectorComponent',
   imports: [],

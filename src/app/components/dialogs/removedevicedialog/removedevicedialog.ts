@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { OptionComponent } from '../controls/option/option';
-import { RemoveDeviceOptions, SwitchElement } from '../../models/types';
+import { OptionComponent } from '../../controls/option/option';
+import { RemoveDeviceOptions, SwitchElement } from '../../../models/types';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 @Component({
