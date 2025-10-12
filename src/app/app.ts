@@ -8,7 +8,7 @@ import { BridgeService } from './services/bridge.service';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, TranslateModule],
-  providers: [DeviceService, ApplicationService],
+  providers: [],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

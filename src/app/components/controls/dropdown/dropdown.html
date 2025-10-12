@@ -25,7 +25,10 @@
   [cdkConnectedOverlayPositions]="positions"
   [cdkConnectedOverlayOpen]="isOpen()"
   [cdkConnectedOverlayPanelClass]="'dropdown-panel'"
-  (detach)="isOpen() === false"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayBackdropClass]="'dropdown-backdrop'"
+  (backdropClick)="isOpen.set(false)"
+  (detach)="isOpen.set(false)"
 >
   <div class="dropdownRoot scrollbar">
     <ul class="optionsPanel">

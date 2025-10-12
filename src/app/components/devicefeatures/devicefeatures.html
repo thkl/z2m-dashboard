@@ -40,7 +40,7 @@
                   ></RadiolistComponent>
                 }
               } @else {
-                <span> - {{ item.value }}</span>
+                <span>{{ item.value !== null && item.value !== '' ? item.value : '-' }}</span>
               }
             }
 

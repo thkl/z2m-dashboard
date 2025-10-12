@@ -7,7 +7,6 @@ import { SelectOption } from '../../../models/types';
   selector: 'DropdownComponent',
   imports: [OverlayModule],
   templateUrl: './dropdown.html',
-  styleUrl: './dropdown.scss'
 })
 export class DropdownComponent {
   isOpen = signal(false);

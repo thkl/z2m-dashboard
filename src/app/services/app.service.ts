@@ -21,11 +21,10 @@ export class ApplicationService {
 
     public loadSettings() {
         const saved = localStorage.getItem('ui-settings');
-        if (saved) {
             if (saved) {
                 try {
                     this.settings = JSON.parse(saved) as AppSettings;
-
+                    console.log("Connecting")
                     if (this.settings.host) {
                         this.ws.connect(`${this.settings.secure ? 'wss' : 'ws'}://${this.settings.host}/api`);
 
@@ -35,7 +34,6 @@ export class ApplicationService {
                     console.error(e)
                 }
             }
-        }
     }
 
 
