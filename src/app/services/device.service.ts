@@ -1,7 +1,7 @@
 import { computed, effect, inject, Injectable, signal } from "@angular/core";
 import { Websocket, WebSocketMessage } from "./websocket";
 import { DeviceStore } from "../datastore/device.store";
-import { Device, DeviceTargetState, DeviceFeature } from "../models/device";
+import { Device, DeviceTargetState, DeviceFeature, DeviceOption } from "../models/device";
 import { timeAgo } from "../utils/time.utils";
 import { TranslateService } from "@ngx-translate/core";
 import { ApplicationService } from "./app.service";
@@ -61,8 +61,8 @@ export class DeviceService {
     }
   }
 
-  public updateDeviceState(device: string, data: DeviceTargetState): void {
-    const topic = `${device}/set`;
+  public updateDeviceState(deviceName: string, data: DeviceTargetState): void {
+    const topic = `${deviceName}/set`;
     this.appService.sendBridgeRequest(topic, data);
   }
 
@@ -131,18 +131,24 @@ export class DeviceService {
     });
   }
 
-  removeDevice(options:RemoveDeviceOptions): void {
-    this.sendBridgeDeviceRequest("bridge/request/device/remove",  {id:options.device.friendly_name, block:options.blockDevice,force:options.forceDelete });
+  removeDevice(options: RemoveDeviceOptions): void {
+    this.sendBridgeDeviceRequest("bridge/request/device/remove", { id: options.device.friendly_name, block: options.blockDevice, force: options.forceDelete });
   }
 
   changeDeviceDescription(device: Device): void {
-    this.sendBridgeDeviceRequest("bridge/request/device/options", {id: device.friendly_name,
-      options: {description: device.description}
+    this.updateSetting(device,{ description: device.description });
+  }
+
+  updateSetting(device: Device, settings: {[key: string]:any}) {
+    this.sendBridgeDeviceRequest("bridge/request/device/options", {
+      id: device.friendly_name,
+      options: settings
     });
+
   }
 
   renameDevice(renameOptions: RenameDeviceOptions): void {
-    this.sendBridgeDeviceRequest("bridge/request/device/rename",{from:renameOptions.device.friendly_name,to:renameOptions.newName,homeassistant_rename:renameOptions.renameHomeAssiatant});
+    this.sendBridgeDeviceRequest("bridge/request/device/rename", { from: renameOptions.device.friendly_name, to: renameOptions.newName, homeassistant_rename: renameOptions.renameHomeAssiatant });
   }
 
 }

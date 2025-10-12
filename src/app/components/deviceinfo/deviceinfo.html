@@ -66,11 +66,11 @@
     </div>
     <div class="device_row">
       <span class="label">{{ 'MANUFACTURER' | translate }}</span>
-      <span class="value">{{ device()?.definition?.vendor }}</span>
+      <span class="value"><VendorLink [device]="device()!"></VendorLink></span>
     </div>
     <div class="device_row">
       <span class="label">{{ 'MODEL' | translate }}</span>
-      <span class="value">{{ device()?.definition?.model }}</span>
+      <span class="value"><ModelLink [device]="device()!"></ModelLink></span>
     </div>
     <div class="device_row">
       <span class="label">{{ 'POWER' | translate }}</span>

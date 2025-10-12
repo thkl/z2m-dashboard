@@ -15,3 +15,10 @@ export function filterData<T>(
     });
   });
 }
+
+
+export const normalizeDeviceModel = (model: string): string => {
+    const find = "[/| |:]";
+    const re = new RegExp(find, "g");
+    return model.replace(re, "_");
+};

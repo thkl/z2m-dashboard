@@ -7,15 +7,16 @@ import { HumanReadablePipe } from '../../pipes/human.pipe';
 import { Device } from '../../models/device';
 import { createStoreView } from '../../datastore/generic-store-view';
 import { SearchOperator } from '../../datastore/generic.store';
-import { ModalDialog, ModalDialogData } from '../controls/modaldialog/modaldialog';
 import { Dialog } from '@angular/cdk/dialog';
 import { RemoveDeviceOptions, RenameDeviceOptions } from '../../models/types';
 import { RemoveDeviceDialog } from '../dialogs/removedevicedialog/removedevicedialog';
 import { RenamedeviceDialog } from '../dialogs/renamedevicedialog/renamedevicedialog';
+import { ModelLink } from '../controls/modellink/modellink';
+import { VendorLink } from '../controls/vendorlink/vendorlink';
 
 @Component({
   selector: 'DeviceInfoComponent',
-  imports: [TranslateModule, HexPipe, HumanReadablePipe],
+  imports: [TranslateModule, HexPipe, HumanReadablePipe,ModelLink,VendorLink],
   templateUrl: './deviceinfo.html',
   styleUrl: './deviceinfo.scss'
 })

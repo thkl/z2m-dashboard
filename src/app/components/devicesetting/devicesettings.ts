@@ -1,8 +1,9 @@
-import { Component, effect, input, signal, Signal } from '@angular/core';
+import { Component, effect, inject, input, signal, Signal } from '@angular/core';
 import { AccessMode, Device, DeviceOption } from '../../models/device';
 import { InfoOverlayComponent } from '../controls/infooverlay/infooverlay';
 import { OptionComponent } from '../controls/option/option';
 import { DeviceConfigSchema } from '../../models/bridge';
+import { DeviceService } from '../../services/device.service';
 
 @Component({
   selector: 'DeviceSettings',
@@ -14,6 +15,7 @@ export class DeviceSettings {
   section = input.required<DeviceOption[] | DeviceConfigSchema | undefined>();
   device = input.required<Device | null>()
   readonly AccessMode = AccessMode;
+  deviceService = inject(DeviceService)
   deviceOptions = signal<DeviceOption[]>([]);
   hasInitialized = false;
 
@@ -23,9 +25,9 @@ export class DeviceSettings {
 
   constructor() {
     effect(() => {
-      if (this.hasInitialized) {
-        return;
-      }
+      //if (this.hasInitialized) {
+      //  return;
+      //}
       const section = this.section();
 
       if (!section) {
@@ -69,6 +71,17 @@ export class DeviceSettings {
       }
     });
     this.deviceOptions.set(flattend);
+  }
+
+  changeSetting(option: DeviceOption, item: any) {
+    if (this.device()) {
+      option.value = item;
+      const data: {[key: string]:any} = {}
+      if ((option.value !== null) && (option.value !== '?')) {
+        data[option.property] = option.value;
+      }
+      this.deviceService.updateSetting(this.device()!, data)
+    }
   }
 }
 
