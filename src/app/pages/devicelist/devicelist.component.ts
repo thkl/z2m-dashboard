@@ -12,11 +12,12 @@ import { filterData } from '../../utils/filter.utils';
 import { SearchInput } from '../../components/controls/searchinput/searchinput';
 import { OptionPanelComponent } from "../../components/controls/optionpanel/optionpanel";
 import { SelectOption } from '../../models/types';
+import { DeviceImage } from '../../components/controls/device-image/device-image';
 @Component({
   selector: 'app-devicelist',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, CdkTableModule, TableSortDirective, SearchInput, OptionPanelComponent]
+  imports: [TranslateModule, CdkTableModule, TableSortDirective, SearchInput, OptionPanelComponent,DeviceImage]
 })
 export class DeviceListComponent {
 

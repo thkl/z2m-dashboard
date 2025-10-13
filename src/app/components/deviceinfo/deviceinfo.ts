@@ -13,10 +13,12 @@ import { RemoveDeviceDialog } from '../dialogs/removedevicedialog/removedevicedi
 import { RenamedeviceDialog } from '../dialogs/renamedevicedialog/renamedevicedialog';
 import { ModelLink } from '../controls/modellink/modellink';
 import { VendorLink } from '../controls/vendorlink/vendorlink';
+import { DeviceImage } from '../controls/device-image/device-image';
+import { DeviceAvailability } from '../controls/device-availability/device-availability';
 
 @Component({
   selector: 'DeviceInfoComponent',
-  imports: [TranslateModule, HexPipe, HumanReadablePipe,ModelLink,VendorLink],
+  imports: [TranslateModule, HexPipe, HumanReadablePipe,ModelLink,VendorLink,DeviceImage,DeviceAvailability],
   templateUrl: './deviceinfo.html',
   styleUrl: './deviceinfo.scss'
 })

@@ -1,0 +1,26 @@
+.device-image-container {
+  position: relative;
+  display: inline-block;
+
+  .icon-overlay {
+    position: absolute;
+    right: 0;
+    bottom: -5;
+    max-width: 25%;
+    min-width: 20px;
+    transform: translateY(-50%);
+    animation: spin 2s linear infinite;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}

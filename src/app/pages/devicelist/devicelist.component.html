@@ -30,7 +30,7 @@
               class="statusIcon"
               [class.red]="device.state.availability !== 'online'"
               [class.green]="device.state.availability === 'online'"
-              [class.yellow]="device.interviewing === true"
+              [class.yellow]="device.state.availability === ''"
             ></span>
           </div>
         </td>
@@ -39,7 +39,7 @@
       <ng-container cdkColumnDef="icon">
         <th cdk-header-cell *cdkHeaderCellDef class="icon_cell"></th>
         <td cdk-cell *cdkCellDef="let device" class="icon_cell">
-          <img alt="" crossorigin="anonymous" class="icon" src="https://www.zigbee2mqtt.io/images/devices/{{ device.definition?.image }}.png" />
+          <DeviceImage [device]="device" class="icon" width="25px"></DeviceImage>
         </td>
       </ng-container>
 

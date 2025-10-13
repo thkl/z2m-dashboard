@@ -1,3 +1,5 @@
+import { InterviewState } from "./constants";
+
 export interface DeviceOption {
     access: number;
     description: string;
@@ -108,7 +110,7 @@ export interface Device {
     friendly_name: string;
     ieee_address: string;
     interview_completed: boolean;
-    interview_state: string;
+    interview_state: InterviewState;
     interviewing: boolean;
     manufacturer: string;
     model_id: string;

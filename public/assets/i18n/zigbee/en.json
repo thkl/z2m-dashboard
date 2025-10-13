@@ -1,4 +1,5 @@
 {
     "zigbee.SUCCESSFUL": "Successful",
-    "zigbee.IN_PROGRESS": "in progress"
+    "zigbee.IN_PROGRESS": "in progress",
+    "zigbee.UNKNOWN":"unknown"
 }
