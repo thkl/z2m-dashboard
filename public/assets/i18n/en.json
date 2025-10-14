@@ -53,5 +53,6 @@
   "REMOVE_DEVICE_MESSAGE": "Are you sure, you want to delete the device {{name}} ?",
   "REMOVE_DEVICE_CAPTION": "Remove {{name}}",
   "RENAME DEVICE": "Rename {{name}} ...",
-  "RENAME HOMEASSISTANT": "also rename the Homeassistant entity"
+  "RENAME HOMEASSISTANT": "also rename the Homeassistant entity",
+  "UPDATE_RUNNING": "Updating {{time}} left"
 }
