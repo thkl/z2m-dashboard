@@ -1,14 +1,14 @@
 <div class="device-image-container" [style.max-width]="width()">
   @if (imageError()) {
-    <img src="/assets/images/device-default.png" [alt]="device().friendly_name" />
+    <img src="/assets/images/zigbee-device.png" class="zigbee-device" [alt]="device().friendly_name" />
   } @else {
-    <img src="https://www.zigbee2mqtt.io/images/devices/{{ device()?.definition?.image }}.png" (error)="onImageError()" [alt]="device().friendly_name" />
+    <img src="https://www.zigbee2mqtt.io/images/devices/{{ device().definition.image }}.png" (error)="onImageError()" [alt]="device().friendly_name" />
   }
 
-  @if (device().interview_state === InterviewState.InProgress) {
+  @if (device().interview_state === InterviewState.InProgress || device().update?.state === 'updating') {
     <svg class="icon-overlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#e3e3e3">
       <path
-        d="M160-160v-80h110l-16-14q-52-46-73-105t-21-119q0-111 66.5-197.5T400-790v84q-72 26-116 88.5T240-478q0 45 17 87.5t53 78.5l10 10v-98h80v240H160Zm400-10v-84q72-26 116-88.5T720-482q0-45-17-87.5T650-648l-10-10v98h-80v-240h240v80H690l16 14q49 49 71.5 106.5T800-482q0 111-66.5 197.5T560-170Z"
+        d="M482-160q-134 0-228-93t-94-227v-7l-64 64-56-56 160-160 160 160-56 56-64-64v7q0 100 70.5 170T482-240q26 0 51-6t49-18l60 60q-38 22-78 33t-82 11Zm278-161L600-481l56-56 64 64v-7q0-100-70.5-170T478-720q-26 0-51 6t-49 18l-60-60q38-22 78-33t82-11q134 0 228 93t94 227v7l64-64 56 56-160 160Z"
       />
     </svg>
   }

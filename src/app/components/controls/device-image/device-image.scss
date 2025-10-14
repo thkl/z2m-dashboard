@@ -24,3 +24,7 @@
     transform: translateY(-50%) rotate(360deg);
   }
 }
+
+:host-context(body.dark-theme) .zigbee-device {
+  filter: brightness(0) invert(1);
+}
