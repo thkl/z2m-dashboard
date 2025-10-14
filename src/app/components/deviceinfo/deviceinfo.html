@@ -95,6 +95,19 @@
       </div>
 
       <div class="buttonBar mt-3 panel">
+        @if (device()?.update && device()?.update?.state === 'available') {
+          <div class="button">
+            <button class="button-blue left" (click)="performUpdate()">{{ 'PERFORM_UPDATE' | translate }}</button>
+          </div>
+        }
+
+        @if (device()?.update && device()?.update?.state === 'updating') {
+          <div class="button flex flex-col min-h-20">
+            <span>{{ 'UPDATE_RUNNING' | translate: { time: device()?.update?.remaining | secondsToTime } }}</span>
+            <ProgessBar [percent]="device()?.update?.progress ?? 0"></ProgessBar>
+          </div>
+        }
+
         <div class="button">
           <button class="button-blue left" (click)="startInterview()">{{ 'START_INTERVIEW' | translate }}</button>
         </div>

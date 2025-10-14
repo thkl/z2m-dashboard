@@ -4,6 +4,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeviceService } from '../../services/device.service';
 import { HexPipe } from '../../pipes/hex.pipe';
 import { HumanReadablePipe } from '../../pipes/human.pipe';
+import { SecondsToTimePipe } from '../../pipes/seconds-to-time.pipe';
 import { Device } from '../../models/device';
 import { createStoreView } from '../../datastore/generic-store-view';
 import { SearchOperator } from '../../datastore/generic.store';
@@ -15,10 +16,11 @@ import { ModelLink } from '../controls/modellink/modellink';
 import { VendorLink } from '../controls/vendorlink/vendorlink';
 import { DeviceImage } from '../controls/device-image/device-image';
 import { DeviceAvailability } from '../controls/device-availability/device-availability';
+import { ProgessBar } from '../controls/progess-bar/progess-bar';
 
 @Component({
   selector: 'DeviceInfoComponent',
-  imports: [TranslateModule, HexPipe, HumanReadablePipe,ModelLink,VendorLink,DeviceImage,DeviceAvailability],
+  imports: [TranslateModule, HexPipe, HumanReadablePipe, SecondsToTimePipe, ModelLink, VendorLink, DeviceImage, DeviceAvailability,ProgessBar],
   templateUrl: './deviceinfo.html',
   styleUrl: './deviceinfo.scss'
 })
@@ -76,6 +78,12 @@ export class DeviceInfoComponent {
     if (this.device() !== null) {
       const changedDevice = { ...this.device()!, description };
       this.deviceService.changeDeviceDescription(changedDevice);
+    }
+  }
+
+  performUpdate() {
+    if (this.device()) {
+      this.deviceService.performUpdate(this.device()!);
     }
   }
 
