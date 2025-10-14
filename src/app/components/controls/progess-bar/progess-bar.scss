@@ -1,0 +1,31 @@
+.ProgressBar {
+  height: 4px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.status {
+  background: var(--progressbar-status-background-color);
+  transition: all 1s ease;
+  color: var(--progressbar-status-color);
+  border-radius: 16px;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  width: 100%;
+  padding-left: 0em;
+  padding-right: 0em;
+}
+
+.wrapper {
+  width: 100%;
+  margin-left: 0em;
+  margin-right: 0em;
+}
