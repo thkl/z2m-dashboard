@@ -11,6 +11,8 @@ export class ExpansionPanelComponent {
   label = input.required<string>();
   hasSearch = input<boolean>();
   isOpen = signal(false);
+  colorTrigger = input<boolean>(true);
+  contentClass = input<string>();
 
    toggle():void {
     this.isOpen.set(!this.isOpen());

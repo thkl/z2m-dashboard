@@ -1,5 +1,5 @@
-<div class="root_control flex flex-col" [class.panel-open]="isOpen()">
-  <button type="button" tabindex="0" class="trigger" (click)="toggle()">
+<div class="root_control flex flex-col {{ contentClass() }}" [class.panel-open]="isOpen()">
+  <button type="button" tabindex="0" class="trigger" [class.trigger-colored]="colorTrigger() === true" (click)="toggle()">
     <div class="root_control">
       <div>
         <span class="title">{{ label() }}</span>
@@ -11,22 +11,20 @@
       <span class="material-symbols-outlined">arrow_drop_up</span>
     }
   </button>
-  <div class="content flex flex-col" style="flex-grow: inherit">
-    @if (isOpen()) {
-      <div class="options flex flex-col" style="flex-grow: inherit">
-        @if (hasSearch() === true) {
-          <div class="root_control">
-            <div>
-              <app-searchinput></app-searchinput>
-            </div>
-            <div>
-              <ng-content></ng-content>
-            </div>
+  <div class="content flex flex-col" [class.content-open]="isOpen()" style="flex-grow: inherit">
+    <div class="options flex flex-col" style="flex-grow: inherit">
+      @if (hasSearch() === true) {
+        <div class="root_control">
+          <div>
+            <app-searchinput></app-searchinput>
           </div>
-        } @else {
-          <ng-content></ng-content>
-        }
-      </div>
-    }
+          <div>
+            <ng-content></ng-content>
+          </div>
+        </div>
+      } @else {
+        <ng-content></ng-content>
+      }
+    </div>
   </div>
 </div>
