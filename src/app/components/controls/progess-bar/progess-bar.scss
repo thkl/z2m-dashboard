@@ -4,6 +4,7 @@
   overflow: hidden;
   position: relative;
   width: 100%;
+  background: var(--progressbar-background-color);
 }
 
 .status {
@@ -28,4 +29,10 @@
   width: 100%;
   margin-left: 0em;
   margin-right: 0em;
+}
+
+.label {
+    width: auto;
+    padding-left: 2em;
+    white-space: nowrap;
 }

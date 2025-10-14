@@ -10,7 +10,8 @@ export class ProgessBar {
     max = input<number>(100);
     value = input<number>(0);
     percentInput = input<number>(0, { alias: 'percent' });
-
+    showLabel = input<boolean>(false);
+    
     // Computed signal that either uses the direct percent input or calculates from max/value
     percent = computed(() => {
       const directPercent = this.percentInput();
