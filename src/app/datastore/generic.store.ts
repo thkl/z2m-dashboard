@@ -225,6 +225,11 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
                     });
                 },
 
+                findbySearch: (field: string, search: string) => {
+                    const entities = store.entities() || [];
+                    return entities.find((e) => e[field] === search);
+                },
+
                 mergeBySearch: (property: string, newValue: any, field: string, search: string) => {
                     const entities = store.entities() || [];
                     const existingEntity = entities.find((e) => e[field] === search);
