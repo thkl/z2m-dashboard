@@ -1,4 +1,4 @@
-import { InterviewState } from "./constants";
+import { InterviewState, UpdateState } from "./constants";
 
 export interface DeviceOption {
     access: number;
@@ -100,6 +100,14 @@ export interface DeviceTargetState {
 }
 
 
+export interface DeviceUpdate {
+    installed_version: number;
+    latest_version:    number;
+    state:             UpdateState;
+    progress?:         number;
+    remaining?:        number;
+}
+
 
 export interface Device {
     date_code: string;
@@ -121,6 +129,7 @@ export interface Device {
     type: string;
     state:DeviceState;
     options: {[key: string]: any};
+    update?:DeviceUpdate;
 }
 
 export interface Endpoint {

@@ -9,3 +9,9 @@ export enum InterviewState {
     Successful = "SUCCESSFUL",
     Failed = "FAILED",
 }
+
+export enum UpdateState {
+    idle = "idle",
+    available = "available",
+    updating = "updating"
+}

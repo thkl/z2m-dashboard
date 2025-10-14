@@ -51,12 +51,15 @@ export class DeviceService {
 
   }
 
-  private doupdateState(topic: string, status: any) {
+  private doupdateState(topic: string, state: any) {
     const splits = topic.split("/");
     if (splits.length === 1) {
       // the device is the first in the topic
       const deviceName = splits[0];
-      this.deviceStore.mergeBySearch("state", status, "friendly_name", deviceName);
+      this.deviceStore.mergeBySearch("state", state, "friendly_name", deviceName);
+      if (state.update) { // also put the update date into the device data
+        this.deviceStore.mergeBySearch("update",state.update, "friendly_name", deviceName)
+      }
       this.setupUpdateInterval();
     }
   }
@@ -144,7 +147,25 @@ export class DeviceService {
       id: device.friendly_name,
       options: settings
     });
+  }
 
+  checkUpdate(device:Device) {
+     this.sendBridgeDeviceRequest("bridge/request/device/ota_update/check", {
+      id: device.friendly_name,
+    });
+  }
+
+  performUpdate(device:Device) {
+     this.sendBridgeDeviceRequest("bridge/request/device/ota_update/update", {
+      id: device.friendly_name,
+    });
+  }
+
+
+  scheduleUpdate(device:Device) {
+     this.sendBridgeDeviceRequest("bridge/request/device/ota_update/schedule", {
+      id: device.friendly_name,
+    });
   }
 
   renameDevice(renameOptions: RenameDeviceOptions): void {
