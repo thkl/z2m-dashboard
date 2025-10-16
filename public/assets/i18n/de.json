@@ -59,5 +59,6 @@
   "RENAME HOMEASSISTANT": "Die Homeassistant Entität auch umbenennen",
   "DELETE_BLOCK_DEVICE": "Wiederanlernen blockieren",
   "DELETE_FORCE_DELETE": "Löschen erzwingen",
-  "UPDATE_RUNNING":"Aktualisierung noch {{time}}"
+  "UPDATE_RUNNING":"Aktualisierung noch {{time}}",
+  "CLEAR_LOGS":"Log löschen"
 }

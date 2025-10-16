@@ -254,3 +254,11 @@ export interface OS {
 export interface ZigbeeHerdsman {
     version: string;
 }
+
+
+export interface BridgeEvent {
+    uuid:string;
+    date:Date;
+    level:string;
+    message:string;
+}

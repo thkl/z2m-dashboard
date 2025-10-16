@@ -1,6 +1,6 @@
-<div class="flex h-screen w-screen dark:bg-unifi-bg text-gray-900 dark:text-gray-100 layout_root">
+<div class="flex h-screen w-screen dark:bg-unifi-bg text-gray-900 dark:text-gray-100 layout_root overflow-hidden">
   <!-- Sidebar -->
-  <aside class="transition-all duration-300 border-r" [class.w-64]="sidebarOpen" [class.w-16]="!sidebarOpen">
+  <aside class="transition-all duration-300 border-r flex-shrink-0" [class.w-64]="sidebarOpen" [class.w-16]="!sidebarOpen">
     <div class="flex items-center justify-between p-4">
       @if (sidebarOpen) {
         <span class="text-lg font-bold text-unifi-accent">ZigBee2MQTT UI</span>
@@ -36,9 +36,9 @@
   </aside>
 
   <!-- Main Content -->
-  <main class="flex-1 flex flex-col">
+  <main class="flex-1 flex flex-col min-w-0">
     <!-- Topbar -->
-    <header class="h-14 border-b layout_header flex items-center justify-between px-4">
+    <header class="h-14 border-b layout_header flex items-center justify-between px-4 flex-shrink-0">
       <h1 class="text-lg font-semibold">{{ 'APP_TITLE' | translate }}</h1>
 
       @if (info()?.permit_join === true && info()?.permit_join_end) {
@@ -50,14 +50,18 @@
     </header>
 
     <!-- Page Content -->
-    <section class="flex-1 overflow-y-auto p-6 bg-gray-50 layout_section scrollbar">
+    <section class="flex-1 overflow-y-auto p-6 bg-gray-50 layout_section scrollbar min-h-0">
       <router-outlet></router-outlet>
+    </section>
+
+    <section class="logSection flex-shrink-0" [class.logSection-closed]="!logViewOpen">
+      <LogView [logViewOpen]="logViewOpen" (toggleLogView)="toggleLogView()"></LogView>
     </section>
   </main>
 
   <!-- Right Sidebar for Device Properties -->
   <aside
-    class="transition-all duration-300 border-l overflow-hidden scrollbar"
+    class="transition-all duration-300 border-l overflow-hidden scrollbar flex-shrink-0"
     [class.w-[450px]]="rightSidebarOpen()"
     [class.overflow-y-auto]="rightSidebarOpen()"
     [class.w-0]="!rightSidebarOpen()"

@@ -19,17 +19,15 @@ function deepMerge(target: any, source: any): any {
 }
 
 export interface BaseEntity {
-    ieee_address: string;
+    ieee_address?: string;
     [key: string]: any;
 }
 
-export type CreateRequest<T extends BaseEntity> = Omit<T, 'ieee_address'>;
+export type CreateRequest<T extends BaseEntity, K extends keyof T = 'ieee_address'> = Omit<T, K>;
 
-export type UpdateRequest<T extends BaseEntity> = Partial<Omit<T, 'ieee_address'>> & {
-    ieee_address: string;
-};
+export type UpdateRequest<T extends BaseEntity, K extends keyof T = 'ieee_address'> = Partial<Omit<T, K>> & Pick<T, K>;
 
-export type NewRequest<T extends BaseEntity> = Omit<T, 'ieee_address'> & { ieee_address: 'new' | ''; };
+export type NewRequest<T extends BaseEntity, K extends keyof T = 'ieee_address'> = Omit<T, K> & { [P in K]: 'new' | '' };
 
 
 // Search criteria types
@@ -42,15 +40,15 @@ export interface SearchCriteria<T extends BaseEntity> {
     property: keyof T;
     value: any;
     operator?:
-        | 'equals'
-        | 'contains'
-        | 'startsWith'
-        | 'endsWith'
-        | 'greaterThan'
-        | 'lessThan'
-        | 'greaterThanOrEqual'
-        | 'lessThanOrEqual'
-        | 'not';
+    | 'equals'
+    | 'contains'
+    | 'startsWith'
+    | 'endsWith'
+    | 'greaterThan'
+    | 'lessThan'
+    | 'greaterThanOrEqual'
+    | 'lessThanOrEqual'
+    | 'not';
     caseSensitive?: boolean;
 }
 
@@ -74,6 +72,8 @@ export interface StoreConfig<T extends BaseEntity> {
     searchableFields?: (keyof T)[];
     entityName?: string;
     readonly?: boolean;
+    maxNumberOfEntities?: number;
+    idField?: keyof T; // Configurable ID field, defaults to 'ieee_address'
 }
 
 
@@ -98,6 +98,7 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
     };
 
     const searchableFields = config.searchableFields || (Object.keys({} as T) as (keyof T)[]);
+    const idField = (config.idField || 'ieee_address') as keyof T;
 
     const store = signalStore(
         { providedIn: 'root' },
@@ -139,11 +140,19 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
                     });
                 },
 
-                addLocal: (createdEntity: CreateRequest<T>, ieee_address: string) => {
-                    const newEntity = { ...createdEntity, ieee_address } as T;
+                addLocal: (createdEntity: CreateRequest<T, typeof idField>, id: T[typeof idField]) => {
+                    const newEntity = { ...createdEntity, [idField]: id } as T;
+                    let updatedEntities = [...(store.entities() || []), newEntity];
+
+                    // Remove oldest entries if maxNumberOfEntities is configured
+                    if (config.maxNumberOfEntities && updatedEntities.length > config.maxNumberOfEntities) {
+                        const entriesToRemove = updatedEntities.length - config.maxNumberOfEntities;
+                        updatedEntities = updatedEntities.slice(entriesToRemove);
+                    }
+
                     patchState(store, {
-                        entities: [...(store.entities() || []), newEntity],
-                        totalCount: (store.totalCount?.() || 0) + 1,
+                        entities: updatedEntities,
+                        totalCount: updatedEntities.length,
                     });
                 },
 
@@ -151,36 +160,43 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
                     patchState(store, { selectedEntity: entity });
                 },
 
-                setSelectedEntityById: (ieee_address:string) => {
+                setSelectedEntityById: (id: T[typeof idField]) => {
                     const entities = store.entities() || [];
-                    patchState(store, { selectedEntity: entities.find((e) => e.ieee_address === ieee_address)});
+                    patchState(store, { selectedEntity: entities.find((e) => e[idField] === id) });
                 },
 
-
-                updatebyId: (updatedEntity: UpdateRequest<T>) => {
+                clear: () => {
+                    patchState(store, {
+                        entities: [],
+                        selectedEntity: null
+                    });
+                },
+                updatebyId: (updatedEntity: UpdateRequest<T, typeof idField>) => {
                     const entities = store.entities() || [];
-                    const existingEntity = entities.find((e) => e.ieee_address === updatedEntity["ieee_address"]);
+                    const entityId = updatedEntity[idField];
+                    const existingEntity = entities.find((e) => e[idField] === entityId);
                     if (!existingEntity) {
                         return;
                     }
                     const mergedEntity = { ...existingEntity, ...updatedEntity } as T;
                     patchState(store, {
-                        entities: entities.map((e) => (e.ieee_address === updatedEntity.ieee_address ? mergedEntity : e)),
+                        entities: entities.map((e) => (e[idField] === entityId ? mergedEntity : e)),
                         lastUpdated: mergedEntity,
                         selectedEntity:
-                            store.selectedEntity()?.ieee_address === updatedEntity.ieee_address ? mergedEntity : store.selectedEntity()
+                            store.selectedEntity()?.[idField] === entityId ? mergedEntity : store.selectedEntity()
                     });
                 },
 
-                update : (updatedEntity: UpdateRequest<T>) => {
+                update: (updatedEntity: UpdateRequest<T, typeof idField>) => {
                     const entities = store.entities() || [];
-                    const existingEntity = entities.find((e) => e.ieee_address === updatedEntity.ieee_address);
+                    const entityId = updatedEntity[idField];
+                    const existingEntity = entities.find((e) => e[idField] === entityId);
                     if (!existingEntity) {
                         return;
                     }
                     const mergedEntity = { ...existingEntity, ...updatedEntity } as T;
                     patchState(store, {
-                        entities: entities.map((e) => (e.ieee_address === updatedEntity.ieee_address ? mergedEntity : e)),
+                        entities: entities.map((e) => (e[idField] === entityId ? mergedEntity : e)),
                         lastUpdated: mergedEntity,
                     });
                 },

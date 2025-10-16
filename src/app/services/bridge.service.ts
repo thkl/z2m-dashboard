@@ -2,6 +2,7 @@ import { inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
 import { ApplicationService } from "./app.service";
 import { Bridge } from "../models/bridge";
+import { BridgeEventStore } from "../datastore/logging.store";
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ import { Bridge } from "../models/bridge";
 export class BridgeService {
   private ws = inject(Websocket);
   protected readonly appService = inject(ApplicationService);
+  protected readonly eventStore = inject(BridgeEventStore);
   private bridgeInfo = signal<Bridge|null>(null);
 
 
@@ -19,6 +21,16 @@ export class BridgeService {
         const { payload } = message;
         if (payload !== null) {
             this.bridgeInfo.set(payload);
+        }
+      }
+    });
+
+    this.ws.subscribeTopicCallback('bridge/logging', (message) => {
+      if (message) {
+        const { payload } = message;
+        if (payload !== null) {
+          const record = {date:new Date(), level:payload.level,message:payload.message};
+          this.eventStore.addLocal(record, crypto.randomUUID());
         }
       }
     });

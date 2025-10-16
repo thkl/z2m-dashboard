@@ -1,0 +1,51 @@
+<div class="logSection-header">
+  <span class="label">Logs ({{ reversedEntries().length }})</span>
+  <div class="flex">
+    <button class="button-blue left" (click)="clearLog()">{{ 'CLEAR_LOGS' | translate }}</button>
+    <button (click)="toggleView()" class="p-1 ml-5 rounded transition-colors">
+      <span class="material-symbols-outlined text-base">{{ logViewOpen() ? 'expand_more' : 'expand_less' }}</span>
+    </button>
+  </div>
+</div>
+<div class="logSection-content scrollbar">
+  <div class="logcontent scrollbar">
+    @for (item of reversedEntries(); track $index) {
+      <div class="flex flex-row items-center logline">
+        <div class="level ml-2">
+          <div class="ll">
+            <div class="level_container">
+              @switch (item.level) {
+                @case ('debug') {
+                  <div class="bar debug"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                }
+                @case ('info') {
+                  <div class="bar info"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                }
+                @case ('warning') {
+                  <div class="bar warning"></div>
+                  <div class="bar warning"></div>
+                  <div class="bar warning"></div>
+                  <div class="bar"></div>
+                }
+                @case ('error') {
+                  <div class="bar error"></div>
+                  <div class="bar error"></div>
+                  <div class="bar error"></div>
+                  <div class="bar error"></div>
+                }
+              }
+            </div>
+          </div>
+        </div>
+        <p class="ml-2">{{ item.date | date: 'HH:mm:ss' }}</p>
+        <p class="ml-2 message-text">{{ item.message }}</p>
+      </div>
+    }
+  </div>
+</div>

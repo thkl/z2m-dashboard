@@ -37,3 +37,15 @@ aside {
   flex-direction: column;
   height: 100vh; /* or any fixed height */
 }
+
+.logSection {
+  max-height: 200px;
+  transition: max-height 0.3s ease-in-out;
+  overflow: hidden;
+  border-top: 1px solid var(--app-border-color);
+  background-color: var(--app-background-raised-color);
+
+  &.logSection-closed {
+    max-height: 40px;
+  }
+}

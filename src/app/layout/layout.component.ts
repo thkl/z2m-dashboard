@@ -6,15 +6,17 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ApplicationService } from '../services/app.service';
 import { BridgeService } from '../services/bridge.service';
 import { TimeToPipe } from '../pipes/time-togo.pipe';
+import { LogView } from '../components/logview/logview';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [RouterModule, DeviceInspectorComponent, TranslateModule,TimeToPipe]
+  imports: [RouterModule, DeviceInspectorComponent, TranslateModule,TimeToPipe,LogView]
 })
 export class LayoutComponent {
   sidebarOpen = true;
+  logViewOpen = true;
   host = 'localhost';
 
   protected readonly deviceStore = inject(DeviceStore);
@@ -37,6 +39,10 @@ export class LayoutComponent {
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  toggleLogView() {
+    this.logViewOpen = !this.logViewOpen;
   }
 
   closeRightSidebar() {
