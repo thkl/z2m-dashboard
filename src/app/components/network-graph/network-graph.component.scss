@@ -1,0 +1,146 @@
+.network-graph-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: var(--app-background-color);
+  border-radius: 8px;
+  overflow: hidden;
+
+  .network-svg {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  // Node styling
+  .network-node {
+    fill: var(--network-graph-node-default);
+    stroke: var(--network-graph-node-default);
+    stroke-width: 1px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      r: 26;
+      stroke-width: 3px;
+      filter: drop-shadow(0 0 8px var(--network-graph-node-hover-shadow));
+    }
+
+    &.node-type-Coordinator {
+      fill: var(--network-graph-node-coordinator);
+      r: 25;
+      stroke-width: 3px;
+      stroke: #fff;
+    }
+
+    &.node-type-Router {
+      fill: var(--network-graph-node-router);
+      r: 20;
+      stroke: #fff;
+    }
+
+    &.node-type-EndDevice {
+      fill: var(--network-graph-node-enddevice);
+      r: 15;
+      stroke: rgba(0, 0, 0, 0.3);
+    }
+
+    &.node-faded {
+      fill: var(--network-graph-node-faded);
+      opacity: 0.3;
+      cursor: not-allowed;
+
+      &:hover {
+        r: 20;
+        filter: none;
+      }
+    }
+  }
+
+  // Link (edge) styling
+  .network-link {
+    stroke: var(--network-graph-link-default);
+    stroke-width: 1px;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+
+    &:hover {
+      stroke: var(--network-graph-node-default);
+      stroke-width: 3px;
+      opacity: 1;
+      filter: drop-shadow(0 0 4px var(--network-graph-link-hover-shadow));
+    }
+
+    &.link-faded {
+      stroke: var(--network-graph-link-faded);
+      opacity: 0.1;
+      pointer-events: none;
+
+      &:hover {
+        stroke: var(--network-graph-link-faded);
+        stroke-width: 1px;
+        opacity: 0.1;
+        filter: none;
+      }
+    }
+  }
+
+  // Node label styling
+  .network-label {
+    font-weight: 500;
+    font-size: 12px;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+
+    &.label-faded {
+      opacity: 0.3;
+    }
+  }
+
+  // Link label background boxes
+  .lqi-label-bg {
+    fill: var(--app-background-color);
+    stroke: var(--app-border-color);
+    stroke-width: 1;
+    pointer-events: none;
+  }
+
+  // Link label styling (LQI values)
+  .lqi-label {
+    pointer-events: none;
+    text-anchor: middle;
+    fill: var(--app-text-color);
+    font-size: 11px;
+    font-weight: 600;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .network-graph-container {
+    .network-node {
+      &.node-type-Coordinator {
+        r: 20;
+      }
+
+      &.node-type-Router {
+        r: 16;
+      }
+
+      &.node-type-EndDevice {
+        r: 12;
+      }
+
+      &:hover {
+        r: 20;
+      }
+    }
+
+    .network-label {
+      font-size: 10px;
+    }
+  }
+}

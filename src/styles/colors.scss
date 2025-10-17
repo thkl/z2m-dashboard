@@ -23,4 +23,16 @@
   --dropdown-panel-background-hover: rgb(126, 123, 123);
   --option-panel-indicator-selected:#4797ff;
   --expansion-panel-trigger-focus-color:rgba(49, 49, 49, 0.741); //#0e65d8;
+
+  // Network Graph colors
+  --network-graph-node-default: #4797ff;
+  --network-graph-node-coordinator: #dc2626;
+  --network-graph-node-router: #0891b2;
+  --network-graph-node-enddevice: #84cc16;
+  --network-graph-node-faded: #737c87;
+  --network-graph-link-default: rgba(49, 49, 49, 0.741);
+  --network-graph-link-faded: #737c87;
+  --network-graph-node-hover-shadow: rgba(71, 151, 255, 0.4);
+  --network-graph-link-hover-shadow: rgba(71, 151, 255, 0.3);
+  
 }

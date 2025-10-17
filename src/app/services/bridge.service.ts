@@ -39,6 +39,9 @@ export class BridgeService {
     this.ws.subscribeTopicCallback('bridge/response/networkmap',(message)=>{
       const bridgeInfo = this.bridgeInfo();
       if (bridgeInfo) {
+        console.log("Adding NetworkMap");
+        console.log(message.payload.data)
+
         bridgeInfo!.networkMap = message.payload.data;
       }
     });
