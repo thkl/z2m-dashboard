@@ -28,24 +28,15 @@ aside {
   font-size: 20px;
 }
 
-.sidebar-right-open {
-    min-width: 450px;
-}
-
 aside {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* or any fixed height */
+  height: 100vh;
 }
 
-.logSection {
-  max-height: 250px;
-  transition: max-height 0.3s ease-in-out;
+.logSection-closed {
+  height: 40px;
   overflow: hidden;
   border-top: 1px solid var(--app-border-color);
   background-color: var(--app-background-raised-color);
-
-  &.logSection-closed {
-    max-height: 40px;
-  }
 }
