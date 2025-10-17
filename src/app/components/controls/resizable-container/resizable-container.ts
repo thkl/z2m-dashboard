@@ -1,4 +1,5 @@
-import { Component, OnDestroy, ElementRef, viewChild, AfterViewInit, HostBinding, input, effect } from '@angular/core';
+import { Component, OnDestroy, ElementRef, viewChild, AfterViewInit, HostBinding, input, effect, inject } from '@angular/core';
+import { ApplicationService } from '../../../services/app.service';
 
 export type ResizeSide = 'top' | 'right' | 'bottom' | 'left';
 
@@ -28,11 +29,12 @@ export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
   private startSize = 0;
 
   containerStyle = '';
-
+    protected readonly appService = inject(ApplicationService);
+    
   constructor() {
     // Load saved size from localStorage using effect
     effect(() => {
-      const savedSize = localStorage.getItem(this.storageKey());
+      const savedSize = this.appService.getPreference(`size_${this.storageKey()}`);
       if (savedSize) {
         this.currentSize = parseFloat(savedSize);
       } else {
@@ -117,7 +119,7 @@ export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
     document.body.style.cursor = '';
 
     // Save to localStorage
-    localStorage.setItem(this.storageKey(), this.currentSize.toString());
+    this.appService.setPreference(`size_${this.storageKey()}`,this.currentSize.toString());
   };
 
   private removeEventListeners() {

@@ -9,8 +9,15 @@
 </div>
 <div class="logview-body">
   <div class="log_option_panel">
-    <OptionPanelComponent title="{{ 'LOG_OPTIONS' | translate }}" [entities]="logOptions()" (optionsChanged)="logOptionChange($event)"></OptionPanelComponent>
-    {{ 'SYSTEM_LOGLEVEL' | translate: { level: log_level() } }}
+    <OptionPanelComponent title="{{ 'LOG_FILTER' | translate }}" [entities]="logOptions()" (optionsChanged)="logOptionChange($event)"></OptionPanelComponent>
+    <div class="mt-2">
+      <DropdownComponent
+        [items]="serverOptions()"
+        (selected)="changeBridgeLogging($event)"
+        title=" {{ 'SYSTEM_LOGLEVEL' | translate: { level: log_level() } }}"
+        class="mt-1"
+      ></DropdownComponent>
+    </div>
   </div>
 
   <div class="logSection-content scrollbar">

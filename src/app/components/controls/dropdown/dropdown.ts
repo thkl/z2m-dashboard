@@ -13,12 +13,14 @@ export class DropdownComponent {
   items = model.required<SelectOption[]>();
   selected = output<SelectOption>();
   isInitialized = false;
+  title=input<string>();
+
   controlItems = signal<SelectOption[]>([]);
 
   constructor() {
 
     effect(() => {
-      if (!this.isInitialized) {
+      if (!this.isInitialized && this.items() && this.items().length>0) {
         this.controlItems.set(this.items());
         this.isInitialized = true;
       }

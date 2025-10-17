@@ -15,3 +15,8 @@ export enum UpdateState {
     available = "available",
     updating = "updating"
 }
+
+export const LogLevels = [ { value:"info", label: "Info", isSelected: false },
+    { value:"debug", label: "Debug", isSelected: false },
+    { value:"warning", label: "Warning", isSelected: false },
+    { value:"error", label: "Error", isSelected: false }]

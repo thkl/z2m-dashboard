@@ -2,8 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Websocket } from "./websocket";
 
 export interface AppSettings {
-    host: string;
-    secure: boolean;
+    [key: string]: any;
 }
 
 
@@ -24,26 +23,30 @@ export class ApplicationService {
             if (saved) {
                 try {
                     this.settings = JSON.parse(saved) as AppSettings;
-                    console.log("Connecting")
-                    if (this.settings.host) {
-                        this.ws.connect(`${this.settings.secure ? 'wss' : 'ws'}://${this.settings.host}/api`);
-
+                    if (this.settings["host"]) {
+                        this.ws.connect(`${this.settings["secure"] ? 'wss' : 'ws'}://${this.settings["host"]}/api`);
                     }
-
                 } catch (e) {
                     console.error(e)
                 }
             }
     }
 
+    getPreference(key:string):any {
+        return this.settings ? this.settings[key] : undefined;
+    }
+
+    setPreference(key:string,value:any) {
+        if (!this.settings) {
+            this.settings = {}
+        }
+        this.settings[key] = value;
+        this.saveSettings();
+    }
 
     setHostName(host: string) {
-        if (this.settings === undefined) {
-            this.settings = { host: '', secure: false }
-        }
-        this.settings.host = host.replace('https://', '').replace('http://', '')
-        this.settings.secure = (host.startsWith("https://"));
-        this.saveSettings();
+        this.setPreference("host",host.replace('https://', '').replace('http://', ''));
+        this.setPreference("secure",(host.startsWith("https://")));
     }
 
     saveSettings() {

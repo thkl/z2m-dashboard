@@ -35,7 +35,8 @@ export class LayoutComponent {
   })
 
   constructor() {
-    this.host = this.as.settings?.host || 'localhost';
+    const host = this.as.getPreference("host");
+    this.host = host || 'localhost';
   }
 
   toggleSidebar() {

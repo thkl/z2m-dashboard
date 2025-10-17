@@ -61,6 +61,6 @@
   "DELETE_FORCE_DELETE": "Löschen erzwingen",
   "UPDATE_RUNNING":"Aktualisierung noch {{time}}",
   "CLEAR_LOGS":"Log löschen",
-  "LOG_OPTIONS":"Loggig Optionen",
-  "SYSTEM_LOGLEVEL":"System Level ist '{{level}}'"
+  "LOG_FILTER":"Logging Filter",
+  "SYSTEM_LOGLEVEL":"Bridge: {{level}}"
 }

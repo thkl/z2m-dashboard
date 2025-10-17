@@ -2,7 +2,7 @@
   <div class="inputContainer" [class.open]="isOpen()" (click)="isOpen.set(!isOpen())" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
     <div class="inputContent">
       <div class="input">
-        <span class="selectedText">{{ selectedLabel() }}</span>
+        <span class="selectedText">{{ title() ?? selectedLabel() }}</span>
       </div>
     </div>
     <div class="icon" role="button">

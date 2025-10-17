@@ -43,5 +43,9 @@ export class BridgeService {
   permitJoin(time?:number):void {
        this.appService.sendBridgeRequest("bridge/request/permit_join", {device: null,time:time??254});
   }
+
+  updateOptions(options:any):void {
+    this.appService.sendBridgeRequest("bridge/request/options",options);
+  }
  
 }
