@@ -7,12 +7,13 @@ import { ApplicationService } from '../services/app.service';
 import { BridgeService } from '../services/bridge.service';
 import { TimeToPipe } from '../pipes/time-togo.pipe';
 import { LogView } from '../components/logview/logview';
+import { ResizableContainerComponent } from '../components/controls/resizable-container/resizable-container';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [RouterModule, DeviceInspectorComponent, TranslateModule,TimeToPipe,LogView]
+  imports: [RouterModule, DeviceInspectorComponent, TranslateModule, TimeToPipe, LogView, ResizableContainerComponent]
 })
 export class LayoutComponent {
   sidebarOpen = true;

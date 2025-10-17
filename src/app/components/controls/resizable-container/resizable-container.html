@@ -1,0 +1,33 @@
+<div #container class="resizable-container" [class.flex-host]="flexBehavior()" [style]="containerStyle">
+  @if (resizeSide() === 'top') {
+    <div
+      class="resize-handle resize-handle-top"
+      (mousedown)="startResize($event)"
+    ></div>
+  }
+
+  @if (resizeSide() === 'left') {
+    <div
+      class="resize-handle resize-handle-left"
+      (mousedown)="startResize($event)"
+    ></div>
+  }
+
+  <div class="resizable-content" [class.flex-content]="flexBehavior()">
+    <ng-content></ng-content>
+  </div>
+
+  @if (resizeSide() === 'right') {
+    <div
+      class="resize-handle resize-handle-right"
+      (mousedown)="startResize($event)"
+    ></div>
+  }
+
+  @if (resizeSide() === 'bottom') {
+    <div
+      class="resize-handle resize-handle-bottom"
+      (mousedown)="startResize($event)"
+    ></div>
+  }
+</div>

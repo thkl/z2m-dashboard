@@ -1,0 +1,97 @@
+:host {
+  display: block;
+}
+
+:host(.flex-mode) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+:host(.full-height-mode) {
+  height: 100%;
+}
+
+.resizable-container {
+  position: relative;
+  border: 1px solid;
+  border-color: var(--app-border-color);
+}
+
+:host(.full-height-mode) .resizable-container {
+  height: 100%;
+}
+
+.resizable-container.flex-host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.resizable-content {
+  overflow: auto;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+:host(.full-height-mode) .resizable-content {
+  height: 100%;
+}
+
+.resizable-content.flex-content {
+  flex: 1;
+  height: 100%;
+}
+
+.resize-handle {
+  position: absolute;
+  z-index: 10;
+  background: transparent;
+  transition: background-color 0.2s;
+}
+
+.resize-handle::after {
+  border:none
+}
+
+.resize-handle:hover {
+  background-color: rgba(59, 130, 246, 0.3);
+}
+
+.resize-handle:active {
+  background-color: rgba(59, 130, 246, 0.5);
+}
+
+.resize-handle-top,
+.resize-handle-bottom {
+  left: 0;
+  right: 0;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.resize-handle-top {
+  top: 0;
+}
+
+.resize-handle-bottom {
+  bottom: 0;
+}
+
+.resize-handle-left,
+.resize-handle-right {
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.resize-handle-left {
+  left: 0;
+}
+
+.resize-handle-right {
+  right: 0;
+}

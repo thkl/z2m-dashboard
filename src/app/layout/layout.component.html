@@ -1,39 +1,67 @@
 <div class="flex h-screen w-screen dark:bg-unifi-bg text-gray-900 dark:text-gray-100 layout_root overflow-hidden">
   <!-- Sidebar -->
-  <aside class="transition-all duration-300 border-r flex-shrink-0" [class.w-64]="sidebarOpen" [class.w-16]="!sidebarOpen">
-    <div class="flex items-center justify-between p-4">
-      @if (sidebarOpen) {
-        <span class="text-lg font-bold text-unifi-accent">ZigBee2MQTT UI</span>
-      }
-      <button (click)="toggleSidebar()" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </div>
+  @if (sidebarOpen) {
+    <app-resizable-container
+      resizeSide="right"
+      storageKey="leftSidebarWidth"
+      [defaultSize]="256"
+      [fullHeight]="true"
+      [minSize]="200"
+      [maxSize]="400"
+      [flexBehavior]="false"
+      class="flex-shrink-0"
+    >
+      <aside class="h-full border-r">
+        <div class="flex items-center justify-between p-4">
+          <span class="text-lg font-bold text-unifi-accent">ZigBee2MQTT UI</span>
+          <button (click)="toggleSidebar()" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
 
-    <nav class="mt-4">
-      <a routerLink="/dashboard" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-        <span class="material-symbols-outlined">dashboard</span>
-        @if (sidebarOpen) {
-          <span>Dashboard</span>
-        }
-      </a>
-      <a routerLink="/devices" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-        <span class="material-symbols-outlined">router</span>
-        @if (sidebarOpen) {
-          <span>Devices</span>
-        }
-      </a>
+        <nav class="mt-4">
+          <a routerLink="/dashboard" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span>Dashboard</span>
+          </a>
+          <a routerLink="/devices" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <span class="material-symbols-outlined">router</span>
+            <span>Devices</span>
+          </a>
 
-      <a (click)="permitJoin()" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer">
-        <span class="material-symbols-outlined">join</span>
-        @if (sidebarOpen) {
-          <span>Permit Join</span>
-        }
-      </a>
-    </nav>
-  </aside>
+          <a (click)="permitJoin()" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer">
+            <span class="material-symbols-outlined">join</span>
+            <span>Permit Join</span>
+          </a>
+        </nav>
+      </aside>
+    </app-resizable-container>
+  } @else {
+    <aside class="w-16 border-r flex-shrink-0">
+      <div class="flex items-center justify-between p-4">
+        <button (click)="toggleSidebar()" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="mt-4">
+        <a routerLink="/dashboard" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <span class="material-symbols-outlined">dashboard</span>
+        </a>
+        <a routerLink="/devices" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <span class="material-symbols-outlined">router</span>
+        </a>
+
+        <a (click)="permitJoin()" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer">
+          <span class="material-symbols-outlined">join</span>
+        </a>
+      </nav>
+    </aside>
+  }
 
   <!-- Main Content -->
   <main class="flex-1 flex flex-col min-w-0">
@@ -54,20 +82,34 @@
       <router-outlet></router-outlet>
     </section>
 
-    <section class="logSection flex-shrink-0" [class.logSection-closed]="!logViewOpen">
-      <LogView [logViewOpen]="logViewOpen" (toggleLogView)="toggleLogView()"></LogView>
-    </section>
+    @if (logViewOpen) {
+      <app-resizable-container resizeSide="top" storageKey="logViewHeight" [defaultSize]="250" [minSize]="100" [maxSize]="600" [flexBehavior]="false" class="flex-shrink-0">
+        <section class="h-full border-t">
+          <LogView [logViewOpen]="logViewOpen" (toggleLogView)="toggleLogView()"></LogView>
+        </section>
+      </app-resizable-container>
+    } @else {
+      <section class="logSection-closed flex-shrink-0">
+        <LogView [logViewOpen]="logViewOpen" (toggleLogView)="toggleLogView()"></LogView>
+      </section>
+    }
   </main>
 
   <!-- Right Sidebar for Device Properties -->
-  <aside
-    class="transition-all duration-300 border-l overflow-hidden scrollbar flex-shrink-0"
-    [class.w-[450px]]="rightSidebarOpen()"
-    [class.overflow-y-auto]="rightSidebarOpen()"
-    [class.w-0]="!rightSidebarOpen()"
-  >
-    @if (rightSidebarOpen()) {
-      <app-deviceinspector style="flex: 1; /* Takes all available space */" (closed)="closeRightSidebar()"></app-deviceinspector>
-    }
-  </aside>
+  @if (rightSidebarOpen()) {
+    <app-resizable-container
+      resizeSide="left"
+      storageKey="rightSidebarWidth"
+      [defaultSize]="450"
+      [minSize]="450"
+      [maxSize]="800"
+      [flexBehavior]="false"
+      [fullHeight]="true"
+      class="flex-shrink-0"
+    >
+      <aside class="h-full border-l overflow-y-auto scrollbar flex flex-col">
+        <app-deviceinspector (closed)="closeRightSidebar()"></app-deviceinspector>
+      </aside>
+    </app-resizable-container>
+  }
 </div>
