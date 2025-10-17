@@ -13,6 +13,7 @@ export interface Bridge {
     version:                    string;
     zigbee_herdsman:            ZigbeeHerdsman;
     zigbee_herdsman_converters: ZigbeeHerdsman;
+    networkMap:                 Networkmap;
 }
 
 export interface Config {
@@ -261,4 +262,58 @@ export interface BridgeEvent {
     date:Date;
     level:string;
     message:string;
+}
+
+export interface Networkmap {
+    routes: boolean;
+    type:   string;
+    value:  Value;
+}
+
+export interface Value {
+    links: Link[];
+    nodes: Node[];
+}
+
+export interface Link {
+    depth:          number;
+    linkquality:    number;
+    lqi:            number;
+    relationship:   number;
+    routes:         any[];
+    source:         Source;
+    sourceIeeeAddr: string;
+    sourceNwkAddr:  number;
+    target:         Source;
+    targetIeeeAddr: string;
+}
+
+export interface Source {
+    ieeeAddr:       string;
+    networkAddress: number;
+}
+
+export interface Node {
+    failed?:           any[];
+    friendlyName:      string;
+    ieeeAddr:          string;
+    lastSeen:          number;
+    networkAddress:    number;
+    type:              Type;
+    definition?:       Definition;
+    manufacturerName?: string;
+    modelID?:          string;
+}
+
+export interface Definition {
+    description: string;
+    model:       string;
+    supports:    string;
+    vendor:      string;
+}
+
+export enum Type {
+    Coordinator = "Coordinator",
+    EndDevice = "EndDevice",
+    Router = "Router",
 }

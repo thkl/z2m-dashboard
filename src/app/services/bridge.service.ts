@@ -11,7 +11,7 @@ export class BridgeService {
   private ws = inject(Websocket);
   protected readonly appService = inject(ApplicationService);
   protected readonly eventStore = inject(BridgeEventStore);
-  private bridgeInfo = signal<Bridge|null>(null);
+  private bridgeInfo = signal<Bridge | null>(null);
 
 
   constructor() {
@@ -20,7 +20,7 @@ export class BridgeService {
       if (message) {
         const { payload } = message;
         if (payload !== null) {
-            this.bridgeInfo.set(payload);
+          this.bridgeInfo.set(payload);
         }
       }
     });
@@ -29,23 +29,39 @@ export class BridgeService {
       if (message) {
         const { payload } = message;
         if (payload !== null) {
-          const record = {date:new Date(), level:payload.level,message:payload.message};
+          const record = { date: new Date(), level: payload.level, message: payload.message };
           this.eventStore.addLocal(record, crypto.randomUUID());
         }
       }
     });
+
+
+    this.ws.subscribeTopicCallback('bridge/response/networkmap',(message)=>{
+      const bridgeInfo = this.bridgeInfo();
+      if (bridgeInfo) {
+        bridgeInfo!.networkMap = message.payload.data;
+      }
+    });
   }
 
-  getBridgeInfo(): Signal<Bridge|null>{
+  getBridgeInfo(): Signal<Bridge | null> {
     return this.bridgeInfo;
   }
 
-  permitJoin(time?:number):void {
-       this.appService.sendBridgeRequest("bridge/request/permit_join", {device: null,time:time??254});
+  permitJoin(time?: number): void {
+    this.appService.sendBridgeRequest("bridge/request/permit_join", { device: null, time: time ?? 254 });
   }
 
-  updateOptions(options:any):void {
-    this.appService.sendBridgeRequest("bridge/request/options",options);
+  updateOptions(options: any): void {
+    this.appService.sendBridgeRequest("bridge/request/options", options);
   }
- 
+
+  startTouchlinkScan(): void {
+    this.appService.sendBridgeRequest("bridge/request/touchlink/scan", { value: true });
+  }
+
+  requestMap(): void {
+    this.appService.sendBridgeRequest("bridge/request/networkmap", { routes: false, type: "raw" });
+  }
+
 }
