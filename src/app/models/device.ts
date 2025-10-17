@@ -80,6 +80,7 @@ export interface DeviceDefinition {
     exposes: DeviceFeature[];
     model: string;
     image: string;
+    icon?:string;
     options: DeviceOption[];
     source: string;
     supports_ota: boolean;

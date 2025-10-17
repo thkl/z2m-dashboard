@@ -1,8 +1,8 @@
 <div class="device-image-container" [style.max-width]="width()">
   @if (imageError()) {
-    <img src="/assets/images/zigbee-device.png" class="zigbee-device" [alt]="device().friendly_name" />
+    <img src="/assets/images/zigbee-device.png" class="zigbee-device" [alt]="device().friendly_name" [attr.data-org]="imageurl()" />
   } @else {
-    <img src="https://www.zigbee2mqtt.io/images/devices/{{ device().definition.image }}.png" (error)="onImageError()" [alt]="device().friendly_name" />
+    <img [src]="imageurl()" (error)="onImageError()" [alt]="device().friendly_name" />
   }
 
   @if (device().interview_state === InterviewState.InProgress || device().update?.state === 'updating') {
