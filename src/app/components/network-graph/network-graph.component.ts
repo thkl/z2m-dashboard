@@ -154,9 +154,27 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private initializeGraph(): void {
+  prepareData():NetworkNodeData | null {
     const data = this.networkData();
     if (!data || !data.nodes || !data.links) {
+      return null;
+    }
+    //loop thru all links and make sure every link has a node
+    const links = data.links.filter(link=> {
+      const source = link.sourceIeeeAddr;
+      const target = link.targetIeeeAddr;
+      // check if we have the nodes
+      const sourcenode = data.nodes.find(node=>node.ieeeAddr===source);
+      const targetnode = data.nodes.find(node=>node.ieeeAddr===target);
+      return sourcenode !== undefined && targetnode !== undefined;
+    });
+    return {... data, links};
+  }
+
+  private initializeGraph(): void {
+   
+    const data = this.prepareData();
+    if (data===null) {
       return;
     }
 
@@ -242,20 +260,16 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
         (exit) => exit.remove()
       );
 
-    // Render LQI labels on links as SVG groups with background box and text
-    const linkLabels = this.svgGroup
+    // Render LQI labels - background boxes AND text together in groups
+    this.svgGroup
       .selectAll<SVGGElement, D3Link>('g.lqi-label-group')
       .data(this.d3Links, (d) => `${(d.source as D3Node).id}-${(d.target as D3Node).id}`)
       .join(
         (enter) => {
-          const group = enter
-            .append('g')
-            .attr('class', 'lqi-label-group')
-            .attr('pointer-events', 'none');
+          const g = enter.append('g').attr('class', 'lqi-label-group');
 
-          // Add background rectangle
-          group
-            .append('rect')
+          // Add background rect to each group
+          g.append('rect')
             .attr('class', 'lqi-label-bg')
             .attr('width', 24)
             .attr('height', 14)
@@ -264,31 +278,41 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
             .attr('rx', 2)
             .attr('fill', '#1e1e2e')
             .attr('stroke', '#888')
-            .attr('stroke-width', 1);
+            .attr('stroke-width', 1)
+            .attr('pointer-events', 'none');
 
-          // Add text
-          group
-            .append('text')
-            .attr('class', 'lqi-label')
-            .attr('text-anchor', 'middle')
-            .attr('dy', '0.35em')
-            .attr('font-size', '10px')
-            .attr('font-weight', '700')
-            .attr('fill', '#ffffff');
+          // Add text to each group using raw DOM
+          g.each(function(d: any) {
+            const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            textEl.setAttribute('class', 'lqi-label-text');
+            textEl.setAttribute('text-anchor', 'middle');
+            textEl.setAttribute('dominant-baseline', 'central');
+            textEl.setAttribute('font-size', '10px');
+            textEl.setAttribute('font-weight', '700');
+            textEl.setAttribute('fill', '#ffffff');
+            textEl.setAttribute('pointer-events', 'none');
 
-          return group;
+            const lqi = d.data?.lqi ?? d.linkquality ?? 0;
+            (textEl as any).textContent = lqi.toString();
+
+            (this as SVGGElement).appendChild(textEl);
+          });
+
+          return g;
         },
-        (update) => update,
+        (update) => {
+          // Update text content for existing groups
+          update.each(function(d: any) {
+            const textEl = d3.select(this).select('text.lqi-label-text').node() as SVGTextElement;
+            if (textEl) {
+              const lqi = d.data?.lqi ?? d.linkquality ?? 0;
+              (textEl as any).textContent = lqi.toString();
+            }
+          });
+          return update;
+        },
         (exit) => exit.remove()
       );
-
-    // Update text content for all labels (both new and existing)
-    linkLabels
-      .select('text.lqi-label')
-      .text((d) => {
-        const lqi = d.data?.lqi ?? d.linkquality ?? 0;
-        return lqi.toString();
-      });
 
     // Render nodes
     this.nodeSelection = this.svgGroup
@@ -311,9 +335,9 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
         (exit) => exit.remove()
       );
 
-    // Render labels
+    // Render labels (node name labels, not LQI labels)
     this.labelSelection = this.svgGroup
-      .selectAll<SVGTextElement, D3Node>('text')
+      .selectAll<SVGTextElement, D3Node>('text.network-label')
       .data(this.d3Nodes, (d) => d.id)
       .join(
         (enter) =>
@@ -339,7 +363,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
         .attr('x2', (d) => (d.target as D3Node).x || 0)
         .attr('y2', (d) => (d.target as D3Node).y || 0);
 
-      // Update LQI label group positions
+      // Update LQI label group positions (positions both rect and text inside)
       this.svgGroup
         .selectAll<SVGGElement, D3Link>('g.lqi-label-group')
         .attr('transform', (d) => {
@@ -394,7 +418,6 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private onNodeClick(event: MouseEvent, node: D3Node): void {
     event.stopPropagation();
-
     // Toggle selection
     if (this.selectedNode()?.id === node.id) {
       this.selectedNode.set(null);
@@ -403,7 +426,6 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
       this.selectedNode.set(node);
       this.connectedNodeIds.set(this.getConnectedNodes(node.id));
     }
-
     this.updateNodeVisibility();
   }
 
