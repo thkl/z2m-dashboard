@@ -472,22 +472,48 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
     const selected = this.selectedNode();
     const connected = this.connectedNodeIds();
 
-    this.nodeSelection.classed('node-faded', (d) => {
-      if (!selected) return false;
-      return !connected.has(d.id);
-    });
+    // If nothing is selected, show everything at full opacity
+    if (!selected) {
+      // Reset nodes to full visibility
+      this.nodeSelection.attr('opacity', 1).attr('fill', (d) => this.getNodeFill(d.type));
 
-    this.labelSelection.classed('label-faded', (d) => {
-      if (!selected) return false;
-      return !connected.has(d.id);
-    });
+      // Reset labels to full visibility
+      this.labelSelection.attr('opacity', 1);
 
-    this.linkSelection.classed('link-faded', (d) => {
-      if (!selected) return false;
-      const sourceId = typeof d.source === 'string' ? d.source : (d.source as D3Node).id;
-      const targetId = typeof d.target === 'string' ? d.target : (d.target as D3Node).id;
-      return !(connected.has(sourceId) && connected.has(targetId));
-    });
+      // Reset links to full visibility
+      this.linkSelection
+        .attr('opacity', 0.6)
+        .attr('stroke', (d) => this.getLinkColor(d))
+        .attr('stroke-width', 2);
+
+      return;
+    }
+
+    // Something is selected - fade non-connected nodes and links
+    this.nodeSelection
+      .attr('opacity', (d) => (connected.has(d.id) ? 1 : 0.3))
+      .attr('fill', (d) => {
+        if (connected.has(d.id)) return this.getNodeFill(d.type);
+        return '#737c87'; // faded color
+      });
+
+    // Update labels
+    this.labelSelection.attr('opacity', (d) => (connected.has(d.id) ? 1 : 0.3));
+
+    // Update links - only show links where both source and target are connected
+    this.linkSelection
+      .attr('opacity', (d) => {
+        const sourceId = typeof d.source === 'string' ? d.source : (d.source as D3Node).id;
+        const targetId = typeof d.target === 'string' ? d.target : (d.target as D3Node).id;
+        return connected.has(sourceId) && connected.has(targetId) ? 0.6 : 0.1;
+      })
+      .attr('stroke', (d) => {
+        const sourceId = typeof d.source === 'string' ? d.source : (d.source as D3Node).id;
+        const targetId = typeof d.target === 'string' ? d.target : (d.target as D3Node).id;
+        return connected.has(sourceId) && connected.has(targetId)
+          ? this.getLinkColor(d)
+          : '#737c87';
+      });
   }
 
   onContainerClick(): void {
