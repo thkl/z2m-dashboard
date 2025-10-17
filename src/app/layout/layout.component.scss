@@ -21,7 +21,9 @@ aside {
 
 .layout_section {
   background-color: var(--app-background-color);
+  border: 1px solid;
   border-color: var(--app-border-color);
+
 }
 
 .material-icons {
@@ -35,7 +37,7 @@ aside {
 }
 
 .logSection-closed {
-  height: 40px;
+  height: 50px;
   overflow: hidden;
   border-top: 1px solid var(--app-border-color);
   background-color: var(--app-background-raised-color);

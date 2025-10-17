@@ -154,14 +154,14 @@ input {
 }
 
 .scrollbar::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--app-background-color);
   margin-right: 4px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
   background: #333333;
   border-radius: 4px;
-  border: 2px solid #000000;
+  border: 2px solid var(--app-background-color);
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover {

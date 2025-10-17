@@ -7,13 +7,14 @@
     </button>
   </div>
 </div>
-<div class="flex flex-row ml-3">
+<div class="logview-body">
   <div class="log_option_panel">
     <OptionPanelComponent title="{{ 'LOG_OPTIONS' | translate }}" [entities]="logOptions()" (optionsChanged)="logOptionChange($event)"></OptionPanelComponent>
+    {{ 'SYSTEM_LOGLEVEL' | translate: { level: log_level() } }}
   </div>
 
   <div class="logSection-content scrollbar">
-    <div class="logcontent scrollbar">
+    <div class="logcontent">
       @for (item of reversedEntries(); track $index) {
         <div class="flex flex-row items-center logline">
           <div class="level ml-2">

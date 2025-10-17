@@ -84,9 +84,7 @@
 
     @if (logViewOpen) {
       <app-resizable-container resizeSide="top" storageKey="logViewHeight" [defaultSize]="250" [minSize]="100" [maxSize]="600" [flexBehavior]="false" class="flex-shrink-0">
-        <section class="h-full border-t">
-          <LogView [logViewOpen]="logViewOpen" (toggleLogView)="toggleLogView()"></LogView>
-        </section>
+        <LogView class="h-full block" [logViewOpen]="logViewOpen" (toggleLogView)="toggleLogView()"></LogView>
       </app-resizable-container>
     } @else {
       <section class="logSection-closed flex-shrink-0">

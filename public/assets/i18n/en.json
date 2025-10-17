@@ -55,6 +55,6 @@
   "RENAME DEVICE": "Rename {{name}} ...",
   "RENAME HOMEASSISTANT": "also rename the Homeassistant entity",
   "UPDATE_RUNNING": "Updating {{time}} left",
-    "CLEAR_LOGS":"Delete log"
-
+  "CLEAR_LOGS": "Delete log",
+  "SYSTEM_LOGLEVEL": "System level is {{level}}"
 }

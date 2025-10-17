@@ -1,21 +1,22 @@
 :host {
   display: block;
+  border:none;
 }
 
 :host(.flex-mode) {
   display: flex;
   flex-direction: column;
+  border:none;
   flex: 1;
 }
 
 :host(.full-height-mode) {
+  border:none;
   height: 100%;
 }
 
 .resizable-container {
   position: relative;
-  border: 1px solid;
-  border-color: var(--app-border-color);
 }
 
 :host(.full-height-mode) .resizable-container {
@@ -29,11 +30,12 @@
 }
 
 .resizable-content {
-  overflow: auto;
+  overflow: hidden;
   min-height: 0;
   min-width: 0;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 :host(.full-height-mode) .resizable-content {
@@ -50,10 +52,11 @@
   z-index: 10;
   background: transparent;
   transition: background-color 0.2s;
+  border-color: var(--app-border-color);
 }
 
 .resize-handle::after {
-  border:none
+  border-color: var(--app-border-color);
 }
 
 .resize-handle:hover {
