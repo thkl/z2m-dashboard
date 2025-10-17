@@ -83,7 +83,6 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
   private linkSelection!: d3.Selection<SVGLineElement, D3Link, SVGGElement, unknown>;
   private nodeSelection!: d3.Selection<SVGCircleElement, D3Node, SVGGElement, unknown>;
   private labelSelection!: d3.Selection<SVGTextElement, D3Node, SVGGElement, unknown>;
-  private linkLabelSelection!: d3.Selection<SVGTextElement, D3Link, SVGGElement, unknown>;
   private zoomBehavior!: d3.ZoomBehavior<SVGSVGElement, unknown>;
   private containerWidth = 800;
   private containerHeight = 600;
@@ -243,13 +242,19 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
         (exit) => exit.remove()
       );
 
-    // Render background boxes for LQI labels
-    this.svgGroup
-      .selectAll<SVGRectElement, D3Link>('rect.lqi-label-bg')
+    // Render LQI labels on links as SVG groups with background box and text
+    const linkLabels = this.svgGroup
+      .selectAll<SVGGElement, D3Link>('g.lqi-label-group')
       .data(this.d3Links, (d) => `${(d.source as D3Node).id}-${(d.target as D3Node).id}`)
       .join(
-        (enter) =>
-          enter
+        (enter) => {
+          const group = enter
+            .append('g')
+            .attr('class', 'lqi-label-group')
+            .attr('pointer-events', 'none');
+
+          // Add background rectangle
+          group
             .append('rect')
             .attr('class', 'lqi-label-bg')
             .attr('width', 24)
@@ -259,30 +264,27 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
             .attr('rx', 2)
             .attr('fill', '#1e1e2e')
             .attr('stroke', '#888')
-            .attr('stroke-width', 1)
-            .attr('pointer-events', 'none'),
-        (update) => update,
-        (exit) => exit.remove()
-      );
+            .attr('stroke-width', 1);
 
-    // Render LQI labels on links as SVG text elements
-    this.linkLabelSelection = this.svgGroup
-      .selectAll<SVGTextElement, D3Link>('text.lqi-label')
-      .data(this.d3Links, (d) => `${(d.source as D3Node).id}-${(d.target as D3Node).id}`)
-      .join(
-        (enter) =>
-          enter
+          // Add text
+          group
             .append('text')
             .attr('class', 'lqi-label')
             .attr('text-anchor', 'middle')
             .attr('dy', '0.35em')
             .attr('font-size', '10px')
             .attr('font-weight', '700')
-            .attr('pointer-events', 'none')
-            .attr('fill', '#ffffff'),
+            .attr('fill', '#ffffff');
+
+          return group;
+        },
         (update) => update,
         (exit) => exit.remove()
-      )
+      );
+
+    // Update text content for all labels (both new and existing)
+    linkLabels
+      .select('text.lqi-label')
       .text((d) => {
         const lqi = d.data?.lqi ?? d.linkquality ?? 0;
         return lqi.toString();
@@ -337,16 +339,14 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
         .attr('x2', (d) => (d.target as D3Node).x || 0)
         .attr('y2', (d) => (d.target as D3Node).y || 0);
 
-      // Update LQI label background box positions
+      // Update LQI label group positions
       this.svgGroup
-        .selectAll<SVGRectElement, D3Link>('rect.lqi-label-bg')
-        .attr('x', (d) => (((d.source as D3Node).x || 0) + ((d.target as D3Node).x || 0)) / 2 - 12)
-        .attr('y', (d) => (((d.source as D3Node).y || 0) + ((d.target as D3Node).y || 0)) / 2 - 7);
-
-      // Update LQI label text positions to midpoint of links
-      this.linkLabelSelection
-        .attr('x', (d) => (((d.source as D3Node).x || 0) + ((d.target as D3Node).x || 0)) / 2)
-        .attr('y', (d) => (((d.source as D3Node).y || 0) + ((d.target as D3Node).y || 0)) / 2);
+        .selectAll<SVGGElement, D3Link>('g.lqi-label-group')
+        .attr('transform', (d) => {
+          const x = (((d.source as D3Node).x || 0) + ((d.target as D3Node).x || 0)) / 2;
+          const y = (((d.source as D3Node).y || 0) + ((d.target as D3Node).y || 0)) / 2;
+          return `translate(${x},${y})`;
+        });
 
       this.nodeSelection
         .attr('cx', (d) => d.x || 0)
