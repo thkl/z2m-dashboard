@@ -16,7 +16,7 @@ export class DashboardComponent {
 
 
     info = computed(()=>{
-      const bi = this.bridgeService.getBridgeInfo();
+      const bi = this.bridgeService.bridgeInfo;
       return bi();
     })
 

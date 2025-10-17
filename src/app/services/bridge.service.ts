@@ -1,8 +1,9 @@
 import { inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
 import { ApplicationService } from "./app.service";
-import { Bridge } from "../models/bridge";
+import { Bridge, Networkmap } from "../models/bridge";
 import { BridgeEventStore } from "../datastore/logging.store";
+import * as dummy from '../pages/networkmap/dummy';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class BridgeService {
   private ws = inject(Websocket);
   protected readonly appService = inject(ApplicationService);
   protected readonly eventStore = inject(BridgeEventStore);
-  private bridgeInfo = signal<Bridge | null>(null);
+  public bridgeInfo = signal<Bridge | null>(null);
 
 
   constructor() {
@@ -36,19 +37,13 @@ export class BridgeService {
     });
 
 
-    this.ws.subscribeTopicCallback('bridge/response/networkmap',(message)=>{
+    this.ws.subscribeTopicCallback('bridge/response/networkmap', (message) => {
       const bridgeInfo = this.bridgeInfo();
       if (bridgeInfo) {
-        console.log("Adding NetworkMap");
-        console.log(message.payload.data)
-
-        bridgeInfo!.networkMap = message.payload.data;
+        console.log("set new bridgeinfo")
+        this.bridgeInfo.set({ ...bridgeInfo, networkMap: message.payload.data });
       }
     });
-  }
-
-  getBridgeInfo(): Signal<Bridge | null> {
-    return this.bridgeInfo;
   }
 
   permitJoin(time?: number): void {

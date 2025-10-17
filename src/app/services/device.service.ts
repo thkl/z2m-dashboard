@@ -82,7 +82,7 @@ export class DeviceService {
   addDevices(deviceList: Device[]): void {
     console.log("Set All Devices")
     const devicelist = this.deviceStore.entities();
-    const bridgeInfo = this.bridgeService.getBridgeInfo();
+    const bridgeInfo = this.bridgeService.bridgeInfo;
     // copy the old state or create an empty one
     deviceList.forEach(device => {
       // set the device option values from the bridge info devices 
