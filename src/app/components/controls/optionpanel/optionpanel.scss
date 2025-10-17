@@ -23,9 +23,9 @@ label.root {
 }
 
 .indicator.selected {
-    background: #4797ff;
-    border-color: #4797ff;
-    color: #fff;
+    background: var(--option-panel-indicator-selected);
+    border-color: var(--option-panel-indicator-selected);
+    color: var( --app-text-color);
     font-size: 15px;
     font-weight: bold;
 }

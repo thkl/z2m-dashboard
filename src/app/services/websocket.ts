@@ -61,6 +61,8 @@ export class Websocket {
   private url?: string;
   /** Interval timer ID for the watchdog */
   private timer?: number;
+  
+  private failTimes:number = 0;
 
   /**
    * Establishes a WebSocket connection to the specified URL.
@@ -137,7 +139,10 @@ export class Websocket {
 
     this.ws.onerror = (error) => {
       console.error('WebSocket error:', error);
-
+      this.failTimes = this.failTimes + 1;
+      if (this.failTimes < 5) {
+        this.reconnect();
+      }
     };
 
     this.ws.onclose = () => {
@@ -147,6 +152,7 @@ export class Websocket {
 
     this.ws.onopen = () => {
       this.shouldBeConnected = true;
+      this.failTimes = 0;
       this.setWatchdog();
     }
 
