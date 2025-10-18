@@ -1,44 +1,68 @@
-import { Component, computed, inject, signal, effect, Signal } from '@angular/core';
+import { Component, computed, inject, signal, effect, Signal, Injector } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
 import { createStoreView } from '../../datastore/generic-store-view';
 import { SearchOperator } from '../../datastore/generic.store';
-import { CdkTableModule } from '@angular/cdk/table';
 import { Device } from '../../models/device';
 import { CDKDataSource } from '../../datastore/generic-store-ui';
-import { TableSortDirective, SortEvent, SortDirection } from '../../directives/table-sort.directive';
+import { SortEvent, SortDirection } from '../../directives/table-sort.directive';
 import { sortData } from '../../utils/sort.utils';
 import { filterData } from '../../utils/filter.utils';
 import { SearchInput } from '../../components/controls/searchinput/searchinput';
 import { OptionPanelComponent } from "../../components/controls/optionpanel/optionpanel";
-import { SelectOption, TableColumnConfig } from '../../models/types';
+import { SelectOption, ColumnDef, GenericTableConfig } from '../../models/types';
 import { DeviceImage } from '../../components/controls/device-image/device-image';
+import { GenericTableComponent } from '../../components/controls/generic-table/generic-table.component';
+import { TableCellDirective } from '../../directives/table-cell.directive';
 import { ApplicationService } from '../../services/app.service';
 
 @Component({
   selector: 'app-devicelist',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, CdkTableModule, TableSortDirective, SearchInput, OptionPanelComponent,DeviceImage]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, GenericTableComponent, TableCellDirective]
 })
 export class DeviceListComponent {
 
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly applicationService = inject(ApplicationService);
+  protected readonly injector = inject(Injector);
 
-  // Column width configuration
-  private readonly columnConfig: Map<string, TableColumnConfig> = new Map([
-    ['status', { name: 'status', label: 'STATUS', minWidth: 30, maxWidth: 30 }],
-    ['icon', { name: 'icon', label: 'ICON', minWidth: 50, maxWidth: 50 }],
-    ['name', { name: 'name', label: 'NAME', minWidth: 150, maxWidth: 250 }],
-    ['vendor', { name: 'vendor', label: 'MANUFACTURER', minWidth: 100, maxWidth: 150 }],
-    ['model', { name: 'model', label: 'MODEL', minWidth: 100, maxWidth: 200 }],
-    ['linkquality', { name: 'linkquality', label: 'LQI', minWidth: 60, maxWidth: 80 }],
-    ['battery', { name: 'battery', label: 'BATTERY', minWidth: 80, maxWidth: 120 }],
-    ['lastseenhuman', { name: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150 }]
-  ]);
-
+  // Displayed columns signal for column visibility management
   displayedColumns = signal<string[]>(['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman']);
+
+  // Table configuration with column definitions
+  tableConfig = computed<GenericTableConfig<Device>>(() => {
+    const allColumns: ColumnDef<Device>[] = [
+      { id: 'status', label: '', minWidth: 30, maxWidth: 30, sortable: false },
+      { id: 'icon', label: '', minWidth: 50, maxWidth: 50, sortable: false },
+      { id: 'name', label: 'NAME', minWidth: 250, maxWidth: 450, sortable: true },
+      { id: 'vendor', label: 'MANUFACTURER', minWidth: 150, maxWidth: 250, sortable: true },
+      { id: 'model', label: 'MODEL', minWidth: 200, maxWidth: 400, sortable: true },
+      { id: 'linkquality', label: 'LQI', minWidth: 60, maxWidth: 80, sortable: true },
+      { id: 'battery', label: 'BATTERY', minWidth: 80, maxWidth: 120, sortable: true },
+      { id: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150, sortable: true }
+    ];
+
+    // Hide columns that are not in the displayedColumns list
+    const displayed = this.displayedColumns();
+    allColumns.forEach(col => {
+      col.hidden = !displayed.includes(col.id);
+    });
+
+    const selected = this.selectedDevice();
+    const sortDir = this.sortDirection();
+    return {
+      columns: allColumns,
+      trackByFn: (index: number, device: Device) => device.ieee_address || index,
+      selectedItem: selected || undefined,
+      onRowClick: (device: Device) => this.selectDevice(device.ieee_address),
+      initialSort: {
+        column: this.sortColumn(),
+        direction: (sortDir === 'asc' || sortDir === 'desc') ? sortDir : 'asc'
+      }
+    };
+  });
 
   // Sorting state
   sortColumn = signal<string>('name');
@@ -118,8 +142,12 @@ export class DeviceListComponent {
     return prefiltered;
   });
 
+  // Create a signal for the datasource that updates whenever finalyFilter changes
+  datasourceSignal = signal<CDKDataSource<Device> | null>(null);
 
-  datasource: CDKDataSource<Device> = new CDKDataSource(this.finalyFilter);
+  get datasource(): CDKDataSource<Device> {
+    return this.datasourceSignal() || new CDKDataSource(this.finalyFilter, this.injector);
+  }
 
   private vendorsMap = new Map<string, SelectOption>();
   private modelMap = new Map<string,SelectOption>();
@@ -192,10 +220,21 @@ export class DeviceListComponent {
   })
 
   constructor() {
+    // Initialize datasource
+    this.datasourceSignal.set(new CDKDataSource(this.finalyFilter, this.injector));
+
+    // Update datasource whenever finalyFilter changes
+    effect(() => {
+      // Access finalyFilter to trigger effect dependency
+      this.finalyFilter();
+      // Create new datasource instance
+      this.datasourceSignal.set(new CDKDataSource(this.finalyFilter, this.injector));
+    });
+
     effect(() => {
       const devices = this.devices();
     });
-    
+
     const cl = this.applicationService.getPreference("devicelist_columns");
     if (cl) {
       this.displayedColumns.set(cl);
@@ -206,14 +245,6 @@ export class DeviceListComponent {
     return item.friendly_name || item.ieee_address; // Use unique identifier
   }
 
-  isLastColumn(column: string): boolean {
-    const columns = this.displayedColumns();
-    return columns.length > 0 && columns[columns.length - 1] === column;
-  }
-
-  getColumnConfig(columnName: string): TableColumnConfig | undefined {
-    return this.columnConfig.get(columnName);
-  }
 
   onSort(event: SortEvent) {
     this.sortColumn.set(event.column);
