@@ -31,12 +31,8 @@
   :dependencies:
   - build
   :script:
-  - apk add --no-cache cifs-utils
-  - mkdir -p /mnt/network
-  - mount -t cifs $SMB_PATH /mnt/network -o username=$SMB_USER,password=$SMB_PASSWORD,uid=0,gid=0
-  - mkdir -p /mnt/network/$DEPLOY_PATH
-  - cp -r dist/zigbee2mqtt-ui/browser/* /mnt/network/$DEPLOY_PATH/
-  - umount /mnt/network
+   - apk add --no-cache samba-client
+   - smbclient $SMB_PATH -U $SMB_USER%$SMB_PASSWORD -c "cd $DEPLOY_PATH; prompt OFF; recurse ON; mput dist/zigbee2mqtt-ui/browser/*"
   :only:
   - master
   
