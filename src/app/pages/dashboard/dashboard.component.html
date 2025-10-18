@@ -1,11 +1,11 @@
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
   <div class="p-6 rounded-2xl panel shadow">
-    <h2 class="text-lg font-semibold mb-2">Clients</h2>
-    <p class="text-sm opacity-70">23 active</p>
+    <h2 class="text-lg font-semibold mb-2">{{ 'GROUPS' | translate }}</h2>
+    <p class="text-sm opacity-70">{{ groupStore.entities().length }}</p>
   </div>
-  <div class="p-6 rounded-2xl panel shadow">
+  <div class="p-6 rounded-2xl panel shadow cursor-pointer" (click)="goToDevices()">
     <h2 class="text-lg font-semibold mb-2">{{ 'DEVICES' | translate }}</h2>
-    <p class="text-sm opacity-70">{{ deviceStore.entities().length }} online</p>
+    <p class="text-sm opacity-70">{{ deviceStore.entities().length }}</p>
   </div>
   <div class="p-6 rounded-2xl panel shadow">
     <h2 class="text-lg font-semibold mb-2">Version {{ info()?.version }}</h2>

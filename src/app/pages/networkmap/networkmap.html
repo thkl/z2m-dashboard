@@ -1,0 +1,13 @@
+<div class="flex flex-col gap-4 p-4 h-full">
+  <div class="flex gap-2">
+    <button (click)="scan()" class="px-4 py-2 bg-blue-500 text-white rounded">Scan Network</button>
+    <div class="text-sm text-gray-400">
+      @if (networkData(); as data) {
+        Nodes: {{ data.nodes.length }} | Links: {{ data.links.length }}
+      }
+    </div>
+  </div>
+  <div class="flex-1 min-h-0 border border-gray-600 rounded">
+    <app-network-graph [networkData]="networkData()" class="w-full h-full" />
+  </div>
+</div>

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DeviceListComponent } from './pages/devicelist/devicelist.component';
+import { NetworkMapPage } from './pages/networkmap/networkmap';
 
 export const routes: Routes = [{
     path: '',
@@ -9,7 +10,8 @@ export const routes: Routes = [{
     children: [
         { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
         { path: 'dashboard', component: DashboardComponent },
-        { path: 'devices', component: DeviceListComponent }
+        { path: 'devices', component: DeviceListComponent },
+        { path: 'network', component: NetworkMapPage}
     ],
 },];
 

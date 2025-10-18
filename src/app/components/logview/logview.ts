@@ -33,7 +33,7 @@ export class LogView {
     this.selectedLevels.set(selLevel);
 
     effect(() => {
-      const bi = this.bridgeService.getBridgeInfo();
+      const bi = this.bridgeService.bridgeInfo;
       if (bi() !== null) {
         this.log_level.set(bi()!.log_level);
         const lvlval = this.log_level();

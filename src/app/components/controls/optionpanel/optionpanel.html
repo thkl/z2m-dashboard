@@ -1,6 +1,6 @@
 <ExpansionPanelComponent [label]="title()">
   <div class="options">
-    @if (length() > maxShown()) {
+    @if (length() > maxShown() && useSearch() === true) {
       <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
     }
     <div class="panel scrollbar" [style.max-height.px]="maxShown() * 30">

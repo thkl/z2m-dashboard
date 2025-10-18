@@ -44,3 +44,79 @@ export interface SelectOption {
   label:string;
   value?:string
 }
+
+/**
+ * Defines the width constraints for a table column
+ * @deprecated Use ColumnDef instead
+ */
+export interface TableColumnConfig {
+  /** Column identifier */
+  name: string;
+  /** Display label for the column header */
+  label: string;
+  /** Minimum column width in pixels */
+  minWidth: number;
+  /** Maximum column width in pixels */
+  maxWidth: number;
+}
+
+/**
+ * Column definition for generic table component
+ */
+export interface ColumnDef<T = any> {
+  /** Column identifier (must be unique) */
+  id: string;
+
+  /** Display label for header (translation key) */
+  label: string;
+
+  /** Minimum width in pixels */
+  minWidth?: number;
+
+  /** Maximum width in pixels */
+  maxWidth?: number;
+
+  /** Enable sorting for this column */
+  sortable?: boolean;
+
+  /** Sort key (defaults to id if not specified) */
+  sortKey?: string;
+
+  /** Custom sort value extractor function */
+  sortValueFn?: (item: T) => any;
+
+  /** Hide column by default */
+  hidden?: boolean;
+
+  /** CSS classes for header cell */
+  headerClass?: string;
+
+  /** CSS classes for data cell */
+  cellClass?: string;
+}
+
+/**
+ * Configuration for generic table component
+ */
+export interface GenericTableConfig<T = any> {
+  /** Column definitions */
+  columns: ColumnDef<T>[];
+
+  /** Track by function for ngFor performance */
+  trackByFn?: (index: number, item: T) => any;
+
+  /** Enable row selection/highlighting */
+  selectable?: boolean;
+
+  /** Currently selected item */
+  selectedItem?: T;
+
+  /** Row click handler */
+  onRowClick?: (item: T) => void;
+
+  /** Initial sort configuration */
+  initialSort?: {
+    column: string;
+    direction: 'asc' | 'desc';
+  };
+}

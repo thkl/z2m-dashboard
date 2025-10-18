@@ -1,8 +1,14 @@
 import { inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
 import { ApplicationService } from "./app.service";
-import { Bridge } from "../models/bridge";
+import { Bridge, Networkmap } from "../models/bridge";
 import { BridgeEventStore } from "../datastore/logging.store";
+import * as dummy from '../pages/networkmap/dummy';
+import { Device } from "../models/device";
+import { createDeviceStoreExtensions, DeviceStore } from "../datastore/device.store";
+import { GroupStore } from "../datastore/group.store";
+import { TranslateService } from "@ngx-translate/core";
+import { Group } from "../models/group";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +17,13 @@ export class BridgeService {
   private ws = inject(Websocket);
   protected readonly appService = inject(ApplicationService);
   protected readonly eventStore = inject(BridgeEventStore);
-  private bridgeInfo = signal<Bridge | null>(null);
+  protected readonly deviceStore = inject(DeviceStore);
+  protected readonly groupStore = inject(GroupStore);
+  private translate = inject(TranslateService);
+  public bridgeInfo = signal<Bridge | null>(null);
+  private lastSeenTimer?: number;
+
+  private extensions = createDeviceStoreExtensions(this.deviceStore, this.translate);
 
 
   constructor() {
@@ -21,6 +33,25 @@ export class BridgeService {
         const { payload } = message;
         if (payload !== null) {
           this.bridgeInfo.set(payload);
+        }
+      }
+    });
+
+    this.ws.subscribeTopicCallback('bridge/devices', (message) => {
+      if (message) {
+        const { payload } = message;
+        if ((payload !== null) && (Array.isArray(payload))) {
+          this.addDevices(payload);
+        }
+      }
+    });
+
+
+    this.ws.subscribeTopicCallback('bridge/groups', (message) => {
+      if (message) {
+        const { payload } = message;
+        if ((payload !== null) && (Array.isArray(payload))) {
+          this.addGroups(payload);
         }
       }
     });
@@ -36,16 +67,13 @@ export class BridgeService {
     });
 
 
-    this.ws.subscribeTopicCallback('bridge/response/networkmap',(message)=>{
+    this.ws.subscribeTopicCallback('bridge/response/networkmap', (message) => {
       const bridgeInfo = this.bridgeInfo();
       if (bridgeInfo) {
-        bridgeInfo!.networkMap = message.payload.data;
+        console.log("set new bridgeinfo")
+        this.bridgeInfo.set({ ...bridgeInfo, networkMap: message.payload.data });
       }
     });
-  }
-
-  getBridgeInfo(): Signal<Bridge | null> {
-    return this.bridgeInfo;
   }
 
   permitJoin(time?: number): void {
@@ -64,4 +92,56 @@ export class BridgeService {
     this.appService.sendBridgeRequest("bridge/request/networkmap", { routes: false, type: "raw" });
   }
 
+  setDeviceTimeUpdater() {
+    if (this.lastSeenTimer) {
+      clearInterval(this.lastSeenTimer);
+    }
+    this.lastSeenTimer = setInterval(() => { 
+      console.log("Update")
+      this.extensions.updateDeviceLastSeenTime(); }, 3000);
+
+     this.extensions.updateDeviceLastSeenTime();
+  }
+
+  addDevices(deviceList: Device[]): void {
+    console.log("Set All Devices")
+    const devicelist = this.deviceStore.entities();
+
+    // copy the old state or create an empty one
+    deviceList.forEach(device => {
+      // set the device option values from the bridge info devices 
+      const bridgeDevice = this.bridgeInfo()?.config.devices[device.ieee_address];
+      if (bridgeDevice) {
+        device.options = bridgeDevice;
+      }
+      const oldDevice = devicelist.find(d => d.ieee_address === device.ieee_address);
+      if (oldDevice) {
+        device.state = oldDevice.state;
+      } else {
+        device.state = {
+          availability: "",
+          lastseenhuman: "",
+          last_seen: "", linkquality: 0, battery: 0
+        };
+      }
+    })
+
+    this.deviceStore.addAll(deviceList);
+
+    setTimeout(() => {
+      this.setDeviceTimeUpdater();
+    }, 1000);
+  }
+
+  addGroups(groupList: Group[]): void {
+    const grouplist = this.groupStore.entities();
+
+    // copy the old state or create an empty one
+    grouplist.forEach(group => {
+
+
+    })
+
+    this.groupStore.addAll(groupList);
+  }
 }
