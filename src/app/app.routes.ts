@@ -11,7 +11,8 @@ export const routes: Routes = [{
         { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
         { path: 'dashboard', component: DashboardComponent },
         { path: 'devices', component: DeviceListComponent },
-        { path: 'network', component: NetworkMapPage}
+        { path: 'network', component: NetworkMapPage},
+        { path: 'groups', component: GroupListComponent}
     ],
 },];
 
