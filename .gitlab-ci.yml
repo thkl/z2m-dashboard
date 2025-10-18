@@ -19,7 +19,7 @@
   :script:
   - npm install
   - npm audit
-  - npm build
+  - npm run build
   :artifacts:
     :paths:
     - dist/zigbee2mqtt-ui/browser
