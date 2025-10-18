@@ -39,7 +39,10 @@
         for file in $(find dist/zigbee2mqtt-ui/browser -type f); do
           remote_path="${file#dist/zigbee2mqtt-ui/browser/}"
           remote_dir="$(dirname "$remote_path")"
-          smbclient //$SMB_HOST/$SMB_SHARE -U $SMB_USER%$SMB_PASSWORD -c "cd $DEPLOY_PATH; mkdir -p \"$remote_dir\"; put \"$file\" \"$remote_path\""
+          if [ "$remote_dir" != "." ]; then
+            smbclient //$SMB_HOST/$SMB_SHARE -U $SMB_USER%$SMB_PASSWORD -c "cd $DEPLOY_PATH; mkdir \"$remote_dir\""
+          fi
+          smbclient //$SMB_HOST/$SMB_SHARE -U $SMB_USER%$SMB_PASSWORD -c "cd $DEPLOY_PATH; put \"$file\" \"$remote_path\""
         done
   :only:
     - master
