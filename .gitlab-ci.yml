@@ -11,7 +11,7 @@
 :variables:
   :NODE_ENV: development
   :APP_NAME: zigbee2mqtt-ui
-  :DEPLOY_PATH: "devserver/zigbee"
+  :DEPLOY_PATH: "data/devserver/zigbee"
 
 :build:
   :stage: build
