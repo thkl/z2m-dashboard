@@ -30,7 +30,14 @@
     </div>
   </div>
   <div class="w-full ml-2">
-    <TableComponent [dataSource]="datasource" [config]="tableConfig()" (sortChange)="onSort($event)" (rowClick)="selectDevice($event.ieee_address)">
+    <TableComponent
+      [dataSource]="datasource"
+      [config]="tableConfig()"
+      [columnOrder]="displayedColumns()"
+      (sortChange)="onSort($event)"
+      (rowClick)="selectDevice($event.ieee_address)"
+      (columnOrderChange)="columnOrderChange($event)"
+    >
       <!-- Status cell -->
       <ng-template appTableCell="status" let-device>
         <div class="flex ml-2">
@@ -73,12 +80,15 @@
         @if (device.power_source && device.power_source.indexOf('Battery') > -1) {
           @if (device.state) {
             <span
-              class="statusIcon"
-              [class.red]="device.state.availability !== 'online'"
-              [class.green]="device.state.availability === 'online'"
-              [class.yellow]="device.state.availability === ''"
-            ></span>
+              [class.battery_ok]="device.state.battery >= 50"
+              [class.battery_warning]="device.state.battery < 50 && device.state.battery >= 20"
+              [class.battery_low]="device.state.battery < 20"
+            >
+              {{ device.state && device.state.battery ? `${device.state.battery}%` : '' }}
+            </span>
           }
+        } @else {
+          <span class="material-symbols-outlined">power</span>
         }
       </ng-template>
 

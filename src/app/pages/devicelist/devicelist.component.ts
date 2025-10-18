@@ -44,12 +44,6 @@ export class DeviceListComponent {
       { id: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150, sortable: true }
     ];
 
-    // Hide columns that are not in the displayedColumns list
-    const displayed = this.displayedColumns();
-    allColumns.forEach(col => {
-      col.hidden = !displayed.includes(col.id);
-    });
-
     const selected = this.selectedDevice();
     const sortDir = this.sortDirection();
     return {
@@ -237,6 +231,7 @@ export class DeviceListComponent {
 
     const cl = this.applicationService.getPreference("devicelist_columns");
     if (cl) {
+      console.log(cl);
       this.displayedColumns.set(cl);
     }
   }
@@ -255,6 +250,10 @@ export class DeviceListComponent {
   updateColumns(event:SelectOption[]):void {
     this.displayedColumns.set(event.filter((c)=>c.isSelected===true).map(c=>c.value!));
     this.applicationService.setPreference('devicelist_columns',this.displayedColumns());
+  }
+
+  columnOrderChange(newOrder:any):void {
+     this.applicationService.setPreference('devicelist_columns',newOrder);
   }
 
   getDeviceValue(device: Device, column: string): any {

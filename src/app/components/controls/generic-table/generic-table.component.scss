@@ -92,3 +92,37 @@ th:not(.last-column),
 td:not(.last-column) {
   flex: 0 0 auto;
 }
+
+/* Drag and drop styles */
+th[draggable="true"] {
+  cursor: grab;
+  user-select: none;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+th[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+/* Style for the header being dragged */
+th.dragging {
+  opacity: 0.5;
+  background-color: rgba(3, 69, 156, 0.2);
+}
+
+/* Style for drop target - glow effect on left border */
+th.drop-target {
+  border-left: 3px solid rgba(52, 152, 219, 0.8);
+  box-shadow: inset 3px 0 0 0 rgba(52, 152, 219, 0.6);
+  animation: drop-zone-glow 0.6s ease-in-out infinite;
+}
+
+/* Glow animation for drop zone */
+@keyframes drop-zone-glow {
+  0%, 100% {
+    box-shadow: inset 3px 0 0 0 rgba(52, 152, 219, 0.6);
+  }
+  50% {
+    box-shadow: inset 3px 0 0 0 rgba(52, 152, 219, 1), 0 0 8px rgba(52, 152, 219, 0.4);
+  }
+}

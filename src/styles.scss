@@ -549,3 +549,22 @@ nav.inspector {
   background-color: var(--button-selected-background-color);
   color: var(--button-text-color);
 }
+
+/* Drag ghost element styling for table column reordering */
+.column-drag-ghost {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 150px;
+  height: 40px;
+  background-color: var(--app-background-color-selected);
+  border: 1px solid var(--app-border-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: bold 14px Arial, sans-serif;
+  color: var(--app-text-color);
+  z-index: 99999;
+  pointer-events: none;
+}

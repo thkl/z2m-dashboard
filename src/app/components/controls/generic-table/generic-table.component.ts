@@ -22,11 +22,17 @@ export class TableComponent<T> implements AfterViewInit {
   /** Table configuration */
   config = input<TableConfig<T>>(undefined, { alias: 'config' });
 
+  /** Column order signal for dynamic column ordering */
+  columnOrderSignal = input<string[]>([], { alias: 'columnOrder' });
+
   /** Sort change event */
   sortChange = output<SortEvent>();
 
   /** Row click event */
   rowClick = output<T>();
+
+  /** Column order change event */
+  columnOrderChange = output<string[]>();
 
   /** Query for all cell templates */
   @ContentChildren(TableCellDirective) cellTemplates!: QueryList<TableCellDirective>;
@@ -37,15 +43,48 @@ export class TableComponent<T> implements AfterViewInit {
   /** Current sort direction */
   sortDirection = signal<SortDirection>('');
 
-  /** Visible columns computed from config */
-  visibleColumns = computed(() => {
+  /** Column order state */
+  columnOrder = signal<string[]>([]);
+
+  /** Currently dragging column ID */
+  draggedColumnId = signal<string | null>(null);
+
+  /** Drop target column ID */
+  dropTargetColumnId = signal<string | null>(null);
+
+  /** Sorted columns based on columnOrderSignal input */
+  sortedColumns = computed(() => {
     const config = this.config();
-    return config ? config.columns.filter((col: ColumnDef<T>) => !col.hidden) : [];
+    const order = this.columnOrderSignal();
+
+    if (!config) return [];
+
+    // If no order provided, return config columns as-is
+    if (order.length === 0) {
+      return config.columns;
+    }
+
+    return this.sortColumnsByOrder(config.columns, order);
+  });
+
+  /** Visible columns computed from sorted columns */
+  visibleColumns = computed(() => {
+    const sorted = this.sortedColumns();
+    return sorted.filter((col: ColumnDef<T>) => !col.hidden);
   });
 
   /** Display column IDs for CDK table */
   displayedColumnIds = computed(() => {
-    return this.visibleColumns().map((col: ColumnDef<T>) => col.id);
+    const visible = this.visibleColumns();
+    const order = this.columnOrder();
+
+    // If no custom order set, use default order from config
+    if (order.length === 0) {
+      return visible.map((col: ColumnDef<T>) => col.id);
+    }
+
+    // Return columns in custom order, filtering out hidden ones
+    return order.filter(id => visible.some(col => col.id === id));
   });
 
   constructor(private cdr: ChangeDetectorRef) {
@@ -75,11 +114,39 @@ export class TableComponent<T> implements AfterViewInit {
   }
 
   /**
-   * Check if a column is the last visible column
+   * Sort columns by the specified order and mark hidden columns.
+   * This utility minimizes boilerplate in components managing column visibility and order.
+   */
+  private sortColumnsByOrder(
+    allColumns: ColumnDef<T>[],
+    columnOrder: string[]
+  ): ColumnDef<T>[] {
+    // Map through columnOrder and find matching definitions
+    const sortedColumns = columnOrder
+      .map(columnId => allColumns.find(col => col.id === columnId))
+      .filter((col): col is ColumnDef<T> => col !== undefined);
+
+    // Add any remaining columns that weren't in columnOrder (for safety)
+    allColumns.forEach(col => {
+      if (!sortedColumns.find(sc => sc.id === col.id)) {
+        sortedColumns.push(col);
+      }
+    });
+
+    // Mark columns as hidden if they're not in the columnOrder list
+    sortedColumns.forEach(col => {
+      col.hidden = !columnOrder.includes(col.id);
+    });
+
+    return sortedColumns;
+  }
+
+  /**
+   * Check if a column is the last visible column (in display order)
    */
   isLastColumn(columnId: string): boolean {
-    const visible = this.visibleColumns();
-    return visible.length > 0 && visible[visible.length - 1].id === columnId;
+    const displayIds = this.displayedColumnIds();
+    return displayIds.length > 0 && displayIds[displayIds.length - 1] === columnId;
   }
 
   /**
@@ -148,5 +215,111 @@ export class TableComponent<T> implements AfterViewInit {
    */
   trackByColumnId(_index: number, column: ColumnDef<T>): string {
     return column.id;
+  }
+
+  /**
+   * Handle column header drag start
+   */
+  onColumnDragStart(event: DragEvent, columnId: string): void {
+    this.draggedColumnId.set(columnId);
+
+    // Create a ghost image from the header cell
+    const headerCell = (event.target as HTMLElement).closest('th');
+    if (headerCell) {
+      const text = headerCell.textContent || '';
+      this.createGhostImage(text, event);
+    }
+
+    event.dataTransfer!.effectAllowed = 'move';
+  }
+
+  /**
+   * Create a ghost image element from a header cell
+   */
+  private createGhostImage(text: string, event: DragEvent): void {
+    // Create a DOM element for the drag image
+    const ghostElement = document.createElement('div');
+    ghostElement.className = 'column-drag-ghost';
+    ghostElement.textContent = text;
+
+    document.body.appendChild(ghostElement);
+    
+    // Use the element as the drag image
+    event.dataTransfer!.setDragImage(ghostElement, 75, 20);
+
+    // Clean up after drag starts
+    setTimeout(() => {
+      document.body.removeChild(ghostElement);
+    }, 0);
+  }
+
+  /**
+   * Handle column header drag over
+   */
+  onColumnDragOver(event: DragEvent, columnId: string): void {
+    event.preventDefault();
+    event.dataTransfer!.dropEffect = 'move';
+
+    const draggedId = this.draggedColumnId();
+    if (draggedId && draggedId !== columnId) {
+      this.dropTargetColumnId.set(columnId);
+    }
+  }
+
+  /**
+   * Handle column header drag leave
+   */
+  onColumnDragLeave(): void {
+    this.dropTargetColumnId.set(null);
+  }
+
+  /**
+   * Handle column header drop
+   */
+  onColumnDrop(event: DragEvent, targetColumnId: string): void {
+    event.preventDefault();
+
+    const draggedId = this.draggedColumnId();
+    if (!draggedId || draggedId === targetColumnId) {
+      this.cleanup();
+      return;
+    }
+
+    // Get current order
+    let order = this.columnOrder().length > 0
+      ? this.columnOrder()
+      : this.displayedColumnIds();
+
+    // Find indices
+    const draggedIndex = order.indexOf(draggedId);
+    const targetIndex = order.indexOf(targetColumnId);
+
+    if (draggedIndex !== -1 && targetIndex !== -1) {
+      // Reorder the array
+      const newOrder = [...order];
+      newOrder.splice(draggedIndex, 1);
+      newOrder.splice(targetIndex, 0, draggedId);
+
+      this.columnOrder.set(newOrder);
+      this.columnOrderChange.emit(newOrder);
+    }
+
+    this.cleanup();
+  }
+
+  /**
+   * Handle column header drag end
+   */
+  onColumnDragEnd(): void {
+    this.cleanup();
+  }
+
+  /**
+   * Clean up drag state
+   */
+  private cleanup(): void {
+    this.draggedColumnId.set(null);
+    this.dropTargetColumnId.set(null);
+    this.cdr.markForCheck();
   }
 }
