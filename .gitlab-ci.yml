@@ -34,11 +34,10 @@
       - apk add --no-cache samba-client
       - |
         smbclient //$SMB_HOST/$SMB_SHARE -U $SMB_USER%$SMB_PASSWORD << EOF
-        mkdir $DEPLOY_PATH
         cd $DEPLOY_PATH
         prompt OFF
         recurse ON
-        mput dist/zigbee2mqtt-ui/browser/*
+        mput dist/zigbee2mqtt-ui/browser/
         quit
         EOF
   :only:
