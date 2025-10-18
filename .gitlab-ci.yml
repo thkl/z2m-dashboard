@@ -32,15 +32,7 @@
   - build
   :script:
       - apk add --no-cache samba-client
-      - |
-        cat > /tmp/smbcmds.txt << EOF
-        cd $DEPLOY_PATH
-        prompt OFF
-        recurse ON
-        mput dist/zigbee2mqtt-ui/browser/
-        quit
-        EOF
-        smbclient //$SMB_HOST/$SMB_SHARE -U $SMB_USER%$SMB_PASSWORD < /tmp/smbcmds.txt
+      - smbclient //$SMB_HOST/$SMB_SHARE -U $SMB_USER%$SMB_PASSWORD -c "cd $DEPLOY_PATH; prompt OFF; recurse ON; mput dist/zigbee2mqtt-ui/browser/"
   :only:
     - master
   
