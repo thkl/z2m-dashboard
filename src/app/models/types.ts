@@ -44,3 +44,17 @@ export interface SelectOption {
   label:string;
   value?:string
 }
+
+/**
+ * Defines the width constraints for a table column
+ */
+export interface TableColumnConfig {
+  /** Column identifier */
+  name: string;
+  /** Display label for the column header */
+  label: string;
+  /** Minimum column width in pixels */
+  minWidth: number;
+  /** Maximum column width in pixels */
+  maxWidth: number;
+}

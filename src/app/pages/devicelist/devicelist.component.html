@@ -19,12 +19,16 @@
     <div class="mt-2">
       <OptionPanelComponent title="{{ 'POWER' | translate }}" [entities]="powerOptionList()" (optionsChanged)="powerSelectionChanged($event)"></OptionPanelComponent>
     </div>
+
+    <div class="mt-10">
+      <OptionPanelComponent title="{{ 'COLUMNS' | translate }}" [useSearch]="false" [entities]="availableColumns()" (optionsChanged)="updateColumns($event)"></OptionPanelComponent>
+    </div>
   </div>
   <div class="w-full ml-2">
     <table cdk-table [dataSource]="datasource" [trackBy]="trackByFn">
       <ng-container cdkColumnDef="status">
-        <th cdk-header-cell *cdkHeaderCellDef class="w-7"></th>
-        <td cdk-cell *cdkCellDef="let device">
+        <th cdk-header-cell *cdkHeaderCellDef [style.width.px]="30"></th>
+        <td cdk-cell *cdkCellDef="let device" [style.width.px]="30">
           <div class="flex ml-2">
             <span
               class="statusIcon"
@@ -37,42 +41,94 @@
       </ng-container>
 
       <ng-container cdkColumnDef="icon">
-        <th cdk-header-cell *cdkHeaderCellDef class="icon_cell"></th>
-        <td cdk-cell *cdkCellDef="let device" class="icon_cell">
+        <th cdk-header-cell *cdkHeaderCellDef [style.width.px]="50"></th>
+        <td cdk-cell *cdkCellDef="let device" [style.width.px]="50">
           <DeviceImage [device]="device" class="icon" width="25px"></DeviceImage>
         </td>
       </ng-container>
 
       <ng-container cdkColumnDef="name">
-        <th cdk-header-cell *cdkHeaderCellDef appTableSort="name" [active]="sortColumn" [direction]="sortDirection" (sortChange)="onSort($event)">
+        <th
+          cdk-header-cell
+          *cdkHeaderCellDef
+          appTableSort="name"
+          [active]="sortColumn"
+          [direction]="sortDirection"
+          (sortChange)="onSort($event)"
+          [class.last-column]="isLastColumn('name')"
+          [style.min-width.px]="getColumnConfig('name')?.minWidth"
+          [style.max-width.px]="isLastColumn('name') ? null : getColumnConfig('name')?.maxWidth"
+        >
           {{ 'NAME' | translate }}
         </th>
-        <td cdk-cell *cdkCellDef="let device">{{ device.friendly_name }}</td>
+        <td cdk-cell *cdkCellDef="let device" [class.last-column]="isLastColumn('name')" [style.min-width.px]="getColumnConfig('name')?.minWidth" [style.max-width.px]="isLastColumn('name') ? null : getColumnConfig('name')?.maxWidth">{{ device.friendly_name }}</td>
       </ng-container>
 
       <ng-container cdkColumnDef="vendor">
-        <th cdk-header-cell *cdkHeaderCellDef appTableSort="vendor" [active]="sortColumn" [direction]="sortDirection" (sortChange)="onSort($event)">
+        <th
+          cdk-header-cell
+          *cdkHeaderCellDef
+          appTableSort="vendor"
+          [active]="sortColumn"
+          [direction]="sortDirection"
+          (sortChange)="onSort($event)"
+          [class.last-column]="isLastColumn('vendor')"
+          [style.min-width.px]="getColumnConfig('vendor')?.minWidth"
+          [style.max-width.px]="isLastColumn('vendor') ? null : getColumnConfig('vendor')?.maxWidth"
+        >
           {{ 'MANUFACTURER' | translate }}
         </th>
-        <td cdk-cell *cdkCellDef="let device">{{ device.definition ? device.definition.vendor : '' }}</td>
+        <td cdk-cell *cdkCellDef="let device" [class.last-column]="isLastColumn('vendor')" [style.min-width.px]="getColumnConfig('vendor')?.minWidth" [style.max-width.px]="isLastColumn('vendor') ? null : getColumnConfig('vendor')?.maxWidth">{{ device.definition ? device.definition.vendor : '' }}</td>
       </ng-container>
       <ng-container cdkColumnDef="model">
-        <th cdk-header-cell *cdkHeaderCellDef appTableSort="model" [active]="sortColumn" [direction]="sortDirection" (sortChange)="onSort($event)">
+        <th
+          cdk-header-cell
+          *cdkHeaderCellDef
+          appTableSort="model"
+          [active]="sortColumn"
+          [direction]="sortDirection"
+          (sortChange)="onSort($event)"
+          [class.last-column]="isLastColumn('model')"
+          [style.min-width.px]="getColumnConfig('model')?.minWidth"
+          [style.max-width.px]="isLastColumn('model') ? null : getColumnConfig('model')?.maxWidth"
+        >
           {{ 'MODEL' | translate }}
         </th>
-        <td cdk-cell *cdkCellDef="let device">{{ device.definition ? device.definition.model : '' }}</td>
+        <td cdk-cell *cdkCellDef="let device" [class.last-column]="isLastColumn('model')" [style.min-width.px]="getColumnConfig('model')?.minWidth" [style.max-width.px]="isLastColumn('model') ? null : getColumnConfig('model')?.maxWidth">{{ device.definition ? device.definition.model : '' }}</td>
       </ng-container>
       <ng-container cdkColumnDef="linkquality">
-        <th cdk-header-cell *cdkHeaderCellDef appTableSort="linkquality" [active]="sortColumn" [direction]="sortDirection" (sortChange)="onSort($event)">
+        <th
+          cdk-header-cell
+          *cdkHeaderCellDef
+          appTableSort="linkquality"
+          [active]="sortColumn"
+          [direction]="sortDirection"
+          (sortChange)="onSort($event)"
+          [class.last-column]="isLastColumn('linkquality')"
+          [style.min-width.px]="getColumnConfig('linkquality')?.minWidth"
+          [style.max-width.px]="isLastColumn('linkquality') ? null : getColumnConfig('linkquality')?.maxWidth"
+        >
           {{ 'LQI' | translate }}
         </th>
-        <td cdk-cell *cdkCellDef="let device">{{ device.state && device.state.linkquality ? device.state.linkquality : '??' }}</td>
+        <td cdk-cell *cdkCellDef="let device" [class.last-column]="isLastColumn('linkquality')" [style.min-width.px]="getColumnConfig('linkquality')?.minWidth" [style.max-width.px]="isLastColumn('linkquality') ? null : getColumnConfig('linkquality')?.maxWidth">
+          {{ device.state && device.state.linkquality ? device.state.linkquality : '??' }}
+        </td>
       </ng-container>
       <ng-container cdkColumnDef="battery">
-        <th cdk-header-cell *cdkHeaderCellDef appTableSort="battery" [active]="sortColumn" [direction]="sortDirection" (sortChange)="onSort($event)">
+        <th
+          cdk-header-cell
+          *cdkHeaderCellDef
+          appTableSort="battery"
+          [active]="sortColumn"
+          [direction]="sortDirection"
+          (sortChange)="onSort($event)"
+          [class.last-column]="isLastColumn('battery')"
+          [style.min-width.px]="getColumnConfig('battery')?.minWidth"
+          [style.max-width.px]="isLastColumn('battery') ? null : getColumnConfig('battery')?.maxWidth"
+        >
           {{ 'BATTERY' | translate }}
         </th>
-        <td cdk-cell *cdkCellDef="let device">
+        <td cdk-cell *cdkCellDef="let device" [class.last-column]="isLastColumn('battery')" [style.min-width.px]="getColumnConfig('battery')?.minWidth" [style.max-width.px]="isLastColumn('battery') ? null : getColumnConfig('battery')?.maxWidth">
           @if (device.power_source && device.power_source.indexOf('Battery') > -1) {
             @if (device.state) {
               <span
@@ -89,16 +145,26 @@
         </td>
       </ng-container>
       <ng-container cdkColumnDef="lastseenhuman">
-        <th cdk-header-cell *cdkHeaderCellDef appTableSort="lastseenhuman" [active]="sortColumn" [direction]="sortDirection" (sortChange)="onSort($event)">
+        <th
+          cdk-header-cell
+          *cdkHeaderCellDef
+          appTableSort="lastseenhuman"
+          [active]="sortColumn"
+          [direction]="sortDirection"
+          (sortChange)="onSort($event)"
+          [class.last-column]="isLastColumn('lastseenhuman')"
+          [style.min-width.px]="getColumnConfig('lastseenhuman')?.minWidth"
+          [style.max-width.px]="isLastColumn('lastseenhuman') ? null : getColumnConfig('lastseenhuman')?.maxWidth"
+        >
           {{ 'LAST_SEEN' | translate }}
         </th>
-        <td cdk-cell *cdkCellDef="let device">{{ device.state.lastseenhuman || '--' }}</td>
+        <td cdk-cell *cdkCellDef="let device" [class.last-column]="isLastColumn('lastseenhuman')" [style.min-width.px]="getColumnConfig('lastseenhuman')?.minWidth" [style.max-width.px]="isLastColumn('lastseenhuman') ? null : getColumnConfig('lastseenhuman')?.maxWidth">{{ device.state.lastseenhuman || '--' }}</td>
       </ng-container>
 
-      <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
+      <tr cdk-header-row *cdkHeaderRowDef="displayedColumns()"></tr>
       <tr
         cdk-row
-        *cdkRowDef="let device; columns: displayedColumns"
+        *cdkRowDef="let device; columns: displayedColumns()"
         (click)="selectDevice(device.ieee_address)"
         [class.selected]="device.ieee_address === selectedDevice()?.ieee_address"
       ></tr>

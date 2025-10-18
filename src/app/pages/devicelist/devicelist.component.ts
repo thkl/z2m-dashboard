@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, effect } from '@angular/core';
+import { Component, computed, inject, signal, effect, Signal } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
 import { createStoreView } from '../../datastore/generic-store-view';
@@ -11,8 +11,10 @@ import { sortData } from '../../utils/sort.utils';
 import { filterData } from '../../utils/filter.utils';
 import { SearchInput } from '../../components/controls/searchinput/searchinput';
 import { OptionPanelComponent } from "../../components/controls/optionpanel/optionpanel";
-import { SelectOption } from '../../models/types';
+import { SelectOption, TableColumnConfig } from '../../models/types';
 import { DeviceImage } from '../../components/controls/device-image/device-image';
+import { ApplicationService } from '../../services/app.service';
+
 @Component({
   selector: 'app-devicelist',
   templateUrl: './devicelist.component.html',
@@ -22,7 +24,21 @@ import { DeviceImage } from '../../components/controls/device-image/device-image
 export class DeviceListComponent {
 
   protected readonly deviceStore = inject(DeviceStore);
-  displayedColumns = ['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman'];
+  protected readonly applicationService = inject(ApplicationService);
+
+  // Column width configuration
+  private readonly columnConfig: Map<string, TableColumnConfig> = new Map([
+    ['status', { name: 'status', label: 'STATUS', minWidth: 30, maxWidth: 30 }],
+    ['icon', { name: 'icon', label: 'ICON', minWidth: 50, maxWidth: 50 }],
+    ['name', { name: 'name', label: 'NAME', minWidth: 150, maxWidth: 250 }],
+    ['vendor', { name: 'vendor', label: 'MANUFACTURER', minWidth: 100, maxWidth: 150 }],
+    ['model', { name: 'model', label: 'MODEL', minWidth: 100, maxWidth: 200 }],
+    ['linkquality', { name: 'linkquality', label: 'LQI', minWidth: 60, maxWidth: 80 }],
+    ['battery', { name: 'battery', label: 'BATTERY', minWidth: 80, maxWidth: 120 }],
+    ['lastseenhuman', { name: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150 }]
+  ]);
+
+  displayedColumns = signal<string[]>(['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman']);
 
   // Sorting state
   sortColumn = signal<string>('name');
@@ -34,8 +50,7 @@ export class DeviceListComponent {
   selectedModels = signal<SelectOption[]>([]); 
   selectedPowering = signal<SelectOption[]>([]); 
   selectedAvailability = signal<SelectOption[]>([]); 
-
-
+  
   //Filter the coordinator from the devices
   devicesView = createStoreView(this.deviceStore, {
     criteria: [
@@ -170,20 +185,45 @@ export class DeviceListComponent {
     return this.deviceStore.selectedEntity();
   })
 
+  availableColumns : Signal<SelectOption[]> = computed(()=>{
+    return ['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman'].map(c=>{
+      return {label:c,value:c,isSelected: this.displayedColumns().includes(c)}
+    })
+  })
+
   constructor() {
     effect(() => {
       const devices = this.devices();
-
     });
+    
+    const cl = this.applicationService.getPreference("devicelist_columns");
+    if (cl) {
+      this.displayedColumns.set(cl);
+    }
   }
 
   trackByFn(index: number, item: Device): string {
     return item.friendly_name || item.ieee_address; // Use unique identifier
   }
 
+  isLastColumn(column: string): boolean {
+    const columns = this.displayedColumns();
+    return columns.length > 0 && columns[columns.length - 1] === column;
+  }
+
+  getColumnConfig(columnName: string): TableColumnConfig | undefined {
+    return this.columnConfig.get(columnName);
+  }
+
   onSort(event: SortEvent) {
     this.sortColumn.set(event.column);
     this.sortDirection.set(event.direction);
+  }
+
+
+  updateColumns(event:SelectOption[]):void {
+    this.displayedColumns.set(event.filter((c)=>c.isSelected===true).map(c=>c.value!));
+    this.applicationService.setPreference('devicelist_columns',this.displayedColumns());
   }
 
   getDeviceValue(device: Device, column: string): any {

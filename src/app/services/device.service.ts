@@ -17,19 +17,11 @@ export class DeviceService {
   protected readonly appService = inject(ApplicationService);
   protected readonly bridgeService = inject(BridgeService);
 
-  private translate = inject(TranslateService);
+
 
   constructor() {
 
-    this.ws.subscribeTopicCallback('bridge/devices', (message) => {
-      if (message) {
-        const { payload } = message;
-        if ((payload !== null) && (Array.isArray(payload))) {
-          this.addDevices(payload);
-        }
-      }
-    });
-
+   
     this.ws.subscribeTopicCallback('*/availability', (message) => {
       const { topic, payload } = message;
       this.updateAvailability(topic, payload.state);
@@ -37,7 +29,7 @@ export class DeviceService {
 
     this.ws.subscribeCatchAllCallback((message) => {
       const { topic, payload } = message;
-      this.doupdateState(topic, payload);
+      this.doUpdateState(topic, payload);
 
     });
 
@@ -51,7 +43,7 @@ export class DeviceService {
 
   }
 
-  private doupdateState(topic: string, state: any) {
+  private doUpdateState(topic: string, state: any) {
     const splits = topic.split("/");
     if (splits.length === 1) {
       // the device is the first in the topic
@@ -60,7 +52,7 @@ export class DeviceService {
       if (state.update) { // also put the update date into the device data
         this.deviceStore.mergeBySearch("update",state.update, "friendly_name", deviceName)
       }
-      this.setupUpdateInterval();
+      this.bridgeService.setDeviceTimeUpdater();
     }
   }
 
@@ -69,47 +61,7 @@ export class DeviceService {
     this.appService.sendBridgeRequest(topic, data);
   }
 
-  private setupUpdateInterval() {
-    for (const device of this.deviceStore.entities()) {
-      if (device.state?.last_seen) {
-        const lastseenhuman = timeAgo(device.state?.last_seen, this.translate);
-        const newState = { ...device.state, lastseenhuman };
-        this.deviceStore.mergeBySearch("state", newState, "ieee_address", device.ieee_address);
-      }
-    }
-  }
-
-  addDevices(deviceList: Device[]): void {
-    console.log("Set All Devices")
-    const devicelist = this.deviceStore.entities();
-    const bridgeInfo = this.bridgeService.bridgeInfo;
-    // copy the old state or create an empty one
-    deviceList.forEach(device => {
-      // set the device option values from the bridge info devices 
-      const bridgeDevice = bridgeInfo()?.config.devices[device.ieee_address];
-      if (bridgeDevice) {
-        device.options = bridgeDevice;
-      }
-      const oldDevice = devicelist.find(d => d.ieee_address === device.ieee_address);
-      if (oldDevice) {
-        device.state = oldDevice.state;
-      } else {
-        device.state = {
-          availability: "",
-          lastseenhuman: "",
-          last_seen: "", linkquality: 0, battery: 0
-        };
-      }
-    })
-
-    this.deviceStore.addAll(deviceList);
-
-    setTimeout(() => {
-      this.setupUpdateInterval();
-
-    }, 1000);
-  }
-
+  
   private sendBridgeDeviceRequest(topic: string, parameters: { [key: string]: any }) {
     const payload: any = {
       transaction: crypto.randomUUID()
