@@ -11,18 +11,59 @@ import { sortData } from '../../utils/sort.utils';
 import { filterData } from '../../utils/filter.utils';
 import { SearchInput } from '../../components/controls/searchinput/searchinput';
 import { OptionPanelComponent } from "../../components/controls/optionpanel/optionpanel";
-import { SelectOption } from '../../models/types';
+import { SelectOption, ColumnDef, TableConfig } from '../../models/types';
 import { DeviceImage } from '../../components/controls/device-image/device-image';
+import { TableComponent } from '../../components/controls/generic-table/generic-table.component';
+import { TableCellDirective } from '../../directives/table-cell.directive';
+import { ApplicationService } from '../../services/app.service';
+
 @Component({
-  selector: 'app-devicelist',
+  selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, CdkTableModule, TableSortDirective, SearchInput, OptionPanelComponent,DeviceImage]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective]
 })
 export class DeviceListComponent {
 
   protected readonly deviceStore = inject(DeviceStore);
-  displayedColumns = ['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman'];
+  protected readonly applicationService = inject(ApplicationService);
+  protected readonly injector = inject(Injector);
+
+  // Displayed columns signal for column visibility management
+  displayedColumns = signal<string[]>(['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman']);
+
+  // Table configuration with column definitions
+  tableConfig = computed<TableConfig<Device>>(() => {
+    const allColumns: ColumnDef<Device>[] = [
+      { id: 'status', label: '', minWidth: 30, maxWidth: 30, sortable: false },
+      { id: 'icon', label: '', minWidth: 50, maxWidth: 50, sortable: false },
+      { id: 'name', label: 'NAME', minWidth: 250, maxWidth: 450, sortable: true },
+      { id: 'vendor', label: 'MANUFACTURER', minWidth: 150, maxWidth: 250, sortable: true },
+      { id: 'model', label: 'MODEL', minWidth: 200, maxWidth: 400, sortable: true },
+      { id: 'linkquality', label: 'LQI', minWidth: 60, maxWidth: 80, sortable: true },
+      { id: 'battery', label: 'BATTERY', minWidth: 80, maxWidth: 120, sortable: true },
+      { id: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150, sortable: true }
+    ];
+
+    // Hide columns that are not in the displayedColumns list
+    const displayed = this.displayedColumns();
+    allColumns.forEach(col => {
+      col.hidden = !displayed.includes(col.id);
+    });
+
+    const selected = this.selectedDevice();
+    const sortDir = this.sortDirection();
+    return {
+      columns: allColumns,
+      trackByFn: (index: number, device: Device) => device.ieee_address || index,
+      selectedItem: selected || undefined,
+      onRowClick: (device: Device) => this.selectDevice(device.ieee_address),
+      initialSort: {
+        column: this.sortColumn(),
+        direction: (sortDir === 'asc' || sortDir === 'desc') ? sortDir : 'asc'
+      }
+    };
+  });
 
   // Sorting state
   sortColumn = signal<string>('name');

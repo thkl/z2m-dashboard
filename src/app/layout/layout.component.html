@@ -30,6 +30,14 @@
             <span class="material-symbols-outlined">router</span>
             <span>Devices</span>
           </a>
+          <a routerLink="/groups" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <span class="material-symbols-outlined">group_work</span>
+            <span>Groups</span>
+          </a>
+          <a routerLink="/network" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <span class="material-symbols-outlined">network_node</span>
+            <span>Network</span>
+          </a>
 
           <a (click)="permitJoin()" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer">
             <span class="material-symbols-outlined">join</span>
@@ -54,6 +62,12 @@
         </a>
         <a routerLink="/devices" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
           <span class="material-symbols-outlined">router</span>
+        </a>
+        <a routerLink="/groups" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <span class="material-symbols-outlined">group_work</span>
+        </a>
+        <a routerLink="/network" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <span class="material-symbols-outlined">network_node</span>
         </a>
 
         <a (click)="permitJoin()" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer">
