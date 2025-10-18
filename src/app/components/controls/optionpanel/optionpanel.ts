@@ -2,10 +2,11 @@ import { Component, computed, effect, input, output, signal } from '@angular/cor
 import { ExpansionPanelComponent } from '../expansionpanel/expansionpanel';
 import { SearchInput } from '../searchinput/searchinput';
 import { SelectOption } from '../../../models/types';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'OptionPanelComponent',
-  imports: [ExpansionPanelComponent, SearchInput],
+  imports: [ExpansionPanelComponent, SearchInput,TranslateModule],
   templateUrl: './optionpanel.html',
   styleUrl: './optionpanel.scss'
 })

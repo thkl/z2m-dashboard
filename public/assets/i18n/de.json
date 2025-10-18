@@ -64,5 +64,10 @@
   "LOG_FILTER":"Logging Filter",
   "SYSTEM_LOGLEVEL":"Bridge: {{level}}",
   "GROUPS":"Gruppen",
-  "COLUMN_CONFIG":"Spalteneinstellungen"
+  "COLUMN_CONFIG":"Spalteneinstellungen",
+  "FIRMWARE_STATE":"Firmware Status",
+  "UP_TO_DATE":"aktuell",
+  "UNKNOWN":"unbekannt",
+  "UPDATE_AVAILABLE":"Update verfügbar",
+  "PERFORM_UPDATE":"Gerät aktualisieren"
 }

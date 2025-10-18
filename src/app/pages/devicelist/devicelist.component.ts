@@ -15,12 +15,31 @@ import { DeviceImage } from '../../components/controls/device-image/device-image
 import { TableComponent } from '../../components/controls/generic-table/generic-table.component';
 import { TableCellDirective } from '../../directives/table-cell.directive';
 import { ApplicationService } from '../../services/app.service';
+import { HexPipe } from '../../pipes/hex.pipe';
+import { HumanReadablePipe } from '../../pipes/human.pipe';
+
+
+ const allColumns: ColumnDef<Device>[] = [
+      { id: 'status', label: 'STATUS', hideLabel:true, minWidth: 30, maxWidth: 30, sortable: false },
+      { id: 'icon', label: 'ICON',hideLabel:true, minWidth: 50, maxWidth: 50, sortable: false },
+      { id: 'name', label: 'NAME', minWidth: 250, maxWidth: 450, sortable: true },
+      { id: 'vendor', label: 'MANUFACTURER', minWidth: 150, maxWidth: 250, sortable: true },
+      { id: 'model', label: 'MODEL', minWidth: 200, maxWidth: 400, sortable: true },
+      { id: 'linkquality', label: 'LQI', minWidth: 60, maxWidth: 80, sortable: true },
+      { id: 'battery', label: 'BATTERY', minWidth: 80, maxWidth: 120, sortable: true },
+      { id: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150, sortable: true },
+      { id: 'ieee_address', label: 'IEEE_ADDRESS', minWidth: 250, maxWidth: 250, sortable: true },
+      { id: 'supported', label: 'SUPPORT_STATUS', minWidth: 50, maxWidth: 100, sortable: true },
+      { id: 'type', label: 'DEVICE_TYPE', minWidth: 50, maxWidth: 100, sortable: true },
+      { id: 'firmware_state', label: 'FIRMWARE_STATE', minWidth: 50, maxWidth: 100, sortable: true },
+    ];
+
 
 @Component({
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective,HexPipe,HumanReadablePipe]
 })
 export class DeviceListComponent {
 
@@ -31,18 +50,10 @@ export class DeviceListComponent {
   // Displayed columns signal for column visibility management
   displayedColumns = signal<string[]>(['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman']);
 
+ 
   // Table configuration with column definitions
   tableConfig = computed<TableConfig<Device>>(() => {
-    const allColumns: ColumnDef<Device>[] = [
-      { id: 'status', label: '', minWidth: 30, maxWidth: 30, sortable: false },
-      { id: 'icon', label: '', minWidth: 50, maxWidth: 50, sortable: false },
-      { id: 'name', label: 'NAME', minWidth: 250, maxWidth: 450, sortable: true },
-      { id: 'vendor', label: 'MANUFACTURER', minWidth: 150, maxWidth: 250, sortable: true },
-      { id: 'model', label: 'MODEL', minWidth: 200, maxWidth: 400, sortable: true },
-      { id: 'linkquality', label: 'LQI', minWidth: 60, maxWidth: 80, sortable: true },
-      { id: 'battery', label: 'BATTERY', minWidth: 80, maxWidth: 120, sortable: true },
-      { id: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150, sortable: true }
-    ];
+   
 
     const selected = this.selectedDevice();
     const sortDir = this.sortDirection();
@@ -208,8 +219,8 @@ export class DeviceListComponent {
   })
 
   availableColumns : Signal<SelectOption[]> = computed(()=>{
-    return ['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman'].map(c=>{
-      return {label:c,value:c,isSelected: this.displayedColumns().includes(c)}
+    return allColumns.map(c=>{
+      return {label:c.label,value:c.id,isSelected: this.displayedColumns().includes(c.id)}
     })
   })
 
@@ -231,7 +242,6 @@ export class DeviceListComponent {
 
     const cl = this.applicationService.getPreference("devicelist_columns");
     if (cl) {
-      console.log(cl);
       this.displayedColumns.set(cl);
     }
   }

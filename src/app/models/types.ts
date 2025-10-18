@@ -70,6 +70,8 @@ export interface ColumnDef<T = any> {
   /** Display label for header (translation key) */
   label: string;
 
+  hideLabel?:boolean;
+
   /** Minimum width in pixels */
   minWidth?: number;
 

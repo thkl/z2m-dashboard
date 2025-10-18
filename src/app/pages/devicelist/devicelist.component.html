@@ -52,7 +52,7 @@
 
       <!-- Icon cell -->
       <ng-template appTableCell="icon" let-device>
-        <DeviceImage [device]="device" class="icon" width="25px"></DeviceImage>
+        <DeviceImage [device]="device" class="icon ml-2" width="25px"></DeviceImage>
       </ng-template>
 
       <!-- Name cell -->
@@ -73,6 +73,31 @@
       <!-- Link Quality cell -->
       <ng-template appTableCell="linkquality" let-device>
         {{ device.state?.linkquality ?? '??' }}
+      </ng-template>
+
+      <!-- ieee_address cell -->
+      <ng-template appTableCell="ieee_address" let-device> {{ device.ieee_address ?? '??' }} / {{ device.network_address | toHex }} </ng-template>
+
+      <!-- supported cell -->
+      <ng-template appTableCell="supported" let-device> {{ device.supported | human }} </ng-template>
+
+      <!-- supported cell -->
+      <ng-template appTableCell="firmware_state" let-device>
+        @if (device.update) {
+          @switch (device.update.state) {
+            @case ('available') {
+              <span class="firmware_available">{{ 'UPDATE_AVAILABLE' | translate }}</span>
+            }
+            @case ('idle') {
+              {{ 'UP_TO_DATE' | translate }}
+            }
+            @case ('updating') {
+              {{ 'DEVICE_UPDATING' | translate }}
+            }
+          }
+        } @else {
+          {{ 'UNKNOWN' | translate }}
+        }
       </ng-template>
 
       <!-- Battery cell -->

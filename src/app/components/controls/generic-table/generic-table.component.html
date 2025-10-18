@@ -23,7 +23,9 @@
         [class.dragging]="draggedColumnId() === column.id"
         [class.drop-target]="dropTargetColumnId() === column.id"
       >
-        {{ column.label | translate }}
+        @if (!column.hideLabel) {
+          {{ column.label | translate }}
+        }
       </th>
 
       <!-- Data cell -->

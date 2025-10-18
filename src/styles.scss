@@ -12,13 +12,21 @@
 html,
 body {
   @apply h-full;
-  font-family: 'Inter', sans-serif;
-  font-feature-settings: normal;
   font-size: 14px;
   background-color: var(--app-background-color);
   margin: 0px;
   padding: 0px;
   border: none;
+
+  font-family: Inter, Lato, Arial, sans-serif;
+  font-feature-settings: "kern";
+  font-size: 13px;
+  font-synthesis-small-caps: none;
+  font-synthesis-style: none;
+  font-synthesis-weight: none;
+  font-variant-ligatures: no-common-ligatures;
+  font-variant-numeric: slashed-zero;
+  font-weight: 400;
 }
 
 input {
