@@ -58,7 +58,7 @@ export class DeviceService {
 
   public updateDeviceState(deviceName: string, data: DeviceTargetState): void {
     const topic = `${deviceName}/set`;
-    this.appService.sendBridgeRequest(topic, data);
+    this.appService.sendBridgeRequest(topic, data,false);
   }
 
   

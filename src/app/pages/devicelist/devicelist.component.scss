@@ -138,3 +138,8 @@ td:not(.last-column) {
 }
 
 
+hr {
+  background-color: var(--app-border-color);
+  border: none;
+  height: 1px;
+}

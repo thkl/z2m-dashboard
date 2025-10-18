@@ -14,6 +14,17 @@ export class ApplicationService {
     public settings?: AppSettings;
     private ws = inject(Websocket);
 
+    private mainTitleSignal = signal<string>('');
+
+    get mainTitle(): Signal<string> {
+        return this.mainTitleSignal;
+    }
+
+    set mainTitle(item: string) {
+        this.mainTitleSignal.set(item);
+    }
+
+
     private inspectorSignal = signal<string | null>(null);
 
     get inspector(): Signal<string | null> {
@@ -67,8 +78,8 @@ export class ApplicationService {
         }
     }
 
-    sendBridgeRequest(topic: string, payload: any) {
-        if (payload && payload.transaction === undefined) {
+    sendBridgeRequest(topic: string, payload: any,useTransaction:boolean = true) {
+        if (payload && payload.transaction === undefined && useTransaction===true) {
             payload.transaction = crypto.randomUUID();
         }
         const message: any = {

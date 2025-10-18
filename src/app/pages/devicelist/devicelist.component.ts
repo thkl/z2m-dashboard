@@ -244,6 +244,8 @@ export class DeviceListComponent {
     if (cl) {
       this.displayedColumns.set(cl);
     }
+
+    this.applicationService.mainTitle = "DEVICE_VIEW";
   }
 
   trackByFn(index: number, item: Device): string {

@@ -15,17 +15,17 @@
 }
 
 label.root {
-    display: inline-flex;
+  display: inline-flex;
 }
 
 .label {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .indicator.selected {
-    background: var(--option-panel-indicator-selected);
-    border-color: var(--option-panel-indicator-selected);
-    color: var( --app-text-color);
-    font-size: 15px;
-    font-weight: bold;
+  background: var(--option-panel-indicator-selected);
+  border-color: var(--option-panel-indicator-selected);
+  color: var(--option-panel-indicator-color, var(--app-text-color));
+  font-size: 15px;
+  font-weight: bold;
 }

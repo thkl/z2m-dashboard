@@ -25,6 +25,10 @@ export class LayoutComponent {
   protected readonly as = inject(ApplicationService);
   protected readonly bs = inject(BridgeService);
 
+  mainTitle = computed(()=>{
+    return this.as.mainTitle();
+  })  
+
   inspector = computed(()=>{
     return this.as.inspector();
   })

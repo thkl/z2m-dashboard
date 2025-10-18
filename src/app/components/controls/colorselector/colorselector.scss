@@ -63,21 +63,22 @@
   border: none;
   background: none;
   width: 100%;
-  text-align: left;
+  text-align: left !important;
+  justify-content: flex-start;
   font-size: 0.75rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .color-option:hover {
-  background-color: #f8f9fa;
+  background-color: var(--button-selected-background-color)
 }
 
 .color-bar {
   width: 20px;
   height: 12px;
   border-radius: 2px;
-  border: 1px solid #dee2e6;
+  border: 1px solid app(--app-border-color);
   display: inline-block;
 }
 
@@ -91,7 +92,7 @@
 .custom-color-picker .form-control-color {
   width: 32px;
   height: 24px;
-  border: 1px solid #dee2e6;
+  border: 1px solid app(--app-border-color);
   border-radius: 2px;
   padding: 0;
   cursor: pointer;
@@ -100,14 +101,14 @@
 .custom-color-picker .form-label {
   font-size: 0.75rem;
   margin: 0;
-  color: #2c3e50;
+  color: var(--app-text-color);
 }
 
 .dropdown-divider {
   height: 0;
   margin: 0.5rem 0;
   overflow: hidden;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--app-border-color);
 }
 
 .backdrop {
@@ -144,7 +145,7 @@
 
 .btn-outline-secondary:hover:not(:disabled) {
   background-color: #6c757d;
-  color: white;
+  color:var(--app-text-color)
 }
 
 .btn-sm {

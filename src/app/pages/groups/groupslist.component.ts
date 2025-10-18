@@ -69,6 +69,10 @@ export class GroupListComponent {
     return this.datasourceSignal() || new CDKDataSource(this.groupStore.entities, this.injector);
   }
 
+  constructor() {
+    this.applicationService.mainTitle = "GROUP_VIEW";
+  }
+
 
 
   trackByFn(index: number, item: Group): string {

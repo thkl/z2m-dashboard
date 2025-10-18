@@ -59,10 +59,13 @@
   "SYSTEM_LOGLEVEL": "Bridge: {{level}}",
   "LOG_FILTER": "Log Filter",
   "GROUPS": "Groups",
-  "COLUMN_CONFIG":"Configure Columns",
-  "FIRMWARE_STATE":"Firmware state",
-  "UP_TO_DATE":"current",
-  "UNKNOWN":"unknown",
-  "UPDATE_AVAILABLE":"Update available",
-  "PERFORM_UPDATE":"Update device"
+  "COLUMN_CONFIG": "Configure Columns",
+  "FIRMWARE_STATE": "Firmware state",
+  "UP_TO_DATE": "current",
+  "UNKNOWN": "unknown",
+  "UPDATE_AVAILABLE": "Update available",
+  "PERFORM_UPDATE": "Update device",
+  "DEVICE_VIEW": "Devices",
+  "GROUP_VIEW": "Groups",
+  "NETWORK_VIEW": "Network"
 }

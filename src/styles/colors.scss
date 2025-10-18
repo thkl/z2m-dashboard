@@ -4,25 +4,36 @@
   --app-background-transparent: rgb(0, 0, 0, 0);
   --app-background-color-selected: rgb(101, 98, 98);
 
-  --app-text-color: rgb(222, 224, 227);
+  --app-text-color: rgb(182, 182, 182);
   --app-text-color-selected: rgb(8, 8, 8);
   --app-text-color-inactive: #737c87;
   --app-link-color: #0e65d8;
   --app-border-color: rgba(49, 49, 49, 0.741);
+  --app-navbar-color: rgb(28, 30, 33);
+  --app-panel-color: rgb(28, 30, 33);
+  --app-header-background-color:  rgb(40, 43, 47);
+
   --button-background-color: rgb(28, 30, 33);
   --button-selected-background-color: #282b2f;
   --button-text-color: #4797ff;
+  --button-frame-color: #4797ff;
+  
   --progressbar-status-color: #4797ff;
   --progressbar-status-background-color:rgb(71, 151, 255);
   --progressbar-background-color: rgb(78, 80, 87);
-  --button-frame-color: #4797ff;
-  --app-navbar-color: rgb(28, 30, 33);
-  --app-panel-color: rgb(28, 30, 33);
+
   --dropdown-background-inactive: #2d3135;
   --dropdown-panel-background: #282b2f;
   --dropdown-panel-background-hover: rgb(126, 123, 123);
+  
   --option-panel-indicator-selected:#4797ff;
+  --option-panel-indicator-color:#FFF;
+  
   --expansion-panel-trigger-focus-color:rgba(49, 49, 49, 0.741); //#0e65d8;
+
+  --table-cell-text-color: rgb(182, 182, 182);
+  --table-row-text-color: rgb(182, 182, 182);
+  --table-header-text-color: rgb(182, 182, 182);
 
   // Network Graph colors
   --network-graph-node-default: #4797ff;

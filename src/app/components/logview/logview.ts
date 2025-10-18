@@ -48,14 +48,18 @@ export class LogView {
 
     effect(() => {
       const sl = this.selectedLevels();
-      this.logOptions = signal([...LogLevels].map(ll=> { return {...ll,isSelected:sl.indexOf(ll.value)>-1}}));
+      if (sl) {
+        this.logOptions = signal([...LogLevels].map(ll => { return { ...ll, isSelected: sl.indexOf(ll.value) > -1 } }));
+      } else {
+        this.logOptions = signal([...LogLevels]);
+      }
     });
 
   }
 
   protected readonly reversedEntries = computed(() => {
     const selectedLevels = this.selectedLevels();
-    return [...this.eventStore.entities()].reverse().filter(e => selectedLevels.indexOf(e.level) > -1);
+    return [...this.eventStore.entities()].reverse().filter(e => selectedLevels ? selectedLevels.indexOf(e.level) > -1 : true);
   });
 
   toggleView() {
@@ -78,7 +82,7 @@ export class LogView {
   logOptionChange(event: any) {
     const selected: SelectOption[] = event.filter((e: SelectOption) => e.isSelected);
     const levels = selected.map((e) => e.value ?? '');
-    this.appService.setPreference("log_levels",levels);
+    this.appService.setPreference("log_levels", levels);
     this.selectedLevels.set(levels);
   }
 }

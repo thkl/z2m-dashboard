@@ -1,6 +1,7 @@
 <div class="flex w-full">
   <div style="width: 270px">
-    <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
+    <span class="mt-2">Filter</span>
+    <app-searchinput class="mt-2" (searchChange)="applySearch($event)"></app-searchinput>
     <div class="mt-2">
       <OptionPanelComponent title="{{ 'MANUFACTURER' | translate }}" [entities]="vendorList()" (optionsChanged)="vendorsSelectionChanged($event)"></OptionPanelComponent>
     </div>
@@ -19,8 +20,9 @@
     <div class="mt-2">
       <OptionPanelComponent title="{{ 'POWER' | translate }}" [entities]="powerOptionList()" (optionsChanged)="powerSelectionChanged($event)"></OptionPanelComponent>
     </div>
-
-    <div class="mt-10">
+    <hr class="mt-10 mb-4" />
+    <span>Settings</span>
+    <div class="mt-2">
       <OptionPanelComponent
         title="{{ 'COLUMN_CONFIG' | translate }}"
         [useSearch]="false"

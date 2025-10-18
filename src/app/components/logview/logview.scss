@@ -104,13 +104,22 @@ button {
   text-overflow: ellipsis;
   flex: 1;
   min-width: 0;
+  color: var(--app-text-color);
+}
+
+.message-date {
+  color: var(--app-text-color);
+}
+
+.label {
+  color: var(--app-text-color);
 }
 
 .log_option_panel {
-    padding-left:1em;
-    padding-right: 1em;
-    padding-top: 1em;
-    border-right: 1px solid;
-    border-right-color: var(--app-border-color);
-    flex-shrink: 0;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 1em;
+  border-right: 1px solid;
+  border-right-color: var(--app-border-color);
+  flex-shrink: 0;
 }

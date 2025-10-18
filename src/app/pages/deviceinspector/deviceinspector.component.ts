@@ -16,7 +16,6 @@ export class DeviceInspectorComponent {
     protected readonly deviceStore = inject(DeviceStore);
     protected readonly deviceService = inject(DeviceService);
     closed = output<void>();
-
     panel = signal<number>(1);
     
     device = computed(()=>{

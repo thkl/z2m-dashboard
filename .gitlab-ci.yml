@@ -1,0 +1,43 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/user/application_security/secret_detection/pipeline/configure
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+:stages:
+- build
+- deploy
+:variables:
+  :NODE_ENV: development
+  :APP_NAME: zigbee2mqtt-ui
+  :DEPLOY_PATH: "devserver/zigbee"
+
+:build:
+  :stage: build
+  :image: node:20
+  :script:
+  - npm install
+  - npm audit
+  - npm build
+  :artifacts:
+    :paths:
+    - dist/zigbee2mqtt-ui/browser
+    :expire_in: 1 day
+
+:deploy:
+  :stage: deploy
+  :image: alpine:latest
+  :dependencies:
+  - build
+  :script:
+  - apk add --no-cache cifs-utils
+  - mkdir -p /mnt/network
+  - mount -t cifs $SMB_PATH /mnt/network -o username=$SMB_USER,password=$SMB_PASSWORD,uid=0,gid=0
+  - mkdir -p /mnt/network/$DEPLOY_PATH
+  - cp -r dist/zigbee2mqtt-ui/browser/* /mnt/network/$DEPLOY_PATH/
+  - umount /mnt/network
+  :only:
+  - master
+  
+
