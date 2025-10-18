@@ -31,18 +31,22 @@
   :dependencies:
   - build
   :script:
-      - apk add --no-cache samba-client bash
+      - apk add --no-cache samba-client
       - |
-        for file in $(find dist/zigbee2mqtt-ui/browser -type f); do
-          remote_path="${file#dist/zigbee2mqtt-ui/browser/}"
-          smbclient //$SMB_HOST/$SMB_SHARE -U $SMB_USER%$SMB_PASSWORD << SMBEOF
-        cd $DEPLOY_PATH
-        prompt OFF
-        recurse ON
-        put "$file" "$remote_path"
-        quit
-        SMBEOF
-        done
+        # Build command script with all mkdir and put commands
+        {
+          echo "cd $DEPLOY_PATH"
+          # Create all directories first (in order of depth)
+          find dist/zigbee2mqtt-ui/browser -type d ! -name browser | sed 's|dist/zigbee2mqtt-ui/browser/||' | sed '/^$/d' | sort | while read dir; do
+            echo "mkdir $dir"
+          done
+          # Upload all files
+          find dist/zigbee2mqtt-ui/browser -type f | while read file; do
+            relpath="${file#dist/zigbee2mqtt-ui/browser/}"
+            echo "put $file $relpath"
+          done
+          echo "quit"
+        } | smbclient //$SMB_HOST/$SMB_SHARE -U $SMB_USER%$SMB_PASSWORD 2>&1 | grep -v "Try \"help\""
   :only:
     - master
   
