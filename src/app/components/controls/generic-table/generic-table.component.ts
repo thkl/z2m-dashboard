@@ -2,25 +2,25 @@ import { Component, input, output, signal, computed, ContentChildren, QueryList,
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { ColumnDef, GenericTableConfig } from '../../../models/types';
+import { ColumnDef, TableConfig } from '../../../models/types';
 import { CDKDataSource } from '../../../datastore/generic-store-ui';
 import { TableSortDirective, SortEvent, SortDirection } from '../../../directives/table-sort.directive';
 import { TableCellDirective } from '../../../directives/table-cell.directive';
 
 @Component({
-  selector: 'app-generic-table',
+  selector: 'TableComponent',
   templateUrl: './generic-table.component.html',
   styleUrl: './generic-table.component.scss',
   standalone: true,
   imports: [CdkTableModule, CommonModule, TranslateModule, TableSortDirective],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GenericTableComponent<T> implements AfterViewInit {
+export class TableComponent<T> implements AfterViewInit {
   /** Data source for the table */
   dataSource = input<CDKDataSource<T>>(undefined, { alias: 'dataSource' });
 
   /** Table configuration */
-  config = input<GenericTableConfig<T>>(undefined, { alias: 'config' });
+  config = input<TableConfig<T>>(undefined, { alias: 'config' });
 
   /** Sort change event */
   sortChange = output<SortEvent>();

@@ -1,48 +1,41 @@
 <table cdk-table [dataSource]="dataSource() || []" [trackBy]="trackBy.bind(this)">
   <!-- Dynamic column definitions -->
-  <ng-container *ngFor="let column of visibleColumns(); trackBy: trackByColumnId" [cdkColumnDef]="column.id">
-    <!-- Header cell -->
-    <th
-      cdk-header-cell
-      *cdkHeaderCellDef
-      [appTableSort]="column.id"
-      [active]="sortColumn"
-      [direction]="sortDirection"
-      (sortChange)="onSort($event)"
-      [class.sortable]="column.sortable"
-      [class.last-column]="isLastColumn(column.id)"
-      [style.width.px]="isLastColumn(column.id) ? null : column.maxWidth"
-      [ngClass]="column.headerClass"
-    >
-      {{ column.label | translate }}
-    </th>
+  @for (column of visibleColumns(); track $index) {
+    <ng-container [cdkColumnDef]="column.id">
+      <!-- Header cell -->
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+        [appTableSort]="column.id"
+        [active]="sortColumn"
+        [direction]="sortDirection"
+        (sortChange)="onSort($event)"
+        [class.sortable]="column.sortable"
+        [class.last-column]="isLastColumn(column.id)"
+        [style.width.px]="isLastColumn(column.id) ? null : column.maxWidth"
+        [ngClass]="column.headerClass"
+      >
+        {{ column.label | translate }}
+      </th>
 
-    <!-- Data cell -->
-    <td
-      cdk-cell
-      *cdkCellDef="let item"
-      [class.last-column]="isLastColumn(column.id)"
-      [style.width.px]="isLastColumn(column.id) ? null : column.maxWidth"
-      [ngClass]="column.cellClass"
-    >
-      <ng-container
-        [ngTemplateOutlet]="getCellTemplate(column.id)"
-        [ngTemplateOutletContext]="{ $implicit: item }"
-      ></ng-container>
-      @if (!getCellTemplate(column.id)) {
-        {{ getDefaultCellValue(item, column.id) }}
-      }
-    </td>
-  </ng-container>
-
+      <!-- Data cell -->
+      <td
+        cdk-cell
+        *cdkCellDef="let item"
+        [class.last-column]="isLastColumn(column.id)"
+        [style.width.px]="isLastColumn(column.id) ? null : column.maxWidth"
+        [ngClass]="column.cellClass"
+      >
+        <ng-container [ngTemplateOutlet]="getCellTemplate(column.id)" [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
+        @if (!getCellTemplate(column.id)) {
+          {{ getDefaultCellValue(item, column.id) }}
+        }
+      </td>
+    </ng-container>
+  }
   <!-- Header row -->
   <tr cdk-header-row *cdkHeaderRowDef="displayedColumnIds()"></tr>
 
   <!-- Data rows -->
-  <tr
-    cdk-row
-    *cdkRowDef="let item; columns: displayedColumnIds()"
-    (click)="onRowClick(item)"
-    [class.selected]="isSelected(item)"
-  ></tr>
+  <tr cdk-row *cdkRowDef="let item; columns: displayedColumnIds()" (click)="onRowClick(item)" [class.selected]="isSelected(item)"></tr>
 </table>
