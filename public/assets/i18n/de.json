@@ -63,5 +63,6 @@
   "CLEAR_LOGS":"Log löschen",
   "LOG_FILTER":"Logging Filter",
   "SYSTEM_LOGLEVEL":"Bridge: {{level}}",
-  "GROUPS":"Gruppen"
+  "GROUPS":"Gruppen",
+  "COLUMN_CONFIG":"Spalteneinstellungen"
 }

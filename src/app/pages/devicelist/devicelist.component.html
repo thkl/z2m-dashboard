@@ -21,7 +21,12 @@
     </div>
 
     <div class="mt-10">
-      <OptionPanelComponent title="{{ 'COLUMNS' | translate }}" [useSearch]="false" [entities]="availableColumns()" (optionsChanged)="updateColumns($event)"></OptionPanelComponent>
+      <OptionPanelComponent
+        title="{{ 'COLUMN_CONFIG' | translate }}"
+        [useSearch]="false"
+        [entities]="availableColumns()"
+        (optionsChanged)="updateColumns($event)"
+      ></OptionPanelComponent>
     </div>
   </div>
   <div class="w-full ml-2">
@@ -73,9 +78,9 @@
               [class.green]="device.state.availability === 'online'"
               [class.yellow]="device.state.availability === ''"
             ></span>
-          </div>
-        </td>
-      </ng-container>
+          }
+        }
+      </ng-template>
 
       <!-- Last Seen cell -->
       <ng-template appTableCell="lastseenhuman" let-device>

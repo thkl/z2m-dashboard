@@ -3,6 +3,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DeviceListComponent } from './pages/devicelist/devicelist.component';
 import { NetworkMapPage } from './pages/networkmap/networkmap';
+import { GroupListComponent } from './pages/groups/groupslist.component';
 
 export const routes: Routes = [{
     path: '',

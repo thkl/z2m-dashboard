@@ -10,9 +10,9 @@ import { sortData } from '../../utils/sort.utils';
 import { filterData } from '../../utils/filter.utils';
 import { SearchInput } from '../../components/controls/searchinput/searchinput';
 import { OptionPanelComponent } from "../../components/controls/optionpanel/optionpanel";
-import { SelectOption, ColumnDef, GenericTableConfig } from '../../models/types';
+import { SelectOption, ColumnDef, TableConfig } from '../../models/types';
 import { DeviceImage } from '../../components/controls/device-image/device-image';
-import { GenericTableComponent } from '../../components/controls/generic-table/generic-table.component';
+import { TableComponent } from '../../components/controls/generic-table/generic-table.component';
 import { TableCellDirective } from '../../directives/table-cell.directive';
 import { ApplicationService } from '../../services/app.service';
 
@@ -20,7 +20,7 @@ import { ApplicationService } from '../../services/app.service';
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, GenericTableComponent, TableCellDirective]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective]
 })
 export class DeviceListComponent {
 
@@ -32,7 +32,7 @@ export class DeviceListComponent {
   displayedColumns = signal<string[]>(['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman']);
 
   // Table configuration with column definitions
-  tableConfig = computed<GenericTableConfig<Device>>(() => {
+  tableConfig = computed<TableConfig<Device>>(() => {
     const allColumns: ColumnDef<Device>[] = [
       { id: 'status', label: '', minWidth: 30, maxWidth: 30, sortable: false },
       { id: 'icon', label: '', minWidth: 50, maxWidth: 50, sortable: false },
