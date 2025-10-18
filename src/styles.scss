@@ -499,3 +499,53 @@ button.right {
 .button-red {
   color: rgb(241, 12, 12);
 }
+
+
+
+
+nav.inspector {
+  background-color: var(--app-navbar-color);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  box-sizing: border-box;
+  color: var(--app-text-color);
+  display: flex;
+  height: 40px;
+  line-height: 18.4px;
+  margin-top: 5px;
+  margin-bottom: 16px;
+  min-height: 36px;
+  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 4px;
+  position: sticky;
+  top: 0px;
+}
+
+.navbutton {
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  display: inline-flex;
+  flex: 1;
+  flex-direction: column;
+  font: 400 12px/16px UI Sans, Lato, Arial, sans-serif;
+  justify-content: center;
+  min-height: 32px;
+  padding: 4px;
+  transition: background-color 0.15s cubic-bezier(0.7, 0, 0.3, 1),
+    color 0.15s cubic-bezier(0.7, 0, 0.3, 1);
+  width: 0;
+  cursor: pointer;
+  background-color: var(--button-background-color);
+  color: var(--button-text-color);
+}
+
+.navbutton-selected {
+  background-color: var(--button-selected-background-color);
+  color: var(--button-text-color);
+}

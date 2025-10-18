@@ -7,7 +7,7 @@ import { DeviceFeaturesComponent } from '../../components/devicefeatures/devicef
 import { DevicePropertiesComponent } from '../../components/deviceproperties/deviceproperties';
 
 @Component({
-  selector: 'app-deviceinspector',
+  selector: 'DeviceInspectorComponent',
   imports: [TranslateModule,DeviceInfoComponent,DeviceFeaturesComponent,DevicePropertiesComponent],
   templateUrl: './deviceinspector.component.html',
   styleUrl: './deviceinspector.component.scss'

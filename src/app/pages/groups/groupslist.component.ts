@@ -6,6 +6,7 @@ import { SortDirection, SortEvent } from '../../directives/table-sort.directive'
 import { TableCellDirective } from '../../directives/table-cell.directive';
 import { TableComponent } from '../../components/controls/generic-table/generic-table.component';
 import { CDKDataSource } from '../../datastore/generic-store-ui';
+import { ApplicationService } from '../../services/app.service';
 
 @Component({
   selector: 'GroupListComponent',
@@ -18,6 +19,7 @@ export class GroupListComponent {
 
   protected readonly injector = inject(Injector);
   protected readonly groupStore = inject(GroupStore);
+  protected readonly applicationService = inject(ApplicationService);
 
   // Displayed columns signal for column visibility management
   displayedColumns = signal<string[]>(['id', 'friendly_name', 'members', 'scenes']);
@@ -82,5 +84,6 @@ export class GroupListComponent {
 
   selectGroup(groupId: number) {
     this.groupStore.setSelectedEntityById(groupId);
+    this.applicationService.inspector = "group";
   }
 }

@@ -33,6 +33,7 @@ tr {
   background-size: auto;
   color: rgb(222, 224, 227);
   cursor: pointer;
+  padding-left:1em;
 }
 
 th {
@@ -59,6 +60,10 @@ td {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+td:first-child {
+  padding-left: 1em;
 }
 
 tr:hover {

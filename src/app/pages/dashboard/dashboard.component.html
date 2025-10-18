@@ -1,5 +1,5 @@
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-  <div class="p-6 rounded-2xl panel shadow">
+  <div class="p-6 rounded-2xl panel shadow cursor-pointer" (click)="goToGroups()">
     <h2 class="text-lg font-semibold mb-2">{{ 'GROUPS' | translate }}</h2>
     <p class="text-sm opacity-70">{{ groupStore.entities().length }}</p>
   </div>

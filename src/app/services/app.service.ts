@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
 
 export interface AppSettings {
@@ -14,29 +14,39 @@ export class ApplicationService {
     public settings?: AppSettings;
     private ws = inject(Websocket);
 
+    private inspectorSignal = signal<string | null>(null);
+
+    get inspector(): Signal<string | null> {
+        return this.inspectorSignal;
+    }
+
+    set inspector(item: string | null) {
+        this.inspectorSignal.set(item);
+    }
+
     constructor() {
         this.loadSettings();
     }
 
     public loadSettings() {
         const saved = localStorage.getItem('ui-settings');
-            if (saved) {
-                try {
-                    this.settings = JSON.parse(saved) as AppSettings;
-                    if (this.settings["host"]) {
-                        this.ws.connect(`${this.settings["secure"] ? 'wss' : 'ws'}://${this.settings["host"]}/api`);
-                    }
-                } catch (e) {
-                    console.error(e)
+        if (saved) {
+            try {
+                this.settings = JSON.parse(saved) as AppSettings;
+                if (this.settings["host"]) {
+                    this.ws.connect(`${this.settings["secure"] ? 'wss' : 'ws'}://${this.settings["host"]}/api`);
                 }
+            } catch (e) {
+                console.error(e)
             }
+        }
     }
 
-    getPreference(key:string):any {
+    getPreference(key: string): any {
         return this.settings ? this.settings[key] : undefined;
     }
 
-    setPreference(key:string,value:any) {
+    setPreference(key: string, value: any) {
         if (!this.settings) {
             this.settings = {}
         }
@@ -45,8 +55,8 @@ export class ApplicationService {
     }
 
     setHostName(host: string) {
-        this.setPreference("host",host.replace('https://', '').replace('http://', ''));
-        this.setPreference("secure",(host.startsWith("https://")));
+        this.setPreference("host", host.replace('https://', '').replace('http://', ''));
+        this.setPreference("secure", (host.startsWith("https://")));
     }
 
     saveSettings() {
@@ -58,7 +68,7 @@ export class ApplicationService {
     }
 
     sendBridgeRequest(topic: string, payload: any) {
-        if (payload && payload.transaction===undefined) {
+        if (payload && payload.transaction === undefined) {
             payload.transaction = crypto.randomUUID();
         }
         const message: any = {

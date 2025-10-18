@@ -8,12 +8,13 @@ import { BridgeService } from '../services/bridge.service';
 import { TimeToPipe } from '../pipes/time-togo.pipe';
 import { LogView } from '../components/logview/logview';
 import { ResizableContainerComponent } from '../components/controls/resizable-container/resizable-container';
+import { GroupInspectorComponent } from '../pages/groupinspector/groupinspector.component';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [RouterModule, DeviceInspectorComponent, TranslateModule, TimeToPipe, LogView, ResizableContainerComponent]
+  imports: [RouterModule, DeviceInspectorComponent, TranslateModule, TimeToPipe, LogView, ResizableContainerComponent,GroupInspectorComponent]
 })
 export class LayoutComponent {
   sidebarOpen = true;
@@ -24,6 +25,9 @@ export class LayoutComponent {
   protected readonly as = inject(ApplicationService);
   protected readonly bs = inject(BridgeService);
 
+  inspector = computed(()=>{
+    return this.as.inspector();
+  })
 
   info = computed(() => {
     const bi = this.bs.bridgeInfo;
@@ -31,7 +35,7 @@ export class LayoutComponent {
   })
 
   rightSidebarOpen = computed(() => {
-    return this.deviceStore.selectedEntity() !== null;
+    return this.as.inspector()!==null
   })
 
   constructor() {

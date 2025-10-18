@@ -1,0 +1,30 @@
+@if (group() !== null) {
+  <header class="h-14 flex items-center justify-between px-4">
+    <h1 class="text-lg font-semibold w-full text-center">{{ group()?.friendly_name }}</h1>
+    <div class="wrap">
+      <button type="button" class="headerButton" (click)="closeSidebar()">
+        <span class="material-symbols-outlined">close</span>
+        <div class="stateIcon"></div>
+      </button>
+    </div>
+  </header>
+  <nav class="inspector">
+    <button class="navbutton" (click)="panel.set(1)" [class.navbutton-selected]="panel() === 1" title="Settings">
+      <span class="material-symbols-outlined">dashboard</span>
+    </button>
+    <button class="navbutton" (click)="panel.set(2)" [class.navbutton-selected]="panel() === 2" title="Members">
+      <span class="material-symbols-outlined">app_registration</span>
+    </button>
+    <button class="navbutton" (click)="panel.set(3)" [class.navbutton-selected]="panel() === 3" title="Scenes">
+      <span class="material-symbols-outlined">wallpaper_slideshow</span>
+    </button>
+  </nav>
+
+  <div class="flex-1 flex flex-col">
+    @if (panel() === 1) {
+      <GroupInfoComponent></GroupInfoComponent>
+    }
+    @if (panel() === 2) {}
+    @if (panel() === 3) {}
+  </div>
+}

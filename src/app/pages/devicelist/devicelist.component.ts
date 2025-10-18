@@ -295,6 +295,7 @@ export class DeviceListComponent {
 
   selectDevice(deviceID: string) {
     this.deviceStore.setSelectedEntityById(deviceID);
+    this.applicationService.inspector = 'device';
   }
 
   vendorsSelectionChanged(event:SelectOption[]) {

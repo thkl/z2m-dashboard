@@ -120,7 +120,14 @@
       class="flex-shrink-0"
     >
       <aside class="h-full border-l overflow-y-auto scrollbar flex flex-col">
-        <app-deviceinspector (closed)="closeRightSidebar()"></app-deviceinspector>
+        @switch (inspector()) {
+          @case ('device') {
+            <DeviceInspectorComponent (closed)="closeRightSidebar()"></DeviceInspectorComponent>
+          }
+          @case ('group') {
+            <GroupInspectorComponent (closed)="closeRightSidebar()"></GroupInspectorComponent>
+          }
+        }
       </aside>
     </app-resizable-container>
   }
