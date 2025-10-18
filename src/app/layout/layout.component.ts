@@ -26,7 +26,7 @@ export class LayoutComponent {
 
 
   info = computed(() => {
-    const bi = this.bs.getBridgeInfo();
+    const bi = this.bs.bridgeInfo;
     return bi();
   })
 

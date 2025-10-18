@@ -98,7 +98,7 @@ export interface ColumnDef<T = any> {
 /**
  * Configuration for generic table component
  */
-export interface TableConfig<T = any> {
+export interface GenericTableConfig<T = any> {
   /** Column definitions */
   columns: ColumnDef<T>[];
 

@@ -58,6 +58,9 @@ export class ApplicationService {
     }
 
     sendBridgeRequest(topic: string, payload: any) {
+        if (payload && payload.transaction===undefined) {
+            payload.transaction = crypto.randomUUID();
+        }
         const message: any = {
             payload,
             topic

@@ -13,6 +13,7 @@ export class OptionPanelComponent {
   title = input.required<string>();
   maxShown = input<number>(5);
   entities = input.required<SelectOption[]>();
+  useSearch = input<boolean>(true);
 
   internalEntites: SelectOption[] = [];
 

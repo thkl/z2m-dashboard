@@ -267,10 +267,10 @@ export interface BridgeEvent {
 export interface Networkmap {
     routes: boolean;
     type:   string;
-    value:  Value;
+    value:  NetworkNodeData;
 }
 
-export interface Value {
+export interface NetworkNodeData {
     links: Link[];
     nodes: Node[];
 }

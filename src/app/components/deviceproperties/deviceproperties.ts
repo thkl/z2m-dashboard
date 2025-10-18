@@ -21,7 +21,7 @@ export class DevicePropertiesComponent {
   protected readonly bridgeService = inject(BridgeService);
 
   bridgeDeviceOptions:Signal<DeviceConfigSchema|undefined> = computed(()=>{
-    const bi =  this.bridgeService.getBridgeInfo();
+    const bi =  this.bridgeService.bridgeInfo;
     return bi()?.config_schema.definitions.device;
   });
 

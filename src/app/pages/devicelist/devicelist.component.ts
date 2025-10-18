@@ -1,19 +1,18 @@
-import { Component, computed, inject, signal, effect } from '@angular/core';
+import { Component, computed, inject, signal, effect, Signal, Injector } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
 import { createStoreView } from '../../datastore/generic-store-view';
 import { SearchOperator } from '../../datastore/generic.store';
-import { CdkTableModule } from '@angular/cdk/table';
 import { Device } from '../../models/device';
 import { CDKDataSource } from '../../datastore/generic-store-ui';
-import { TableSortDirective, SortEvent, SortDirection } from '../../directives/table-sort.directive';
+import { SortEvent, SortDirection } from '../../directives/table-sort.directive';
 import { sortData } from '../../utils/sort.utils';
 import { filterData } from '../../utils/filter.utils';
 import { SearchInput } from '../../components/controls/searchinput/searchinput';
 import { OptionPanelComponent } from "../../components/controls/optionpanel/optionpanel";
-import { SelectOption, ColumnDef, TableConfig } from '../../models/types';
+import { SelectOption, ColumnDef, GenericTableConfig } from '../../models/types';
 import { DeviceImage } from '../../components/controls/device-image/device-image';
-import { TableComponent } from '../../components/controls/generic-table/generic-table.component';
+import { GenericTableComponent } from '../../components/controls/generic-table/generic-table.component';
 import { TableCellDirective } from '../../directives/table-cell.directive';
 import { ApplicationService } from '../../services/app.service';
 
@@ -21,7 +20,7 @@ import { ApplicationService } from '../../services/app.service';
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, GenericTableComponent, TableCellDirective]
 })
 export class DeviceListComponent {
 
@@ -33,7 +32,7 @@ export class DeviceListComponent {
   displayedColumns = signal<string[]>(['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman']);
 
   // Table configuration with column definitions
-  tableConfig = computed<TableConfig<Device>>(() => {
+  tableConfig = computed<GenericTableConfig<Device>>(() => {
     const allColumns: ColumnDef<Device>[] = [
       { id: 'status', label: '', minWidth: 30, maxWidth: 30, sortable: false },
       { id: 'icon', label: '', minWidth: 50, maxWidth: 50, sortable: false },
@@ -75,8 +74,7 @@ export class DeviceListComponent {
   selectedModels = signal<SelectOption[]>([]); 
   selectedPowering = signal<SelectOption[]>([]); 
   selectedAvailability = signal<SelectOption[]>([]); 
-
-
+  
   //Filter the coordinator from the devices
   devicesView = createStoreView(this.deviceStore, {
     criteria: [
@@ -144,8 +142,12 @@ export class DeviceListComponent {
     return prefiltered;
   });
 
+  // Create a signal for the datasource that updates whenever finalyFilter changes
+  datasourceSignal = signal<CDKDataSource<Device> | null>(null);
 
-  datasource: CDKDataSource<Device> = new CDKDataSource(this.finalyFilter);
+  get datasource(): CDKDataSource<Device> {
+    return this.datasourceSignal() || new CDKDataSource(this.finalyFilter, this.injector);
+  }
 
   private vendorsMap = new Map<string, SelectOption>();
   private modelMap = new Map<string,SelectOption>();
@@ -211,20 +213,48 @@ export class DeviceListComponent {
     return this.deviceStore.selectedEntity();
   })
 
+  availableColumns : Signal<SelectOption[]> = computed(()=>{
+    return ['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman'].map(c=>{
+      return {label:c,value:c,isSelected: this.displayedColumns().includes(c)}
+    })
+  })
+
   constructor() {
+    // Initialize datasource
+    this.datasourceSignal.set(new CDKDataSource(this.finalyFilter, this.injector));
+
+    // Update datasource whenever finalyFilter changes
+    effect(() => {
+      // Access finalyFilter to trigger effect dependency
+      this.finalyFilter();
+      // Create new datasource instance
+      this.datasourceSignal.set(new CDKDataSource(this.finalyFilter, this.injector));
+    });
+
     effect(() => {
       const devices = this.devices();
-
     });
+
+    const cl = this.applicationService.getPreference("devicelist_columns");
+    if (cl) {
+      this.displayedColumns.set(cl);
+    }
   }
 
   trackByFn(index: number, item: Device): string {
     return item.friendly_name || item.ieee_address; // Use unique identifier
   }
 
+
   onSort(event: SortEvent) {
     this.sortColumn.set(event.column);
     this.sortDirection.set(event.direction);
+  }
+
+
+  updateColumns(event:SelectOption[]):void {
+    this.displayedColumns.set(event.filter((c)=>c.isSelected===true).map(c=>c.value!));
+    this.applicationService.setPreference('devicelist_columns',this.displayedColumns());
   }
 
   getDeviceValue(device: Device, column: string): any {

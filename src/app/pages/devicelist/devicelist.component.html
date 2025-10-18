@@ -19,6 +19,10 @@
     <div class="mt-2">
       <OptionPanelComponent title="{{ 'POWER' | translate }}" [entities]="powerOptionList()" (optionsChanged)="powerSelectionChanged($event)"></OptionPanelComponent>
     </div>
+
+    <div class="mt-10">
+      <OptionPanelComponent title="{{ 'COLUMNS' | translate }}" [useSearch]="false" [entities]="availableColumns()" (optionsChanged)="updateColumns($event)"></OptionPanelComponent>
+    </div>
   </div>
   <div class="w-full ml-2">
     <TableComponent [dataSource]="datasource" [config]="tableConfig()" (sortChange)="onSort($event)" (rowClick)="selectDevice($event.ieee_address)">
