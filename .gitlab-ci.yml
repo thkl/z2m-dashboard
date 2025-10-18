@@ -31,9 +31,14 @@
   :dependencies:
   - build
   :script:
-   - apk add --no-cache samba-client
-   - smbclient $SMB_PATH -U $SMB_USER%$SMB_PASSWORD -c "cd $DEPLOY_PATH; prompt OFF; recurse ON; mput dist/zigbee2mqtt-ui/browser/*"
+    - apk add --no-cache samba-client
+    # Debug: List available shares
+    - smbclient -L $SMB_HOST -U $SMB_USER%$SMB_PASSWORD
+    # Debug: Try to connect and list directory
+    - smbclient $SMB_PATH -U $SMB_USER%$SMB_PASSWORD -c "ls"
+    # If above works, then do the copy
+    - smbclient $SMB_PATH -U $SMB_USER%$SMB_PASSWORD -c "cd $DEPLOY_PATH; prompt OFF; recurse ON; mput dist/zigbee2mqtt-ui/browser/*"
   :only:
-  - master
+    - master
   
 
