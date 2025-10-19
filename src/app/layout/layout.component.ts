@@ -22,15 +22,15 @@ export class LayoutComponent {
   host = 'localhost';
 
   protected readonly deviceStore = inject(DeviceStore);
-  protected readonly as = inject(ApplicationService);
+  protected readonly applicationService = inject(ApplicationService);
   protected readonly bs = inject(BridgeService);
 
   mainTitle = computed(()=>{
-    return this.as.mainTitle();
+    return this.applicationService.mainTitle();
   })  
 
   inspector = computed(()=>{
-    return this.as.inspector();
+    return this.applicationService.inspector();
   })
 
   info = computed(() => {
@@ -39,11 +39,11 @@ export class LayoutComponent {
   })
 
   rightSidebarOpen = computed(() => {
-    return this.as.inspector()!==null
+    return this.applicationService.inspector()!==null
   })
 
   constructor() {
-    const host = this.as.getPreference("host");
+    const host = this.applicationService.getPreference("host");
     this.host = host || 'localhost';
   }
 
@@ -57,6 +57,7 @@ export class LayoutComponent {
 
   closeRightSidebar() {
     this.deviceStore.setSelectedEntity(null);
+    this.applicationService.inspector = null;
   }
 
   permitJoin() {
