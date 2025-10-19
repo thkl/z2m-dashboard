@@ -53,7 +53,7 @@
   "ENDPOINT": "Endpunkt",
   "CANCEL": "Abbrechen",
   "RENAME": "Umbenennen",
-  "REMOVE_DEVICE_MESSAGE": "Bist du sicher, dass du {{name}} löschen möchtest ?",
+  "REMOVE_DEVICE_MESSAGE": "Bist du sicher, dass du \"{{name}}\" löschen möchtest ?",
   "REMOVE_DEVICE_CAPTION": "{{name}} löschen",
   "RENAME DEVICE": "Gerät {{name}} umbenennen....",
   "RENAME HOMEASSISTANT": "Die Homeassistant Entität auch umbenennen",
@@ -80,5 +80,8 @@
   "RECALL_SCENE":"Szene abrufen",
   "DELETE_SCENE":"Szene löschen",
   "UPDATE_SCENE":"Szene aktualisieren",
-  "DELETE_ALL_SCENES":"Alle Szenen löschen"
+  "DELETE_ALL_SCENES":"Alle Szenen löschen",
+  "WANT_DELETE_SCENE":"Soll die Szene \"{{name}}\" wirklich gelöscht werden?",
+  "WANT_DELETE_ALL_SCENES":"Sollen wirklich alle Szenen dieser Gruppe gelöscht werden?"
+
 }

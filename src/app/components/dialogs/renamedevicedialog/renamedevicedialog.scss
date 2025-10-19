@@ -2,3 +2,8 @@
     border:1px solid;
     border-color: var (--app-border-color);
 }
+
+button {
+    color:var(--dialog-button-text-color);
+    font-weight: normal;
+}

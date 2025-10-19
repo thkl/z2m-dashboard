@@ -6,6 +6,9 @@ import { Component, computed, inject, input, Signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { ExpansionPanelComponent } from '../../expansionpanel/expansionpanel';
 import { BridgeService } from '@/app/services/bridge.service';
+import { Dialog } from '@angular/cdk/dialog';
+import { DeleteObjectDialog } from '@/app/components/dialogs/deleteobject/deleteobject';
+import { DeleteObjectOptions } from '@/app/models/types';
 
 @Component({
   selector: 'GroupSceneComponent',
@@ -16,6 +19,7 @@ import { BridgeService } from '@/app/services/bridge.service';
 export class GroupSceneComponent {
   protected readonly groupStore = inject(GroupStore);
   protected readonly bridgeService = inject(BridgeService);
+  protected readonly dialog = inject(Dialog);
 
   group_id = input.required<number | undefined>();
   group = computed(() => {
@@ -35,4 +39,49 @@ export class GroupSceneComponent {
       this.bridgeService.recallScene(this.group()!.friendly_name, sceneId);
     }
   }
+
+
+  deleteScene(sceneId: number, sceneName: string) {
+    const data: DeleteObjectOptions = {
+      title: "DELETE_SCENE",
+      message: "WANT_DELETE_SCENE",
+      objectName: sceneName,
+      delete: false,
+    }
+
+    const dialogRef = this.dialog.open(DeleteObjectDialog, {
+      height: '400px',
+      width: '600px',
+      data
+    });
+
+    dialogRef.closed.subscribe((result:any) => {
+      if (result !== undefined && result.delete===true) {
+        this.bridgeService.deleteScene(this.group()!.friendly_name, sceneId);
+      }
+    });
+  }
+
+
+  deleteAllScenes(){
+    const data: DeleteObjectOptions = {
+      title: "DELETE_ALL_SCENES",
+      message: "WANT_DELETE_ALL_SCENES",
+      objectName: "",
+      delete: false,
+    }
+
+    const dialogRef = this.dialog.open(DeleteObjectDialog, {
+      height: '400px',
+      width: '600px',
+      data
+    });
+
+    dialogRef.closed.subscribe((result:any) => {
+      if (result !== undefined && result.delete===true) {
+        this.bridgeService.deleteAllScenes(this.group()!.friendly_name);
+      }
+    });
+  }
+
 }

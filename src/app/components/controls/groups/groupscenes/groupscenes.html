@@ -5,7 +5,7 @@
     </div>
     <div class="container">
       @for (scene of group()!.scenes; track $index) {
-        <div class="group_row flex">
+        <div class="group_row flex mt-5">
           <ExpansionPanelComponent
             label="{{ scene.name }} ({{ scene.id }})"
             style="flex-grow: inherit"
@@ -36,14 +36,14 @@
             </div>
 
             <div class="button">
-              <button class="button-red left">{{ 'DELETE_SCENE' | translate }}</button>
+              <button class="button-red left" (click)="deleteScene(scene.id, scene.name)">{{ 'DELETE_SCENE' | translate }}</button>
             </div>
           </ExpansionPanelComponent>
         </div>
       }
       <div class="scene_row">
         <div class="button">
-          <button class="button-red left">{{ 'DELETE_ALL_SCENES' | translate }}</button>
+          <button class="button-red left" [class.disabled]="group()!.scenes.length === 0" (click)="deleteAllScenes()">{{ 'DELETE_ALL_SCENES' | translate }}</button>
         </div>
       </div>
     </div>

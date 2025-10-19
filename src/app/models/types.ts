@@ -40,6 +40,13 @@ export interface RemoveDeviceOptions {
   forceDelete: boolean
 }
 
+export interface DeleteObjectOptions {
+  title:string,
+  message:string,
+  objectName:string,
+  delete:boolean
+}
+
 export interface RemoveDeviceFromGroupOptions {
   group: string;
   device: string;

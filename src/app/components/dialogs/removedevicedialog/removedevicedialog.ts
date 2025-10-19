@@ -10,6 +10,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
   templateUrl: './removedevicedialog.html',
   styleUrl: './removedevicedialog.scss'
 })
+
 export class RemoveDeviceDialog {
 
   blockDevice: SwitchElement;

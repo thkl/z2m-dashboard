@@ -152,4 +152,12 @@ export class BridgeService {
   recallScene(groupName: string, sceneID: number) {
     this.appService.sendBridgeRequest(`${groupName}/set`, { scene_recall: sceneID },false);
   }
+
+  deleteScene(groupName:string,sceneID:number) {
+    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove: sceneID },false);
+  }
+
+  deleteAllScenes(groupName:string) {
+    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove_all: "" },false);
+  }
 }
