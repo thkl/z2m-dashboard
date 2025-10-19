@@ -25,7 +25,7 @@
       <DeviceInfoComponent [ieee_address]="device()?.ieee_address"></DeviceInfoComponent>
     }
     @if (panel() === 2) {
-      <DeviceFeaturesComponent [ieee_address]="device()?.ieee_address"></DeviceFeaturesComponent>
+      <DeviceFeaturesComponent [ieee_address]="device()?.ieee_address" displayMode="settings"></DeviceFeaturesComponent>
     }
     @if (panel() === 3) {
       <DevicePropertiesComponent [ieee_address]="device()?.ieee_address"></DevicePropertiesComponent>

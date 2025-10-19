@@ -1,10 +1,12 @@
 <div class="wrapper" style="display: flex; flex-direction: column">
-  <div class="container header">
-    <div class="font-bold text-center mt-5">{{ 'DETAILS' | translate }}</div>
-  </div>
+  @if (displayMode() === 'settings') {
+    <div class="container header">
+      <div class="font-bold text-center mt-5">{{ 'DETAILS' | translate }}</div>
+    </div>
+  }
   <div class="container">
     @for (item of deviceFeatures(); track $index) {
-      @if (item.property.hidden === false) {
+      @if (item.property.hidden === false && (displayMode() === 'settings' || item.validForScenes)) {
         <div class="device_row">
           <div class="label flex flex-col mt-auto mb-auto">
             <span
@@ -99,9 +101,11 @@
       }
     }
   </div>
-  <div class="pl-2 pr-2 flex flex-col grow">
-    <ExpansionPanelComponent label="Raw Data" style="flex-grow: inherit">
-      <textarea class="scrollbar w-full bg-transparent grow">{{ deviceFeatures() | human: '' : 2 }}</textarea>
-    </ExpansionPanelComponent>
-  </div>
+  @if (displayMode() === 'settings') {
+    <div class="pl-2 pr-2 flex flex-col grow">
+      <ExpansionPanelComponent label="Raw Data" style="flex-grow: inherit">
+        <textarea class="scrollbar w-full bg-transparent grow">{{ deviceFeatures() | human: '' : 2 }}</textarea>
+      </ExpansionPanelComponent>
+    </div>
+  }
 </div>

@@ -1,0 +1,21 @@
+.group_row {
+  display: flex;
+  min-height: 20px;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  gap: 8px;
+  color: var(--app-text-color);
+}
+
+.header {
+  display:flex;
+  align-items: center;
+}
+
+.edit_icon {
+  max-width: 13px;
+  color: var(--app-link-color);
+}

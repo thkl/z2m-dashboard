@@ -12,19 +12,15 @@
     <button class="navbutton" (click)="panel.set(1)" [class.navbutton-selected]="panel() === 1" title="Settings">
       <span class="material-symbols-outlined">dashboard</span>
     </button>
-    <button class="navbutton" (click)="panel.set(2)" [class.navbutton-selected]="panel() === 2" title="Members">
-      <span class="material-symbols-outlined">app_registration</span>
-    </button>
-    <button class="navbutton" (click)="panel.set(3)" [class.navbutton-selected]="panel() === 3" title="Scenes">
+    <button class="navbutton" (click)="panel.set(3)" [class.navbutton-selected]="panel() === 2" title="Scenes">
       <span class="material-symbols-outlined">wallpaper_slideshow</span>
     </button>
   </nav>
 
   <div class="flex-1 flex flex-col">
     @if (panel() === 1) {
-      <GroupInfoComponent></GroupInfoComponent>
+      <GroupInfoComponent [group_id]="group()!.id"></GroupInfoComponent>
     }
     @if (panel() === 2) {}
-    @if (panel() === 3) {}
   </div>
 }

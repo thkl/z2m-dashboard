@@ -1,4 +1,5 @@
-import { InterviewState, UpdateState } from "./constants";
+import { InterviewState, SubFeatureType, UpdateState } from "./constants";
+
 
 export interface DeviceOption {
     access: number;
@@ -17,7 +18,9 @@ export interface DeviceOption {
 export interface DeviceFeatureVisual {
     property:DeviceFeature;
     value:any
+    subtype?:any
     helper:any
+    validForScenes:boolean
 }
 
 export interface FeaturePreset {
@@ -62,8 +65,8 @@ export interface DeviceFeature {
     label: string;
     name: string;
     property: string;
-    type: "binary" | "list" | "numeric" | "enum" | "text" | "composite";
-    subtype: "switch" | "lock" | "composite" | "light" | "cover" | "fan" | "climate";
+    type: "binary" | "list" | "numeric" | "enum" | "text" | SubFeatureType;
+    subtype: SubFeatureType;
     unit: string;
     value_max?: number;
     value_min?: number;

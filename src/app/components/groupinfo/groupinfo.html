@@ -1,1 +1,27 @@
-<p>groupinfo works!</p>
+<div class="wrapper">
+  @if (group() !== null) {
+    <div class="container">
+      <div class="group_row">
+        <span class="label">{{ 'FRIENDLY_NAME' | translate }}</span>
+        <span class="value flex flex-row"
+          >{{ group()?.friendly_name }}<span class="material-symbols-outlined edit_icon mr-2 ml-2 cursor-pointer" (click)="renameGroup()">edit_square</span></span
+        >
+      </div>
+      @for (member of members(); track $index) {
+        <div class="group_row flex">
+          <ExpansionPanelComponent
+            label="{{ member?.device?.friendly_name }} ({{ 'ENDPOINT' | translate }}: {{ member.endpoint }})"
+            style="flex-grow: inherit"
+            class="panel w-full"
+            contentClass="content_filled"
+            [colorTrigger]="false"
+          >
+            <div class="wrapper">
+              <DeviceFeaturesComponent [ieee_address]="member?.device?.ieee_address" displayMode="scene"></DeviceFeaturesComponent>
+            </div>
+          </ExpansionPanelComponent>
+        </div>
+      }
+    </div>
+  }
+</div>

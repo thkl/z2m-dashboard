@@ -18,10 +18,12 @@ import { ExpansionPanelComponent } from '../controls/expansionpanel/expansionpan
 import { ColorSelectorComponent } from '../controls/colorselector/colorselector';
 import { ColorTemperatureSelectorComponent } from '../controls/colortemperatureselector/colortemperatureselector';
 import { DropdownComponent } from '../controls/dropdown/dropdown';
+import { isValidForScenes } from '../../utils/filter.utils';
+import { FeatureDisplayMode } from '../../models/constants';
 
 @Component({
   selector: 'DeviceFeaturesComponent',
-  imports: [TranslateModule, HumanReadablePipe, LevelSelectorComponent, InfoOverlayComponent, ExpansionPanelComponent, RadiolistComponent, OptionComponent, ColorSelectorComponent, ColorTemperatureSelectorComponent,DropdownComponent],
+  imports: [TranslateModule, HumanReadablePipe, LevelSelectorComponent, InfoOverlayComponent, ExpansionPanelComponent, RadiolistComponent, OptionComponent, ColorSelectorComponent, ColorTemperatureSelectorComponent, DropdownComponent],
   templateUrl: './devicefeatures.html',
   styleUrl: './devicefeatures.scss'
 })
@@ -32,8 +34,11 @@ export class DeviceFeaturesComponent {
   readonly AccessMode = AccessMode;
 
   deviceFeatures = signal<DeviceFeatureVisual[]>([]);
+  displayMode = input<FeatureDisplayMode>('settings');
+  
+  filterEndpoints = input<string[]>();
 
-  levelMarks: LevelMarkOption[] = [{ percent: 0, label: "0" },{ percent: 25, label: "25" }, { percent: 50, label: "50" },{ percent: 75, label: "75" }, { percent: 100, label: "100" }];
+  levelMarks: LevelMarkOption[] = [{ percent: 0, label: "0" }, { percent: 25, label: "25" }, { percent: 50, label: "50" }, { percent: 75, label: "75" }, { percent: 100, label: "100" }];
 
   ieee_address = input.required<string | undefined>();
   device = computed(() => {
@@ -53,6 +58,7 @@ export class DeviceFeaturesComponent {
       const expos = this.device()?.definition.exposes;
       const states = this.device()?.state;
       const result = this.flattenExposures(expos || [], states || []);
+      console.log(result);
       this.deviceFeatures.set(result);
     })
   }
@@ -61,7 +67,7 @@ export class DeviceFeaturesComponent {
   flattenExposures(exposures: DeviceFeature[], states: any): DeviceFeatureVisual[] {
     const result: DeviceFeatureVisual[] = [];
 
-    const flatten = (exp: DeviceFeature, parentValue?: any, parentIsComposite: boolean = false) => {
+    const flatten = (exp: DeviceFeature, parentValue?: any, parentIsComposite: boolean = false, parentType?: any) => {
       const value = parentValue?.[exp.property] ?? states?.[exp.property];
 
       // Set hidden property for features that don't have it defined
@@ -80,6 +86,8 @@ export class DeviceFeaturesComponent {
           property: exp,
           value: value ?? null,
           helper: null,
+          subtype: parentType,
+          validForScenes:isValidForScenes(exp)
         });
       } else {
         // Only add parent feature if it's a composite type or light type
@@ -98,18 +106,23 @@ export class DeviceFeaturesComponent {
           result.push({
             property: exp,
             value: value ?? null,
-            helper: helperValue
+            helper: helperValue,
+            subtype: parentType,
+            validForScenes:isValidForScenes(exp)
           });
         }
 
         // Recursively flatten sub-features
-        exp.features.forEach(f => flatten(f, value, isComposite));
+        exp.features.forEach(f => flatten(f, value, isComposite,exp.type));
       }
     };
 
     exposures.forEach(exp => flatten(exp));
+    console.log(result);
     return result;
   }
+
+
 
   /**
    * Convert color values to HTML RGB format
@@ -207,7 +220,7 @@ export class DeviceFeaturesComponent {
 
   colorChange(property: DeviceFeature, newColor: string): void {
     console.log(property, newColor)
-    if (property && property.type === "composite" && property.features) {
+    if (property && property.subtype === "composite" && property.features) {
       const state: DeviceTargetState = {};
       state[property.property] = { "hex": newColor }
       if (this.device()) {
