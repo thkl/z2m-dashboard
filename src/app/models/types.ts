@@ -1,3 +1,4 @@
+import { TableSettingsControl } from "../components/tablesettings/tablesettings";
 import { Device } from "./device";
 
 export interface SwitchElement {
@@ -121,4 +122,7 @@ export interface TableConfig<T = any> {
     column: string;
     direction: 'asc' | 'desc';
   };
+
+  settingsControl?:TableSettingsControl;
+  
 }

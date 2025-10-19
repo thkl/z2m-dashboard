@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, effect, Signal, Injector } from '@angular/core';
+import { Component, computed, inject, signal, effect, Signal, Injector, viewChild } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
 import { createStoreView } from '../../datastore/generic-store-view';
@@ -17,6 +17,7 @@ import { TableCellDirective } from '../../directives/table-cell.directive';
 import { ApplicationService } from '../../services/app.service';
 import { HexPipe } from '../../pipes/hex.pipe';
 import { HumanReadablePipe } from '../../pipes/human.pipe';
+import { TableSettingsControl } from '../../components/tablesettings/tablesettings';
 
 
  const allColumns: ColumnDef<Device>[] = [
@@ -39,7 +40,7 @@ import { HumanReadablePipe } from '../../pipes/human.pipe';
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective,HexPipe,HumanReadablePipe]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective,HexPipe,HumanReadablePipe,TableSettingsControl]
 })
 export class DeviceListComponent {
 
@@ -48,8 +49,9 @@ export class DeviceListComponent {
   protected readonly injector = inject(Injector);
 
   // Displayed columns signal for column visibility management
-  displayedColumns = signal<string[]>(['status','icon', 'name', 'model', 'vendor', 'linkquality', 'battery', 'lastseenhuman']);
+  displayedColumns = signal<string[]>([]);
 
+  tableSettings = viewChild(TableSettingsControl);
  
   // Table configuration with column definitions
   tableConfig = computed<TableConfig<Device>>(() => {
@@ -65,7 +67,8 @@ export class DeviceListComponent {
       initialSort: {
         column: this.sortColumn(),
         direction: (sortDir === 'asc' || sortDir === 'desc') ? sortDir : 'asc'
-      }
+      },
+      settingsControl: this.tableSettings()
     };
   });
 
@@ -218,12 +221,6 @@ export class DeviceListComponent {
     return this.deviceStore.selectedEntity();
   })
 
-  availableColumns : Signal<SelectOption[]> = computed(()=>{
-    return allColumns.map(c=>{
-      return {label:c.label,value:c.id,isSelected: this.displayedColumns().includes(c.id)}
-    })
-  })
-
   constructor() {
     // Initialize datasource
     this.datasourceSignal.set(new CDKDataSource(this.finalyFilter, this.injector));
@@ -258,11 +255,6 @@ export class DeviceListComponent {
     this.sortDirection.set(event.direction);
   }
 
-
-  updateColumns(event:SelectOption[]):void {
-    this.displayedColumns.set(event.filter((c)=>c.isSelected===true).map(c=>c.value!));
-    this.applicationService.setPreference('devicelist_columns',this.displayedColumns());
-  }
 
   columnOrderChange(newOrder:any):void {
      this.applicationService.setPreference('devicelist_columns',newOrder);

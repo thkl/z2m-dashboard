@@ -23,12 +23,7 @@
     <hr class="mt-10 mb-4" />
     <span>Settings</span>
     <div class="mt-2">
-      <OptionPanelComponent
-        title="{{ 'COLUMN_CONFIG' | translate }}"
-        [useSearch]="false"
-        [entities]="availableColumns()"
-        (optionsChanged)="updateColumns($event)"
-      ></OptionPanelComponent>
+      <TableSettingsControl></TableSettingsControl>
     </div>
   </div>
   <div class="w-full ml-2">

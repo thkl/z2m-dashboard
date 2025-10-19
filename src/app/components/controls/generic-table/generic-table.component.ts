@@ -6,6 +6,7 @@ import { ColumnDef, TableConfig } from '../../../models/types';
 import { CDKDataSource } from '../../../datastore/generic-store-ui';
 import { TableSortDirective, SortEvent, SortDirection } from '../../../directives/table-sort.directive';
 import { TableCellDirective } from '../../../directives/table-cell.directive';
+import { TableSettingsControl } from '../../tablesettings/tablesettings';
 
 @Component({
   selector: 'TableComponent',
@@ -88,6 +89,14 @@ export class TableComponent<T> implements AfterViewInit {
   });
 
   constructor(private cdr: ChangeDetectorRef) {
+    // Sync internal columnOrder signal with input columnOrderSignal
+    effect(() => {
+      const inputOrder = this.columnOrderSignal();
+      if (inputOrder.length > 0) {
+        this.columnOrder.set(inputOrder);
+      }
+    });
+
     // Watch for config changes and trigger change detection
     effect(() => {
       const cfg = this.config();
@@ -95,10 +104,39 @@ export class TableComponent<T> implements AfterViewInit {
         this.sortColumn.set(cfg.initialSort.column);
         this.sortDirection.set(cfg.initialSort.direction);
       }
+
+      if (cfg && cfg.settingsControl) {
+        cfg.settingsControl.setAllColumns(cfg.columns);
+        if (this.columnOrder().length>0) {
+          cfg.settingsControl.setDisplayedColumns(this.columnOrder())
+        }
+      }
+
       // Access displayedColumnIds to trigger the computed dependency chain
       this.displayedColumnIds();
       // Trigger change detection when config changes
       this.cdr.markForCheck();
+    });
+
+    effect(() => {
+      const newCo = this.columnOrder();
+      const cfg = this.config();
+      if (cfg && cfg.settingsControl && this.columnOrder().length>0) {
+        cfg.settingsControl.setDisplayedColumns(this.columnOrder())
+      }
+    });
+
+
+    effect(() => {
+      const cfg = this.config();
+      if (cfg && cfg.settingsControl) {
+        // Subscribe to column changes
+        cfg.settingsControl.columnListChanged.subscribe((newColumnIds: string[]) => {
+          // Handle the column list change
+          this.columnOrder.set(newColumnIds);
+          this.columnOrderChange.emit(newColumnIds);
+        });
+      }
     });
   }
 
@@ -243,7 +281,7 @@ export class TableComponent<T> implements AfterViewInit {
     ghostElement.textContent = text;
 
     document.body.appendChild(ghostElement);
-    
+
     // Use the element as the drag image
     event.dataTransfer!.setDragImage(ghostElement, 75, 20);
 
