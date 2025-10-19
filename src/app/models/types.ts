@@ -40,6 +40,12 @@ export interface RemoveDeviceOptions {
   forceDelete: boolean
 }
 
+export interface RemoveDeviceFromGroupOptions {
+  group: string;
+  device: string;
+  endpoint: number;
+}
+
 export interface SelectOption {
   isSelected:boolean;
   label:string;
@@ -125,4 +131,11 @@ export interface TableConfig<T = any> {
 
   settingsControl?:TableSettingsControl;
   
+}
+
+export type GroupSceneData = {
+  scene_store : {ID: number, 
+                name: string},
+
+  name:string
 }

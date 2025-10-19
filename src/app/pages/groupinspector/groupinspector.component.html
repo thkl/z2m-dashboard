@@ -12,7 +12,7 @@
     <button class="navbutton" (click)="panel.set(1)" [class.navbutton-selected]="panel() === 1" title="Settings">
       <span class="material-symbols-outlined">dashboard</span>
     </button>
-    <button class="navbutton" (click)="panel.set(3)" [class.navbutton-selected]="panel() === 2" title="Scenes">
+    <button class="navbutton" (click)="panel.set(2)" [class.navbutton-selected]="panel() === 2" title="Scenes">
       <span class="material-symbols-outlined">wallpaper_slideshow</span>
     </button>
   </nav>
@@ -21,6 +21,8 @@
     @if (panel() === 1) {
       <GroupInfoComponent [group_id]="group()!.id"></GroupInfoComponent>
     }
-    @if (panel() === 2) {}
+    @if (panel() === 2) {
+      <GroupSceneComponent [group_id]="group()!.id"></GroupSceneComponent>
+    }
   </div>
 }

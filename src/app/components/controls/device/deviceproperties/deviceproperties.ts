@@ -1,13 +1,14 @@
 import { Component, computed, inject, input, Signal } from '@angular/core';
-import { Device } from '../../models/device';
-import { createStoreView } from '../../datastore/generic-store-view';
-import { DeviceStore } from '../../datastore/device.store';
-import { SearchOperator } from '../../datastore/generic.store';
+import { DeviceStore } from '@/app/datastore/device.store';
 import { DeviceEndpointComponent } from '../endpoints/endpoints';
+import { ExpansionPanelComponent } from '../../expansionpanel/expansionpanel';
 import { DeviceSettings } from '../devicesetting/devicesettings';
-import { BridgeService } from '../../services/bridge.service';
-import { DeviceConfigSchema } from '../../models/bridge';
-import { ExpansionPanelComponent } from '../controls/expansionpanel/expansionpanel';
+import { BridgeService } from '@/app/services/bridge.service';
+import { DeviceConfigSchema } from '@/app/models/bridge';
+import { Device } from '@/app/models/device';
+import { createStoreView } from '@/app/datastore/generic-store-view';
+import { SearchOperator } from '@/app/datastore/generic.store';
+ 
 
 @Component({
   selector: 'DevicePropertiesComponent',

@@ -72,5 +72,13 @@
   "PERFORM_UPDATE": "Gerät aktualisieren",
   "DEVICE_VIEW": "Geräte",
   "GROUP_VIEW": "Gruppen",
-  "NETWORK_VIEW": "Netzwerk"
+  "NETWORK_VIEW": "Netzwerk",
+  "REMOVE_DEVICE":"Gerät entfernen",
+  "SCENES":"Szenen",
+  "SETTINGS":"Einstellungen",
+  "SCENE_NAME":"Name der Szene",
+  "RECALL_SCENE":"Szene abrufen",
+  "DELETE_SCENE":"Szene löschen",
+  "UPDATE_SCENE":"Szene aktualisieren",
+  "DELETE_ALL_SCENES":"Alle Szenen löschen"
 }

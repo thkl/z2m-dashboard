@@ -1,5 +1,5 @@
+import { Device } from '@/app/models/device';
 import { Component, computed, input } from '@angular/core';
-import { Device } from '../../../models/device';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({

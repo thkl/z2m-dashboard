@@ -576,3 +576,23 @@ nav.inspector {
   z-index: 99999;
   pointer-events: none;
 }
+
+.title.left {
+  text-align: left;
+}
+
+.title.center {
+  text-align: center;
+}
+
+.title.right {
+  text-align: right;
+}
+
+.hint {
+  color: var(--app-text-color-inactive);
+}
+
+.button.hint {
+  height:68px;
+}

@@ -1,4 +1,4 @@
-<ExpansionPanelComponent [label]="title()">
+<ExpansionPanelComponent [label]="title()" titleClass="left">
   <div class="options">
     @if (length() > maxShown() && useSearch() === true) {
       <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>

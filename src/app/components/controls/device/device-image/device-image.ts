@@ -1,8 +1,7 @@
+import { InterviewState } from '@/app/models/constants';
+import { Device } from '@/app/models/device';
+import { ApplicationService } from '@/app/services/app.service';
 import { Component, effect, inject, input, signal } from '@angular/core';
-import { Device } from '../../../models/device';
-import { InterviewState } from '../../../models/constants';
-import { BridgeService } from '../../../services/bridge.service';
-import { ApplicationService } from '../../../services/app.service';
 
 @Component({
   selector: 'DeviceImage',

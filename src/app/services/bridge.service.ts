@@ -9,6 +9,7 @@ import { createDeviceStoreExtensions, DeviceStore } from "../datastore/device.st
 import { GroupStore } from "../datastore/group.store";
 import { TranslateService } from "@ngx-translate/core";
 import { Group } from "../models/group";
+import { GroupSceneData } from "../models/types";
 
 @Injectable({
   providedIn: 'root'
@@ -96,11 +97,12 @@ export class BridgeService {
     if (this.lastSeenTimer) {
       clearInterval(this.lastSeenTimer);
     }
-    this.lastSeenTimer = setInterval(() => { 
+    this.lastSeenTimer = setInterval(() => {
       console.log("Update")
-      this.extensions.updateDeviceLastSeenTime(); }, 3000);
+      this.extensions.updateDeviceLastSeenTime();
+    }, 3000);
 
-     this.extensions.updateDeviceLastSeenTime();
+    this.extensions.updateDeviceLastSeenTime();
   }
 
   addDevices(deviceList: Device[]): void {
@@ -135,13 +137,19 @@ export class BridgeService {
 
   addGroups(groupList: Group[]): void {
     const grouplist = this.groupStore.entities();
-
     // copy the old state or create an empty one
     grouplist.forEach(group => {
 
-
     })
-
     this.groupStore.addAll(groupList);
+  }
+
+
+  saveScene(groupName: string, data: GroupSceneData) {
+    this.appService.sendBridgeRequest(`${groupName}/set`, data,false);
+  }
+
+  recallScene(groupName: string, sceneID: number) {
+    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_recall: sceneID },false);
   }
 }

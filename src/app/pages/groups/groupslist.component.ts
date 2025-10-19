@@ -8,6 +8,7 @@ import { TableComponent } from '../../components/controls/generic-table/generic-
 import { CDKDataSource } from '../../datastore/generic-store-ui';
 import { ApplicationService } from '../../services/app.service';
 import { TableSettingsControl } from '../../components/tablesettings/tablesettings';
+import { sortData } from '../../utils/sort.utils';
 
 @Component({
   selector: 'GroupListComponent',
@@ -29,10 +30,10 @@ export class GroupListComponent {
   // Table configuration with column definitions
   tableConfig = computed<TableConfig<Group>>(() => {
     const allColumns: ColumnDef<Group>[] = [
-      { id: 'id', label: 'ID', hideLabel:true, minWidth: 50, maxWidth: 50, sortable: false },
+      { id: 'id', label: 'ID', hideLabel:true, minWidth: 50, maxWidth: 50, sortable: true },
       { id: 'friendly_name', label: 'NAME', minWidth: 250, maxWidth: 450, sortable: true },
-      { id: 'members', label: 'MEMBERS', minWidth: 50, maxWidth: 200, sortable: true },
-      { id: 'scenes', label: 'SCENES', minWidth: 50, maxWidth: 200, sortable: true },
+      { id: 'members', label: 'MEMBERS', minWidth: 50, maxWidth: 200, sortable: false },
+      { id: 'scenes', label: 'SCENES', minWidth: 50, maxWidth: 200, sortable: false },
     ];
 
     // Hide columns that are not in the displayedColumns list
@@ -52,15 +53,13 @@ export class GroupListComponent {
         column: this.sortColumn(),
         direction: (sortDir === 'asc' || sortDir === 'desc') ? sortDir : 'asc'
       },
-            settingsControl: this.tableSettings()
+      settingsControl: this.tableSettings()
     };
   });
 
   // Sorting state
-  sortColumn = signal<string>('name');
+  sortColumn = signal<string>('id');
   sortDirection = signal<SortDirection>('asc');
-
-
 
   selectedGroup = computed(() => {
     return this.groupStore.selectedEntity();
@@ -68,8 +67,18 @@ export class GroupListComponent {
 
   datasourceSignal = signal<CDKDataSource<Group> | null>(null);
 
+  groups = computed(()=>{
+      const data = this.groupStore.entities();
+       return sortData<Group>(
+            data,
+            this.sortColumn(),
+            this.sortDirection(),
+            (group, column) => this.getGroupValue(group, column)
+          );
+    }
+  )
   get datasource(): CDKDataSource<Group> {
-    return this.datasourceSignal() || new CDKDataSource(this.groupStore.entities, this.injector);
+    return this.datasourceSignal() || new CDKDataSource(this.groups, this.injector);
   }
 
   constructor() {
@@ -93,4 +102,13 @@ export class GroupListComponent {
     this.groupStore.setSelectedEntityById(groupId);
     this.applicationService.inspector = "group";
   }
+
+  getGroupValue(group: Group, column: string): any {
+      switch (column) {
+        case 'friendly_name':
+          return group.friendly_name?.toLowerCase() || '';
+        case 'id':
+          return group.id || 0
+      }
+    }
 }

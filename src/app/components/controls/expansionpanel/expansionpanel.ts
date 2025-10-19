@@ -13,7 +13,8 @@ export class ExpansionPanelComponent {
   isOpen = signal(false);
   colorTrigger = input<boolean>(true);
   contentClass = input<string>();
-
+  titleClass = input<string>();
+  
    toggle():void {
     this.isOpen.set(!this.isOpen());
    }

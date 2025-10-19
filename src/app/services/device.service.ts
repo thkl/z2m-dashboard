@@ -6,7 +6,7 @@ import { timeAgo } from "../utils/time.utils";
 import { TranslateService } from "@ngx-translate/core";
 import { ApplicationService } from "./app.service";
 import { BridgeService } from "./bridge.service";
-import { RemoveDeviceOptions, RenameDeviceOptions } from "../models/types";
+import { RemoveDeviceFromGroupOptions, RemoveDeviceOptions, RenameDeviceOptions } from "../models/types";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class DeviceService {
 
   constructor() {
 
-   
+
     this.ws.subscribeTopicCallback('*/availability', (message) => {
       const { topic, payload } = message;
       this.updateAvailability(topic, payload.state);
@@ -50,7 +50,7 @@ export class DeviceService {
       const deviceName = splits[0];
       this.deviceStore.mergeBySearch("state", state, "friendly_name", deviceName);
       if (state.update) { // also put the update date into the device data
-        this.deviceStore.mergeBySearch("update",state.update, "friendly_name", deviceName)
+        this.deviceStore.mergeBySearch("update", state.update, "friendly_name", deviceName)
       }
       this.bridgeService.setDeviceTimeUpdater();
     }
@@ -58,10 +58,10 @@ export class DeviceService {
 
   public updateDeviceState(deviceName: string, data: DeviceTargetState): void {
     const topic = `${deviceName}/set`;
-    this.appService.sendBridgeRequest(topic, data,false);
+    this.appService.sendBridgeRequest(topic, data, false);
   }
 
-  
+
   private sendBridgeDeviceRequest(topic: string, parameters: { [key: string]: any }) {
     const payload: any = {
       transaction: crypto.randomUUID()
@@ -91,31 +91,31 @@ export class DeviceService {
   }
 
   changeDeviceDescription(device: Device): void {
-    this.updateSetting(device,{ description: device.description });
+    this.updateSetting(device, { description: device.description });
   }
 
-  updateSetting(device: Device, settings: {[key: string]:any}) {
+  updateSetting(device: Device, settings: { [key: string]: any }) {
     this.sendBridgeDeviceRequest("bridge/request/device/options", {
       id: device.friendly_name,
       options: settings
     });
   }
 
-  checkUpdate(device:Device) {
-     this.sendBridgeDeviceRequest("bridge/request/device/ota_update/check", {
+  checkUpdate(device: Device) {
+    this.sendBridgeDeviceRequest("bridge/request/device/ota_update/check", {
       id: device.friendly_name,
     });
   }
 
-  performUpdate(device:Device) {
-     this.sendBridgeDeviceRequest("bridge/request/device/ota_update/update", {
+  performUpdate(device: Device) {
+    this.sendBridgeDeviceRequest("bridge/request/device/ota_update/update", {
       id: device.friendly_name,
     });
   }
 
 
-  scheduleUpdate(device:Device) {
-     this.sendBridgeDeviceRequest("bridge/request/device/ota_update/schedule", {
+  scheduleUpdate(device: Device) {
+    this.sendBridgeDeviceRequest("bridge/request/device/ota_update/schedule", {
       id: device.friendly_name,
     });
   }
@@ -123,5 +123,10 @@ export class DeviceService {
   renameDevice(renameOptions: RenameDeviceOptions): void {
     this.sendBridgeDeviceRequest("bridge/request/device/rename", { from: renameOptions.device.friendly_name, to: renameOptions.newName, homeassistant_rename: renameOptions.renameHomeAssiatant });
   }
+
+  removeDeviceFromGroup(options: RemoveDeviceFromGroupOptions): void {
+    this.sendBridgeDeviceRequest("bridge/request/group/members/remove", options);
+  }
+
 
 }

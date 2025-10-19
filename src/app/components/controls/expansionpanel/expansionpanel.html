@@ -1,8 +1,8 @@
 <div class="root_control flex flex-col {{ contentClass() }}" [class.panel-open]="isOpen()">
   <button type="button" tabindex="0" class="trigger" [class.trigger-colored]="colorTrigger() === true" (click)="toggle()">
     <div class="root_control">
-      <div>
-        <span class="title">{{ label() }}</span>
+      <div class="w-full">
+        <div class="title {{ titleClass() }}">{{ label() }}</div>
       </div>
     </div>
     @if (isOpen() === false) {

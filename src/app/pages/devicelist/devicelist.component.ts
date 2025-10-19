@@ -1,23 +1,23 @@
+import { DeviceImage } from '@/app/components/controls/device/device-image/device-image';
+import { TableComponent } from '@/app/components/controls/generic-table/generic-table.component';
+import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
+import { SearchInput } from '@/app/components/controls/searchinput/searchinput';
+import { TableSettingsControl } from '@/app/components/tablesettings/tablesettings';
+import { DeviceStore } from '@/app/datastore/device.store';
+import { CDKDataSource } from '@/app/datastore/generic-store-ui';
+import { createStoreView } from '@/app/datastore/generic-store-view';
+import { SearchOperator } from '@/app/datastore/generic.store';
+import { TableCellDirective } from '@/app/directives/table-cell.directive';
+import { SortDirection, SortEvent } from '@/app/directives/table-sort.directive';
+import { Device } from '@/app/models/device';
+import { ColumnDef, TableConfig, SelectOption } from '@/app/models/types';
+import { HexPipe } from '@/app/pipes/hex.pipe';
+import { HumanReadablePipe } from '@/app/pipes/human.pipe';
+import { ApplicationService } from '@/app/services/app.service';
+import { filterData } from '@/app/utils/filter.utils';
+import { sortData } from '@/app/utils/sort.utils';
 import { Component, computed, inject, signal, effect, Signal, Injector, viewChild } from '@angular/core';
-import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
-import { createStoreView } from '../../datastore/generic-store-view';
-import { SearchOperator } from '../../datastore/generic.store';
-import { Device } from '../../models/device';
-import { CDKDataSource } from '../../datastore/generic-store-ui';
-import { SortEvent, SortDirection } from '../../directives/table-sort.directive';
-import { sortData } from '../../utils/sort.utils';
-import { filterData } from '../../utils/filter.utils';
-import { SearchInput } from '../../components/controls/searchinput/searchinput';
-import { OptionPanelComponent } from "../../components/controls/optionpanel/optionpanel";
-import { SelectOption, ColumnDef, TableConfig } from '../../models/types';
-import { DeviceImage } from '../../components/controls/device-image/device-image';
-import { TableComponent } from '../../components/controls/generic-table/generic-table.component';
-import { TableCellDirective } from '../../directives/table-cell.directive';
-import { ApplicationService } from '../../services/app.service';
-import { HexPipe } from '../../pipes/hex.pipe';
-import { HumanReadablePipe } from '../../pipes/human.pipe';
-import { TableSettingsControl } from '../../components/tablesettings/tablesettings';
 
 
  const allColumns: ColumnDef<Device>[] = [

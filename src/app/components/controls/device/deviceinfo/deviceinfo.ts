@@ -1,22 +1,22 @@
 import { Component, computed, inject, input, Signal, signal } from '@angular/core';
-import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { DeviceService } from '../../services/device.service';
-import { HexPipe } from '../../pipes/hex.pipe';
-import { HumanReadablePipe } from '../../pipes/human.pipe';
-import { SecondsToTimePipe } from '../../pipes/seconds-to-time.pipe';
-import { Device } from '../../models/device';
-import { createStoreView } from '../../datastore/generic-store-view';
-import { SearchOperator } from '../../datastore/generic.store';
 import { Dialog } from '@angular/cdk/dialog';
-import { RemoveDeviceOptions, RenameDeviceOptions } from '../../models/types';
-import { RemoveDeviceDialog } from '../dialogs/removedevicedialog/removedevicedialog';
-import { RenamedeviceDialog } from '../dialogs/renamedevicedialog/renamedevicedialog';
-import { ModelLink } from '../controls/modellink/modellink';
-import { VendorLink } from '../controls/vendorlink/vendorlink';
-import { DeviceImage } from '../controls/device-image/device-image';
-import { DeviceAvailability } from '../controls/device-availability/device-availability';
-import { ProgessBar } from '../controls/progess-bar/progess-bar';
+import { HexPipe } from '@/app/pipes/hex.pipe';
+import { HumanReadablePipe } from '@/app/pipes/human.pipe';
+import { RemoveDeviceDialog } from '@/app/components/dialogs/removedevicedialog/removedevicedialog';
+import { RenamedeviceDialog } from '@/app/components/dialogs/renamedevicedialog/renamedevicedialog';
+import { DeviceStore } from '@/app/datastore/device.store';
+import { createStoreView } from '@/app/datastore/generic-store-view';
+import { SearchOperator } from '@/app/datastore/generic.store';
+import { Device } from '@/app/models/device';
+import { RemoveDeviceOptions, RenameDeviceOptions } from '@/app/models/types';
+import { SecondsToTimePipe } from '@/app/pipes/seconds-to-time.pipe';
+import { DeviceService } from '@/app/services/device.service';
+import { ProgessBar } from '../../progess-bar/progess-bar';
+import { VendorLink } from '../../vendorlink/vendorlink';
+import { DeviceAvailability } from '../device-availability/device-availability';
+import { ModelLink } from '../../modellink/modellink';
+import { DeviceImage } from '../device-image/device-image';
 
 @Component({
   selector: 'DeviceInfoComponent',

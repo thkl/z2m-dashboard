@@ -3,5 +3,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  "lingua.flatTranslationKeys": true
+  "lingua.flatTranslationKeys": true,
+  "typescript.preferences.importModuleSpecifierMode": "non-relative",
+  "typescript.preferences.preferAutoImportFileExcludePatterns": []
 }

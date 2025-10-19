@@ -1,5 +1,9 @@
 <div class="wrapper">
   @if (group() !== null) {
+    <div class="container header">
+      <div class="font-bold text-center w-full mt-5">{{ 'SETTINGS' | translate }}</div>
+    </div>
+
     <div class="container">
       <div class="group_row">
         <span class="label">{{ 'FRIENDLY_NAME' | translate }}</span>
@@ -12,12 +16,16 @@
           <ExpansionPanelComponent
             label="{{ member?.device?.friendly_name }} ({{ 'ENDPOINT' | translate }}: {{ member.endpoint }})"
             style="flex-grow: inherit"
+            titleClass="center"
             class="panel w-full"
             contentClass="content_filled"
             [colorTrigger]="false"
           >
             <div class="wrapper">
               <DeviceFeaturesComponent [ieee_address]="member?.device?.ieee_address" displayMode="scene"></DeviceFeaturesComponent>
+              <div class="button">
+                <button class="button-red left" (click)="removeDeviceFromGroup(member.device!, member.endpoint)">{{ 'REMOVE_DEVICE' | translate }}</button>
+              </div>
             </div>
           </ExpansionPanelComponent>
         </div>

@@ -1,10 +1,11 @@
 import { Component, computed, inject, output, signal } from '@angular/core';
-import { GroupStore } from '../../datastore/group.store';
-import { GroupInfoComponent } from '../../components/groupinfo/groupinfo';
+import { GroupSceneComponent } from '@/app/components/controls/groups/groupscenes/groupscenes';
+import { GroupInfoComponent } from '@/app/components/controls/groups/groupinfo/groupinfo';
+import { GroupStore } from '@/app/datastore/group.store';
 
 @Component({
   selector: 'GroupInspectorComponent',
-  imports: [GroupInfoComponent],
+  imports: [GroupInfoComponent,GroupSceneComponent],
   templateUrl: './groupinspector.component.html',
   styleUrl: './groupinspector.component.scss'
 })

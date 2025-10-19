@@ -67,5 +67,6 @@
   "PERFORM_UPDATE": "Update device",
   "DEVICE_VIEW": "Devices",
   "GROUP_VIEW": "Groups",
-  "NETWORK_VIEW": "Network"
+  "NETWORK_VIEW": "Network",
+  "REMOVE_DEVICE":"Remove device"
 }

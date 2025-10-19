@@ -1,9 +1,9 @@
 import { Component, effect, inject, input, signal, Signal } from '@angular/core';
-import { AccessMode, Device, DeviceOption } from '../../models/device';
-import { InfoOverlayComponent } from '../controls/infooverlay/infooverlay';
-import { OptionComponent } from '../controls/option/option';
-import { DeviceConfigSchema } from '../../models/bridge';
-import { DeviceService } from '../../services/device.service';
+import { InfoOverlayComponent } from '../../infooverlay/infooverlay';
+import { OptionComponent } from '../../option/option';
+import { DeviceConfigSchema } from '../../../../models/bridge';
+import { AccessMode, Device, DeviceOption } from '../../../../models/device';
+import { DeviceService } from '../../../../services/device.service';
 
 @Component({
   selector: 'DeviceSettings',

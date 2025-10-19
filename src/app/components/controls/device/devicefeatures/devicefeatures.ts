@@ -1,25 +1,24 @@
+import { DeviceStore } from '@/app/datastore/device.store';
+import { createStoreView } from '@/app/datastore/generic-store-view';
+import { SearchOperator } from '@/app/datastore/generic.store';
+import { FeatureDisplayMode } from '@/app/models/constants';
+import { AccessMode, DeviceFeatureVisual, Device, DeviceFeature, DeviceTargetState } from '@/app/models/device';
+import { SelectOption, SwitchElement } from '@/app/models/types';
+import { HumanReadablePipe } from '@/app/pipes/human.pipe';
+import { DeviceService } from '@/app/services/device.service';
+import { hsvToHtmlRgb, xyToHtmlRgb } from '@/app/utils/color.util';
+import { isValidForScenes } from '@/app/utils/filter.utils';
 import { Component, computed, effect, inject, input, model, signal, Signal } from '@angular/core';
-import { DeviceStore } from '../../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
-import { AccessMode, Device, DeviceFeature, DeviceFeatureVisual, DeviceTargetState } from '../../models/device';
+import { ColorSelectorComponent } from '../../colorselector/colorselector';
+import { ColorTemperatureSelectorComponent } from '../../colortemperatureselector/colortemperatureselector';
+import { DropdownComponent } from '../../dropdown/dropdown';
+import { ExpansionPanelComponent } from '../../expansionpanel/expansionpanel';
+import { InfoOverlayComponent } from '../../infooverlay/infooverlay';
+import { LevelSelectorComponent, LevelMarkOption } from '../../levelselector/levelselector';
+import { OptionComponent } from '../../option/option';
+import { RadiolistComponent, RadioElement } from '../../radiolist/radiolist';
 
-import { DeviceService } from '../../services/device.service';
-import { InfoOverlayComponent } from '../controls/infooverlay/infooverlay';
-import { RadioElement, RadiolistComponent } from '../controls/radiolist/radiolist';
-
-import { OptionComponent } from '../controls/option/option';
-import { SelectOption, SwitchElement } from '../../models/types';
-import { hsvToHtmlRgb, xyToHtmlRgb, htmlRgbToHsv, htmlRgbToXy } from '../../utils/color.util';
-import { HumanReadablePipe } from '../../pipes/human.pipe';
-import { createStoreView } from '../../datastore/generic-store-view';
-import { SearchOperator } from '../../datastore/generic.store';
-import { LevelMarkOption, LevelSelectorComponent } from '../controls/levelselector/levelselector';
-import { ExpansionPanelComponent } from '../controls/expansionpanel/expansionpanel';
-import { ColorSelectorComponent } from '../controls/colorselector/colorselector';
-import { ColorTemperatureSelectorComponent } from '../controls/colortemperatureselector/colortemperatureselector';
-import { DropdownComponent } from '../controls/dropdown/dropdown';
-import { isValidForScenes } from '../../utils/filter.utils';
-import { FeatureDisplayMode } from '../../models/constants';
 
 @Component({
   selector: 'DeviceFeaturesComponent',

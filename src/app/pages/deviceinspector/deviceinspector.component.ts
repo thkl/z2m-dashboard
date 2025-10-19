@@ -1,10 +1,10 @@
+import { DeviceFeaturesComponent } from '@/app/components/controls/device/devicefeatures/devicefeatures';
+import { DeviceInfoComponent } from '@/app/components/controls/device/deviceinfo/deviceinfo';
+import { DevicePropertiesComponent } from '@/app/components/controls/device/deviceproperties/deviceproperties';
+import { DeviceStore } from '@/app/datastore/device.store';
+import { DeviceService } from '@/app/services/device.service';
 import { Component, computed, inject, output, signal } from '@angular/core';
-import { DeviceStore } from '../../datastore/device.store';
-import { DeviceService } from '../../services/device.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { DeviceInfoComponent } from '../../components/deviceinfo/deviceinfo';
-import { DeviceFeaturesComponent } from '../../components/devicefeatures/devicefeatures';
-import { DevicePropertiesComponent } from '../../components/deviceproperties/deviceproperties';
 
 @Component({
   selector: 'DeviceInspectorComponent',
