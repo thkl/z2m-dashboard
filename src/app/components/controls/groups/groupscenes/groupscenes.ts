@@ -8,7 +8,9 @@ import { ExpansionPanelComponent } from '../../expansionpanel/expansionpanel';
 import { BridgeService } from '@/app/services/bridge.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { DeleteObjectDialog } from '@/app/components/dialogs/deleteobject/deleteobject';
-import { DeleteObjectOptions } from '@/app/models/types';
+import { AddObjectDialogData, DeleteObjectOptions } from '@/app/models/types';
+import { AddObjectDialog } from '@/app/components/dialogs/addobject/addobject';
+import { findSmallestMissingNumber } from '@/app/utils/sort.utils';
 
 @Component({
   selector: 'GroupSceneComponent',
@@ -55,15 +57,45 @@ export class GroupSceneComponent {
       data
     });
 
-    dialogRef.closed.subscribe((result:any) => {
-      if (result !== undefined && result.delete===true) {
+    dialogRef.closed.subscribe((result: any) => {
+      if (result !== undefined && result.delete === true) {
         this.bridgeService.deleteScene(this.group()!.friendly_name, sceneId);
       }
     });
   }
 
 
-  deleteAllScenes(){
+
+  newScene() {
+    const sceneIds = (this.group() && this.group()?.scenes) ? this.group()?.scenes.map(s => s.id) : [];
+    const data = {
+      id: findSmallestMissingNumber(sceneIds??[]),
+      name: ''
+    };
+
+    const dialogData: AddObjectDialogData = {
+      data,
+      title: "ADD_SCENE",
+      message: "ADD_SCENE_DATA",
+      control: [{ name: "id", label: "SCENE_ID" }, { name: "name", label: "SCENE_NAME" }]
+    }
+
+
+    const dialogRef = this.dialog.open(AddObjectDialog, {
+      height: '400px',
+      width: '600px',
+      data: dialogData
+    });
+
+    dialogRef.closed.subscribe((result: any) => {
+      if (result !== undefined && result.delete === true) {
+
+      }
+    });
+  }
+
+
+  deleteAllScenes() {
     const data: DeleteObjectOptions = {
       title: "DELETE_ALL_SCENES",
       message: "WANT_DELETE_ALL_SCENES",
@@ -77,11 +109,12 @@ export class GroupSceneComponent {
       data
     });
 
-    dialogRef.closed.subscribe((result:any) => {
-      if (result !== undefined && result.delete===true) {
+    dialogRef.closed.subscribe((result: any) => {
+      if (result !== undefined && result.delete === true) {
         this.bridgeService.deleteAllScenes(this.group()!.friendly_name);
       }
     });
   }
 
 }
+

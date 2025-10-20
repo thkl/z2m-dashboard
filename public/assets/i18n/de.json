@@ -82,6 +82,10 @@
   "UPDATE_SCENE":"Szene aktualisieren",
   "DELETE_ALL_SCENES":"Alle Szenen löschen",
   "WANT_DELETE_SCENE":"Soll die Szene \"{{name}}\" wirklich gelöscht werden?",
-  "WANT_DELETE_ALL_SCENES":"Sollen wirklich alle Szenen dieser Gruppe gelöscht werden?"
-
+  "WANT_DELETE_ALL_SCENES":"Sollen wirklich alle Szenen dieser Gruppe gelöscht werden?",
+  "NEW_SCENE":"Neue Szene",
+  "ADD_SCENE":"Szene hinzufügen",
+  "ADD_SCENE_DATA":"Die Szene beinhaltet gleichzeitig alle aktuellen Zustände der Geräte in dieser Gruppe.",
+  "SCENE_ID":"ID der Szene",
+  "ADD":"Hinzufügen"
 }

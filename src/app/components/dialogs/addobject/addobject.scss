@@ -1,0 +1,17 @@
+label {
+  width: 20%;
+  height: 32px;
+  line-height: 32px;
+}
+
+.container {
+  padding: 2px 20px 10px 20px !important;
+  display: flex;
+  flex-direction: row;
+}
+
+
+button {
+    color:var(--dialog-button-text-color);
+    font-weight: normal;
+}

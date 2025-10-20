@@ -43,6 +43,12 @@
       }
       <div class="scene_row">
         <div class="button">
+          <button class="button-blue left" (click)="newScene()">{{ 'NEW_SCENE' | translate }}</button>
+        </div>
+      </div>
+
+      <div class="scene_row">
+        <div class="button">
           <button class="button-red left" [class.disabled]="group()!.scenes.length === 0" (click)="deleteAllScenes()">{{ 'DELETE_ALL_SCENES' | translate }}</button>
         </div>
       </div>

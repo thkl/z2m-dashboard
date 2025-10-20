@@ -38,3 +38,15 @@ function compareValues(a: any, b: any): number {
 
   return aStr < bStr ? -1 : aStr > bStr ? 1 : 0;
 }
+
+
+export function findSmallestMissingNumber(arr: number[]): number {
+  const set = new Set(arr);
+  let num = 0;
+  
+  while (set.has(num)) {
+    num++;
+  }
+  
+  return num;
+}

@@ -1,0 +1,25 @@
+<div class="modal">
+  <header>
+    <div class="title">{{ dialogData.title | translate }}</div>
+  </header>
+  <div class="message">
+    <span>{{ dialogData.message | translate: { name: dialogData.objectName } }}</span>
+  </div>
+  @for (controlItem of dialogData.control; track $index) {
+    <div class="container">
+      <label for="input_{{ controlItem.name }}">{{ controlItem.label | translate }}</label>
+      <div class="input-container">
+        <input class="w-full text-left panel" id="input_{{ controlItem.name }}" (change)="changeProperty(controlItem.name, $event)" [value]="dialogData.data[controlItem.name]" />
+      </div>
+    </div>
+  }
+  <footer>
+    <div class="buttonGroup">
+      <div class="warp"></div>
+      <div class="ml-auto flex flex-row gap-2">
+        <button class="primary min-w-20" (click)="ok()">{{ 'ADD' | translate }}</button>
+        <button class="primary min-w-20" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+      </div>
+    </div>
+  </footer>
+</div>

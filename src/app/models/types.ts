@@ -146,3 +146,15 @@ export type GroupSceneData = {
 
   name:string
 }
+
+
+
+export interface AddObjectDialogData {
+  control: {
+    name:string,
+    label:string
+  }[],
+  data: {[key: string]: any},
+  title:string,
+  message:string,
+}

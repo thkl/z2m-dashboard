@@ -117,7 +117,6 @@ export class DeviceFeaturesComponent {
     };
 
     exposures.forEach(exp => flatten(exp));
-    console.log(result);
     return result;
   }
 
@@ -218,7 +217,6 @@ export class DeviceFeaturesComponent {
   }
 
   colorChange(property: DeviceFeature, newColor: string): void {
-    console.log(property, newColor)
     if (property && property.subtype === "composite" && property.features) {
       const state: DeviceTargetState = {};
       state[property.property] = { "hex": newColor }
