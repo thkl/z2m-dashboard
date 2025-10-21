@@ -41,10 +41,10 @@ export interface RemoveDeviceOptions {
 }
 
 export interface DeleteObjectOptions {
-  title:string,
-  message:string,
-  objectName:string,
-  delete:boolean
+  title: string,
+  message: string,
+  objectName: string,
+  delete: boolean
 }
 
 export interface RemoveDeviceFromGroupOptions {
@@ -54,9 +54,9 @@ export interface RemoveDeviceFromGroupOptions {
 }
 
 export interface SelectOption {
-  isSelected:boolean;
-  label:string;
-  value?:string
+  isSelected: boolean;
+  label: string;
+  value?: string
 }
 
 /**
@@ -84,7 +84,7 @@ export interface ColumnDef<T = any> {
   /** Display label for header (translation key) */
   label: string;
 
-  hideLabel?:boolean;
+  hideLabel?: boolean;
 
   /** Minimum width in pixels */
   minWidth?: number;
@@ -136,25 +136,29 @@ export interface TableConfig<T = any> {
     direction: 'asc' | 'desc';
   };
 
-  settingsControl?:TableSettingsControl;
-  
+  settingsControl?: TableSettingsControl;
+
 }
 
-export type GroupSceneData = {
-  scene_store : {ID: number, 
-                name: string},
+export type SceneStoreData = {
+  ID: number,
+  name: string
+}
 
-  name:string
+
+export type GroupSceneData = {
+  scene_store: SceneStoreData,
 }
 
 
 
 export interface AddObjectDialogData {
   control: {
-    name:string,
-    label:string
+    name: string,
+    label: string
   }[],
-  data: {[key: string]: any},
-  title:string,
-  message:string,
+  data: { [key: string]: any },
+  title: string,
+  message: string,
+  created: boolean
 }

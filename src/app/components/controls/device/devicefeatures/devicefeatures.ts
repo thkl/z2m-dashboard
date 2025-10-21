@@ -57,7 +57,6 @@ export class DeviceFeaturesComponent {
       const expos = this.device()?.definition.exposes;
       const states = this.device()?.state;
       const result = this.flattenExposures(expos || [], states || []);
-      console.log(result);
       this.deviceFeatures.set(result);
     })
   }

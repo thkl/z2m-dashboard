@@ -23,11 +23,13 @@ export class AddObjectDialog {
   }
 
   changeProperty(key:string,event:any) {
-    console.log(key,event);
+    if (key && event.target.value) {
+        this.dialogData.data[key]=event.target.value;
+    }
   }
   
   ok(): void {
-    this.dialogRef.close({ ... this.dialogData, delete: true });
+    this.dialogRef.close({ ... this.dialogData, created: true });
   }
 
 }

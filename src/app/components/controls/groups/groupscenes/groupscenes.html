@@ -19,7 +19,7 @@
               <span class="value">
                 <div class="input-container">
                   <div class="input-content">
-                    <input class="w-full text-right panel" [value]="scene.name || ''" />
+                    <input class="w-full text-right panel" (change)="updateSceneName(scene.id, $event)" [value]="scene.name || ''" />
                   </div>
                 </div>
               </span>
@@ -30,7 +30,7 @@
 
             <div class="button hint">
               <div class="flex flex-col">
-                <button class="button-blue left">{{ 'UPDATE_SCENE' | translate }}</button>
+                <button class="button-blue left" (click)="updateScene(scene.id, scene.name)">{{ 'UPDATE_SCENE' | translate }}</button>
                 <span class="hint ml-1">This will also save the state of all members of this scene</span>
               </div>
             </div>
