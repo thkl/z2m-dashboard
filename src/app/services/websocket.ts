@@ -61,8 +61,8 @@ export class Websocket {
   private url?: string;
   /** Interval timer ID for the watchdog */
   private timer?: number;
-  
-  private failTimes:number = 0;
+  private isConnecting: boolean = false;
+  private failTimes: number = 0;
 
   /**
    * Establishes a WebSocket connection to the specified URL.
@@ -87,6 +87,7 @@ export class Websocket {
     this.clearWatchdog();
 
     this.ws.onmessage = (event) => {
+      this.isConnecting = false;
       this.timeout = 0;
       try {
         const message: WebSocketMessage = JSON.parse(event.data);
@@ -139,6 +140,8 @@ export class Websocket {
 
     this.ws.onerror = (error) => {
       console.error('WebSocket error:', error);
+      this.isConnecting = false;
+
       this.failTimes = this.failTimes + 1;
       if (this.failTimes < 5) {
         this.reconnect();
@@ -241,11 +244,15 @@ export class Websocket {
    * @private
    */
   private reconnect(): void {
+    if (this.isConnecting) {
+      return;
+    }
     setTimeout(() => {
       if ((this.url) && (this.shouldBeConnected)) {
+        this.isConnecting = true;
         this.connect(this.url);
       }
-    }, 1000);
+    }, 10000);
   }
 
   /**
