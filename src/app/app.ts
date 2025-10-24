@@ -22,8 +22,7 @@ export class App {
   private readonly storageKey = 'theme';
 
   constructor() {
-    this.as.setHostName("https://zigbee.th-kl.de");
-
+ 
     // Setup translations
     this.translate.setFallbackLang('en');
 
@@ -36,7 +35,6 @@ export class App {
       this.enableDarkMode();
     }
   }
-
 
   enableDarkMode(): void {
     document.body.classList.add(this.darkClass);

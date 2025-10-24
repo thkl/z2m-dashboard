@@ -1,0 +1,40 @@
+label {
+  width: 20%;
+  height: 32px;
+  line-height: 32px;
+}
+
+.container {
+  padding: 2px 20px 10px 20px !important;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col {
+  flex: 0 0 auto;
+  padding: 1px;
+}
+
+.col-full {
+  flex: 0 0 auto;
+  padding: 1px;
+  width: 100%;
+}
+
+.col-50 {
+  flex: 0 0 auto;
+  padding: 1px;
+  width: 50%;
+}
+
+button {
+  color: var(--dialog-button-text-color);
+  font-weight: normal;
+}
+
+input {
+  background-color: var(--input-background-highlighted) !important;
+}

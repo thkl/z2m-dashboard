@@ -42,8 +42,8 @@ input {
   animation-timeline: auto;
   animation-timing-function: ease;
   appearance: auto;
-  background-color: var(--app-background-color);
-  border-bottom-color: var(--app-text-color);
+  background-color: var(--input-background-color);
+  border-bottom-color: var(--input-border-color);
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   border-bottom-style: none;
@@ -53,20 +53,20 @@ input {
   border-image-slice: 100%;
   border-image-source: none;
   border-image-width: 1;
-  border-left-color: var(--app-text-color);
+  border-left-color: var(--input-border-color);
   border-left-style: none;
   border-left-width: 0px;
-  border-right-color: var(--app-text-color);
+  border-right-color: var(--input-border-color);
   border-right-style: none;
   border-right-width: 0px;
-  border-top-color: var(--app-text-color);
+  border-top-color: var(--input-border-color);
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   border-top-style: none;
   border-top-width: 0px;
   box-sizing: border-box;
   caret-color: var(--app-text-color);
-  color: var(--app-text-color);
+  color: var(--input-text-color);
   cursor: auto;
   display: block;
   flex-basis: 0%;
@@ -607,4 +607,10 @@ nav.inspector {
 
 .button.hint {
   height: 68px;
+}
+
+.cdk-overlay-backdrop-showing {
+    opacity: 70% !important;
+    background-color: var(--app-background-color);
+    transition: opacity 0.2s cubic-bezier(0.7, 0, 0.3, 1);
 }

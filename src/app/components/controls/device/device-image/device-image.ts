@@ -15,8 +15,8 @@ export class DeviceImage {
   imageError = signal(false);
   InterviewState = InterviewState;
   protected readonly appService = inject(ApplicationService);
-  
-  
+
+
   /**
    * Handle image load error by setting imageError flag
    * This will trigger the fallback to default image
@@ -25,20 +25,26 @@ export class DeviceImage {
     this.imageError.set(true);
   }
 
-  imageurl=signal('');
+  imageurl = signal('');
 
   constructor() {
 
     const host = this.appService.getPreference("host");
     const secure = this.appService.getPreference("secure")
 
-    effect(()=>{
-      if (this.device() && this.device().definition?.icon) {
-        this.imageurl.set(`${secure?'https':'http'}://${host}/${this.device().definition?.icon}`); 
+    effect(() => {
+      const device = this.device();
+      if (device && device.definition?.icon) {
+        this.setImage(`${secure ? 'https' : 'http'}://${host}/${device.definition?.icon}`)
       } else {
         const image = this.device().definition.image;
-        this.imageurl.set(`https://www.zigbee2mqtt.io/images/devices/${image}.png`);
+        this.setImage(`https://www.zigbee2mqtt.io/images/devices/${image}.png`);
       }
-    })
+    });
+
+  }
+
+  setImage(imageUrl: string): void {
+    this.imageurl.set(imageUrl);
   }
 }

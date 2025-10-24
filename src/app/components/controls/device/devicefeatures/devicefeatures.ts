@@ -183,7 +183,7 @@ export class DeviceFeaturesComponent {
     if (this.device()) {
       const device = this.device()!;
       const state: DeviceTargetState = {};
-      state[property.name] = item.isActive ? property.value_on ?? "ON" : property.value_off ?? "OFF"
+      state[property.property || property.name] = item.isActive ? property.value_on ?? "ON" : property.value_off ?? "OFF"
       this.deviceService.updateDeviceState(device.friendly_name, state)
     }
   }
@@ -192,7 +192,7 @@ export class DeviceFeaturesComponent {
     if (this.device()) {
       const device = this.device()!;
       const state: DeviceTargetState = {};
-      state[property.name] = item ? item.label : ''
+      state[property.property || property.name] = item ? item.label : ''
       this.deviceService.updateDeviceState(device.friendly_name, state)
     }
   }
@@ -201,7 +201,7 @@ export class DeviceFeaturesComponent {
     if (this.device()) {
       const device = this.device()!;
       const state: DeviceTargetState = {};
-      state[property.name] = item ? item.label : ''
+      state[property.property || property.name] = item ? item.label : ''
       this.deviceService.updateDeviceState(device.friendly_name, state)
     }
   }
@@ -210,7 +210,7 @@ export class DeviceFeaturesComponent {
     if (this.device()) {
       const device = this.device()!;
       const state: DeviceTargetState = {};
-      state[property.name] = newTemp;
+      state[property.property || property.name] = newTemp;
       this.deviceService.updateDeviceState(device.friendly_name, state);
     }
   }

@@ -80,6 +80,10 @@ export class DeviceService {
     });
   }
 
+  interviewCompleted(device:Device):void {
+    
+  }
+
   startReconfig(device: Device): void {
     this.sendBridgeDeviceRequest("bridge/request/device/configure", {
       id: device.friendly_name,
@@ -128,5 +132,30 @@ export class DeviceService {
     this.sendBridgeDeviceRequest("bridge/request/group/members/remove", options);
   }
 
+  readEndpoint(device:Device,endpoint:number,cluster:string, attributes:string[],readOptions:any) {
+    const options = {
+      payload: {
+        read: {
+          attributes,
+          cluster,
+          options:readOptions
+        }
+      }
+    }
+      this.sendBridgeDeviceRequest(`${device.friendly_name}/${endpoint}/set`, options);
+  }
+
+  writeEndpoint(device:Device,endpoint:number,cluster:string,payload:any,writeOptions:any) {
+    const options = {
+      payload: {
+        write: {
+          payload,
+          cluster,
+          options:writeOptions
+        }
+      }
+    }
+      this.sendBridgeDeviceRequest(`${device.friendly_name}/${endpoint}/set`, options);
+  }
 
 }

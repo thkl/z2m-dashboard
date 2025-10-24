@@ -1,5 +1,7 @@
 import { inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
+import { Z2MServer } from "../models/types";
+import { Z } from "@angular/cdk/keycodes";
 
 export interface AppSettings {
     [key: string]: any;
@@ -37,16 +39,14 @@ export class ApplicationService {
 
     constructor() {
         this.loadSettings();
+        this.connect()
     }
 
-    public loadSettings() {
+    loadSettings(): void {
         const saved = localStorage.getItem('ui-settings');
         if (saved) {
             try {
                 this.settings = JSON.parse(saved) as AppSettings;
-                if (this.settings["host"]) {
-                    this.ws.connect(`${this.settings["secure"] ? 'wss' : 'ws'}://${this.settings["host"]}/api`);
-                }
             } catch (e) {
                 console.error(e)
             }
@@ -65,9 +65,36 @@ export class ApplicationService {
         this.saveSettings();
     }
 
-    setHostName(host: string) {
+
+    saveAndConnect(z2m: Z2MServer) {
+
+        //check if we have this setting and replace or add
+        let saved: any = {};
+        try {
+            saved = JSON.parse(this.getPreference("saved_hosts"));
+        } catch (e) {
+
+        }
+
+        const host = z2m.hostname;
+        const secure = z2m.secure;
+        const port = z2m.port;
+        const name = z2m.name;
+
+        saved[host] = { name, host, port, secure };
+        this.setPreference("saved_hosts", saved);
         this.setPreference("host", host.replace('https://', '').replace('http://', ''));
-        this.setPreference("secure", (host.startsWith("https://")));
+        this.setPreference("secure", secure);
+        this.setPreference("port", port);
+        this.connect();
+    }
+
+    connect() {
+        const host = this.getPreference("host");
+        const secure = this.getPreference("secure");
+        if (host) {
+            this.ws.connect(`${secure ? 'wss' : 'ws'}://${host}/api`);
+        }
     }
 
     saveSettings() {
@@ -78,8 +105,8 @@ export class ApplicationService {
         }
     }
 
-    sendBridgeRequest(topic: string, payload: any,useTransaction:boolean = true) {
-        if (payload && payload.transaction === undefined && useTransaction===true) {
+    sendBridgeRequest(topic: string, payload: any, useTransaction: boolean = true) {
+        if (payload && payload.transaction === undefined && useTransaction === true) {
             payload.transaction = crypto.randomUUID();
         }
         const message: any = {
@@ -88,4 +115,6 @@ export class ApplicationService {
         }
         this.ws.sendMessage(JSON.stringify(message));
     }
+
+
 }

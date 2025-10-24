@@ -162,3 +162,10 @@ export interface AddObjectDialogData {
   message: string,
   created: boolean
 }
+
+export interface Z2MServer {
+  name:string,
+  secure:boolean,
+  hostname:string,
+  port:number
+}

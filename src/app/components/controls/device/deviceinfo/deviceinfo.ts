@@ -17,6 +17,7 @@ import { VendorLink } from '../../vendorlink/vendorlink';
 import { DeviceAvailability } from '../device-availability/device-availability';
 import { ModelLink } from '../../modellink/modellink';
 import { DeviceImage } from '../device-image/device-image';
+import { ApplicationService } from '@/app/services/app.service';
 
 @Component({
   selector: 'DeviceInfoComponent',
@@ -29,8 +30,10 @@ export class DeviceInfoComponent {
   protected readonly deviceService = inject(DeviceService);
   protected readonly dialog = inject(Dialog)
   private readonly translate = inject(TranslateService);
+  private readonly applicationService = inject(ApplicationService)
 
   ieee_address = input.required<string | undefined>();
+  
   device = computed(() => {
     //Filter the coordinator from the devices
     let devicesView: Signal<Device[]> = createStoreView(this.deviceStore, {
@@ -58,7 +61,6 @@ export class DeviceInfoComponent {
 
   deleteDevice() {
 
-
     const dialogRef = this.dialog.open(RemoveDeviceDialog, {
       height: '400px',
       width: '600px',
@@ -69,6 +71,7 @@ export class DeviceInfoComponent {
       if (result !== undefined && this.device() !== null) {
         this.deviceService.removeDevice(result as RemoveDeviceOptions);
         this.deviceStore.setSelectedEntity(null);
+        this.applicationService.inspector = null;
       }
     });
   }

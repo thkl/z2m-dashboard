@@ -4,6 +4,7 @@
   --app-background-transparent: rgb(0, 0, 0, 0);
   --app-background-color-selected: rgb(101, 98, 98);
 
+
   --app-text-color: rgb(182, 182, 182);
   --app-text-color-selected: rgb(8, 8, 8);
   --app-text-color-inactive: #737c87;
@@ -18,6 +19,11 @@
   --button-text-color: #4797ff;
   --button-frame-color: #4797ff;
   
+  --input-background-color:var(--app-background-color);
+  --input-background-highlighted: rgb(28, 34, 44)^;
+  --input-border-color:var(--app-text-color);
+  --input-text-color:var(--app-text-color);
+
   --dialog-button-text-color: rgb(255, 255, 255);
 
   --progressbar-status-color: #4797ff;
