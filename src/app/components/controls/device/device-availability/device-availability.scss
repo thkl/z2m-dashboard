@@ -1,11 +1,11 @@
 .warning {
-    color:  #ffd034;
+    color: var(--app-link-warning-color);
 }
 
 .error {
-    color: rgb(247, 36, 36);
+    color: var(--app-link-danger-color);
 }
 
 .ok {
-    color: rgb(20, 226, 37)
+    color:var(--app-link-good-color);
 }

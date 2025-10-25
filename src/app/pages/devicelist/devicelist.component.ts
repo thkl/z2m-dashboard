@@ -1,3 +1,4 @@
+import { DeviceAvailability } from '@/app/components/controls/device/device-availability/device-availability';
 import { DeviceImage } from '@/app/components/controls/device/device-image/device-image';
 import { TableComponent } from '@/app/components/controls/generic-table/generic-table.component';
 import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
@@ -36,7 +37,9 @@ const allColumns: ColumnDef<Device>[] = [
   { id: 'ieee_address', label: 'IEEE_ADDRESS', minWidth: 250, maxWidth: 250, sortable: true },
   { id: 'supported', label: 'SUPPORT_STATUS', minWidth: 50, maxWidth: 100, sortable: true },
   { id: 'type', label: 'DEVICE_TYPE', minWidth: 50, maxWidth: 100, sortable: true },
-  { id: 'firmware_state', label: 'FIRMWARE_STATE', minWidth: 50, maxWidth: 100, sortable: true },
+  { id: 'firmware_state', label: 'FIRMWARE_STATE', minWidth: 100, maxWidth: 100, sortable: true },
+  { id: 'availability', label: 'AVAILABILITY', minWidth: 50, maxWidth: 100, sortable: true },
+
 ];
 
 
@@ -44,7 +47,7 @@ const allColumns: ColumnDef<Device>[] = [
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar,TimeToPipe]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar, TimeToPipe,DeviceAvailability]
 })
 export class DeviceListComponent {
 
@@ -61,8 +64,6 @@ export class DeviceListComponent {
 
   // Table configuration with column definitions
   tableConfig = computed<TableConfig<Device>>(() => {
-
-
     const selected = this.selectedDevice();
     const sortDir = this.sortDirection();
     return {
@@ -289,6 +290,16 @@ export class DeviceListComponent {
         return device.state?.battery ?? -1;
       case 'lastseenhuman':
         return device.state?.last_seen ?? 0;
+      case 'supported':
+        return device.supported ?? 0;
+      case 'type':
+        return device.type ?? 0;
+      case 'firmware_state':
+        return device.update?.state ?? 0;
+      case 'ieee_address':
+        return device.ieee_address ?? '';
+        
+        
       default:
         return '';
     }
@@ -335,5 +346,10 @@ export class DeviceListComponent {
     this.bridgeService.permitJoin(this.bridgeInfo()?.permit_join ? 0 : 254);
   }
 
+  checkUpdateAll() {
+    this.devicesView().forEach((device: Device) => {
+      this.deviceService.checkUpdate(device);
+    });
+  }
 }
 

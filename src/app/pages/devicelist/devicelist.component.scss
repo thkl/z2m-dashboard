@@ -103,19 +103,19 @@ td:not(.last-column) {
 }
 
 .battery_ok {
-  color: rgb(48, 173, 85);
+  color: var(--app-link-good-color);
 }
 
 .firmware_available {
-  color: rgb(48, 173, 85);
+  color: var(--app-link-good-color);
 }
 
 .battery_warning {
-  color:rgb(248, 231, 0);
+  color:(--app-link-warning-color);
 }
 
 .battery_low {
-  color:rgb(243, 30, 30);
+  color:var(--app-link-danger-color);
 }
 
 /* Last column stretches to fill remaining space */

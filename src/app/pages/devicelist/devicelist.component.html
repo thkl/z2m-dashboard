@@ -37,7 +37,7 @@
       </div>
     }
     <div class="button">
-      <button class="button-link left">{{ 'CHECK_FOR_UPDATE_ALL' | translate }}</button>
+      <button class="button-link left" (click)="checkUpdateAll()">{{ 'CHECK_FOR_UPDATE_ALL' | translate }}</button>
     </div>
   </div>
   <div class="w-full ml-2">
@@ -91,6 +91,11 @@
 
       <!-- supported cell -->
       <ng-template appTableCell="supported" let-device> {{ device.supported | human }} </ng-template>
+
+      <!-- availability cell -->
+      <ng-template appTableCell="availability" let-device>
+        <DeviceAvailability [device]="device" />
+      </ng-template>
 
       <!-- supported cell -->
       <ng-template appTableCell="firmware_state" let-device>
