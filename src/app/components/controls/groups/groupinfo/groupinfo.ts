@@ -2,7 +2,6 @@ import { Component, computed, inject, input, signal, Signal } from '@angular/cor
 
 import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ExpansionPanelComponent } from '@/app/components/controls/expansionpanel/expansionpanel';
 import { DeviceFeaturesComponent } from '@/app/components/controls/device/devicefeatures/devicefeatures';
 import { GroupStore } from '@/app/datastore/group.store';
 import { DeviceStore } from '@/app/datastore/device.store';
@@ -12,7 +11,7 @@ import { createStoreView } from '@/app/datastore/generic-store-view';
 import { SearchOperator } from '@/app/datastore/generic.store';
 import { Group } from '@/app/models/group';
 import { Device } from '@/app/models/device';
-import { AddRemoveDeviceFromGroupOptions } from '@/app/models/types';
+import { AddRemoveDeviceFromGroupOptions, SelectOption } from '@/app/models/types';
 import { ExpansionPanelDeviceComponent } from '@/app/components/controls/expansionpanel-device/expansionpanel-device';
 
 
@@ -86,9 +85,13 @@ export class GroupInfoComponent {
         isSelected: false,
         label: d.friendly_name,
         value: d.ieee_address
-      }
+      } as SelectOption
     }
-    );
+    ).sort((a:SelectOption,b:SelectOption)=>{
+      if (a.label > b.label) return 1;
+      if (a.label < b.label) return -1;
+      return 0;
+    });
   })
 
   renameGroup() {
