@@ -7,7 +7,7 @@
   --app-text-color: rgb(182, 182, 182);
   --app-text-color-selected: rgb(8, 8, 8);
   --app-text-color-inactive: #737c87;
-  --app-link-color: #0e65d8;
+  --app-link-color: rgb(48, 106, 255);
   
   --app-link-good-color:rgb(48, 173, 85);
   --app-link-warning-color:rgb(248, 231, 0);
@@ -19,7 +19,7 @@
 
   --button-background-color: rgb(28, 30, 33);
   --button-selected-background-color: #282b2f;
-  --button-text-color: #4797ff;
+  --button-text-color: rgb(48, 106, 255);
   --button-frame-color: #4797ff;
   
   --input-background-color:var(--app-background-color);
@@ -56,5 +56,16 @@
   --network-graph-link-faded: #737c87;
   --network-graph-node-hover-shadow: rgba(71, 151, 255, 0.4);
   --network-graph-link-hover-shadow: rgba(71, 151, 255, 0.3);
+  
+
+  --app-font-size:.95rem;
+  --toolbar-font-size:1rem;
+  --input-font-size:1rem;
+  --label-font-size:1rem;
+  --sublabel-font-size:0.9rem;
+  --button-font-size:1rem;
+  --table-header-font-size:1rem;
+  --table-row-font-size:1rem;
+  --table-font-size:1rem;
   
 }

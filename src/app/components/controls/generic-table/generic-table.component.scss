@@ -3,7 +3,7 @@ table {
   table-layout: fixed;
   border-collapse: collapse;
   border-spacing: 0;
-  font-size: 14px;
+  font-size: var(--table-font-size);
   text-align: left;
   background-color: var(--app-background-color);
 }
@@ -14,6 +14,7 @@ thead {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+  font-size: var(--table-header-font-size);
 }
 
 tr {
@@ -34,11 +35,13 @@ tr {
   color: var(--table-row-text-color, var(--app-text-color));
   cursor: pointer;
   padding-left:1em;
+  font-size: var(--table-row-font-size);
 }
 
 th {
   display: table-cell;
   box-sizing: border-box;
+  font-size: var(--table-header-font-size);
 }
 
 td {
@@ -60,6 +63,7 @@ td {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: var(--table-row-font-size);
 }
 
 td:first-child {

@@ -9,6 +9,8 @@
 @import url('styles/radio.scss');
 @import url('styles/dropdown.scss');
 
+
+
 html,
 body {
   @apply h-full;
@@ -20,7 +22,7 @@ body {
 
   font-family: Inter, Lato, Arial, sans-serif;
   font-feature-settings: 'kern';
-  font-size: 13px;
+  font-size: var(--app-font-size);
   font-synthesis-small-caps: none;
   font-synthesis-style: none;
   font-synthesis-weight: none;
@@ -76,7 +78,7 @@ input {
   font-feature-settings: normal;
   font-kerning: auto;
   font-optical-sizing: auto;
-  font-size: 14px;
+  font-size: var(--input-font-size);
   font-size-adjust: none;
   font-style: normal;
   font-synthesis-small-caps: none;
@@ -267,7 +269,7 @@ th.sortable {
   border: none;
   display: flex;
   flex-grow: 1;
-  font-size: 14px;
+  font-size: var(--toolbar-font-size);
   line-height: 1;
   outline: none;
   padding: 0;
@@ -375,7 +377,7 @@ th.sortable {
   color: rgb(222, 224, 227);
   display: block;
   font-weight: 400;
-  font-size: 14px;
+  font-size:var(--label-font-size);
   height: 24px;
   line-height: 20px;
   width: 40%;
@@ -393,7 +395,7 @@ th.sortable {
 }
 
 .sublabel {
-  font-size: 12px;
+  font-size: var(--sublabel-font-size);
 }
 
 ::-webkit-resizer {
@@ -439,7 +441,7 @@ button {
   border-radius: 6px;
   cursor: pointer;
   display: flex;
-  font-size: 16px;
+  font-size: var(--button-font-size);
   justify-content: center;
   letter-spacing: 0.25px;
   overflow: hidden;
@@ -500,24 +502,24 @@ button.right {
 
 .button-link {
   color:var(--app-link-color);
-  font-size: 13px;
+  font-size: var(--app-font-size);
 }
 
 .button-link-danger {
   color:var(--app-link-danger-color);
-  font-size: 13px;
+  font-size:var(--app-font-size);
 }
 
 
 .button-link.disabled {
   color: rgba(96, 119, 148, 0.702);
-  font-size: 13px;
+  font-size: var(--app-font-size);
   cursor: not-allowed;
 }
 
 .button-link-danger.disabled {
   color: rgba(129, 110, 110, 0.52);
-  font-size: 13px;
+  font-size: var(--app-font-size);
   cursor: not-allowed;
 }
 
