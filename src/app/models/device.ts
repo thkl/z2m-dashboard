@@ -74,6 +74,7 @@ export interface DeviceFeature {
     value_off?:string;
     value_toggle?:string;
     values?:any[];
+    endpoint?:string;
     presets?:FeaturePreset[];
     hidden:boolean;
 }

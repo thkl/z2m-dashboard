@@ -111,14 +111,7 @@ export class DeviceListComponent {
   // Filtered and sorted devices
   devices = computed<Device[]>(() => {
     const filtered = filterData<Device>(
-      this.devicesView().map((d: Device) => {
-
-        if (d.definition && d.definition.model) {
-          d.definition.image = d.definition.model.replaceAll("/", "-")
-        }
-        return d;
-
-      }),
+      this.devicesView(),
       this.searchText(),
       (device) => this.getSearchableFields(device)
     );

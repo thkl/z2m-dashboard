@@ -111,6 +111,7 @@ export class BridgeService {
 
     // copy the old state or create an empty one
     deviceList.forEach(device => {
+      
       // set the device option values from the bridge info devices 
       const bridgeDevice = this.bridgeInfo()?.config.devices[device.ieee_address];
       if (bridgeDevice) {
@@ -136,12 +137,15 @@ export class BridgeService {
   }
 
   addGroups(groupList: Group[]): void {
-    const grouplist = this.groupStore.entities();
-    // copy the old state or create an empty one
-    grouplist.forEach(group => {
-
+    // we have to do a weird little conversion .. the endpoint is everywhere a string
+    // but the api will send here a number .. so just convert this little sckr
+    const converted = groupList.map(group => {
+      const members = group.members.map(member=>{
+        return {...member,endpoint:String(member.endpoint)}
+      })
+      return {...group,members}
     })
-    this.groupStore.addAll(groupList);
+    this.groupStore.addAll(converted);
   }
 
 

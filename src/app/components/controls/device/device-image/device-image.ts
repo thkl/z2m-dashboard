@@ -34,11 +34,15 @@ export class DeviceImage {
 
     effect(() => {
       const device = this.device();
+
       if (device && device.definition?.icon) {
         this.setImage(`${secure ? 'https' : 'http'}://${host}/${device.definition?.icon}`)
       } else {
-        const image = this.device().definition.image;
-        this.setImage(`https://www.zigbee2mqtt.io/images/devices/${image}.png`);
+        // set the image to the model if no local icon
+        if (device.definition && device.definition.model) {
+          const image = device.definition.model.replaceAll("/", "-")
+          this.setImage(`https://www.zigbee2mqtt.io/images/devices/${image}.png`);
+        }
       }
     });
 
