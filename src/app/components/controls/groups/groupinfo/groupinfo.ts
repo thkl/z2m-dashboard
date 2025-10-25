@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, Signal } from '@angular/core';
+import { Component, computed, inject, input, signal, Signal } from '@angular/core';
 import { Group } from '../../../../models/group';
 import { createStoreView } from '../../../../datastore/generic-store-view';
 import { GroupStore } from '../../../../datastore/group.store';
@@ -10,10 +10,11 @@ import { Device } from '../../../../models/device';
 import { RemoveDeviceFromGroupOptions } from '../../../../models/types';
 import { DeviceService } from '../../../../services/device.service';
 import { DeviceFeaturesComponent } from '../../device/devicefeatures/devicefeatures';
+import { OptionPanelComponent } from '../../optionpanel/optionpanel';
 
 @Component({
   selector: 'GroupInfoComponent',
-  imports: [TranslateModule, ExpansionPanelComponent, DeviceFeaturesComponent],
+  imports: [TranslateModule, ExpansionPanelComponent, DeviceFeaturesComponent, OptionPanelComponent],
   templateUrl: './groupinfo.html',
   styleUrl: './groupinfo.scss'
 })
@@ -44,9 +45,35 @@ export class GroupInfoComponent {
     return mb?.map(m => {
       return { device: dv.find(d => d.ieee_address === m.ieee_address), endpoint: m.endpoint };
     })
+  });
+
+  selectedDevice = signal<Device|null>(null);
+
+  deviceSelectorTitle = computed(()=>{
+
+    const d = this.selectedDevice();
+    return d !== null ? d.friendly_name : "SELECT_DEVICE"
 
   });
 
+  availabelDevices = createStoreView(this.deviceStore, {
+    criteria: [
+      { property: "type", value: "Coordinator", operator: "not" }
+    ],
+    logicalOperator: SearchOperator.AND
+  }, false, undefined);
+
+  deviceNameList = computed(() => {
+    const dv = this.availabelDevices();
+    return dv.map((d:Device) => {
+      return {
+        isSelected: false,
+        label: d.friendly_name,
+        value: d.ieee_address
+      }
+    }
+    );
+  })
 
   renameGroup() {
     console.log(this.group());
@@ -61,5 +88,13 @@ export class GroupInfoComponent {
       }
       this.deviceService.removeDeviceFromGroup(options);
     }
+  }
+
+  addDevice(): void {
+
+  }
+
+  selectNewDevice(selected: any) {
+    this.selectedDevice.set(this.availabelDevices().find((d:Device)=>d.ieee_address === selected.value));
   }
 }

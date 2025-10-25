@@ -6,14 +6,14 @@
       <OptionPanelComponent title="{{ 'MANUFACTURER' | translate }}" [entities]="vendorList()" (optionsChanged)="vendorsSelectionChanged($event)"></OptionPanelComponent>
     </div>
     <div class="mt-2">
-      <OptionPanelComponent title="{{ 'MODEL' | translate }}" [entities]="modelList()" [maxShown]="10" (optionsChanged)="modelSelectionChanged($event)"></OptionPanelComponent>
+      <OptionPanelComponent title="{{ 'MODEL' | translate }}" [entities]="modelList()" (optionsChanged)="modelSelectionChanged($event)"></OptionPanelComponent>
     </div>
 
     <div class="mt-2">
       <OptionPanelComponent
         title="{{ 'STATUS' | translate }}"
         [entities]="availabilityList()"
-        [maxShown]="10"
+        [options]="{ maxShown: 10 }"
         (optionsChanged)="availabilitySelectionChanged($event)"
       ></OptionPanelComponent>
     </div>

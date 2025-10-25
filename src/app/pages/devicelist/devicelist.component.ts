@@ -47,7 +47,7 @@ const allColumns: ColumnDef<Device>[] = [
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar, TimeToPipe,DeviceAvailability]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar, TimeToPipe, DeviceAvailability]
 })
 export class DeviceListComponent {
 
@@ -68,7 +68,10 @@ export class DeviceListComponent {
     const sortDir = this.sortDirection();
     return {
       columns: allColumns,
-      trackByFn: (index: number, device: Device) => device.ieee_address || index,
+      trackByFn: (index: number, device: Device) => { 
+        const t = device.ieee_address || index;
+        return t;
+      },
       selectedItem: selected || undefined,
       onRowClick: (device: Device) => this.selectDevice(device.ieee_address),
       initialSort: {
@@ -298,8 +301,8 @@ export class DeviceListComponent {
         return device.update?.state ?? 0;
       case 'ieee_address':
         return device.ieee_address ?? '';
-        
-        
+
+
       default:
         return '';
     }
@@ -325,20 +328,28 @@ export class DeviceListComponent {
     this.applicationService.inspector = 'device';
   }
 
-  vendorsSelectionChanged(event: SelectOption[]) {
-    this.selectedVendors.set(event.filter(v => v.isSelected));
+  vendorsSelectionChanged(selected: SelectOption | SelectOption[]) {
+    if (Array.isArray(selected)) {
+      this.selectedVendors.set(selected.filter(v => v.isSelected));
+    }
   }
 
-  modelSelectionChanged(event: SelectOption[]) {
-    this.selectedModels.set(event.filter(v => v.isSelected));
+  modelSelectionChanged(selected: SelectOption | SelectOption[]) {
+    if (Array.isArray(selected)) {
+      this.selectedModels.set(selected.filter(v => v.isSelected));
+    }
   }
 
-  powerSelectionChanged(event: SelectOption[]) {
-    this.selectedPowering.set(event.filter(v => v.isSelected));
+  powerSelectionChanged(selected: SelectOption | SelectOption[]) {
+    if (Array.isArray(selected)) {
+      this.selectedPowering.set(selected.filter(v => v.isSelected));
+    }
   }
 
-  availabilitySelectionChanged(event: SelectOption[]) {
-    this.selectedAvailability.set(event.filter(v => v.isSelected));
+  availabilitySelectionChanged(selected: SelectOption | SelectOption[]) {
+    if (Array.isArray(selected)) {
+      this.selectedAvailability.set(selected.filter(v => v.isSelected));
+    }
   }
 
 

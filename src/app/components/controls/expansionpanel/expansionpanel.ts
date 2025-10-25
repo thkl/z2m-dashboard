@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, output, effect, signal } from '@angular/core';
 import { SearchInput } from '../searchinput/searchinput';
 
 @Component({
@@ -10,12 +10,27 @@ import { SearchInput } from '../searchinput/searchinput';
 export class ExpansionPanelComponent {
   label = input.required<string>();
   hasSearch = input<boolean>();
-  isOpen = signal(false);
+  setOpen = input<boolean|null>(null);
+  setOpenChange = output<boolean>();
+
+  isOpen = signal(false);  // Internal state - works in both controlled and uncontrolled modes
+
   colorTrigger = input<boolean>(true);
   contentClass = input<string>();
   titleClass = input<string>();
-  
-   toggle():void {
-    this.isOpen.set(!this.isOpen());
-   }
+
+  constructor() {
+    effect(() => {
+      const value = this.setOpen();
+      if (value !== null) {
+        this.isOpen.set(value);  // Sync when parent sets it
+      }
+    });
+  }
+
+  toggle(): void {
+    const newState = !this.isOpen();
+    this.isOpen.set(newState);  // Always update internal state
+    this.setOpenChange.emit(newState);  // Notify parent if listening
+  }
 }

@@ -1,24 +1,26 @@
-<ExpansionPanelComponent [label]="title()" titleClass="left">
+<ExpansionPanelComponent [label]="title()" [setOpen]="panelIsOpen()" (setOpenChange)="panelIsOpen.set($event)" titleClass="left">
   <div class="options">
-    @if (length() > maxShown() && useSearch() === true) {
+    @if (length() > resolvedOptions().maxShown! && resolvedOptions().useSearch === true) {
       <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
     }
-    <div class="panel scrollbar" [style.max-height.px]="maxShown() * 30">
-      @for (entity of internalEntites; track entity) {
+    <div class="panel scrollbar" [style.max-height.px]="resolvedOptions().maxShown! * 30">
+      @for (entity of internalEntites; track $index) {
         <div class="item">
           <div style="display: contents">
-            <label class="root cursor-pointer" (click)="toggle(entity!); $event.preventDefault(); $event.stopPropagation()">
-              @if (entity?.isSelected) {
-                <span class="indicator selected indicator-dark material-symbols-outlined">check</span>
-              } @else {
-                <span class="indicator indicator-dark"></span>
+            <div class="root cursor-pointer flex flex-row" (click)="toggle(entity!); $event.preventDefault(); $event.stopPropagation()">
+              @if (resolvedOptions().showSelection === true) {
+                @if (entity?.isSelected) {
+                  <span class="indicator selected indicator-dark material-symbols-outlined">check</span>
+                } @else {
+                  <span class="indicator indicator-dark"></span>
+                }
               }
               <div class="root">
                 <div>
                   <span class="label">{{ entity?.label | translate }}</span>
                 </div>
               </div>
-            </label>
+            </div>
           </div>
         </div>
       }

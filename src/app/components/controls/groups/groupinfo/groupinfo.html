@@ -11,6 +11,9 @@
           >{{ group()?.friendly_name }}<span class="material-symbols-outlined edit_icon mr-2 ml-2 cursor-pointer" (click)="renameGroup()">edit_square</span></span
         >
       </div>
+      <div class="container header">
+        <div class="font-bold text-left w-full mt-5">{{ 'DEVICES' | translate }}</div>
+      </div>
       @for (member of members(); track $index) {
         <div class="group_row flex">
           <ExpansionPanelComponent
@@ -30,6 +33,27 @@
           </ExpansionPanelComponent>
         </div>
       }
+
+      <div class="row">
+        <div class="container header">
+          <div class="font-bold text-left w-full mt-5">{{ 'ADD_DEVICE' | translate }}</div>
+        </div>
+
+        <div class="row">
+          <div class="mt-2">
+            <OptionPanelComponent
+              title="{{ deviceSelectorTitle() | translate }}"
+              [entities]="deviceNameList()"
+              [options]="{ maxShown: 10, showSelection: false, multi: false }"
+              (optionsChanged)="selectNewDevice($event)"
+            ></OptionPanelComponent>
+          </div>
+        </div>
+
+        <div class="button">
+          <button class="button-link left" (click)="addDevice()">{{ 'ADD' | translate }}</button>
+        </div>
+      </div>
     </div>
   }
 </div>

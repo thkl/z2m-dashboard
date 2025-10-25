@@ -1,5 +1,5 @@
 .scene_row {
-     display: flex;
+  display: flex;
   min-height: 20px;
   -webkit-box-pack: justify;
   justify-content: space-between;
@@ -7,5 +7,5 @@
   padding: 0.5em;
   margin-top: 0.5em;
   gap: 8px;
-  color: var(--app-text-color)
+  color: var(--app-text-color);
 }

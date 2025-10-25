@@ -1,4 +1,4 @@
-<div class="root_control flex flex-col {{ contentClass() }}" [class.panel-open]="isOpen()">
+<div class="root_control flex flex-col {{ contentClass() }}" [class.panel-open]="isOpen() === true">
   <button type="button" tabindex="0" class="trigger" [class.trigger-colored]="colorTrigger() === true" (click)="toggle()">
     <div class="root_control">
       <div class="w-full">
