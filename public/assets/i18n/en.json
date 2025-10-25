@@ -47,6 +47,7 @@
   "RENAME DEVICE": "Rename {{name}} ...",
   "RENAME HOMEASSISTANT": "also rename the Homeassistant entity",
   "SEARCH": "Search",
+  "SELECT_DEVICE": "Select a device",
   "START_INTERVIEW": "Start Interview",
   "STATUS": "Status",
   "SUPPORT_STATUS": "Support status",

@@ -2,11 +2,10 @@ import { Component, input, output, signal, computed, ContentChildren, QueryList,
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { ColumnDef, TableConfig } from '../../../models/types';
-import { CDKDataSource } from '../../../datastore/generic-store-ui';
-import { TableSortDirective, SortEvent, SortDirection } from '../../../directives/table-sort.directive';
-import { TableCellDirective } from '../../../directives/table-cell.directive';
-import { TableSettingsControl } from '../../tablesettings/tablesettings';
+import { SortDirection, SortEvent, TableSortDirective } from '@/app/directives/table-sort.directive';
+import { CDKDataSource } from '@/app/datastore/generic-store-ui';
+import { ColumnDef, TableConfig } from '@/app/models/types';
+import { TableCellDirective } from '@/app/directives/table-cell.directive';
 
 @Component({
   selector: 'TableComponent',

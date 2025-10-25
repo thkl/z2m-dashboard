@@ -6,7 +6,7 @@ import { timeAgo } from "../utils/time.utils";
 import { TranslateService } from "@ngx-translate/core";
 import { ApplicationService } from "./app.service";
 import { BridgeService } from "./bridge.service";
-import { RemoveDeviceFromGroupOptions, RemoveDeviceOptions, RenameDeviceOptions } from "../models/types";
+import { AddRemoveDeviceFromGroupOptions, RemoveDeviceOptions, RenameDeviceOptions } from "../models/types";
 
 @Injectable({
   providedIn: 'root'
@@ -128,7 +128,13 @@ export class DeviceService {
     this.sendBridgeDeviceRequest("bridge/request/device/rename", { from: renameOptions.device.friendly_name, to: renameOptions.newName, homeassistant_rename: renameOptions.renameHomeAssiatant });
   }
 
-  removeDeviceFromGroup(options: RemoveDeviceFromGroupOptions): void {
+
+  addDeviceToGroup(options: AddRemoveDeviceFromGroupOptions) {
+    this.appService.sendBridgeRequest("bridge/request/group/members/add", options,true);
+  }
+
+
+  removeDeviceFromGroup(options: AddRemoveDeviceFromGroupOptions): void {
     this.sendBridgeDeviceRequest("bridge/request/group/members/remove", options);
   }
 

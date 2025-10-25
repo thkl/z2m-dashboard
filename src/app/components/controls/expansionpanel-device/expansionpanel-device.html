@@ -1,0 +1,31 @@
+<div class="root_control flex flex-col {{ contentClass() }}" [class.panel-open]="isOpen() === true">
+  <button type="button" tabindex="0" class="trigger" [class.trigger-colored]="colorTrigger() === true" (click)="toggle()">
+    <div class="root_control">
+      <div class="w-full flex flex-row items-center">
+        <DeviceImage [device]="device()" class="max-w-7 ml-3"></DeviceImage>
+        <div class="title {{ titleClass() }} ml-3">{{ label() ? label() : device().friendly_name }}</div>
+      </div>
+    </div>
+    @if (isOpen() === false) {
+      <span class="material-symbols-outlined">arrow_drop_down</span>
+    } @else {
+      <span class="material-symbols-outlined">arrow_drop_up</span>
+    }
+  </button>
+  <div class="content flex flex-col" [class.content-open]="isOpen()" style="flex-grow: inherit">
+    <div class="options flex flex-col" style="flex-grow: inherit">
+      @if (hasSearch() === true) {
+        <div class="root_control">
+          <div>
+            <app-searchinput></app-searchinput>
+          </div>
+          <div>
+            <ng-content></ng-content>
+          </div>
+        </div>
+      } @else {
+        <ng-content></ng-content>
+      }
+    </div>
+  </div>
+</div>

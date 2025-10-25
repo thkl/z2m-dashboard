@@ -1,5 +1,6 @@
+import { ColorOption } from '@/app/models/types';
 import { Component, input, model, output, signal } from '@angular/core';
-import { ColorOption } from '../../../models/types';
+ 
  
 @Component({
   selector: 'ColorSelectorComponent',

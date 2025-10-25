@@ -160,4 +160,5 @@ export class BridgeService {
   deleteAllScenes(groupName:string) {
     this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove_all: "" },false);
   }
+
 }

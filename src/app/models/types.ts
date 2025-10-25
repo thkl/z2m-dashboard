@@ -47,7 +47,7 @@ export interface DeleteObjectOptions {
   delete: boolean
 }
 
-export interface RemoveDeviceFromGroupOptions {
+export interface AddRemoveDeviceFromGroupOptions {
   group: string;
   device: string;
   endpoint: number;

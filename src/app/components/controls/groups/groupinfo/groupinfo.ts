@@ -1,20 +1,24 @@
 import { Component, computed, inject, input, signal, Signal } from '@angular/core';
-import { Group } from '../../../../models/group';
-import { createStoreView } from '../../../../datastore/generic-store-view';
-import { GroupStore } from '../../../../datastore/group.store';
-import { SearchOperator } from '../../../../datastore/generic.store';
-import { TranslateModule } from '@ngx-translate/core';
-import { DeviceStore } from '../../../../datastore/device.store';
-import { ExpansionPanelComponent } from '../../expansionpanel/expansionpanel';
-import { Device } from '../../../../models/device';
-import { RemoveDeviceFromGroupOptions } from '../../../../models/types';
-import { DeviceService } from '../../../../services/device.service';
-import { DeviceFeaturesComponent } from '../../device/devicefeatures/devicefeatures';
-import { OptionPanelComponent } from '../../optionpanel/optionpanel';
+
+import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ExpansionPanelComponent } from '@/app/components/controls/expansionpanel/expansionpanel';
+import { DeviceFeaturesComponent } from '@/app/components/controls/device/devicefeatures/devicefeatures';
+import { GroupStore } from '@/app/datastore/group.store';
+import { DeviceStore } from '@/app/datastore/device.store';
+import { DeviceService } from '@/app/services/device.service';
+import { createStoreView } from '@/app/datastore/generic-store-view';
+
+import { SearchOperator } from '@/app/datastore/generic.store';
+import { Group } from '@/app/models/group';
+import { Device } from '@/app/models/device';
+import { AddRemoveDeviceFromGroupOptions } from '@/app/models/types';
+import { ExpansionPanelDeviceComponent } from '@/app/components/controls/expansionpanel-device/expansionpanel-device';
+
 
 @Component({
   selector: 'GroupInfoComponent',
-  imports: [TranslateModule, ExpansionPanelComponent, DeviceFeaturesComponent, OptionPanelComponent],
+  imports: [TranslateModule, ExpansionPanelComponent,ExpansionPanelDeviceComponent, DeviceFeaturesComponent, OptionPanelComponent],
   templateUrl: './groupinfo.html',
   styleUrl: './groupinfo.scss'
 })
@@ -23,6 +27,7 @@ export class GroupInfoComponent {
   protected readonly groupStore = inject(GroupStore);
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly deviceService = inject(DeviceService);
+  protected readonly translate = inject(TranslateService);
 
   group_id = input.required<number | undefined>();
   group = computed(() => {
@@ -38,23 +43,34 @@ export class GroupInfoComponent {
   });
 
   members = computed(() => {
-
     const mb = this.group()?.members;
     const dv = this.deviceStore.entities();
-
     return mb?.map(m => {
       return { device: dv.find(d => d.ieee_address === m.ieee_address), endpoint: m.endpoint };
     })
   });
 
-  selectedDevice = signal<Device|null>(null);
+  selectedDevice = signal<Device | null>(null);
+  selectedEndpointId = signal<string | null>(null);
 
-  deviceSelectorTitle = computed(()=>{
-
+  deviceSelectorTitle = computed(() => {
     const d = this.selectedDevice();
-    return d !== null ? d.friendly_name : "SELECT_DEVICE"
-
+    return d !== null ? d.friendly_name : this.translate.instant("SELECT_DEVICE")
   });
+
+  selectedDeviceEndPoints = computed(() => {
+    const d = this.selectedDevice();
+    return (d !== null) ? Object.keys(d.endpoints).map((e: string) => {
+      return { label: e, value: e, isSelected: false }
+    }) : [];
+  })
+
+
+  endPointSelectorTitle = computed(() => {
+    const epd = this.selectedEndpointId();
+    return epd !== null ? this.translate.instant("ENDPOINT_",{id:epd}) : this.translate.instant("ENDPOINT")
+  });
+
 
   availabelDevices = createStoreView(this.deviceStore, {
     criteria: [
@@ -65,7 +81,7 @@ export class GroupInfoComponent {
 
   deviceNameList = computed(() => {
     const dv = this.availabelDevices();
-    return dv.map((d:Device) => {
+    return dv.map((d: Device) => {
       return {
         isSelected: false,
         label: d.friendly_name,
@@ -81,7 +97,7 @@ export class GroupInfoComponent {
 
   removeDeviceFromGroup(device: Device, endpoint: number) {
     if (this.group()) {
-      const options: RemoveDeviceFromGroupOptions = {
+      const options: AddRemoveDeviceFromGroupOptions = {
         device: device.friendly_name,
         group: this.group()!.friendly_name,
         endpoint
@@ -91,10 +107,45 @@ export class GroupInfoComponent {
   }
 
   addDevice(): void {
+    const device = this.selectedDevice();
+    const endpoint = this.selectedEndpointId();
+    const group = this.group();
+    if (device && endpoint && group) {
 
+      const options: AddRemoveDeviceFromGroupOptions = {
+        device: device.friendly_name,
+        group: group.friendly_name,
+        endpoint: parseInt(endpoint)
+      }
+
+      this.deviceService.addDeviceToGroup(options);
+      this.selectedDevice.set(null);
+      this.selectedEndpointId.set(null);
+    }
   }
 
   selectNewDevice(selected: any) {
-    this.selectedDevice.set(this.availabelDevices().find((d:Device)=>d.ieee_address === selected.value));
+    const device = this.availabelDevices().find((d: Device) => d.ieee_address === selected.value);
+    if (device) {
+      this.selectedDevice.set(device);
+      // if there is just one EP in the device select it
+      const eps = device.endpoints;
+      if (eps) {
+        if (Object.keys(eps).length === 1) {
+          const firstEP = Object.keys(eps)[0];
+          this.selectedEndpointId.set(firstEP);
+        }
+      } else {
+        this.selectedEndpointId.set(null);
+      }
+    }
+  }
+
+  selectNewEndPoint(selected: any) {
+    const device = this.selectedDevice();
+    if (device) {
+      const epid = selected.value;
+      this.selectedEndpointId.set(epid);
+    }
   }
 }
