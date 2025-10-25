@@ -498,21 +498,26 @@ button.right {
   line-height: 18.4px;
 }
 
-.button-blue {
-  color: rgb(128, 183, 255);
+.button-link {
+  color:var(--app-link-color);
+  font-size: 13px;
 }
 
-.button-blue.disabled {
+.button-link-danger {
+  color:var(--app-link-danger-color);
+  font-size: 13px;
+}
+
+
+.button-link.disabled {
   color: rgba(96, 119, 148, 0.702);
+  font-size: 13px;
   cursor: not-allowed;
 }
 
-.button-red {
-  color: rgb(241, 12, 12);
-}
-
-.button-red.disabled {
+.button-link-danger.disabled {
   color: rgba(129, 110, 110, 0.52);
+  font-size: 13px;
   cursor: not-allowed;
 }
 

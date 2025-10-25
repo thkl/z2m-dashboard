@@ -5,7 +5,7 @@ import { DeviceInspectorComponent } from '../pages/deviceinspector/deviceinspect
 import { TranslateModule } from '@ngx-translate/core';
 import { ApplicationService } from '../services/app.service';
 import { BridgeService } from '../services/bridge.service';
-import { TimeToPipe } from '../pipes/time-togo.pipe';
+ 
 import { LogView } from '../components/logview/logview';
 import { ResizableContainerComponent } from '../components/controls/resizable-container/resizable-container';
 import { GroupInspectorComponent } from '../pages/groupinspector/groupinspector.component';
@@ -17,7 +17,7 @@ import { Z2MServer } from '../models/types';
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [RouterModule, DeviceInspectorComponent, TranslateModule, TimeToPipe, LogView, ResizableContainerComponent, GroupInspectorComponent]
+  imports: [RouterModule, DeviceInspectorComponent, TranslateModule, LogView, ResizableContainerComponent, GroupInspectorComponent]
 })
 export class LayoutComponent {
   sidebarOpen = true;

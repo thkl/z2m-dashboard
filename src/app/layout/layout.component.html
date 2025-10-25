@@ -76,9 +76,6 @@
         {{ mainTitle() | translate }}
       </h1>
 
-      @if (info()?.permit_join === true && info()?.permit_join_end) {
-        <div class="flex items-center gap-2">Open {{ info()?.permit_join_end ?? 0 | timeTogo }}</div>
-      }
       <div class="flex items-center gap-2">
         <span class="cursor-pointer" (click)="openServerDialog()">
           {{ connectedHost() }}

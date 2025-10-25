@@ -24,7 +24,7 @@
             <div class="wrapper">
               <DeviceFeaturesComponent [ieee_address]="member?.device?.ieee_address" displayMode="scene"></DeviceFeaturesComponent>
               <div class="button">
-                <button class="button-red left" (click)="removeDeviceFromGroup(member.device!, member.endpoint)">{{ 'REMOVE_DEVICE' | translate }}</button>
+                <button class="button-link-danger left" (click)="removeDeviceFromGroup(member.device!, member.endpoint)">{{ 'REMOVE_DEVICE' | translate }}</button>
               </div>
             </div>
           </ExpansionPanelComponent>

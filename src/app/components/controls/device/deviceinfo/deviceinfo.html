@@ -97,7 +97,7 @@
       <div class="buttonBar mt-3 panel">
         @if (device()?.update && device()?.update?.state === 'available') {
           <div class="button">
-            <button class="button-blue left" (click)="performUpdate()">{{ 'PERFORM_UPDATE' | translate }}</button>
+            <button class="button-link left" (click)="performUpdate()">{{ 'PERFORM_UPDATE' | translate }}</button>
           </div>
         }
 
@@ -110,18 +110,18 @@
 
         @if (device()?.update === undefined || device()?.update?.state !== 'updating') {
           <div class="button">
-            <button class="button-blue left" (click)="checkUpdate()">{{ 'CHECK_FOR_UPDATE' | translate }}</button>
+            <button class="button-link left" (click)="checkUpdate()">{{ 'CHECK_FOR_UPDATE' | translate }}</button>
           </div>
         }
 
         <div class="button">
-          <button class="button-blue left" (click)="startInterview()">{{ 'START_INTERVIEW' | translate }}</button>
+          <button class="button-link left" (click)="startInterview()">{{ 'START_INTERVIEW' | translate }}</button>
         </div>
         <div class="button">
-          <button class="button-blue left" (click)="startReconfig()">{{ 'RECONFIGURE' | translate }}</button>
+          <button class="button-link left" (click)="startReconfig()">{{ 'RECONFIGURE' | translate }}</button>
         </div>
         <div class="button">
-          <button class="button-red left" (click)="deleteDevice()">{{ 'DELETE' | translate }}</button>
+          <button class="button-link-danger left" (click)="deleteDevice()">{{ 'DELETE' | translate }}</button>
         </div>
       </div>
     </div>

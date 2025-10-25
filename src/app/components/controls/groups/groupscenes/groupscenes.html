@@ -25,31 +25,31 @@
               </span>
             </div>
             <div class="button">
-              <button class="button-blue left" (click)="recallScene(scene.id)">{{ 'RECALL_SCENE' | translate }}</button>
+              <button class="button-link left" (click)="recallScene(scene.id)">{{ 'RECALL_SCENE' | translate }}</button>
             </div>
 
             <div class="button hint">
               <div class="flex flex-col">
-                <button class="button-blue left" (click)="updateScene(scene.id, scene.name)">{{ 'UPDATE_SCENE' | translate }}</button>
+                <button class="button-link left" (click)="updateScene(scene.id, scene.name)">{{ 'UPDATE_SCENE' | translate }}</button>
                 <span class="hint ml-1">This will also save the state of all members of this scene</span>
               </div>
             </div>
 
             <div class="button">
-              <button class="button-red left" (click)="deleteScene(scene.id, scene.name)">{{ 'DELETE_SCENE' | translate }}</button>
+              <button class="button-link-danger left" (click)="deleteScene(scene.id, scene.name)">{{ 'DELETE_SCENE' | translate }}</button>
             </div>
           </ExpansionPanelComponent>
         </div>
       }
       <div class="scene_row">
         <div class="button">
-          <button class="button-blue left" (click)="newScene()">{{ 'NEW_SCENE' | translate }}</button>
+          <button class="button-link left" (click)="newScene()">{{ 'NEW_SCENE' | translate }}</button>
         </div>
       </div>
 
       <div class="scene_row">
         <div class="button">
-          <button class="button-red left" [class.disabled]="group()!.scenes.length === 0" (click)="deleteAllScenes()">{{ 'DELETE_ALL_SCENES' | translate }}</button>
+          <button class="button-link-danger left" [class.disabled]="group()!.scenes.length === 0" (click)="deleteAllScenes()">{{ 'DELETE_ALL_SCENES' | translate }}</button>
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ import { Device } from '@/app/models/device';
 import { ColumnDef, TableConfig, SelectOption } from '@/app/models/types';
 import { HexPipe } from '@/app/pipes/hex.pipe';
 import { HumanReadablePipe } from '@/app/pipes/human.pipe';
+import { TimeToPipe } from '@/app/pipes/time-togo.pipe';
 import { ApplicationService } from '@/app/services/app.service';
 import { BridgeService } from '@/app/services/bridge.service';
 import { DeviceService } from '@/app/services/device.service';
@@ -43,7 +44,7 @@ const allColumns: ColumnDef<Device>[] = [
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar,TimeToPipe]
 })
 export class DeviceListComponent {
 

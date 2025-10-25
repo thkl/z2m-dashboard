@@ -25,11 +25,19 @@
     <div class="mt-2">
       <TableSettingsControl></TableSettingsControl>
     </div>
+
+    @if (bridgeInfo()?.permit_join === true && bridgeInfo()?.permit_join_end) {
+      <div class="mt-2 flex flex-col">
+        <button class="button-link left" (click)="permitJoin()">{{ 'END_JOIN' | translate }}</button>
+        <div class="ml-2 mr-2">{{ 'OPEN_NETWORK' | translate: { time: bridgeInfo()?.permit_join_end ?? 0 | timeTogo } }}</div>
+      </div>
+    } @else {
+      <div class="button">
+        <button class="button-link left" (click)="permitJoin()">{{ 'PERMIT_JOIN' | translate }}</button>
+      </div>
+    }
     <div class="button">
-      <button class="button-blue left" (click)="permitJoin()">{{ 'PERMIT_JOIN' | translate }}</button>
-    </div>
-    <div class="button">
-      <button class="button-blue left">{{ 'CHECK_FOR_UPDATE_ALL' | translate }}</button>
+      <button class="button-link left">{{ 'CHECK_FOR_UPDATE_ALL' | translate }}</button>
     </div>
   </div>
   <div class="w-full ml-2">
