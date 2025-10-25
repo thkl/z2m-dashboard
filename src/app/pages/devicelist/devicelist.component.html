@@ -25,6 +25,12 @@
     <div class="mt-2">
       <TableSettingsControl></TableSettingsControl>
     </div>
+    <div class="button">
+      <button class="button-blue left" (click)="permitJoin()">{{ 'PERMIT_JOIN' | translate }}</button>
+    </div>
+    <div class="button">
+      <button class="button-blue left">{{ 'CHECK_FOR_UPDATE_ALL' | translate }}</button>
+    </div>
   </div>
   <div class="w-full ml-2">
     <TableComponent
@@ -89,7 +95,10 @@
               {{ 'UP_TO_DATE' | translate }}
             }
             @case ('updating') {
-              {{ 'DEVICE_UPDATING' | translate }}
+              <div class="flex flex-row items-center">
+                {{ 'DEVICE_UPDATING' | translate }}
+                <ProgessBar class="block ml-1 max-w-36" [percent]="device.update?.progress ?? 0"></ProgessBar>
+              </div>
             }
           }
         } @else {

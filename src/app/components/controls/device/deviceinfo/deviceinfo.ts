@@ -21,7 +21,7 @@ import { ApplicationService } from '@/app/services/app.service';
 
 @Component({
   selector: 'DeviceInfoComponent',
-  imports: [TranslateModule, HexPipe, HumanReadablePipe, SecondsToTimePipe, ModelLink, VendorLink, DeviceImage, DeviceAvailability,ProgessBar],
+  imports: [TranslateModule, HexPipe, HumanReadablePipe, SecondsToTimePipe, ModelLink, VendorLink, DeviceImage, DeviceAvailability, ProgessBar],
   templateUrl: './deviceinfo.html',
   styleUrl: './deviceinfo.scss'
 })
@@ -33,7 +33,7 @@ export class DeviceInfoComponent {
   private readonly applicationService = inject(ApplicationService)
 
   ieee_address = input.required<string | undefined>();
-  
+
   device = computed(() => {
     //Filter the coordinator from the devices
     let devicesView: Signal<Device[]> = createStoreView(this.deviceStore, {
@@ -87,6 +87,12 @@ export class DeviceInfoComponent {
   performUpdate() {
     if (this.device()) {
       this.deviceService.performUpdate(this.device()!);
+    }
+  }
+
+  checkUpdate() {
+    if (this.device()) {
+      this.deviceService.checkUpdate(this.device()!);
     }
   }
 

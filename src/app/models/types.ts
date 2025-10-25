@@ -166,6 +166,6 @@ export interface AddObjectDialogData {
 export interface Z2MServer {
   name:string,
   secure:boolean,
-  hostname:string,
+  host:string,
   port:number
 }

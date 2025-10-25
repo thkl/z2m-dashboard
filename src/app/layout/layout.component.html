@@ -38,11 +38,6 @@
             <span class="material-symbols-outlined">network_node</span>
             <span>Network</span>
           </a>
-
-          <a (click)="permitJoin()" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer">
-            <span class="material-symbols-outlined">join</span>
-            <span>Permit Join</span>
-          </a>
         </nav>
       </aside>
     </app-resizable-container>
@@ -69,10 +64,6 @@
         <a routerLink="/network" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
           <span class="material-symbols-outlined">network_node</span>
         </a>
-
-        <a (click)="permitJoin()" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer">
-          <span class="material-symbols-outlined">join</span>
-        </a>
       </nav>
     </aside>
   }
@@ -89,8 +80,8 @@
         <div class="flex items-center gap-2">Open {{ info()?.permit_join_end ?? 0 | timeTogo }}</div>
       }
       <div class="flex items-center gap-2">
-        <span (click)="openServerDialog()">
-          {{ host }}
+        <span class="cursor-pointer" (click)="openServerDialog()">
+          {{ connectedHost() }}
         </span>
       </div>
     </header>

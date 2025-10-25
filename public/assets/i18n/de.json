@@ -70,6 +70,9 @@
   "UNKNOWN": "unbekannt",
   "UPDATE_AVAILABLE": "Update verfügbar",
   "PERFORM_UPDATE": "Gerät aktualisieren",
+  "DEVICE_UPDATING":"Gerät aktualisiert",
+  "CHECK_FOR_UPDATE":"Auf Upates prüfen",
+  "PERMIT_JOIN":"Gerät hinzufügen",
   "DEVICE_VIEW": "Geräte",
   "GROUP_VIEW": "Gruppen",
   "NETWORK_VIEW": "Netzwerk",
@@ -87,5 +90,11 @@
   "ADD_SCENE":"Szene hinzufügen",
   "ADD_SCENE_DATA":"Die Szene beinhaltet gleichzeitig alle aktuellen Zustände der Geräte in dieser Gruppe.",
   "SCENE_ID":"ID der Szene",
-  "ADD":"Hinzufügen"
+  "ADD":"Hinzufügen",
+  "CHOOSE_SERVER_TITLE":"Server auswählen",
+  "CHOOSE_SERVER_MESSAGE":"Bekannten Server auswählen",
+  "NEW_SERVER":"Neuen Server",
+  "CONNECT":"Verbinden",
+  "IS_SECURE":"Secure",
+  "IS_SECURE_DESCRIPTION":"Auswählen wenn zigbee2mqtt hinter einem HTTPS Proxy ist"
 }

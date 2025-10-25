@@ -1,6 +1,7 @@
 import { DeviceImage } from '@/app/components/controls/device/device-image/device-image';
 import { TableComponent } from '@/app/components/controls/generic-table/generic-table.component';
 import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
+import { ProgessBar } from '@/app/components/controls/progess-bar/progess-bar';
 import { SearchInput } from '@/app/components/controls/searchinput/searchinput';
 import { TableSettingsControl } from '@/app/components/tablesettings/tablesettings';
 import { DeviceStore } from '@/app/datastore/device.store';
@@ -14,48 +15,52 @@ import { ColumnDef, TableConfig, SelectOption } from '@/app/models/types';
 import { HexPipe } from '@/app/pipes/hex.pipe';
 import { HumanReadablePipe } from '@/app/pipes/human.pipe';
 import { ApplicationService } from '@/app/services/app.service';
+import { BridgeService } from '@/app/services/bridge.service';
+import { DeviceService } from '@/app/services/device.service';
 import { filterData } from '@/app/utils/filter.utils';
 import { sortData } from '@/app/utils/sort.utils';
 import { Component, computed, inject, signal, effect, Signal, Injector, viewChild } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 
- const allColumns: ColumnDef<Device>[] = [
-      { id: 'status', label: 'STATUS', hideLabel:true, minWidth: 30, maxWidth: 30, sortable: false },
-      { id: 'icon', label: 'ICON',hideLabel:true, minWidth: 50, maxWidth: 50, sortable: false },
-      { id: 'name', label: 'NAME', minWidth: 250, maxWidth: 450, sortable: true },
-      { id: 'vendor', label: 'MANUFACTURER', minWidth: 150, maxWidth: 250, sortable: true },
-      { id: 'model', label: 'MODEL', minWidth: 200, maxWidth: 400, sortable: true },
-      { id: 'linkquality', label: 'LQI', minWidth: 60, maxWidth: 80, sortable: true },
-      { id: 'battery', label: 'BATTERY', minWidth: 80, maxWidth: 120, sortable: true },
-      { id: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150, sortable: true },
-      { id: 'ieee_address', label: 'IEEE_ADDRESS', minWidth: 250, maxWidth: 250, sortable: true },
-      { id: 'supported', label: 'SUPPORT_STATUS', minWidth: 50, maxWidth: 100, sortable: true },
-      { id: 'type', label: 'DEVICE_TYPE', minWidth: 50, maxWidth: 100, sortable: true },
-      { id: 'firmware_state', label: 'FIRMWARE_STATE', minWidth: 50, maxWidth: 100, sortable: true },
-    ];
+const allColumns: ColumnDef<Device>[] = [
+  { id: 'status', label: 'STATUS', hideLabel: true, minWidth: 30, maxWidth: 30, sortable: false },
+  { id: 'icon', label: 'ICON', hideLabel: true, minWidth: 50, maxWidth: 50, sortable: false },
+  { id: 'name', label: 'NAME', minWidth: 250, maxWidth: 450, sortable: true },
+  { id: 'vendor', label: 'MANUFACTURER', minWidth: 150, maxWidth: 250, sortable: true },
+  { id: 'model', label: 'MODEL', minWidth: 200, maxWidth: 400, sortable: true },
+  { id: 'linkquality', label: 'LQI', minWidth: 60, maxWidth: 80, sortable: true },
+  { id: 'battery', label: 'BATTERY', minWidth: 80, maxWidth: 120, sortable: true },
+  { id: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150, sortable: true },
+  { id: 'ieee_address', label: 'IEEE_ADDRESS', minWidth: 250, maxWidth: 250, sortable: true },
+  { id: 'supported', label: 'SUPPORT_STATUS', minWidth: 50, maxWidth: 100, sortable: true },
+  { id: 'type', label: 'DEVICE_TYPE', minWidth: 50, maxWidth: 100, sortable: true },
+  { id: 'firmware_state', label: 'FIRMWARE_STATE', minWidth: 50, maxWidth: 100, sortable: true },
+];
 
 
 @Component({
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective,HexPipe,HumanReadablePipe,TableSettingsControl]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar]
 })
 export class DeviceListComponent {
 
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly applicationService = inject(ApplicationService);
   protected readonly injector = inject(Injector);
+  protected readonly deviceService = inject(DeviceService);
+  protected readonly bridgeService = inject(BridgeService);
 
   // Displayed columns signal for column visibility management
   displayedColumns = signal<string[]>([]);
 
   tableSettings = viewChild(TableSettingsControl);
- 
+
   // Table configuration with column definitions
   tableConfig = computed<TableConfig<Device>>(() => {
-   
+
 
     const selected = this.selectedDevice();
     const sortDir = this.sortDirection();
@@ -72,6 +77,13 @@ export class DeviceListComponent {
     };
   });
 
+
+  bridgeInfo = computed(() => {
+    const bi = this.bridgeService.bridgeInfo;
+    return bi();
+  })
+
+
   // Sorting state
   sortColumn = signal<string>('name');
   sortDirection = signal<SortDirection>('asc');
@@ -79,10 +91,10 @@ export class DeviceListComponent {
   // Filter state
   searchText = signal<string>('');
   selectedVendors = signal<SelectOption[]>([]);
-  selectedModels = signal<SelectOption[]>([]); 
-  selectedPowering = signal<SelectOption[]>([]); 
-  selectedAvailability = signal<SelectOption[]>([]); 
-  
+  selectedModels = signal<SelectOption[]>([]);
+  selectedPowering = signal<SelectOption[]>([]);
+  selectedAvailability = signal<SelectOption[]>([]);
+
   //Filter the coordinator from the devices
   devicesView = createStoreView(this.deviceStore, {
     criteria: [
@@ -94,10 +106,10 @@ export class DeviceListComponent {
   // Filtered and sorted devices
   devices = computed<Device[]>(() => {
     const filtered = filterData<Device>(
-      this.devicesView().map((d:Device)=>{
+      this.devicesView().map((d: Device) => {
 
         if (d.definition && d.definition.model) {
-          d.definition.image = d.definition.model.replaceAll("/","-")
+          d.definition.image = d.definition.model.replaceAll("/", "-")
         }
         return d;
 
@@ -114,36 +126,36 @@ export class DeviceListComponent {
     );
   });
 
-  finalyFilter = computed(()=>{
+  finalyFilter = computed(() => {
     let prefiltered = this.devices();
-    let selVendorNames = this.selectedVendors().map(v=>v.label);
-    let selModelNames = this.selectedModels().map(v=>v.label);
-    let selPowering = this.selectedPowering().map(v=>v.label);
-    let selAvailability = this.selectedAvailability().map(v=>v.label);
+    let selVendorNames = this.selectedVendors().map(v => v.label);
+    let selModelNames = this.selectedModels().map(v => v.label);
+    let selPowering = this.selectedPowering().map(v => v.label);
+    let selAvailability = this.selectedAvailability().map(v => v.label);
 
     if (selVendorNames.length > 0) {
-  
-      prefiltered = prefiltered.filter(d=>{
-        return selVendorNames.indexOf(d.definition?.vendor)!==-1
+
+      prefiltered = prefiltered.filter(d => {
+        return selVendorNames.indexOf(d.definition?.vendor) !== -1
       });
     }
 
 
     if (selModelNames.length > 0) {
-      prefiltered = prefiltered.filter(d=>{
-        return selModelNames.indexOf(d.definition?.model)!==-1
+      prefiltered = prefiltered.filter(d => {
+        return selModelNames.indexOf(d.definition?.model) !== -1
       });
     }
 
     if (selPowering.length > 0) {
-      prefiltered = prefiltered.filter(d=>{
-        return selPowering.indexOf(d.power_source)!==-1
+      prefiltered = prefiltered.filter(d => {
+        return selPowering.indexOf(d.power_source) !== -1
       });
     }
 
     if (selAvailability.length > 0) {
-      prefiltered = prefiltered.filter(d=>{
-        return selAvailability.indexOf(d.state?.availability)!==-1
+      prefiltered = prefiltered.filter(d => {
+        return selAvailability.indexOf(d.state?.availability) !== -1
       });
     }
 
@@ -158,10 +170,10 @@ export class DeviceListComponent {
   }
 
   private vendorsMap = new Map<string, SelectOption>();
-  private modelMap = new Map<string,SelectOption>();
-  private powerMap = new Map<string,SelectOption>();
-  private avaliMap = new Map<string,SelectOption>();
-  
+  private modelMap = new Map<string, SelectOption>();
+  private powerMap = new Map<string, SelectOption>();
+  private avaliMap = new Map<string, SelectOption>();
+
   vendorList = computed(() => {
     const entitys = Array.from(new Set(this.deviceStore.entities()
       .map(entity => entity.definition ? entity.definition.vendor : undefined)
@@ -215,7 +227,7 @@ export class DeviceListComponent {
     });
   });
 
-   
+
 
   selectedDevice = computed(() => {
     return this.deviceStore.selectedEntity();
@@ -256,8 +268,8 @@ export class DeviceListComponent {
   }
 
 
-  columnOrderChange(newOrder:any):void {
-     this.applicationService.setPreference('devicelist_columns',newOrder);
+  columnOrderChange(newOrder: any): void {
+    this.applicationService.setPreference('devicelist_columns', newOrder);
   }
 
   getDeviceValue(device: Device, column: string): any {
@@ -301,20 +313,26 @@ export class DeviceListComponent {
     this.applicationService.inspector = 'device';
   }
 
-  vendorsSelectionChanged(event:SelectOption[]) {
-    this.selectedVendors.set(event.filter(v=>v.isSelected));
+  vendorsSelectionChanged(event: SelectOption[]) {
+    this.selectedVendors.set(event.filter(v => v.isSelected));
   }
 
-  modelSelectionChanged(event:SelectOption[]) {
-    this.selectedModels.set(event.filter(v=>v.isSelected));
+  modelSelectionChanged(event: SelectOption[]) {
+    this.selectedModels.set(event.filter(v => v.isSelected));
   }
 
-  powerSelectionChanged(event:SelectOption[]) {
-    this.selectedPowering.set(event.filter(v=>v.isSelected));
+  powerSelectionChanged(event: SelectOption[]) {
+    this.selectedPowering.set(event.filter(v => v.isSelected));
   }
 
-  availabilitySelectionChanged(event:SelectOption[]) {
-    this.selectedAvailability.set(event.filter(v=>v.isSelected));
+  availabilitySelectionChanged(event: SelectOption[]) {
+    this.selectedAvailability.set(event.filter(v => v.isSelected));
   }
+
+
+  permitJoin() {
+    this.bridgeService.permitJoin(this.bridgeInfo()?.permit_join ? 0 : 254);
+  }
+
 }
 

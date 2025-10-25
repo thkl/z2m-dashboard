@@ -108,6 +108,12 @@
           </div>
         }
 
+        @if (device()?.update === undefined || device()?.update?.state !== 'updating') {
+          <div class="button">
+            <button class="button-blue left" (click)="checkUpdate()">{{ 'CHECK_FOR_UPDATE' | translate }}</button>
+          </div>
+        }
+
         <div class="button">
           <button class="button-blue left" (click)="startInterview()">{{ 'START_INTERVIEW' | translate }}</button>
         </div>

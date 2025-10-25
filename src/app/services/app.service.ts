@@ -37,6 +37,12 @@ export class ApplicationService {
         this.inspectorSignal.set(item);
     }
 
+    private connectedHostSignal = signal<string | null>(null);
+
+    get connectedHost(): Signal<string | null> {
+        return this.connectedHostSignal;
+    }
+
     constructor() {
         this.loadSettings();
         this.connect()
@@ -75,12 +81,10 @@ export class ApplicationService {
         } catch (e) {
 
         }
-
-        const host = z2m.hostname;
+        const host = z2m.host;
         const secure = z2m.secure;
         const port = z2m.port;
         const name = z2m.name;
-
         saved[host] = { name, host, port, secure };
         this.setPreference("saved_hosts", saved);
         this.setPreference("host", host.replace('https://', '').replace('http://', ''));
@@ -94,6 +98,7 @@ export class ApplicationService {
         const secure = this.getPreference("secure");
         if (host) {
             this.ws.connect(`${secure ? 'wss' : 'ws'}://${host}/api`);
+            this.connectedHostSignal.set(`${host}`);
         }
     }
 

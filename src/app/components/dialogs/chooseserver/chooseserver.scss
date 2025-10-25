@@ -30,6 +30,37 @@ label {
   width: 50%;
 }
 
+.col-10 {
+  flex: 0 0 auto;
+  padding: 1px;
+  width: 10%;
+}
+
+.col-20 {
+  flex: 0 0 auto;
+  padding: 1px;
+  width: 20%;
+}
+
+.col-30 {
+  flex: 0 0 auto;
+  padding: 1px;
+  width: 30%;
+}
+
+.col-40 {
+  flex: 0 0 auto;
+  padding: 1px;
+  width: 40%;
+}
+
+
+.col-60 {
+  flex: 0 0 auto;
+  padding: 1px;
+  width: 60%;
+}
+
 button {
   color: var(--dialog-button-text-color);
   font-weight: normal;
@@ -37,4 +68,12 @@ button {
 
 input {
   background-color: var(--input-background-highlighted) !important;
+}
+
+
+.framed {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 4px;
+  border: 1px solid var(--app-border-color);
 }

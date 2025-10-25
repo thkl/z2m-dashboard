@@ -37,6 +37,10 @@ export class LayoutComponent {
     return this.applicationService.inspector();
   })
 
+  connectedHost = computed(()=>{
+    return this.applicationService.connectedHost();
+  })
+
   info = computed(() => {
     const bi = this.bs.bridgeInfo;
     return bi();
@@ -49,7 +53,10 @@ export class LayoutComponent {
   constructor() {
     const host = this.applicationService.getPreference("host");
 
-    this.host = host || 'localhost';
+    this.host = host;
+    if (!host) {
+      this.openServerDialog()
+    }
 
   }
 
@@ -66,9 +73,6 @@ export class LayoutComponent {
     this.applicationService.inspector = null;
   }
 
-  permitJoin() {
-    this.bs.permitJoin(this.info()?.permit_join ? 0 : 254);
-  }
 
   openServerDialog() {
 
@@ -94,6 +98,7 @@ export class LayoutComponent {
     dialogRef.closed.subscribe((result: unknown) => {
       if (result !== undefined) {
         const dr = result as ChooseServerDialogData 
+        console.log("Try connecting",dr.newServer)
         this.applicationService.saveAndConnect(dr.newServer!)
       }
     });

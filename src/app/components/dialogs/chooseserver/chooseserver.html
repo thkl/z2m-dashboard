@@ -2,55 +2,62 @@
   <header>
     <div class="title">{{ 'CHOOSE_SERVER_TITLE' | translate }}</div>
   </header>
-  <div class="message">
-    <span>{{ 'CHOOSE_SERVER_MESSAGE' | translate }}</span>
-  </div>
-  @for (kServer of dialogData.knownServer; track $index) {
-    <div class="container flex flex-row">
-      <span>{{ kServer.name }}</span>
-      <button>{{ 'CONNECT' | translate }}</button>
+  <div class="framed">
+    <div class="message mb-5">
+      <span>{{ 'CHOOSE_SERVER_MESSAGE' | translate }}</span>
     </div>
-  }
-  <div class="container">
-    {{ 'NEW_SERVER' | translate }}
-    <div class="row">
-      <div class="col-full">
-        <label for="input_newServerName">{{ 'NAME' | translate }}</label>
-        <div class="input-container">
-          <input class="w-full text-left panel" id="input_newServerName" [value]="name()" (change)="changeName($event)" />
+    <div class="container">
+      @for (kServer of dialogData.knownServer; track $index) {
+        <div class="row">
+          <div class="col-20">{{ kServer.name }}</div>
+          <div class="col-40">{{ kServer.host }}</div>
+          <div class="col-10">{{ kServer.port }}</div>
+          <div class="col-30">
+            <a class="button-blue left cursor-pointer" (click)="connect(kServer)">{{ 'CONNECT' | translate }}</a>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-50">
-        <label for="input_newHost">{{ 'HOST' | translate }}</label>
-        <div class="input-container">
-          <input class="w-full text-left panel" id="input_newHost" [value]="host()" (change)="changeHost($event)" />
-        </div>
-      </div>
-      <div class="col-50">
-        <label for="input_newPort">{{ 'PORT' | translate }}</label>
-        <div class="input-container">
-          <input class="w-full text-left panel" id="input_newPort" [value]="port()" (change)="changePort($event)" />
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <label for="input_newSecure">{{ 'IS_SECURE' | translate }}</label>
-        <div class="input-container">
-          <OptionComponent class="w-full text-left panel" id="input_newSecure" [active]="true" [item]="isSecure()" (clicked)="changeIsSecure($event)" />
-        </div>
-      </div>
+      }
     </div>
   </div>
-
+  <div class="framed">
+    <div class="container">
+      {{ 'NEW_SERVER' | translate }}
+      <div class="row">
+        <div class="col-full">
+          <label for="input_newServerName">{{ 'NAME' | translate }}</label>
+          <div class="input-container">
+            <input class="w-full text-left panel" id="input_newServerName" [value]="name()" (change)="changeName($event)" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-60">
+          <label for="input_newHost">{{ 'HOST' | translate }}</label>
+          <div class="input-container">
+            <input class="w-full text-left panel" id="input_newHost" [value]="host()" (change)="changeHost($event)" />
+          </div>
+        </div>
+        <div class="col-20">
+          <label for="input_newPort">{{ 'PORT' | translate }}</label>
+          <div class="input-container">
+            <input class="w-full text-left panel" id="input_newPort" [value]="port()" (change)="changePort($event)" />
+          </div>
+        </div>
+        <div class="col-20">
+          <label for="input_newSecure">{{ 'IS_SECURE' | translate }}</label>
+          <div class="input-container">
+            <OptionComponent class="w-full text-left panel" id="input_newSecure" [active]="true" [item]="isSecure()" (clicked)="changeIsSecure($event)" />
+            <InfoOverlayComponent message="{{ 'IS_SECURE_DESCRIPTION' | translate }}" style="min-width: 30px"> </InfoOverlayComponent>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <footer>
     <div class="buttonGroup">
       <div class="warp"></div>
       <div class="ml-auto flex flex-row gap-2">
-        <button class="primary min-w-20" (click)="save()">{{ 'CONNECT' | translate }}</button>
+        <button class="primary min-w-20" (click)="save()">{{ 'SAVE' | translate }}</button>
         <button class="primary min-w-20" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
       </div>
     </div>

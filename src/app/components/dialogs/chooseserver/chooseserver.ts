@@ -1,9 +1,9 @@
 import { Z2MServer } from '@/app/models/types';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { CommonModule } from '@angular/common';
 import { Component, computed, inject, model } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OptionComponent } from '../../controls/option/option';
+import { InfoOverlayComponent } from '../../controls/infooverlay/infooverlay';
 
 
 
@@ -14,7 +14,7 @@ export interface ChooseServerDialogData {
 
 @Component({
   selector: 'ChooseServerDialog',
-  imports: [TranslateModule, OptionComponent],
+  imports: [TranslateModule, OptionComponent,InfoOverlayComponent],
   templateUrl: './chooseserver.html',
   styleUrl: './chooseserver.scss'
 })
@@ -40,7 +40,7 @@ export class ChooseServerDialog {
   save(): void {
     const newServer: Z2MServer = {
       name: this.name(),
-      hostname: this.host(),
+      host: this.host(),
       port: this.port(),
       secure: this.secure() ?? false
     }
@@ -65,5 +65,10 @@ export class ChooseServerDialog {
 
   cancel(): void {
     this.dialogRef.close();
+  }
+
+  connect(server:Z2MServer):void {
+    console.log(server);
+        this.dialogRef.close({ ...this.dialogData, newServer:server });
   }
 }
