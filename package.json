@@ -4,6 +4,7 @@
   "main": "./index.js",
   "scripts": {
     "ng": "ng",
+    "sec": "pnpm outdated",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
@@ -22,7 +23,7 @@
       }
     ]
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/cdk": "20.2.10",
     "@angular/common": "20.3.7",
@@ -54,8 +55,8 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "postcss": "^8.5.6",
     "prettier": "3.6.2",
-    "tailwindcss": "4.1.16",
-    "typescript": "~5.9.2",
-    "snyk":"1.1300.1"
+    "snyk": "1.1300.1",
+    "tailwindcss": "^3.4.18",
+    "typescript": "~5.9.2"
   }
 }
