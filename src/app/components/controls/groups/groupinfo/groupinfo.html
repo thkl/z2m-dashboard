@@ -26,7 +26,7 @@
             [colorTrigger]="false"
           >
             <div class="wrapper">
-              <DeviceFeaturesComponent [ieee_address]="member?.device?.ieee_address" displayMode="scene"></DeviceFeaturesComponent>
+              <DeviceFeaturesComponent [ieee_address]="member?.device?.ieee_address" [filterEndpoints]="[member.endpoint]" displayMode="scene"></DeviceFeaturesComponent>
               <div class="button">
                 <button class="button-link-danger left" (click)="removeDeviceFromGroup(member.device!, member.endpoint)">{{ 'REMOVE_DEVICE' | translate }}</button>
               </div>

@@ -6,7 +6,7 @@ export interface Group {
 }
 
 export interface Member {
-    endpoint:     number;
+    endpoint:     string;
     ieee_address: string;
 }
 

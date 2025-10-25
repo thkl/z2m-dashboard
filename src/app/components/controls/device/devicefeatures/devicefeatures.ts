@@ -34,7 +34,7 @@ export class DeviceFeaturesComponent {
 
   deviceFeatures = signal<DeviceFeatureVisual[]>([]);
   displayMode = input<FeatureDisplayMode>('settings');
-  
+
   filterEndpoints = input<string[]>();
 
   levelMarks: LevelMarkOption[] = [{ percent: 0, label: "0" }, { percent: 25, label: "25" }, { percent: 50, label: "50" }, { percent: 75, label: "75" }, { percent: 100, label: "100" }];
@@ -56,8 +56,15 @@ export class DeviceFeaturesComponent {
     effect(() => {
       const expos = this.device()?.definition.exposes;
       const states = this.device()?.state;
-      const result = this.flattenExposures(expos || [], states || []);
-      this.deviceFeatures.set(result);
+      const endpointFilter = this.filterEndpoints();
+      if ( endpointFilter === undefined) {
+        const result = this.flattenExposures(expos || [], states || []);
+        this.deviceFeatures.set(result);
+      } else {
+        const result = this.flattenExposures(expos || [], states || []);
+        const filtered = result.filter(f=>endpointFilter?.includes(f.property.endpoint!));
+        this.deviceFeatures.set(filtered);
+      }
     })
   }
 
@@ -85,7 +92,7 @@ export class DeviceFeaturesComponent {
           value: value ?? null,
           helper: null,
           subtype: parentType,
-          validForScenes:isValidForScenes(exp)
+          validForScenes: isValidForScenes(exp)
         });
       } else {
         // Only add parent feature if it's a composite type or light type
@@ -106,12 +113,12 @@ export class DeviceFeaturesComponent {
             value: value ?? null,
             helper: helperValue,
             subtype: parentType,
-            validForScenes:isValidForScenes(exp)
+            validForScenes: isValidForScenes(exp)
           });
         }
 
         // Recursively flatten sub-features
-        exp.features.forEach(f => flatten(f, value, isComposite,exp.type));
+        exp.features.forEach(f => flatten(f, value, isComposite, exp.type));
       }
     };
 

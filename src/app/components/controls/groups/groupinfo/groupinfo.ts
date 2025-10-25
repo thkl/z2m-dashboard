@@ -18,7 +18,7 @@ import { ExpansionPanelDeviceComponent } from '@/app/components/controls/expansi
 
 @Component({
   selector: 'GroupInfoComponent',
-  imports: [TranslateModule, ExpansionPanelComponent,ExpansionPanelDeviceComponent, DeviceFeaturesComponent, OptionPanelComponent],
+  imports: [TranslateModule,ExpansionPanelDeviceComponent, DeviceFeaturesComponent, OptionPanelComponent],
   templateUrl: './groupinfo.html',
   styleUrl: './groupinfo.scss'
 })
@@ -95,7 +95,7 @@ export class GroupInfoComponent {
     console.log(this.group());
   }
 
-  removeDeviceFromGroup(device: Device, endpoint: number) {
+  removeDeviceFromGroup(device: Device, endpoint: string) {
     if (this.group()) {
       const options: AddRemoveDeviceFromGroupOptions = {
         device: device.friendly_name,
@@ -115,7 +115,7 @@ export class GroupInfoComponent {
       const options: AddRemoveDeviceFromGroupOptions = {
         device: device.friendly_name,
         group: group.friendly_name,
-        endpoint: parseInt(endpoint)
+        endpoint: endpoint
       }
 
       this.deviceService.addDeviceToGroup(options);

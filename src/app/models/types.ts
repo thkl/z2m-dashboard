@@ -50,7 +50,7 @@ export interface DeleteObjectOptions {
 export interface AddRemoveDeviceFromGroupOptions {
   group: string;
   device: string;
-  endpoint: number;
+  endpoint: string;
 }
 
 export interface SelectOption {
