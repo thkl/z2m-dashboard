@@ -3,7 +3,16 @@
   <button class="control iconControl left" type="button"><span class="material-symbols-outlined">search</span></button>
   <div style="width: 176px" class="containerToolbarSearchExpandable">
     <div class="toolbarInputAndClearContainer" style="min-width: 72px">
-      <input class="toolbarInput" placeholder="Search" type="text" style="min-width: 20px" tabindex="0" [value]="searchText()" (change)="applySearch($event)" />
+      <input
+        class="toolbarInput"
+        placeholder="Search"
+        type="text"
+        style="min-width: 20px"
+        tabindex="0"
+        [value]="searchText()"
+        (change)="applySearch($event)"
+        (keyup)="alsoApply($event)"
+      />
     </div>
     @if (searchText() !== null && searchText() !== '') {
       <div class="wrap">

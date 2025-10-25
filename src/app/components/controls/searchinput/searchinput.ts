@@ -21,4 +21,14 @@ export class SearchInput {
     }
     this.searchChange.emit(this.searchText());
   }
+
+  alsoApply(event: any): void {
+    if (event.key === 'Escape') {
+      this.searchText.set('');
+      this.searchChange.emit(this.searchText());
+    } else {
+      this.searchText.set(event.target.value);
+      this.searchChange.emit(this.searchText());
+    }
+  }
 }
