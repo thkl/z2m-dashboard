@@ -109,6 +109,7 @@
   "UPDATE_SCENE": "Szene aktualisieren",
   "UPTIME": "Betriebszeit",
   "UP_TO_DATE": "aktuell",
+  "VISIT_DEVICE": "Geräteeigenschaften anzeigen",
   "WANT_DELETE_ALL_SCENES": "Sollen wirklich alle Szenen dieser Gruppe gelöscht werden?",
   "WANT_DELETE_SCENE": "Soll die Szene \"{{name}}\" wirklich gelöscht werden?",
   "YES": "Ja",

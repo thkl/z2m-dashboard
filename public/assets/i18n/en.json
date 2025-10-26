@@ -79,6 +79,7 @@
   "UPDATE_RUNNING": "Updating {{time}} left",
   "UPTIME": "Uptime",
   "UP_TO_DATE": "current",
+  "VISIT_DEVICE": "Show Device properties",
   "YES": "Yes",
   "ZIGBEE_MANUFACTURER": "Zigbee Manufacturer",
   "ZIGBEE_MODEL": "Zigbee Model"

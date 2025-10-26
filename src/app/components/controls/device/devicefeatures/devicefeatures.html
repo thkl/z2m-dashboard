@@ -101,6 +101,11 @@
       }
     }
   </div>
+  @if (displayMode() !== 'settings') {
+    <div class="button">
+      <button class="button-link left" (click)="visitDevice()">{{ 'VISIT_DEVICE' | translate }}</button>
+    </div>
+  }
   @if (displayMode() === 'settings') {
     <div class="pl-2 pr-2 flex flex-col grow">
       <ExpansionPanelComponent label="Raw Data" style="flex-grow: inherit">

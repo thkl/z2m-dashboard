@@ -523,8 +523,8 @@ button.right {
   line-height: 18.4px;
   margin-bottom: 16px;
   padding-bottom: 0px;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 2px;
+  padding-right: 2px;
   padding-top: 0px;
 }
 
@@ -601,6 +601,7 @@ nav.inspector {
     sans-serif;
   justify-content: center;
   min-height: 32px;
+  top: -2px;
   padding: 4px;
   transition:
     background-color 0.15s cubic-bezier(0.7, 0, 0.3, 1),

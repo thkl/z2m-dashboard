@@ -10,13 +10,12 @@
 .tab-header {
   display: flex;
   flex-direction: column; // Vertical stack
- 
+
   border-left: 1px solid var(--tab-header-border-color);
   border-bottom: 1px solid var(--tab-header-border-color);
   border-right: 1px solid var(--tab-background-color);
 
   background-color: var(--tab-background-color, var(--app-background-raised-color));
-  gap: 4px;
   overflow-y: auto; // Changed from overflow-x
   overflow-x: hidden;
   min-width: 60px;
@@ -24,7 +23,6 @@
   position: absolute;
   left: -60px;
   z-index: 100;
- 
 
   filter: drop-shadow(-5px 5px 5px var(--tab-header-shadow-color));
 
@@ -44,7 +42,6 @@
   align-items: center;
   gap: 8px;
   padding: 5px;
-  border: none;
   background-color: var(--tab-background-color, var(--app-background-raised-color));
   cursor: pointer;
   font-size: 14px;
@@ -56,7 +53,7 @@
   text-align: left;
 
   &:hover {
-    background-color:var(--tab-background-color, var(--app-background-raised-color));
+    background-color: var(--tab-background-color, var(--app-background-raised-color));
     color: var(--app-text-color);
   }
 
@@ -68,12 +65,12 @@
 }
 
 .tabIcon {
-  padding-left:10px;
+  padding-left: 10px;
 }
 
 .tab-icon {
-    max-width: 30px;
-    margin-left:15px;
+  max-width: 30px;
+  margin:auto;
 }
 
 .tab-label {
@@ -102,7 +99,6 @@
   font-size: 16px;
 }
 
-
 .tab-pane {
   position: absolute;
   top: 0;
@@ -113,9 +109,8 @@
   overflow: auto;
   display: none;
   flex: 1;
-  
+
   &.active {
     display: flex;
-    
-}
+  }
 }

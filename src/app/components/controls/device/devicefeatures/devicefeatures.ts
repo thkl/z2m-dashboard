@@ -18,6 +18,9 @@ import { InfoOverlayComponent } from '../../infooverlay/infooverlay';
 import { LevelSelectorComponent, LevelMarkOption } from '../../levelselector/levelselector';
 import { OptionComponent } from '../../option/option';
 import { RadiolistComponent, RadioElement } from '../../radiolist/radiolist';
+import { PropertyTabManagerService } from '@/app/services/propertytab.service';
+import { DeviceImage } from '@/app/components/controls/device/device-image/device-image';
+import { DeviceInspectorComponent } from '@/app/pages/deviceinspector/deviceinspector.component';
 
 
 @Component({
@@ -31,6 +34,7 @@ export class DeviceFeaturesComponent {
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly deviceService = inject(DeviceService);
   readonly AccessMode = AccessMode;
+  protected readonly tabManager = inject(PropertyTabManagerService);
 
   deviceFeatures = signal<DeviceFeatureVisual[]>([]);
   displayMode = input<FeatureDisplayMode>('settings');
@@ -57,13 +61,13 @@ export class DeviceFeaturesComponent {
       const expos = this.device()?.definition.exposes;
       const states = this.device()?.state;
       const endpointFilter = this.filterEndpoints();
-      if ( endpointFilter === undefined) {
+      if (endpointFilter === undefined) {
         const result = this.flattenExposures(expos || [], states || []);
         this.deviceFeatures.set(result);
       } else {
         const result = this.flattenExposures(expos || [], states || []);
-        
-        const filtered = result.filter(f=>(endpointFilter?.includes(f.property.endpoint!) || f.property.endpoint === undefined));
+
+        const filtered = result.filter(f => (endpointFilter?.includes(f.property.endpoint!) || f.property.endpoint === undefined));
         this.deviceFeatures.set(filtered);
       }
     })
@@ -244,5 +248,20 @@ export class DeviceFeaturesComponent {
 
   hasAccess(access: number, mode: AccessMode): boolean {
     return (access & mode) !== 0;
+  }
+
+  visitDevice(): void {
+    const device = this.device();
+    if (device) {
+      this.tabManager.openTab({
+        id: device.ieee_address,
+        label: device.friendly_name,
+
+        data: { ieee_address: device.ieee_address },
+        component: DeviceInspectorComponent,
+        iconComponent: DeviceImage,
+        iconData: { device }
+      });
+    }
   }
 }
