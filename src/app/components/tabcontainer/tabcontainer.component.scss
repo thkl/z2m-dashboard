@@ -10,7 +10,7 @@
 .tab-header {
   display: flex;
   flex-direction: column; // Vertical stack
-  border-top: 1px solid var(--tab-header-border-color);
+ 
   border-left: 1px solid var(--tab-header-border-color);
   border-bottom: 1px solid var(--tab-header-border-color);
   border-right: 1px solid var(--tab-background-color);
@@ -24,7 +24,7 @@
   position: absolute;
   left: -60px;
   z-index: 100;
-  top:50px;
+ 
 
   filter: drop-shadow(-5px 5px 5px var(--tab-header-shadow-color));
 
