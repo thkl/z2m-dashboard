@@ -676,8 +676,7 @@ nav.inspector {
   color: var(--app-text-color);
 }
 
-
 .right_sidebar {
-    border-left: 1px solid var(--app-header-background-color);
-    filter: drop-shadow(-5px 5px 5px var(--app-header-background-color));
+  border-left: 1px solid var(--app-header-background-color);
+  filter: drop-shadow(-5px 5px 5px var(--app-header-background-color));
 }

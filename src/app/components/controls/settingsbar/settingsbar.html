@@ -1,0 +1,8 @@
+<div class="settings_bar" [class.active]="settingsActive()" title="{{ 'OPEN_TABLE_SETTINGS' | translate }}">
+  <div class="settings_bar_toggle" (click)="toggleSettingsBar()">
+    <div class="material-symbols-outlined">{{ settingsActive() ? 'keyboard_double_arrow_left' : 'keyboard_double_arrow_right' }}</div>
+  </div>
+  <div class="settings_bar_content">
+    <ng-content></ng-content>
+  </div>
+</div>

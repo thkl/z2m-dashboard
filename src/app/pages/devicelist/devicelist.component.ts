@@ -4,6 +4,7 @@ import { TableComponent } from '@/app/components/controls/generic-table/generic-
 import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
 import { ProgessBar } from '@/app/components/controls/progess-bar/progess-bar';
 import { SearchInput } from '@/app/components/controls/searchinput/searchinput';
+import { SettingsBarComponent } from '@/app/components/controls/settingsbar/settingsbar';
 import { TableSettingsControl } from '@/app/components/tablesettings/tablesettings';
 import { DeviceStore } from '@/app/datastore/device.store';
 import { CDKDataSource } from '@/app/datastore/generic-store-ui';
@@ -49,7 +50,7 @@ const allColumns: ColumnDef<Device>[] = [
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar, TimeToPipe, DeviceAvailability]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar, TimeToPipe, DeviceAvailability,SettingsBarComponent]
 })
 export class DeviceListComponent {
 
@@ -370,5 +371,6 @@ export class DeviceListComponent {
       this.deviceService.checkUpdate(device);
     });
   }
+
 }
 

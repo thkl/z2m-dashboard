@@ -61,6 +61,7 @@
   "OFFLINE": "Offline",
   "ONLINE": "Online",
   "OPEN_NETWORK": "Das Zigbee Netz ist {{time}} offen. Gerät in den Lernmodus versetzen um es hinzuzufügen.",
+  "OPEN_TABLE_SETTINGS": "Tabellen Einstellungen öffnen",
   "PERFORM_UPDATE": "Gerät aktualisieren",
   "PERMIT_JOIN": "Gerät hinzufügen",
   "POWER": "Stromversorgung",

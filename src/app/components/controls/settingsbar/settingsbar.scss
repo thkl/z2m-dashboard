@@ -1,0 +1,47 @@
+:host {
+  flex-grow: 1;
+  display: flex;
+}
+.settings_bar {
+  border-right: 1px solid var(--app-header-background-color);
+  display: flex;
+  position: relative;
+  padding-top: 12px;
+  padding-left: 0px;
+  padding-right: 0px;
+  flex-grow: 1;
+}
+
+.settings_bar.active {
+  padding-left: 12px;
+  padding-right: 12px;
+  transition-duration: 250ms;
+}
+
+.settings_bar_toggle {
+  position: absolute;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  z-index: 10;
+  cursor: pointer;
+  top: 0px;
+  width: 25px;
+  right: -20px;
+  background-color: var(--button-background-color);
+  border: 1px solid var(--app-header-background-color);
+}
+
+
+.settings_bar > .settings_bar_content {
+  width: 0px;
+  overflow: hidden;
+  transition: width 0.2s ease;
+}
+
+.settings_bar.active > .settings_bar_content {
+  width: 270px;
+  min-width: 270px;
+  transition: width 0.2s ease;
+}

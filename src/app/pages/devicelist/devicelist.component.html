@@ -1,5 +1,5 @@
 <div class="flex w-full overflow-x-hidden">
-  <div style="width: 270px">
+  <SettingsBarComponent>
     <span class="mt-2">Filter</span>
     <app-searchinput class="mt-2" (searchChange)="applySearch($event)"></app-searchinput>
     <div class="mt-2">
@@ -39,7 +39,8 @@
     <div class="button">
       <button class="button-link left" (click)="checkUpdateAll()">{{ 'CHECK_FOR_UPDATE_ALL' | translate }}</button>
     </div>
-  </div>
+  </SettingsBarComponent>
+
   <div class="w-full ml-2">
     <TableComponent
       [dataSource]="datasource"

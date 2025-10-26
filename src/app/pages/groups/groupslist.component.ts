@@ -13,10 +13,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 import { GroupInspectorComponent } from '@/app/pages/groupinspector/groupinspector.component';
 import { GroupImage } from '@/app/components/controls/groups/groupimage/groupimage';
+import { SettingsBarComponent } from '@/app/components/controls/settingsbar/settingsbar';
 
 @Component({
   selector: 'GroupListComponent',
-  imports: [TableComponent, TableCellDirective, TableSettingsControl,TranslateModule],
+  imports: [TableComponent, TableCellDirective, TableSettingsControl,TranslateModule,SettingsBarComponent],
   templateUrl: './groupslist.component.html',
   styleUrl: './groupslist.component.scss'
 })
