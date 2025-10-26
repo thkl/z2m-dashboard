@@ -1,5 +1,7 @@
 import { Injectable, signal, computed, Type } from '@angular/core';
 
+
+
 export interface DynamicTab {
     id: string;
     label: string;
@@ -15,7 +17,7 @@ export interface DynamicTab {
 export class PropertyTabManagerService {
     private tabs = signal<DynamicTab[]>([]);
     private activeTabId = signal<string | null>(null);
-
+    private maxTabs = 10;
     readonly allTabs = this.tabs.asReadonly();
     readonly activeId = this.activeTabId.asReadonly();
 
@@ -35,6 +37,11 @@ export class PropertyTabManagerService {
             // Tab already exists, just switch to it
             this.activeTabId.set(tab.id);
         } else {
+            if (this.tabs().length > this.maxTabs) {
+                // remove the first
+                this.tabs.update(tabs => tabs.slice(1));
+
+            }
             // Add new tab and make it active
             this.tabs.update(tabs => [...tabs, tab]);
             this.activeTabId.set(tab.id);
