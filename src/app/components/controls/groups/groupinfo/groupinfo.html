@@ -5,7 +5,7 @@
     </div>
 
     <div class="container">
-      <div class="group_row">
+      <div class="sidbar_row">
         <span class="label">{{ 'FRIENDLY_NAME' | translate }}</span>
         <span class="value flex flex-row"
           >{{ group()?.friendly_name }}<span class="material-symbols-outlined edit_icon mr-2 ml-2 cursor-pointer" (click)="renameGroup()">edit_square</span></span
@@ -15,7 +15,7 @@
         <div class="font-bold text-left w-full mt-5">{{ 'DEVICES' | translate }}</div>
       </div>
       @for (member of members(); track $index) {
-        <div class="group_row flex">
+        <div class="sidbar_row flex">
           <ExpansionPanelDeviceComponent
             [device]="member?.device!"
             label="{{ member?.device?.friendly_name }} ({{ 'ENDPOINT_' | translate: { id: member.endpoint } }})"
@@ -40,7 +40,7 @@
           <div class="font-bold text-left w-full mt-5">{{ 'ADD_DEVICE' | translate }}</div>
         </div>
 
-        <div class="group_row">
+        <div class="sidbar_row">
           <div class="mt-2 w-full">
             <OptionPanelComponent
               class="panel w-full"
@@ -53,7 +53,7 @@
           </div>
         </div>
         @if (selectedDevice() !== null && selectedDevice()?.endpoints) {
-          <div class="group_row">
+          <div class="sidbar_row">
             <div class="mt-2 w-full">
               <OptionPanelComponent
                 class="panel w-full"
@@ -66,9 +66,17 @@
             </div>
           </div>
         }
-
-        <div class="button">
-          <button class="button-link left" (click)="addDevice()">{{ 'ADD' | translate }}</button>
+        @if (selectedDevice() !== null && selectedEndpointId() !== null) {
+          <div class="sidbar_row">
+            <div class="button">
+              <button class="button-link left" (click)="addDevice()">{{ 'ADD' | translate }}</button>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="sidbar_row">
+        <div class="mt-5 button">
+          <button class="button-link-danger left" (click)="deleteGroup()">{{ 'DELETE_GROUP' | translate }}</button>
         </div>
       </div>
     </div>

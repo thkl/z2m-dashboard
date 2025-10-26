@@ -1,0 +1,29 @@
+<div class="tab-container">
+  @if (tabManager.allTabs().length > 0) {
+    <div class="tab-header">
+      @for (tab of tabManager.allTabs(); track tab.id) {
+        <div class="tab-button" [class.active]="tabManager.activeId() === tab.id" (click)="tabManager.switchToTab(tab.id)">
+          @if (tab.iconComponent) {
+            <div class="tab-icon">
+              <ng-container *ngComponentOutlet="tab.iconComponent; inputs: tab.iconData" class="tabIcon" />
+            </div>
+          } @else {
+            <span class="tab-label">{{ tab.label }}</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="tab-content scrollbar">
+      @for (tab of tabManager.allTabs(); track tab.id) {
+        <div class="tab-pane" [class.active]="tab.id === tabManager.activeId()">
+          <ng-container *ngComponentOutlet="tab.component; inputs: tab.data" />
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <p>No tabs open. Select an object to view its properties.</p>
+    </div>
+  }
+</div>

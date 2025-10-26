@@ -98,6 +98,10 @@ export class GroupInfoComponent {
     console.log(this.group());
   }
 
+  deleteGroup() {
+    console.log(this.group());
+  }
+
   removeDeviceFromGroup(device: Device, endpoint: string) {
     if (this.group()) {
       const options: AddRemoveDeviceFromGroupOptions = {

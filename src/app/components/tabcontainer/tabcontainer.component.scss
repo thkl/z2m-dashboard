@@ -1,0 +1,127 @@
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: transparent;
+}
+
+.tab-header {
+  display: flex;
+  flex-direction: column; // Vertical stack
+  border-top: 2px solid var(--app-border-color);
+  border-left: 2px solid var(--app-border-color);
+  border-bottom: 2px solid var(--app-border-color);
+
+  background-color: var(--app-tab-background, var(--app-background-raised-color));
+  gap: 4px;
+  overflow-y: auto; // Changed from overflow-x
+  overflow-x: hidden;
+  min-width: 60px;
+  max-width: 60px;
+  position: absolute;
+  left: -60px;
+  top:50px;
+  &::-webkit-scrollbar {
+    width: 6px; // Changed from height
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #bbb;
+    border-radius: 3px;
+  }
+}
+
+.tab-button {
+  display: flex;
+  left: -7px;
+  align-items: center;
+  gap: 8px;
+  padding: 5px;
+  border: none;
+  background-color: var(--app-tab-background, var(--app-background-raised-color));
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--app-text-color);
+  //border-radius: 8px 0 0 8px; // Rounded on left side only (bookmark style)
+  transition: all 0.2s ease;
+  position: relative;
+  white-space: nowrap;
+  text-align: left;
+
+  &:hover {
+    background-color:var(--app-tab-background, var(--app-background-raised-color));
+    color: var(--app-text-color);
+    transform: translateX(4px); // Slight slide out on hover
+  }
+
+  &.active {
+    cursor: pointer;
+    background-color: var(--app-tab-selected-background-color);
+    font-weight: 500;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -2px; // Changed from bottom
+      padding-left: 2px;
+      bottom: 0;
+      background-color: var(--app-link-color);
+    
+    }
+  }
+}
+
+.tabIcon {
+  padding-left:10px;
+}
+
+.tab-icon {
+    max-width: 30px;
+    margin-left:15px;
+}
+
+.tab-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.tab-content {
+  flex: 1;
+  padding: 0px;
+  background-color: transparent;
+  overflow: hidden;
+  overflow-y: auto;
+  height: 100vh;
+  display: flex;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: transparent;
+  font-size: 16px;
+}
+
+
+.tab-pane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0px;
+  overflow: auto;
+  display: none;
+  flex: 1;
+  
+  &.active {
+    display: flex;
+    
+}
+}

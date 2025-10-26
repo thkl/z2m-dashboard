@@ -1,0 +1,23 @@
+:host {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 0%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  font-family: Inter, 'UI Sans', Lato, Arial, sans-serif;
+  font-feature-settings: 'kern';
+  font-synthesis-small-caps: none;
+  font-synthesis-style: none;
+  font-synthesis-weight: none;
+  font-variant-ligatures: no-common-ligatures;
+  background-color: var(--app-background-color);
+  line-height: 18.4px;
+  padding-bottom: 0px;
+  padding-right: 2px;
+  padding-top: 0px;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  border-color: var(--app-section-border-color);
+}
+

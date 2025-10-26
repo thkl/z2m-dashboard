@@ -13,12 +13,14 @@ import { TableCellDirective } from '@/app/directives/table-cell.directive';
 import { SortDirection, SortEvent } from '@/app/directives/table-sort.directive';
 import { Device } from '@/app/models/device';
 import { ColumnDef, TableConfig, SelectOption } from '@/app/models/types';
+import { DeviceInspectorComponent } from '@/app/pages/deviceinspector/deviceinspector.component';
 import { HexPipe } from '@/app/pipes/hex.pipe';
 import { HumanReadablePipe } from '@/app/pipes/human.pipe';
 import { TimeToPipe } from '@/app/pipes/time-togo.pipe';
 import { ApplicationService } from '@/app/services/app.service';
 import { BridgeService } from '@/app/services/bridge.service';
 import { DeviceService } from '@/app/services/device.service';
+import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 import { filterData } from '@/app/utils/filter.utils';
 import { sortData } from '@/app/utils/sort.utils';
 import { Component, computed, inject, signal, effect, Signal, Injector, viewChild } from '@angular/core';
@@ -56,6 +58,7 @@ export class DeviceListComponent {
   protected readonly injector = inject(Injector);
   protected readonly deviceService = inject(DeviceService);
   protected readonly bridgeService = inject(BridgeService);
+  protected readonly tabManager = inject(PropertyTabManagerService);
 
   // Displayed columns signal for column visibility management
   displayedColumns = signal<string[]>([]);
@@ -319,6 +322,18 @@ export class DeviceListComponent {
   selectDevice(deviceID: string) {
     this.deviceStore.setSelectedEntityById(deviceID);
     this.applicationService.inspector = 'device';
+    const device = this.deviceStore.entities().find(e=>e.ieee_address===deviceID);
+    if (device) {
+     this.tabManager.openTab({
+      id: deviceID,
+      label: device.friendly_name,
+
+      data:{ieee_address:deviceID},
+      component: DeviceInspectorComponent,
+      iconComponent:DeviceImage,
+      iconData:{device}
+    });
+  }
   }
 
   vendorsSelectionChanged(selected: SelectOption | SelectOption[]) {

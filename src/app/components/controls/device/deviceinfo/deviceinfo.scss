@@ -3,29 +3,6 @@
     display:flex;
 }
 
-.buttonBar {
-  background-color: var(--app-background-raised-color);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  box-sizing: border-box;
-  color: var(--app-text-color);
-  display: flex;
-  flex-basis: 0%;
-  flex-direction: column;
-  flex-grow: 0;
-  flex-shrink: 1;
-  height: 96px;
-  line-height: 18.4px;
-  margin-bottom: 16px;
-  padding-bottom: 0px;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 0px;
-}
-
-
 .header {
   display:flex;
   align-items: center;

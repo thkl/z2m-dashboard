@@ -112,14 +112,7 @@
       class="flex-shrink-0"
     >
       <aside class="h-full border-l overflow-y-auto scrollbar flex flex-col">
-        @switch (inspector()) {
-          @case ('device') {
-            <DeviceInspectorComponent (closed)="closeRightSidebar()"></DeviceInspectorComponent>
-          }
-          @case ('group') {
-            <GroupInspectorComponent (closed)="closeRightSidebar()"></GroupInspectorComponent>
-          }
-        }
+        <TabContainerComponent></TabContainerComponent>
       </aside>
     </app-resizable-container>
   }

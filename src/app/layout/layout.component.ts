@@ -12,12 +12,14 @@ import { GroupInspectorComponent } from '../pages/groupinspector/groupinspector.
 import { Dialog } from '@angular/cdk/dialog';
 import { ChooseServerDialog, ChooseServerDialogData } from '../components/dialogs/chooseserver/chooseserver';
 import { Z2MServer } from '../models/types';
+import { TabContainerComponent } from '@/app/components/tabcontainer/tabcontainer.component';
+import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [RouterModule, DeviceInspectorComponent, TranslateModule, LogView, ResizableContainerComponent, GroupInspectorComponent]
+  imports: [RouterModule, TranslateModule, LogView, ResizableContainerComponent, TabContainerComponent]
 })
 export class LayoutComponent {
   sidebarOpen = true;
@@ -28,7 +30,9 @@ export class LayoutComponent {
   protected readonly applicationService = inject(ApplicationService);
   protected readonly bs = inject(BridgeService);
   protected readonly dialog = inject(Dialog);
+  protected readonly tabManager = inject(PropertyTabManagerService);
 
+  
   mainTitle = computed(() => {
     return this.applicationService.mainTitle();
   })
@@ -47,7 +51,7 @@ export class LayoutComponent {
   })
 
   rightSidebarOpen = computed(() => {
-    return this.applicationService.inspector() !== null
+    return this.tabManager.numberOfTabs() > 0;
   })
 
   constructor() {

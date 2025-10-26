@@ -9,8 +9,6 @@
 @import url('styles/radio.scss');
 @import url('styles/dropdown.scss');
 
-
-
 html,
 body {
   @apply h-full;
@@ -377,7 +375,7 @@ th.sortable {
   color: rgb(222, 224, 227);
   display: block;
   font-weight: 400;
-  font-size:var(--label-font-size);
+  font-size: var(--label-font-size);
   height: 24px;
   line-height: 20px;
   width: 40%;
@@ -488,9 +486,6 @@ button.right {
 }
 
 .button {
-  border-bottom-color: rgba(249, 250, 250, 0.07);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
   box-sizing: border-box;
   color: rgba(255, 255, 255, 0.65);
   display: flex;
@@ -500,16 +495,51 @@ button.right {
   line-height: 18.4px;
 }
 
+.buttonBar {
+  background-color: var(--app-background-raised-color);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  box-sizing: border-box;
+  color: var(--app-text-color);
+  display: flex;
+  flex-basis: 0%;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 1;
+  height: 96px;
+  line-height: 18.4px;
+  margin-bottom: 16px;
+  padding-bottom: 0px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 0px;
+}
+
+.buttonBar > .button {
+  border-bottom-color: rgba(249, 250, 250, 0.07);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  width: 100%;
+}
+
+.sidbar_row > .button {
+  border-bottom-color: rgba(249, 250, 250, 0.07);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  width: 100%;
+}
+
 .button-link {
-  color:var(--app-link-color);
+  color: var(--app-link-color);
   font-size: var(--app-font-size);
 }
 
 .button-link-danger {
-  color:var(--app-link-danger-color);
-  font-size:var(--app-font-size);
+  color: var(--app-link-danger-color);
+  font-size: var(--app-font-size);
 }
-
 
 .button-link.disabled {
   color: rgba(96, 119, 148, 0.702);
@@ -617,7 +647,19 @@ nav.inspector {
 }
 
 .cdk-overlay-backdrop-showing {
-    opacity: 70% !important;
-    background-color: var(--app-background-color);
-    transition: opacity 0.2s cubic-bezier(0.7, 0, 0.3, 1);
+  opacity: 70% !important;
+  background-color: var(--app-background-color);
+  transition: opacity 0.2s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.sidbar_row {
+  display: flex;
+  min-height: 20px;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  gap: 8px;
+  color: var(--app-text-color);
 }
