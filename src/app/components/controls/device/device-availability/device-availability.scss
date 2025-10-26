@@ -9,3 +9,9 @@
 .ok {
     color:var(--app-link-good-color);
 }
+
+span{
+      overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
