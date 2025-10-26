@@ -14,3 +14,13 @@
     </p>
   </div>
 </div>
+<div class="h-full flex flex-col scrollbar overflow-y-auto overflow-x-hidden">
+  <div class="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6 gap-2 w-full ml-2 panel">
+    @for (device of devicesView(); track $index) {
+      <div class="p-6 rounded-2xl w-full flex flex-col">
+        <span class="text-center w-full">{{ device.friendly_name }}</span>
+        <DeviceFeaturesComponent [ieee_address]="device?.ieee_address" displayMode="dashboard"></DeviceFeaturesComponent>
+      </div>
+    }
+  </div>
+</div>

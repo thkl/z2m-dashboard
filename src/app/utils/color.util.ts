@@ -3,6 +3,8 @@
  * Supports conversions between RGB, HSV (Hue/Saturation/Value), and XY color spaces
  */
 
+import { DeviceFeature } from "@/app/models/device";
+
 export interface RGB {
   r: number; // 0-255
   g: number; // 0-255
@@ -310,4 +312,52 @@ export function miredToHtmlRgb(mireds: number): string {
  */
 export function kelvinToHtmlRgb(kelvin: number): string {
   return rgbToHtml(kelvinToRgb(kelvin));
+}
+
+
+
+export function convertColorToHtml(colorFeature: DeviceFeature, value: any): string | null {
+  if (!colorFeature.features) {
+    return null;
+  }
+
+  // Check for hue and saturation properties
+  const hasHue = colorFeature.features.some(f => f.property === 'hue');
+  const hasSaturation = colorFeature.features.some(f => f.property === 'saturation');
+
+  if (hasHue && hasSaturation && value.hue !== undefined && value.saturation !== undefined) {
+    try {
+      // Zigbee hue is 0-360, saturation is 0-254
+      // Convert to 0-360 for hue and 0-100 for saturation
+      const hsv = {
+        h: value.hue,
+        s: Math.round((value.saturation / 254) * 100),
+        v: 100 // Assume full brightness for color display
+      };
+      return hsvToHtmlRgb(hsv);
+    } catch (e) {
+      console.error('Error converting HSV to HTML RGB:', e);
+      return null;
+    }
+  }
+
+  // Check for x and y properties (CIE color space)
+  const hasX = colorFeature.features.some(f => f.property === 'x');
+  const hasY = colorFeature.features.some(f => f.property === 'y');
+
+  if (hasX && hasY && value.x !== undefined && value.y !== undefined) {
+    try {
+      // XY values are already in 0-1 range (not 0-65535)
+      const xy = {
+        x: value.x,
+        y: value.y
+      };
+      return xyToHtmlRgb(xy);
+    } catch (e) {
+      console.error('Error converting XY to HTML RGB:', e);
+      return null;
+    }
+  }
+
+  return null;
 }

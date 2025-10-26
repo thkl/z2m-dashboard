@@ -6,7 +6,11 @@
   }
   <div class="container">
     @for (item of deviceFeatures(); track $index) {
-      @if (item.property.hidden === false && (displayMode() === 'settings' || item.validForScenes)) {
+      @if (
+        (item.property.hidden === false && displayMode() === 'settings') ||
+        (displayMode() === 'scene' && item.validForScenes) ||
+        (displayMode() === 'dashboard' && item.validForDashboard)
+      ) {
         <div class="device_row">
           <div class="label flex flex-col mt-auto mb-auto">
             <span

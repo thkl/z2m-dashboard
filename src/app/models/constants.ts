@@ -23,8 +23,12 @@ export const LogLevels = [ { value:"info", label: "Info", isSelected: false },
 
 
 
-export const BLACKLISTED_PARTIAL_FEATURE_NAMES = ["schedule_", "_mode", "_options", "_startup", "_type", "inching_", "cyclic_", "_scene"];
-export const BLACKLISTED_FEATURE_NAMES = ["effect", "power_on_behavior", "gradient"];
+export const BLACKLISTED_PARTIAL_FEATURE_NAMES = ["schedule_", "_mode", "_options", "_startup", "_type", "inching_", 
+    "cyclic_", "_scene","learning","countdown","_memory","_calibration",
+"led_indication","_timeout","_disturb","child_lock"];
+
+export const BLACKLISTED_FEATURE_NAMES = ["effect", "power_on_behavior", "gradient","action"];
+
 export const WHITELIST_FEATURE_NAMES = ["state", "color_temp", "color", "transition", "brightness"];
 export type SubFeatureType =  "switch" | "lock" | "composite" | "light" | "cover" | "fan" | "climate"
 export type BasicFeatureType = "binary" | "list" | "numeric" | "enum" | "text";

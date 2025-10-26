@@ -21,6 +21,7 @@ export interface DeviceFeatureVisual {
     subtype?:any
     helper:any
     validForScenes:boolean
+    validForDashboard:boolean
 }
 
 export interface FeaturePreset {
