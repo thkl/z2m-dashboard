@@ -105,7 +105,7 @@
               <span class="firmware_available">{{ 'UPDATE_AVAILABLE' | translate }}</span>
             }
             @case ('idle') {
-              {{ 'UP_TO_DATE' | translate }}
+              <span>{{ 'UP_TO_DATE' | translate }}</span>
             }
             @case ('updating') {
               <div class="flex flex-row items-center">
@@ -115,7 +115,7 @@
             }
           }
         } @else {
-          {{ 'UNKNOWN' | translate }}
+          <span>{{ 'UNKNOWN' | translate }}</span>
         }
       </ng-template>
 
