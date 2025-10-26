@@ -84,7 +84,7 @@
     </header>
 
     <!-- Page Content -->
-    <section class="flex-1 overflow-y-auto p-6 bg-gray-50 layout_section scrollbar min-h-0">
+    <section class="flex-1 overflow-y-auto bg-gray-50 layout_section scrollbar min-h-0">
       <router-outlet></router-outlet>
     </section>
 
@@ -109,6 +109,7 @@
       [maxSize]="800"
       [flexBehavior]="false"
       [fullHeight]="true"
+      containerClass="right_sidebar"
       class="flex-shrink-0"
     >
       <aside class="h-full border-l overflow-y-auto scrollbar flex flex-col">

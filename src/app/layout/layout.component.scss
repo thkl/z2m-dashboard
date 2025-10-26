@@ -23,7 +23,9 @@ aside {
   background-color: var(--app-background-color);
   border: 1px solid;
   border-color: var(--app-border-color);
-
+  padding-left: 1em;
+  padding-top: 1em;
+  
 }
 
 .material-icons {
@@ -42,3 +44,4 @@ aside {
   border-top: 1px solid var(--app-border-color);
   background-color: var(--app-background-raised-color);
 }
+

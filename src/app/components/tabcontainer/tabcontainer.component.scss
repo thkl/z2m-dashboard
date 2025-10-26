@@ -4,16 +4,18 @@
   width: 100%;
   height: 100vh;
   background-color: transparent;
+  border-left: 2px solid var(--tab-header-border-color);
 }
 
 .tab-header {
   display: flex;
   flex-direction: column; // Vertical stack
-  border-top: 2px solid var(--app-border-color);
-  border-left: 2px solid var(--app-border-color);
-  border-bottom: 2px solid var(--app-border-color);
+  border-top: 1px solid var(--tab-header-border-color);
+  border-left: 1px solid var(--tab-header-border-color);
+  border-bottom: 1px solid var(--tab-header-border-color);
+  border-right: 1px solid var(--tab-background-color);
 
-  background-color: var(--app-tab-background, var(--app-background-raised-color));
+  background-color: var(--tab-background-color, var(--app-background-raised-color));
   gap: 4px;
   overflow-y: auto; // Changed from overflow-x
   overflow-x: hidden;
@@ -21,7 +23,11 @@
   max-width: 60px;
   position: absolute;
   left: -60px;
+  z-index: 100;
   top:50px;
+
+  filter: drop-shadow(-5px 5px 5px var(--tab-header-shadow-color));
+
   &::-webkit-scrollbar {
     width: 6px; // Changed from height
   }
@@ -34,12 +40,12 @@
 
 .tab-button {
   display: flex;
-  left: -7px;
+  border-bottom: 1px solid var(--tab-header-border-color);
   align-items: center;
   gap: 8px;
   padding: 5px;
   border: none;
-  background-color: var(--app-tab-background, var(--app-background-raised-color));
+  background-color: var(--tab-background-color, var(--app-background-raised-color));
   cursor: pointer;
   font-size: 14px;
   color: var(--app-text-color);
@@ -50,26 +56,14 @@
   text-align: left;
 
   &:hover {
-    background-color:var(--app-tab-background, var(--app-background-raised-color));
+    background-color:var(--tab-background-color, var(--app-background-raised-color));
     color: var(--app-text-color);
-    transform: translateX(4px); // Slight slide out on hover
   }
 
   &.active {
     cursor: pointer;
-    background-color: var(--app-tab-selected-background-color);
+    background-color: var(--tab-selected-background-color);
     font-weight: 500;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: -2px; // Changed from bottom
-      padding-left: 2px;
-      bottom: 0;
-      background-color: var(--app-link-color);
-    
-    }
   }
 }
 

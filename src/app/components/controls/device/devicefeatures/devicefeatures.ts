@@ -62,7 +62,8 @@ export class DeviceFeaturesComponent {
         this.deviceFeatures.set(result);
       } else {
         const result = this.flattenExposures(expos || [], states || []);
-        const filtered = result.filter(f=>endpointFilter?.includes(f.property.endpoint!));
+        
+        const filtered = result.filter(f=>(endpointFilter?.includes(f.property.endpoint!) || f.property.endpoint === undefined));
         this.deviceFeatures.set(filtered);
       }
     })

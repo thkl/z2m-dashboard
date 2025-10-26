@@ -15,6 +15,7 @@ export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
   defaultSize = input<number>(250);
   minSize = input<number>(100);
   maxSize = input<number>(800);
+  containerClass = input<string>();
   flexBehavior = input<boolean>(true); // Set to false for fixed height/width behavior
   fullHeight = input<boolean>(false); // Set to true to make container fill parent height
 
@@ -29,7 +30,8 @@ export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
   private startSize = 0;
 
   containerStyle = '';
-    protected readonly appService = inject(ApplicationService);
+  
+  protected readonly appService = inject(ApplicationService);
     
   constructor() {
     // Load saved size from localStorage using effect
