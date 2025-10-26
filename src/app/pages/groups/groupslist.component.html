@@ -1,13 +1,10 @@
-<div class="flex w-full overflow-x-hidden flex-grow">
+<div class="flex w-full overflow-x-hidden flex-grow h-full">
   <SettingsBarComponent>
     <div class="mt-2">
       <TableSettingsControl></TableSettingsControl>
     </div>
-    <div class="button">
-      <button class="button-link left" (click)="createGroup()">{{ 'CREATE_NEW_GROUP' | translate }}</button>
-    </div>
   </SettingsBarComponent>
-  <div class="w-full ml-2">
+  <div class="w-full ml-2 overflow-y-auto scrollbar">
     <TableComponent [dataSource]="datasource" [config]="tableConfig()" (sortChange)="onSort($event)" (rowClick)="selectGroup($event.id)">
       <!-- Icon cell -->
       <ng-template appTableCell="id" let-group>
@@ -26,5 +23,8 @@
         {{ group.scenes ? group.scenes.length : 0 }}
       </ng-template>
     </TableComponent>
+    <div class="button">
+      <button class="button-link left" (click)="createGroup()">{{ 'CREATE_NEW_GROUP' | translate }}</button>
+    </div>
   </div>
 </div>
