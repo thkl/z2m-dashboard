@@ -117,7 +117,8 @@ export class DeviceFeaturesComponent {
   }
 
   colorChange(property: DeviceFeature, newColor: string): void {
-    if (property && property.subtype === "composite" && property.features) {
+    console.log("colorChange",property)
+    if (property && (property.subtype === "composite" || property.type==='composite' ) && property.features) {
       const state: DeviceTargetState = {};
       state[property.property] = { "hex": newColor }
       if (this.device()) {
