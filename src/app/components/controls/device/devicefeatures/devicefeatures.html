@@ -105,7 +105,7 @@
       }
     }
   </div>
-  @if (displayMode() !== 'settings') {
+  @if (displayMode() !== 'settings' && displayMode() !== 'dashboard') {
     <div class="button">
       <button class="button-link left" (click)="visitDevice()">{{ 'VISIT_DEVICE' | translate }}</button>
     </div>

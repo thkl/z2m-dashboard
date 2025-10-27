@@ -18,10 +18,10 @@
   <SearchInput (searchChange)="applySearch($event)"></SearchInput>
 </div>
 <div class="h-full flex flex-col scrollbar overflow-y-auto overflow-x-hidden pt-2 pr-2 pl-1 mb-4">
-  <div class="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6 gap-2 w-full ml-2 panel">
+  <div class="dashboard-grid ml-2 panel">
     @for (device of filteredDevices(); track $index) {
-      <div class="p-2 rounded-2xl w-full flex flex-col">
-        <span class="text-center w-full device_name">{{ device.friendly_name }}</span>
+      <div class="p-2 w-full flex flex-col">
+        <span (click)="visitDevice(device)" class="cursor-pointer text-center w-full device_name">{{ device.friendly_name }}</span>
         <DeviceFeaturesComponent [ieee_address]="device?.ieee_address" displayMode="dashboard"></DeviceFeaturesComponent>
       </div>
     }
