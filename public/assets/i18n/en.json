@@ -1,5 +1,7 @@
 {
   "ADD_DEVICE": "Add device",
+  "ADD_GROUP": "Add new group",
+  "ADD_GROUP_DATA": "Create a new group",
   "APP_TITLE": "Zigbee2MQTT Dashboard",
   "AVAILABILITY": "Availability",
   "CLEAR_LOGS": "Delete log",
@@ -22,6 +24,8 @@
   "FIRMWARE_STATE": "Firmware state",
   "FRIENDLY_NAME": "Friendly name",
   "GROUPS": "Groups",
+  "GROUP_ID": "ID of the group",
+  "GROUP_NAME": "Name of the group",
   "GROUP_VIEW": "Groups",
   "IEEE_ADDRESS": "IEEE Address",
   "INTERVIEW_STATE": "Interview state",
@@ -81,6 +85,8 @@
   "UPTIME": "Uptime",
   "UP_TO_DATE": "current",
   "VISIT_DEVICE": "Show Device properties",
+  "WANT_DELETE_GROUP": "Sure you want to delete the group {{name}}",
+  "WANT_DELETE_SCENE": "Sure you want to delete the scene {{name}}",
   "YES": "Yes",
   "ZIGBEE_MANUFACTURER": "Zigbee Manufacturer",
   "ZIGBEE_MODEL": "Zigbee Model"

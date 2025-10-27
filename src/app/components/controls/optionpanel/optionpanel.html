@@ -1,7 +1,7 @@
 <ExpansionPanelComponent [label]="title()" [setOpen]="panelIsOpen()" (setOpenChange)="panelIsOpen.set($event)" titleClass="left">
   <div class="options">
     @if (length() > resolvedOptions().maxShown! && resolvedOptions().useSearch === true) {
-      <app-searchinput (searchChange)="applySearch($event)"></app-searchinput>
+      <SearchInput (searchChange)="applySearch($event)"></SearchInput>
     }
     <div class="panel scrollbar" [style.max-height.px]="resolvedOptions().maxShown! * 30">
       @for (entity of internalEntites; track $index) {

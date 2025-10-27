@@ -165,4 +165,16 @@ export class BridgeService {
     this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove_all: "" },false);
   }
 
+  addGroup(groupId:string,groupName:string) {
+    this.appService.sendBridgeRequest("bridge/request/group/add",{id:groupId,friendly_name:groupName});
+  }
+
+  deleteGroup(groupName:string) {
+     this.appService.sendBridgeRequest("bridge/request/group/remove",{id:groupName});
+  }
+
+  renameGroup(groupName:string,newName:string) {
+     this.appService.sendBridgeRequest("bridge/request/group/rename",{from:groupName, to:newName});
+  }
+
 }

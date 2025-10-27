@@ -40,9 +40,9 @@ function compareValues(a: any, b: any): number {
 }
 
 
-export function findSmallestMissingNumber(arr: number[]): number {
+export function findSmallestMissingNumber(arr: number[],start:number=0): number {
   const set = new Set(arr);
-  let num = 0;
+  let num = start;
   
   while (set.has(num)) {
     num++;

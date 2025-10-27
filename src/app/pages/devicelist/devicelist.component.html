@@ -1,7 +1,7 @@
 <div class="flex w-full overflow-x-hidden h-full">
   <SettingsBarComponent>
     <span class="mt-2">Filter</span>
-    <app-searchinput class="mt-2" (searchChange)="applySearch($event)"></app-searchinput>
+    <SearchInput class="mt-2" (searchChange)="applySearch($event)"></SearchInput>
     <div class="mt-2">
       <OptionPanelComponent title="{{ 'MANUFACTURER' | translate }}" [entities]="vendorList()" (optionsChanged)="vendorsSelectionChanged($event)"></OptionPanelComponent>
     </div>

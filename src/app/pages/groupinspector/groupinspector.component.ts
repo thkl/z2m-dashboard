@@ -13,7 +13,8 @@ import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 export class GroupInspectorComponent {
 
   protected readonly groupStore = inject(GroupStore);
-    protected readonly tabManager = inject(PropertyTabManagerService);
+  protected readonly tabManager = inject(PropertyTabManagerService);
+  
   groupid = input.required<string | undefined>();
   panel = signal<number>(1);
 

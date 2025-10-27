@@ -11,13 +11,17 @@ import { createStoreView } from '@/app/datastore/generic-store-view';
 import { SearchOperator } from '@/app/datastore/generic.store';
 import { Group } from '@/app/models/group';
 import { Device } from '@/app/models/device';
-import { AddRemoveDeviceFromGroupOptions, SelectOption } from '@/app/models/types';
+import { AddRemoveDeviceFromGroupOptions, DeleteObjectOptions, SelectOption } from '@/app/models/types';
 import { ExpansionPanelDeviceComponent } from '@/app/components/controls/expansionpanel-device/expansionpanel-device';
+import { DeleteObjectDialog } from '@/app/components/dialogs/deleteobject/deleteobject';
+import { BridgeService } from '@/app/services/bridge.service';
+import { Dialog } from '@angular/cdk/dialog';
+import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 
 
 @Component({
   selector: 'GroupInfoComponent',
-  imports: [TranslateModule,ExpansionPanelDeviceComponent, DeviceFeaturesComponent, OptionPanelComponent],
+  imports: [TranslateModule, ExpansionPanelDeviceComponent, DeviceFeaturesComponent, OptionPanelComponent],
   templateUrl: './groupinfo.html',
   styleUrl: './groupinfo.scss'
 })
@@ -27,6 +31,9 @@ export class GroupInfoComponent {
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly deviceService = inject(DeviceService);
   protected readonly translate = inject(TranslateService);
+  protected readonly bridgeService = inject(BridgeService);
+  protected readonly dialog = inject(Dialog);
+  protected readonly tabManager = inject(PropertyTabManagerService);
 
   group_id = input.required<number | undefined>();
   group = computed(() => {
@@ -67,7 +74,7 @@ export class GroupInfoComponent {
 
   endPointSelectorTitle = computed(() => {
     const epd = this.selectedEndpointId();
-    return epd !== null ? this.translate.instant("ENDPOINT_",{id:epd}) : this.translate.instant("ENDPOINT")
+    return epd !== null ? this.translate.instant("ENDPOINT_", { id: epd }) : this.translate.instant("ENDPOINT")
   });
 
 
@@ -87,7 +94,7 @@ export class GroupInfoComponent {
         value: d.ieee_address
       } as SelectOption
     }
-    ).sort((a:SelectOption,b:SelectOption)=>{
+    ).sort((a: SelectOption, b: SelectOption) => {
       if (a.label > b.label) return 1;
       if (a.label < b.label) return -1;
       return 0;
@@ -99,7 +106,28 @@ export class GroupInfoComponent {
   }
 
   deleteGroup() {
-    console.log(this.group());
+    if (this.group()) {
+      const data: DeleteObjectOptions = {
+        title: "DELETE_GROUP",
+        message: "WANT_DELETE_GROUP",
+        objectName: this.group()?.friendly_name!,
+        delete: false,
+      }
+
+      const dialogRef = this.dialog.open(DeleteObjectDialog, {
+        height: '400px',
+        width: '600px',
+        data
+      });
+
+      dialogRef.closed.subscribe((result: any) => {
+        if (result !== undefined && result.delete === true) {
+          const groupID = this.group()!.id;
+          this.bridgeService.deleteGroup(this.group()!.friendly_name);
+          this.tabManager.closeTab(String(groupID));
+        }
+      });
+    }
   }
 
   removeDeviceFromGroup(device: Device, endpoint: string) {

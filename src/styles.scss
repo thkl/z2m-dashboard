@@ -680,3 +680,7 @@ nav.inspector {
   border-left: 1px solid var(--app-header-background-color);
   filter: drop-shadow(-5px 5px 5px var(--app-header-background-color));
 }
+
+.border {
+  border: 1px solid var(--app-border-color);
+}

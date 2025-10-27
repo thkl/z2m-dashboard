@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Group } from '@/app/models/group';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'GroupImage',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './groupimage.scss',
 })
 export class GroupImage {
-
+    group = input<Group>()
 }

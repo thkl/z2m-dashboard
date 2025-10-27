@@ -1,5 +1,5 @@
 import { Component, computed, inject, Injector, signal, viewChild } from '@angular/core';
-import { ColumnDef, TableConfig } from '../../models/types';
+import { AddObjectDialogData, ColumnDef, TableConfig } from '../../models/types';
 import { Group } from '../../models/group';
 import { GroupStore } from '../../datastore/group.store';
 import { SortDirection, SortEvent } from '../../directives/table-sort.directive';
@@ -8,16 +8,19 @@ import { TableComponent } from '../../components/controls/generic-table/generic-
 import { CDKDataSource } from '../../datastore/generic-store-ui';
 import { ApplicationService } from '../../services/app.service';
 import { TableSettingsControl } from '../../components/tablesettings/tablesettings';
-import { sortData } from '../../utils/sort.utils';
+import { findSmallestMissingNumber, sortData } from '../../utils/sort.utils';
 import { TranslateModule } from '@ngx-translate/core';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 import { GroupInspectorComponent } from '@/app/pages/groupinspector/groupinspector.component';
 import { GroupImage } from '@/app/components/controls/groups/groupimage/groupimage';
 import { SettingsBarComponent } from '@/app/components/controls/settingsbar/settingsbar';
+import { Dialog } from '@angular/cdk/dialog';
+import { AddObjectDialog } from '@/app/components/dialogs/addobject/addobject';
+import { BridgeService } from '@/app/services/bridge.service';
 
 @Component({
   selector: 'GroupListComponent',
-  imports: [TableComponent, TableCellDirective, TableSettingsControl,TranslateModule,SettingsBarComponent],
+  imports: [TableComponent, TableCellDirective, TableSettingsControl, TranslateModule, SettingsBarComponent],
   templateUrl: './groupslist.component.html',
   styleUrl: './groupslist.component.scss'
 })
@@ -28,7 +31,9 @@ export class GroupListComponent {
   protected readonly groupStore = inject(GroupStore);
   protected readonly applicationService = inject(ApplicationService);
   protected readonly tabManager = inject(PropertyTabManagerService);
-  
+  protected readonly dialog = inject(Dialog);
+  protected readonly bridgeService = inject(BridgeService);
+
   tableSettings = viewChild(TableSettingsControl);
   // Displayed columns signal for column visibility management
   displayedColumns = signal<string[]>(['id', 'friendly_name', 'members', 'scenes']);
@@ -105,18 +110,18 @@ export class GroupListComponent {
 
 
   selectGroup(groupId: number) {
-    const group = this.groupStore.entities().find(g=>g.id===groupId);
-     if (group) {
-         this.tabManager.openTab({
-          id: String(groupId),
-          label: group.friendly_name,
-    
-          data:{groupid:String(groupId)},
-          component: GroupInspectorComponent,
-          iconComponent:GroupImage,
-          iconData:{group}
-        });
-      }
+    const group = this.groupStore.entities().find(g => g.id === groupId);
+    if (group) {
+      this.tabManager.openTab({
+        id: String(groupId),
+        label: group.friendly_name,
+
+        data: { groupid: String(groupId) },
+        component: GroupInspectorComponent,
+        iconComponent: GroupImage,
+        iconData: { group }
+      });
+    }
   }
 
   getGroupValue(group: Group, column: string): any {
@@ -130,5 +135,33 @@ export class GroupListComponent {
 
   createGroup(): void {
 
+    const groupids = (this.groupStore && this.groupStore?.entities()) ? this.groupStore?.entities().map(g => g.id) : [];
+    console.log(groupids);
+    const data = {
+      id: findSmallestMissingNumber(groupids ?? [],1),
+      name: ''
+    };
+
+
+    const dialogData: AddObjectDialogData = {
+      data,
+      title: "ADD_GROUP",
+      message: "ADD_GROUP_DATA",
+      control: [{ name: "id", label: "GROUP_ID" }, { name: "name", label: "GROUP_NAME" }],
+      created: false
+    }
+
+
+    const dialogRef = this.dialog.open(AddObjectDialog, {
+      height: '400px',
+      width: '600px',
+      data: dialogData
+    });
+
+    dialogRef.closed.subscribe((result: any) => {
+      if (result !== undefined && result.created === true) {
+        this.bridgeService.addGroup(result.data['id'], result.data['name']);
+      }
+    })
   }
 }
