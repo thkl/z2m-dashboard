@@ -77,9 +77,10 @@ export class ApplicationService {
         //check if we have this setting and replace or add
         let saved: any = {};
         try {
-            saved = JSON.parse(this.getPreference("saved_hosts"));
+            saved = this.getPreference("saved_hosts");
         } catch (e) {
-
+            console.log("Unable to read saved hosts");
+            console.error(e);
         }
         const host = z2m.host;
         const secure = z2m.secure;
@@ -95,9 +96,16 @@ export class ApplicationService {
 
     connect() {
         const host = this.getPreference("host");
+        const port = this.getPreference("port");
         const secure = this.getPreference("secure");
+        const token = this.getPreference("token");
+
         if (host) {
-            this.ws.connect(`${secure ? 'wss' : 'ws'}://${host}/api`);
+            let url = `${secure ? 'wss' : 'ws'}://${host}:${port}/api`;
+            if (token) {
+                url = `${url}?token=${token}`
+            }
+            this.ws.connect(url);
             this.connectedHostSignal.set(`${host}`);
         }
     }

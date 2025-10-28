@@ -77,13 +77,14 @@ export class Websocket {
    * ```
    */
   connect(url: string): void {
+
     this.url = url;
 
     if (this.ws) {
       this.ws.close();
     }
 
-    this.ws = new WebSocket(url);
+    this.ws = new WebSocket(this.url);
     this.clearWatchdog();
 
     this.ws.onmessage = (event) => {
@@ -249,8 +250,7 @@ export class Websocket {
     }
     setTimeout(() => {
       if ((this.url) && (this.shouldBeConnected)) {
-        this.isConnecting = true;
-        this.connect(this.url);
+            this.connect(this.url);
       }
     }, 10000);
   }
