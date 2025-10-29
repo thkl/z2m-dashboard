@@ -2,6 +2,7 @@ import { inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
 import { Z2MServer } from "../models/types";
 import { Z } from "@angular/cdk/keycodes";
+import { TokenService } from "@/app/services/token.service";
 
 export interface AppSettings {
     [key: string]: any;
@@ -15,7 +16,7 @@ export class ApplicationService {
 
     public settings?: AppSettings;
     private ws = inject(Websocket);
-
+    private  tokenService = inject(TokenService);
     private mainTitleSignal = signal<string>('');
 
     get mainTitle(): Signal<string> {
@@ -82,23 +83,23 @@ export class ApplicationService {
             console.log("Unable to read saved hosts");
             console.error(e);
         }
-        const host = z2m.host;
-        const secure = z2m.secure;
-        const port = z2m.port;
-        const name = z2m.name;
-        saved[host] = { name, host, port, secure };
+        const {host,secure,port,name,token} = z2m;
+        saved[host] = { name, host, port, secure,token };
+        
         this.setPreference("saved_hosts", saved);
         this.setPreference("host", host.replace('https://', '').replace('http://', ''));
         this.setPreference("secure", secure);
         this.setPreference("port", port);
+        this.setPreference("token",token);
         this.connect();
     }
 
-    connect() {
+    async connect() {
         const host = this.getPreference("host");
         const port = this.getPreference("port");
         const secure = this.getPreference("secure");
-        const token = this.getPreference("token");
+        let encryptedToken: string | undefined = this.getPreference("token");
+        const token = (encryptedToken) ? await this.tokenService.decryptToken(encryptedToken):undefined
 
         if (host) {
             let url = `${secure ? 'wss' : 'ws'}://${host}:${port}/api`;

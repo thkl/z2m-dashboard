@@ -167,5 +167,6 @@ export interface Z2MServer {
   name:string,
   secure:boolean,
   host:string,
-  port:number
+  port:number,
+  token?:string
 }

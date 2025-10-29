@@ -51,6 +51,15 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-60">
+          <label for="input_token">{{ 'TOKEN' | translate }}</label>
+          <div class="input-container">
+            <input class="w-full text-left panel" id="input_token" [value]="token() ?? ''" (change)="changeToken($event)" />
+            <InfoOverlayComponent message="{{ 'TOKEN_DESCRIPTION' | translate }}" style="min-width: 30px"> </InfoOverlayComponent>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <footer>
@@ -58,7 +67,7 @@
       <div class="warp"></div>
       <div class="ml-auto flex flex-row gap-2">
         <button class="primary min-w-20" (click)="save()">{{ 'SAVE' | translate }}</button>
-        <button class="primary min-w-20" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button class="primary min-w-20" (click)="cancel()">{{ 'CANACEL' | translate }}</button>
       </div>
     </div>
   </footer>
