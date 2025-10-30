@@ -77,8 +77,8 @@
       </h1>
 
       <div class="flex items-center gap-2">
-        <span class="cursor-pointer" (click)="openServerDialog()">
-          {{ connectedHost() }}
+        <span class="cursor-pointer" (click)="openServerDialog('')">
+          {{ connectedHost() ?? 'Connect to a host' }}
         </span>
       </div>
     </header>

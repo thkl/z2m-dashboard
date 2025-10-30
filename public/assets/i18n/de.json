@@ -63,6 +63,7 @@
   "NEW_SERVER": "Neuen Server",
   "NO": "Nein",
   "NO_DEVICES": "Keine Geräte gefunden",
+  "NO_LASTSAVED_CONNECTION": "Keine zuletzt benutze Verbindung. Wähle eine Verbindung oder erstelle eine neue.",
   "OFFLINE": "Offline",
   "ONLINE": "Online",
   "OPEN_NETWORK": "Das Zigbee Netz ist {{time}} offen. Gerät in den Lernmodus versetzen um es hinzuzufügen.",

@@ -5,5 +5,6 @@
   },
   "lingua.flatTranslationKeys": true,
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "typescript.preferences.autoImportFileExcludePatterns": []
+  "typescript.preferences.autoImportFileExcludePatterns": [],
+  "lingua.warnAboutFlatAndMixedTranslationKeys": false
 }

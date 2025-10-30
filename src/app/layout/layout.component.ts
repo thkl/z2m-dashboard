@@ -1,11 +1,11 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DeviceStore } from '../datastore/device.store';
 import { DeviceInspectorComponent } from '../pages/deviceinspector/deviceinspector.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApplicationService } from '../services/app.service';
 import { BridgeService } from '../services/bridge.service';
- 
+
 import { LogView } from '../components/logview/logview';
 import { ResizableContainerComponent } from '../components/controls/resizable-container/resizable-container';
 import { GroupInspectorComponent } from '../pages/groupinspector/groupinspector.component';
@@ -14,6 +14,7 @@ import { ChooseServerDialog, ChooseServerDialogData } from '../components/dialog
 import { Z2MServer } from '../models/types';
 import { TabContainerComponent } from '@/app/components/tabcontainer/tabcontainer.component';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
+import { SignalBusService } from '@/app/services/sigbalbus.service';
 
 @Component({
   selector: 'app-layout',
@@ -31,8 +32,8 @@ export class LayoutComponent {
   protected readonly bs = inject(BridgeService);
   protected readonly dialog = inject(Dialog);
   protected readonly tabManager = inject(PropertyTabManagerService);
+  protected readonly signalBusService = inject(SignalBusService);
 
-  
   mainTitle = computed(() => {
     return this.applicationService.mainTitle();
   })
@@ -41,7 +42,7 @@ export class LayoutComponent {
     return this.applicationService.inspector();
   })
 
-  connectedHost = computed(()=>{
+  connectedHost = computed(() => {
     return this.applicationService.connectedHost();
   })
 
@@ -54,14 +55,17 @@ export class LayoutComponent {
     return this.tabManager.numberOfTabs() > 0;
   })
 
+  noSavedConnectionSignal = this.signalBusService.onEvent<string>('connection_error');
+
   constructor() {
-    const host = this.applicationService.getPreference("host");
 
-    this.host = host;
-    if (!host) {
-      this.openServerDialog()
-    }
-
+    effect(() => {
+      const sgn = this.noSavedConnectionSignal();
+      if (sgn !== null && (sgn.data === "NO_LASTSAVED_CONNECTION" || sgn.data === "error_connecting")) {
+        this.openServerDialog(sgn.data)
+        this.signalBusService.reset("connection_error");
+      }
+    });
   }
 
   toggleSidebar() {
@@ -78,21 +82,22 @@ export class LayoutComponent {
   }
 
 
-  openServerDialog() {
-
+  openServerDialog(message:string) {
     let knownServerList: Z2MServer[] = [];
     try {
-      const ks =  this.applicationService.getPreference("saved_hosts");
+      const ks = this.applicationService.getPreference("saved_hosts");
       if (ks) {
         Object.keys(ks).forEach(sn => {
           knownServerList.push(ks[sn])
         })
       }
-    } catch (e) { console.error(e);}
+    } catch (e) { console.error(e); }
+
     const data: ChooseServerDialogData = {
-      knownServer: knownServerList
+      knownServer: knownServerList,
+      message
     }
-    console.log(data);
+
     const dialogRef = this.dialog.open(ChooseServerDialog, {
       height: '400px',
       width: '600px',
@@ -101,9 +106,11 @@ export class LayoutComponent {
 
     dialogRef.closed.subscribe((result: unknown) => {
       if (result !== undefined) {
-        const dr = result as ChooseServerDialogData 
-        console.log("Try connecting",dr.newServer)
-        this.applicationService.saveAndConnect(dr.newServer!)
+        const dr = result as ChooseServerDialogData
+        console.log("Try connecting", dr.newServer)
+        setTimeout(()=>{
+          this.applicationService.saveAndConnect(dr.newServer!)
+        },500);
       }
     });
   }

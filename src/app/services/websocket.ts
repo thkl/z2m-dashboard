@@ -1,4 +1,15 @@
-import { Injectable, signal, computed, Signal } from '@angular/core';
+import { SignalBusService } from '@/app/services/sigbalbus.service';
+import { Injectable, signal, computed, Signal, inject } from '@angular/core';
+
+export interface Connection {
+  name: string;
+  host: string;
+  port: number;
+  secure: boolean;
+  token?: string;
+}
+
+const ERROR_UNAUTHORIZED = 4401;
 
 /**
  * Message structure for WebSocket communication.
@@ -57,34 +68,39 @@ export class Websocket {
   private shouldBeConnected = false;
   /** Seconds since last message received (used by watchdog timer) */
   private timeout = 0;
-  /** The WebSocket URL to connect to */
-  private url?: string;
+  /** The WebSocket connection */
+  private connection?: Connection;
   /** Interval timer ID for the watchdog */
   private timer?: number;
   private isConnecting: boolean = false;
   private failTimes: number = 0;
-
+  protected readonly  signalBusService = inject(SignalBusService);
   /**
    * Establishes a WebSocket connection to the specified URL.
    * Closes any existing connection before creating a new one.
    * Sets up message routing, error handling, and automatic reconnection.
    *
-   * @param url - The WebSocket URL to connect to (ws:// or wss://)
+   * @param connection - The connection object
    *
    * @example
    * ```typescript
    * websocket.connect('wss://example.com/api');
    * ```
    */
-  connect(url: string): void {
+  connect(connection: Connection): void {
+    const { host, port, secure, token } = connection;
+    const stripped = host.replace(/^(https?:\/\/)/, "");;
 
-    this.url = url;
-
+    let url = `${secure ? 'wss' : 'ws'}://${stripped}:${port}/api`;
+    if (token) {
+      url = `${url}?token=${token}`
+    }
+    this.connection = connection;
     if (this.ws) {
       this.ws.close();
     }
 
-    this.ws = new WebSocket(this.url);
+    this.ws = new WebSocket(url);
     this.clearWatchdog();
 
     this.ws.onmessage = (event) => {
@@ -142,16 +158,25 @@ export class Websocket {
     this.ws.onerror = (error) => {
       console.error('WebSocket error:', error);
       this.isConnecting = false;
-
       this.failTimes = this.failTimes + 1;
       if (this.failTimes < 5) {
         this.reconnect();
       }
     };
 
-    this.ws.onclose = () => {
-      console.log('WebSocket connection closed');
-      this.reconnect();
+    this.ws.onclose = (event: CloseEvent) => {
+      console.log('WebSocket connection closed', event);
+      switch (event.code) {
+        case ERROR_UNAUTHORIZED:
+          this.signalBusService.emit("connection_error",'authentication_needed');
+          break;
+        case 1006:
+          this.signalBusService.emit("connection_error",'error_connecting');
+          break;
+        default:
+        this.reconnect();
+
+        }
     };
 
     this.ws.onopen = () => {
@@ -249,8 +274,8 @@ export class Websocket {
       return;
     }
     setTimeout(() => {
-      if ((this.url) && (this.shouldBeConnected)) {
-            this.connect(this.url);
+      if ((this.connection) && (this.shouldBeConnected)) {
+        this.connect(this.connection);
       }
     }, 10000);
   }

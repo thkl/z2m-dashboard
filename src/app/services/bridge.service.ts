@@ -1,4 +1,4 @@
-import { inject, Injectable, Signal, signal } from "@angular/core";
+import { effect, inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
 import { ApplicationService } from "./app.service";
 import { Bridge, Networkmap } from "../models/bridge";
@@ -10,6 +10,7 @@ import { GroupStore } from "../datastore/group.store";
 import { TranslateService } from "@ngx-translate/core";
 import { Group } from "../models/group";
 import { GroupSceneData } from "../models/types";
+import { SignalBusService } from "@/app/services/sigbalbus.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,13 +22,23 @@ export class BridgeService {
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly groupStore = inject(GroupStore);
   private translate = inject(TranslateService);
+  protected readonly signalBusService = inject(SignalBusService);
   public bridgeInfo = signal<Bridge | null>(null);
   private lastSeenTimer?: number;
 
   private extensions = createDeviceStoreExtensions(this.deviceStore, this.translate);
-
+  private clearSignal = this.signalBusService.onEvent<any>("clear_stores");
 
   constructor() {
+
+    effect(() => {
+      const cs = this.clearSignal();
+      if (cs !== null && cs.data) {
+        this.bridgeInfo.set(null);
+        this.deviceStore.clear();
+        this.groupStore.clear();
+      }
+    })
 
     this.ws.subscribeTopicCallback('bridge/info', (message) => {
       if (message) {
@@ -111,7 +122,7 @@ export class BridgeService {
 
     // copy the old state or create an empty one
     deviceList.forEach(device => {
-      
+
       // set the device option values from the bridge info devices 
       const bridgeDevice = this.bridgeInfo()?.config.devices[device.ieee_address];
       if (bridgeDevice) {
@@ -140,41 +151,44 @@ export class BridgeService {
     // we have to do a weird little conversion .. the endpoint is everywhere a string
     // but the api will send here a number .. so just convert this little sckr
     const converted = groupList.map(group => {
-      const members = group.members.map(member=>{
-        return {...member,endpoint:String(member.endpoint)}
+      const members = group.members.map(member => {
+        return { ...member, endpoint: String(member.endpoint) }
       })
-      return {...group,members}
+      return { ...group, members }
     })
     this.groupStore.addAll(converted);
   }
 
+  clear(): void {
+    this.bridgeInfo.set(null);
+  }
 
   saveScene(groupName: string, data: GroupSceneData) {
-    this.appService.sendBridgeRequest(`${groupName}/set`, data,false);
+    this.appService.sendBridgeRequest(`${groupName}/set`, data, false);
   }
 
   recallScene(groupName: string, sceneID: number) {
-    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_recall: sceneID },false);
+    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_recall: sceneID }, false);
   }
 
-  deleteScene(groupName:string,sceneID:number) {
-    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove: sceneID },false);
+  deleteScene(groupName: string, sceneID: number) {
+    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove: sceneID }, false);
   }
 
-  deleteAllScenes(groupName:string) {
-    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove_all: "" },false);
+  deleteAllScenes(groupName: string) {
+    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove_all: "" }, false);
   }
 
-  addGroup(groupId:string,groupName:string) {
-    this.appService.sendBridgeRequest("bridge/request/group/add",{id:groupId,friendly_name:groupName});
+  addGroup(groupId: string, groupName: string) {
+    this.appService.sendBridgeRequest("bridge/request/group/add", { id: groupId, friendly_name: groupName });
   }
 
-  deleteGroup(groupName:string) {
-     this.appService.sendBridgeRequest("bridge/request/group/remove",{id:groupName});
+  deleteGroup(groupName: string) {
+    this.appService.sendBridgeRequest("bridge/request/group/remove", { id: groupName });
   }
 
-  renameGroup(groupName:string,newName:string) {
-     this.appService.sendBridgeRequest("bridge/request/group/rename",{from:groupName, to:newName});
+  renameGroup(groupName: string, newName: string) {
+    this.appService.sendBridgeRequest("bridge/request/group/rename", { from: groupName, to: newName });
   }
 
 }

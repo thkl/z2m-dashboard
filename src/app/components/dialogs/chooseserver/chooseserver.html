@@ -2,13 +2,18 @@
   <header>
     <div class="title">{{ 'CHOOSE_SERVER_TITLE' | translate }}</div>
   </header>
+
+  @if (dialogData.message != '') {
+    <div class="framed">{{ dialogData.message | translate }}</div>
+  }
+
   <div class="framed">
     <div class="message mb-5">
       <span>{{ 'CHOOSE_SERVER_MESSAGE' | translate }}</span>
     </div>
     <div class="container">
       @for (kServer of dialogData.knownServer; track $index) {
-        <div class="row">
+        <div class="row serverline min-h-5">
           <div class="col-20">{{ kServer.name }}</div>
           <div class="col-40">{{ kServer.host }}</div>
           <div class="col-10">{{ kServer.port }}</div>

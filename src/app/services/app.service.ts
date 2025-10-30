@@ -1,8 +1,12 @@
 import { inject, Injectable, Signal, signal } from "@angular/core";
-import { Websocket } from "./websocket";
+import { Connection, Websocket } from "./websocket";
 import { Z2MServer } from "../models/types";
 import { Z } from "@angular/cdk/keycodes";
 import { TokenService } from "@/app/services/token.service";
+import { SignalBusService } from "@/app/services/sigbalbus.service";
+import { DeviceStore } from "@/app/datastore/device.store";
+import { BridgeService } from "@/app/services/bridge.service";
+import { GroupStore } from "@/app/datastore/group.store";
 
 export interface AppSettings {
     [key: string]: any;
@@ -15,9 +19,12 @@ export interface AppSettings {
 export class ApplicationService {
 
     public settings?: AppSettings;
-    private ws = inject(Websocket);
-    private  tokenService = inject(TokenService);
-    private mainTitleSignal = signal<string>('');
+    protected readonly ws = inject(Websocket);
+    protected readonly tokenService = inject(TokenService);
+    protected readonly signalBusService = inject(SignalBusService);
+    protected readonly mainTitleSignal = signal<string>('');
+    protected readonly deviceStore = inject(DeviceStore);
+    protected readonly groupStore = inject(GroupStore);
 
     get mainTitle(): Signal<string> {
         return this.mainTitleSignal;
@@ -46,7 +53,14 @@ export class ApplicationService {
 
     constructor() {
         this.loadSettings();
-        this.connect()
+        const last = this.getPreference("last_connection");
+        const saved = this.getPreference("saved_hosts");
+        if (last && saved && saved[last]) {
+            this.connect(saved[last]);
+        } else {
+            // send a signal to the Main Page to open the Settings
+            this.signalBusService.emit("connection_error", "NO_LASTSAVED_CONNECTION");
+        }
     }
 
     loadSettings(): void {
@@ -83,32 +97,25 @@ export class ApplicationService {
             console.log("Unable to read saved hosts");
             console.error(e);
         }
-        const {host,secure,port,name,token} = z2m;
-        saved[host] = { name, host, port, secure,token };
-        
+        const { host, secure, port, name, token } = z2m;
+        saved[host] = z2m;
+
         this.setPreference("saved_hosts", saved);
-        this.setPreference("host", host.replace('https://', '').replace('http://', ''));
-        this.setPreference("secure", secure);
-        this.setPreference("port", port);
-        this.setPreference("token",token);
-        this.connect();
+        this.setPreference("last_connection", host);
+        const connection: Connection = { ...z2m };
+        this.connect(connection);
     }
 
-    async connect() {
-        const host = this.getPreference("host");
-        const port = this.getPreference("port");
-        const secure = this.getPreference("secure");
-        let encryptedToken: string | undefined = this.getPreference("token");
-        const token = (encryptedToken) ? await this.tokenService.decryptToken(encryptedToken):undefined
-
-        if (host) {
-            let url = `${secure ? 'wss' : 'ws'}://${host}:${port}/api`;
+    async connect(connection: Connection) {
+        if (connection.token) {
+            const token = await this.tokenService.decryptToken(connection.token);
             if (token) {
-                url = `${url}?token=${token}`
+                connection.token = token; // decrypt it
             }
-            this.ws.connect(url);
-            this.connectedHostSignal.set(`${host}`);
         }
+        this.signalBusService.emit("clear_stores",{});
+        this.ws.connect(connection);
+        this.connectedHostSignal.set(`${connection.name}`);
     }
 
     saveSettings() {

@@ -1,6 +1,6 @@
 import { Z2MServer } from '@/app/models/types';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { Component, computed, inject, model } from '@angular/core';
+import { Component, computed, inject, input, model } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OptionComponent } from '../../controls/option/option';
 import { InfoOverlayComponent } from '../../controls/infooverlay/infooverlay';
@@ -10,7 +10,8 @@ import { TokenService } from '@/app/services/token.service';
 
 export interface ChooseServerDialogData {
   knownServer: Z2MServer[],
-  newServer?: Z2MServer
+  newServer?: Z2MServer,
+  message?:string;
 }
 
 @Component({
@@ -24,7 +25,7 @@ export class ChooseServerDialog {
   dialogRef = inject<DialogRef<ChooseServerDialogData>>(DialogRef<ChooseServerDialogData>);
   dialogData = inject(DIALOG_DATA);
   tokenService = inject(TokenService);
-
+  
   host = model<string>("");
   port = model<number>(8080);
   secure = model<boolean>(false);
