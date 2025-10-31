@@ -106,6 +106,9 @@ export class ApplicationService {
             console.log("Unable to read saved hosts");
             console.error(e);
         }
+        if (saved===undefined) {
+            saved = {};
+        }
         const { id } = z2m;
         saved[id] = z2m;
 
