@@ -33,7 +33,7 @@
         <div class="col-full">
           <label for="input_newServerName">{{ 'NAME' | translate }}</label>
           <div class="input-container">
-            <input class="w-full text-left panel" id="input_newServerName" [value]="name()" (change)="changeName($event)" />
+            <input class="w-full text-left" id="input_newServerName" [value]="name()" (change)="changeName($event)" />
           </div>
         </div>
       </div>
@@ -41,13 +41,13 @@
         <div class="col-60">
           <label for="input_newHost">{{ 'HOST' | translate }}</label>
           <div class="input-container">
-            <input class="w-full text-left panel" id="input_newHost" [value]="host()" (change)="changeHost($event)" />
+            <input class="w-full text-left" id="input_newHost" [value]="host()" (change)="changeHost($event)" />
           </div>
         </div>
         <div class="col-20">
           <label for="input_newPort">{{ 'PORT' | translate }}</label>
           <div class="input-container">
-            <input class="w-full text-left panel" id="input_newPort" [value]="port()" (change)="changePort($event)" />
+            <input class="w-full text-left" id="input_newPort" [value]="port()" (change)="changePort($event)" />
           </div>
         </div>
         <div class="col-20">
@@ -62,9 +62,12 @@
         <div class="col-60">
           <label for="input_token">{{ 'TOKEN' | translate }}</label>
           <div class="input-container">
-            <input class="w-full text-left panel" id="input_token" [value]="token() ?? ''" (change)="changeToken($event)" />
+            <input class="w-full text-left" id="input_token" [value]="token() ?? ''" (change)="changeToken($event)" />
             <InfoOverlayComponent message="{{ 'TOKEN_DESCRIPTION' | translate }}" style="min-width: 30px"> </InfoOverlayComponent>
           </div>
+        </div>
+        <div class="col-40 align-middle mt-10 mb-auto">
+          <a class="button-link left cursor-pointer pl-8" (click)="save()">{{ 'SAVE' | translate }}</a>
         </div>
       </div>
     </div>
@@ -73,7 +76,6 @@
     <div class="buttonGroup">
       <div class="warp"></div>
       <div class="ml-auto flex flex-row gap-2">
-        <button class="primary min-w-20" (click)="save()">{{ 'SAVE' | translate }}</button>
         <button class="primary min-w-20" (click)="cancel()">{{ 'CANACEL' | translate }}</button>
       </div>
     </div>

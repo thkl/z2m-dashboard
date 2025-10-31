@@ -138,8 +138,19 @@ export interface Device {
     update?:DeviceUpdate;
 }
 
+export interface BindingTarget {
+    endpoint:string;
+    ieee_address:string;
+    type:string;
+}
+
+export interface Binding {
+    cluster:string;
+    target:BindingTarget
+}
+
 export interface Endpoint {
-    bindings:              any[];
+    bindings:              Binding[];
     clusters:              Clusters;
     configured_reportings: any[];
     scenes:                any[];

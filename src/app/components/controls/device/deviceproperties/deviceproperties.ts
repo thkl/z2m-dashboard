@@ -8,11 +8,12 @@ import { DeviceConfigSchema } from '@/app/models/bridge';
 import { Device } from '@/app/models/device';
 import { createStoreView } from '@/app/datastore/generic-store-view';
 import { SearchOperator } from '@/app/datastore/generic.store';
+import { DeviceBindingsComponent } from '@/app/components/controls/device/devicebindings/devicebindings';
  
 
 @Component({
   selector: 'DevicePropertiesComponent',
-  imports: [DeviceEndpointComponent,ExpansionPanelComponent,DeviceSettings],
+  imports: [DeviceEndpointComponent,ExpansionPanelComponent,DeviceSettings,DeviceBindingsComponent],
   templateUrl: './deviceproperties.html',
   styleUrl: './deviceproperties.scss'
 })

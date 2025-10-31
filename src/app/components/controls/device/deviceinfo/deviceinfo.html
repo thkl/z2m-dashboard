@@ -16,7 +16,7 @@
         <span class="value">
           <div class="input-container active">
             <div class="input-content">
-              <input (change)="changeDescriptions($event)" class="w-full text-right panel" [value]="device()?.description || ''" />
+              <input (change)="changeDescriptions($event)" id="device_description" class="w-full text-right" [value]="device()?.description || ''" />
             </div>
           </div>
         </span>

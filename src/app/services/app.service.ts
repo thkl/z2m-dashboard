@@ -53,15 +53,24 @@ export class ApplicationService {
 
     constructor() {
         this.loadSettings();
-        const last = this.getPreference("last_connection");
-        const saved = this.getPreference("saved_hosts");
-        if (last && saved && saved[last]) {
-            this.connect(saved[last]);
+        const connection = this.selectedConnection();
+        if (connection) {
+            this.connect(connection);
         } else {
             // send a signal to the Main Page to open the Settings
             this.signalBusService.emit("connection_error", "NO_LASTSAVED_CONNECTION");
         }
     }
+
+    selectedConnection() : Connection | undefined{
+        const last = this.getPreference("last_connection");
+        const saved = this.getPreference("saved_hosts");
+        if (last && saved && saved[last]) {
+            return saved[last];
+        }
+        return undefined;
+    }
+
 
     loadSettings(): void {
         const saved = localStorage.getItem('ui-settings');
@@ -97,11 +106,11 @@ export class ApplicationService {
             console.log("Unable to read saved hosts");
             console.error(e);
         }
-        const { host, secure, port, name, token } = z2m;
-        saved[host] = z2m;
+        const { id } = z2m;
+        saved[id] = z2m;
 
         this.setPreference("saved_hosts", saved);
-        this.setPreference("last_connection", host);
+        this.setPreference("last_connection", id);
         const connection: Connection = { ...z2m };
         this.connect(connection);
     }
@@ -113,7 +122,7 @@ export class ApplicationService {
                 connection.token = token; // decrypt it
             }
         }
-        this.signalBusService.emit("clear_stores",{});
+        this.signalBusService.emit("clear_stores", {});
         this.ws.connect(connection);
         this.connectedHostSignal.set(`${connection.name}`);
     }

@@ -31,6 +31,7 @@ export class ChooseServerDialog {
   secure = model<boolean>(false);
   name = model<string>('localhost');
   token = model<string | undefined>();
+  selectedId : string = crypto.randomUUID();
 
   isSecure = computed(() => {
 
@@ -50,13 +51,14 @@ export class ChooseServerDialog {
     }
 
     const newServer: Z2MServer = {
+      id:this.selectedId,
       name: this.name(),
       host: this.host(),
       port: this.port(),
       secure: this.secure() ?? false,
       token: encryptedToken
     }
-
+    
     this.dialogRef.close({ ...this.dialogData, newServer });
   }
 
@@ -93,8 +95,8 @@ export class ChooseServerDialog {
     this.port.set(server.port);
     this.name.set(server.name);
     this.secure.set(server.secure);
+    this.selectedId = server.id ?? crypto.randomUUID();
     if (server.token) {
-  
       let decryptedToken = await this.tokenService.decryptToken(server.token);
       console.log(server.token,decryptedToken)
       this.token.set(decryptedToken!);

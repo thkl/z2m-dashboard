@@ -29,14 +29,17 @@ export class DeviceImage {
 
   constructor() {
 
-    const host = this.appService.getPreference("host");
-    const secure = this.appService.getPreference("secure")
+    const selectedConnection = this.appService.selectedConnection();
 
+    const host = selectedConnection ? selectedConnection.host.replace(/^(https?:\/\/)/, "") : undefined;
+    const port = selectedConnection ? selectedConnection.port : undefined;
+    const secure = selectedConnection ? selectedConnection.secure : undefined;
+ 
     effect(() => {
       const device = this.device();
 
-      if (device && device.definition?.icon) {
-        this.setImage(`${secure ? 'https' : 'http'}://${host}/${device.definition?.icon}`)
+      if (device && device.definition?.icon && host) {
+        this.setImage(`${secure ? 'https' : 'http'}://${host}${port ? ':'+port :''}/${device.definition?.icon}`)
       } else {
         // set the image to the model if no local icon
         if (device.definition && device.definition.model) {

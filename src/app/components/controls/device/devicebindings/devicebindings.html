@@ -1,0 +1,10 @@
+@for (bgroupKey of bindingGroups(); track $index) {
+  @for (binding of bindings()[bgroupKey]; track $index) {
+    <p>{{ binding.endpoint }}</p>
+    <p>{{ binding.targetName }}/{{ binding.target }}</p>
+
+    @for (cluster of binding.cluster; track $index) {
+      <p>{{ cluster }}</p>
+    }
+  }
+}
