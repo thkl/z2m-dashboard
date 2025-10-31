@@ -89,19 +89,21 @@ export class Websocket {
    */
   connect(connection: Connection): void {
     const { host, port, secure, token } = connection;
-    const stripped = host.replace(/^(https?:\/\/)/, "");;
 
+    console.log("connect to",connection.host);
+    const stripped = host.replace(/^(https?:\/\/)/, "");;
+    this.clearWatchdog();
     let url = `${secure ? 'wss' : 'ws'}://${stripped}:${port}/api`;
     if (token) {
       url = `${url}?token=${token}`
     }
     this.connection = connection;
     if (this.ws) {
-      this.ws.close();
+      console.log("found existing close it")
+      this.ws.close(1000);
     }
 
     this.ws = new WebSocket(url);
-    this.clearWatchdog();
 
     this.ws.onmessage = (event) => {
       this.isConnecting = false;
@@ -169,6 +171,10 @@ export class Websocket {
       switch (event.code) {
         case ERROR_UNAUTHORIZED:
           this.signalBusService.emit("connection_error",'authentication_needed');
+          break;
+        case 1000:
+          // normal closure
+          this.clearWatchdog();
           break;
         case 1006:
           this.signalBusService.emit("connection_error",'error_connecting');

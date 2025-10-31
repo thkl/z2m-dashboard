@@ -11,12 +11,12 @@ import { TokenService } from '@/app/services/token.service';
 export interface ChooseServerDialogData {
   knownServer: Z2MServer[],
   newServer?: Z2MServer,
-  message?:string;
+  message?: string;
 }
 
 @Component({
   selector: 'ChooseServerDialog',
-  imports: [TranslateModule, OptionComponent,InfoOverlayComponent],
+  imports: [TranslateModule, OptionComponent, InfoOverlayComponent],
   templateUrl: './chooseserver.html',
   styleUrl: './chooseserver.scss'
 })
@@ -25,12 +25,12 @@ export class ChooseServerDialog {
   dialogRef = inject<DialogRef<ChooseServerDialogData>>(DialogRef<ChooseServerDialogData>);
   dialogData = inject(DIALOG_DATA);
   tokenService = inject(TokenService);
-  
+
   host = model<string>("");
   port = model<number>(8080);
   secure = model<boolean>(false);
   name = model<string>('localhost');
-  token = model<string|undefined>();
+  token = model<string | undefined>();
 
   isSecure = computed(() => {
 
@@ -76,22 +76,30 @@ export class ChooseServerDialog {
     this.secure.set(event.isActive);
   }
 
-  changeToken(event:any) {
-     this.token.set(event.target.value);
+  changeToken(event: any) {
+    this.token.set(event.target.value);
   }
 
   cancel(): void {
     this.dialogRef.close();
   }
 
-  async connect(server:Z2MServer):Promise<void> {
-    // Encrypt token if provided
-    let encryptedToken: string | undefined;
-    if (server.token) {
-      encryptedToken = await this.tokenService.encryptToken(server.token);
-    }
+  async connect(server: Z2MServer): Promise<void> {
+    this.dialogRef.close({ ...this.dialogData, newServer: server });
+  }
 
-    const serverWithEncryptedToken = { ...server, token: encryptedToken };
-    this.dialogRef.close({ ...this.dialogData, newServer: serverWithEncryptedToken });
+  async edit(server: Z2MServer) {
+    this.host.set(server.host);
+    this.port.set(server.port);
+    this.name.set(server.name);
+    this.secure.set(server.secure);
+    if (server.token) {
+  
+      let decryptedToken = await this.tokenService.decryptToken(server.token);
+      console.log(server.token,decryptedToken)
+      this.token.set(decryptedToken!);
+    } else {
+      this.token.set("")
+    }
   }
 }

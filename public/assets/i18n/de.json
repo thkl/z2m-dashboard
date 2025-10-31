@@ -32,6 +32,7 @@
   "DEVICE_TYPE": "Gerätetyp",
   "DEVICE_UPDATING": "Gerät aktualisiert",
   "DEVICE_VIEW": "Geräte",
+  "EDIT": "Bearbeiten",
   "ENDPOINT": "Endpunkt",
   "ENDPOINT_": "Endpunkt: {{id}}",
   "END_JOIN": "Hinzufügen beenden",

@@ -13,12 +13,14 @@
     </div>
     <div class="container">
       @for (kServer of dialogData.knownServer; track $index) {
-        <div class="row serverline min-h-5">
+        <div class="row serverline min-h-7">
           <div class="col-20">{{ kServer.name }}</div>
           <div class="col-40">{{ kServer.host }}</div>
-          <div class="col-10">{{ kServer.port }}</div>
-          <div class="col-30">
-            <a class="button-blue left cursor-pointer" (click)="connect(kServer)">{{ 'CONNECT' | translate }}</a>
+          <div class="col-20">
+            <a class="button-link left cursor-pointer" (click)="connect(kServer)">{{ 'CONNECT' | translate }}</a>
+          </div>
+          <div class="col-20">
+            <a class="button-link left cursor-pointer" (click)="edit(kServer)">{{ 'EDIT' | translate }}</a>
           </div>
         </div>
       }
