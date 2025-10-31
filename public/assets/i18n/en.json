@@ -66,6 +66,8 @@
   "STATUS": "Status",
   "SUPPORT_STATUS": "Support status",
   "SYSTEM_LOGLEVEL": "Bridge: {{level}}",
+  "TARGET_DEVICE": "Target device",
+  "TARGET_ENDPOINT": "Target endpoint",
   "TIME": {
     "days_ago": "{{count}} days ago",
     "days_ago_one": "{{count}} day ago",

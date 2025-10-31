@@ -8,6 +8,7 @@ import { BridgeService } from '../../services/bridge.service';
 import { DropdownComponent } from '../controls/dropdown/dropdown';
 import { LogLevels } from '../../models/constants';
 import { ApplicationService } from '../../services/app.service';
+import { SettingsService } from '@/app/services/settings.service';
 
 @Component({
   selector: 'LogView',
@@ -19,7 +20,8 @@ export class LogView {
   protected readonly eventStore = inject(BridgeEventStore);
   protected readonly bridgeService = inject(BridgeService);
   protected readonly appService = inject(ApplicationService);
-
+  protected readonly settingsService = inject(SettingsService);
+  
   selectedLevels = signal<string[]>([]);
   serverOptions = signal<SelectOption[]>([]);
   log_level = signal<string>('');
@@ -29,7 +31,7 @@ export class LogView {
   logOptions = signal<SelectOption[]>([]);
 
   constructor() {
-    const selLevel = this.appService.getPreference("log_levels");
+    const selLevel = this.settingsService.getPreference("log_levels");
     this.selectedLevels.set(selLevel);
 
     effect(() => {
@@ -82,7 +84,7 @@ export class LogView {
   logOptionChange(event: any) {
     const selected: SelectOption[] = event.filter((e: SelectOption) => e.isSelected);
     const levels = selected.map((e) => e.value ?? '');
-    this.appService.setPreference("log_levels", levels);
+    this.settingsService.setPreference("log_levels", levels);
     this.selectedLevels.set(levels);
   }
 }

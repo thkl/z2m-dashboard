@@ -22,6 +22,7 @@ import { ApplicationService } from '@/app/services/app.service';
 import { BridgeService } from '@/app/services/bridge.service';
 import { DeviceService } from '@/app/services/device.service';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
+import { SettingsService } from '@/app/services/settings.service';
 import { filterData } from '@/app/utils/filter.utils';
 import { sortData } from '@/app/utils/sort.utils';
 import { Component, computed, inject, signal, effect, Signal, Injector, viewChild } from '@angular/core';
@@ -60,7 +61,8 @@ export class DeviceListComponent {
   protected readonly deviceService = inject(DeviceService);
   protected readonly bridgeService = inject(BridgeService);
   protected readonly tabManager = inject(PropertyTabManagerService);
-
+  protected readonly settingsService = inject(SettingsService);
+  
   // Displayed columns signal for column visibility management
   displayedColumns = signal<string[]>([]);
 
@@ -251,7 +253,7 @@ export class DeviceListComponent {
       const devices = this.devices();
     });
 
-    const cl = this.applicationService.getPreference("devicelist_columns");
+    const cl = this.settingsService.getPreference("devicelist_columns");
     if (cl) {
       this.displayedColumns.set(cl);
     }
@@ -271,7 +273,7 @@ export class DeviceListComponent {
 
 
   columnOrderChange(newOrder: any): void {
-    this.applicationService.setPreference('devicelist_columns', newOrder);
+    this.settingsService.setPreference('devicelist_columns', newOrder);
   }
 
   getDeviceValue(device: Device, column: string): any {

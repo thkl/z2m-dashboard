@@ -93,6 +93,8 @@
   "STATUS": "Status",
   "SUPPORT_STATUS": "Support-Status",
   "SYSTEM_LOGLEVEL": "Bridge: {{level}}",
+  "TARGET_DEVICE": "Zielgerät",
+  "TARGET_ENDPOINT": "Ziel Endpunkt",
   "TIME": {
     "days_ago": "vor {{count}} Tagen",
     "days_ago_one": "vor {{count}} Tag",

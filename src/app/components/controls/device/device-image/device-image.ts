@@ -1,6 +1,6 @@
 import { InterviewState } from '@/app/models/constants';
 import { Device } from '@/app/models/device';
-import { ApplicationService } from '@/app/services/app.service';
+import { ConnectionManagerService } from '@/app/services/connectionmanager.service';
 import { Component, effect, inject, input, signal } from '@angular/core';
 
 @Component({
@@ -14,9 +14,7 @@ export class DeviceImage {
   width = input<string>("150px");
   imageError = signal(false);
   InterviewState = InterviewState;
-  protected readonly appService = inject(ApplicationService);
-
-
+  protected readonly connectionManager = inject(ConnectionManagerService);
   /**
    * Handle image load error by setting imageError flag
    * This will trigger the fallback to default image
@@ -29,7 +27,7 @@ export class DeviceImage {
 
   constructor() {
 
-    const selectedConnection = this.appService.selectedConnection();
+    const selectedConnection = this.connectionManager.selectedConnection();
 
     const host = selectedConnection ? selectedConnection.host.replace(/^(https?:\/\/)/, "") : undefined;
     const port = selectedConnection ? selectedConnection.port : undefined;

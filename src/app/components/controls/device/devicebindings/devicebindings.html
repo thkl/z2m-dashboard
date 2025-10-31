@@ -1,10 +1,29 @@
+@if (bindingGroups().length === 0) {
+  <p>No bindings</p>
+}
+
 @for (bgroupKey of bindingGroups(); track $index) {
   @for (binding of bindings()[bgroupKey]; track $index) {
-    <p>{{ binding.endpoint }}</p>
-    <p>{{ binding.targetName }}/{{ binding.target }}</p>
+    <div class="device_row">
+      <span class="label">{{ 'ENDPOINT' | translate }}</span>
+      <span class="value">{{ binding.endpoint }}</span>
+    </div>
 
-    @for (cluster of binding.cluster; track $index) {
-      <p>{{ cluster }}</p>
-    }
+    <div class="device_row">
+      <span class="label">{{ 'TARGET_DEVICE' | translate }}</span>
+      <span class="value">{{ binding.targetName }}</span>
+    </div>
+
+    <div class="device_row">
+      <span class="label">{{ 'TARGET_ENDPOINT' | translate }}</span>
+      <span class="value">{{ binding.targetEndpoint }}</span>
+    </div>
+    <OptionPanelComponent title="Cluster" [entities]="binding.cluster" [panelIsOpen]="true"></OptionPanelComponent>
+
+    <div class="sidbar_row">
+      <div class="button w-full">
+        <button class="button-link-danger left" (click)="removeBinding(binding)">{{ 'REMOVE_BINDING' | translate }}</button>
+      </div>
+    </div>
   }
 }

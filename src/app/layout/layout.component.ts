@@ -1,20 +1,20 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DeviceStore } from '../datastore/device.store';
-import { DeviceInspectorComponent } from '../pages/deviceinspector/deviceinspector.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApplicationService } from '../services/app.service';
 import { BridgeService } from '../services/bridge.service';
 
 import { LogView } from '../components/logview/logview';
 import { ResizableContainerComponent } from '../components/controls/resizable-container/resizable-container';
-import { GroupInspectorComponent } from '../pages/groupinspector/groupinspector.component';
 import { Dialog } from '@angular/cdk/dialog';
 import { ChooseServerDialog, ChooseServerDialogData } from '../components/dialogs/chooseserver/chooseserver';
 import { Z2MServer } from '../models/types';
 import { TabContainerComponent } from '@/app/components/tabcontainer/tabcontainer.component';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 import { SignalBusService } from '@/app/services/sigbalbus.service';
+import { ConnectionManagerService } from '@/app/services/connectionmanager.service';
+import { SettingsService } from '@/app/services/settings.service';
 
 @Component({
   selector: 'app-layout',
@@ -33,6 +33,8 @@ export class LayoutComponent {
   protected readonly dialog = inject(Dialog);
   protected readonly tabManager = inject(PropertyTabManagerService);
   protected readonly signalBusService = inject(SignalBusService);
+  protected readonly connectionManager = inject(ConnectionManagerService);
+  protected readonly settingsService = inject(SettingsService);
 
   mainTitle = computed(() => {
     return this.applicationService.mainTitle();
@@ -43,7 +45,7 @@ export class LayoutComponent {
   })
 
   connectedHost = computed(() => {
-    return this.applicationService.connectedHost();
+    return this.connectionManager.connectedHost();
   })
 
   info = computed(() => {
@@ -82,10 +84,10 @@ export class LayoutComponent {
   }
 
 
-  openServerDialog(message:string) {
+  openServerDialog(message: string) {
     let knownServerList: Z2MServer[] = [];
     try {
-      const ks = this.applicationService.getPreference("saved_hosts");
+      const ks = this.settingsService.getPreference("saved_hosts");
       if (ks) {
         Object.keys(ks).forEach(sn => {
           knownServerList.push(ks[sn])
@@ -108,9 +110,9 @@ export class LayoutComponent {
       if (result !== undefined) {
         const dr = result as ChooseServerDialogData
         console.log("Try connecting", dr.newServer)
-        setTimeout(()=>{
-          this.applicationService.saveAndConnect(dr.newServer!)
-        },500);
+        setTimeout(() => {
+          this.connectionManager.saveAndConnect(dr.newServer!)
+        }, 500);
       }
     });
   }

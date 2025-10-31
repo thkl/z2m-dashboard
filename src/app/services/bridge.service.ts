@@ -109,7 +109,6 @@ export class BridgeService {
       clearInterval(this.lastSeenTimer);
     }
     this.lastSeenTimer = setInterval(() => {
-      console.log("Update")
       this.extensions.updateDeviceLastSeenTime();
     }, 3000);
 

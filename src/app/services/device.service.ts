@@ -1,7 +1,7 @@
 import { computed, effect, inject, Injectable, signal } from "@angular/core";
 import { Websocket, WebSocketMessage } from "./websocket";
 import { DeviceStore } from "../datastore/device.store";
-import { Device, DeviceTargetState, DeviceFeature, DeviceOption } from "../models/device";
+import { Device, DeviceTargetState, DeviceFeature, DeviceOption, DeviceBindingRequest } from "../models/device";
 import { timeAgo } from "../utils/time.utils";
 import { TranslateService } from "@ngx-translate/core";
 import { ApplicationService } from "./app.service";
@@ -80,8 +80,8 @@ export class DeviceService {
     });
   }
 
-  interviewCompleted(device:Device):void {
-    
+  interviewCompleted(device: Device): void {
+
   }
 
   startReconfig(device: Device): void {
@@ -130,7 +130,7 @@ export class DeviceService {
 
 
   addDeviceToGroup(options: AddRemoveDeviceFromGroupOptions) {
-    this.appService.sendBridgeRequest("bridge/request/group/members/add", options,true);
+    this.appService.sendBridgeRequest("bridge/request/group/members/add", options, true);
   }
 
 
@@ -138,30 +138,38 @@ export class DeviceService {
     this.sendBridgeDeviceRequest("bridge/request/group/members/remove", options);
   }
 
-  readEndpoint(device:Device,endpoint:number,cluster:string, attributes:string[],readOptions:any) {
+  readEndpoint(device: Device, endpoint: number, cluster: string, attributes: string[], readOptions: any) {
     const options = {
       payload: {
         read: {
           attributes,
           cluster,
-          options:readOptions
+          options: readOptions
         }
       }
     }
-      this.sendBridgeDeviceRequest(`${device.friendly_name}/${endpoint}/set`, options);
+    this.sendBridgeDeviceRequest(`${device.friendly_name}/${endpoint}/set`, options);
   }
 
-  writeEndpoint(device:Device,endpoint:number,cluster:string,payload:any,writeOptions:any) {
+  writeEndpoint(device: Device, endpoint: number, cluster: string, payload: any, writeOptions: any) {
     const options = {
       payload: {
         write: {
           payload,
           cluster,
-          options:writeOptions
+          options: writeOptions
         }
       }
     }
-      this.sendBridgeDeviceRequest(`${device.friendly_name}/${endpoint}/set`, options);
+    this.sendBridgeDeviceRequest(`${device.friendly_name}/${endpoint}/set`, options);
   }
 
+
+  updateBinding(request: DeviceBindingRequest) {
+    this.sendBridgeDeviceRequest("bridge/request/device/bind", request);
+  }
+
+  removeBinding(request: DeviceBindingRequest) {
+    this.sendBridgeDeviceRequest("bridge/request/device/unbind", request);
+  }
 }

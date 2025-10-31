@@ -161,3 +161,12 @@ export interface Clusters {
     output: string[];
 }
 
+
+
+ export interface DeviceBindingRequest {
+    clusters : string[];
+    from : string;
+    from_endpoint: string;
+    to: string;
+    to_endpoint: string;
+  }
