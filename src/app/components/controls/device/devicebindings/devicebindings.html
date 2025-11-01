@@ -18,9 +18,12 @@
       <span class="label">{{ 'TARGET_ENDPOINT' | translate }}</span>
       <span class="value">{{ binding.targetEndpoint }}</span>
     </div>
-    <OptionPanelComponent title="Cluster" [entities]="binding.cluster" [panelIsOpen]="true"></OptionPanelComponent>
+    <OptionPanelComponent title="Cluster" [entities]="binding.cluster" [panelIsOpen]="true" (optionsChanged)="changeBinding($event, binding)"></OptionPanelComponent>
 
     <div class="sidbar_row">
+      <div class="button w-full">
+        <button [disabled]="!isBindingDirty(binding)" class="button-link left" (click)="updateBinding(binding)">{{ 'UPDATE_BINDING' | translate }}</button>
+      </div>
       <div class="button w-full">
         <button class="button-link-danger left" (click)="removeBinding(binding)">{{ 'REMOVE_BINDING' | translate }}</button>
       </div>

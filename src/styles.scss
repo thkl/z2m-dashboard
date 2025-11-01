@@ -547,6 +547,10 @@ button.right {
   font-size: var(--app-font-size);
 }
 
+.button-link:disabled {
+  color: var(--button-disabled-color);
+}
+
 .button-link-danger {
   color: var(--app-link-danger-color);
   font-size: var(--app-font-size);
