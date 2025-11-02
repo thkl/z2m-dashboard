@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ElementRef, viewChild, AfterViewInit, HostBinding, input, effect, inject } from '@angular/core';
+import { Component, OnDestroy, ElementRef, viewChild, AfterViewInit, HostBinding, input, output, effect, inject } from '@angular/core';
 import { ApplicationService } from '../../../services/app.service';
 import { SettingsService } from '@/app/services/settings.service';
 
@@ -19,6 +19,8 @@ export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
   containerClass = input<string>();
   flexBehavior = input<boolean>(true); // Set to false for fixed height/width behavior
   fullHeight = input<boolean>(false); // Set to true to make container fill parent height
+
+  sizeChange = output<number>();
 
   @HostBinding('class.flex-mode') get isFlexMode() { return this.flexBehavior(); }
   @HostBinding('class.full-height-mode') get isFullHeightMode() { return this.fullHeight(); }
@@ -59,6 +61,7 @@ export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
     const isVertical = resizeSide === 'top' || resizeSide === 'bottom';
     const property = isVertical ? 'height' : 'width';
     this.containerStyle = `${property}: ${this.currentSize}px;`;
+    this.sizeChange.emit(this.currentSize);
   }
 
   startResize(event: MouseEvent) {

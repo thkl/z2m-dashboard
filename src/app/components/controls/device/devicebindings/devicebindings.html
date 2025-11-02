@@ -46,19 +46,41 @@
         <span class="value">{{ binding.targetEndpoint }}</span>
       </div>
     }
-    <OptionPanelComponent title="Cluster" [entities]="binding.cluster" [panelIsOpen]="true" (optionsChanged)="changeBinding($event, binding)"></OptionPanelComponent>
-
+    @if (selectedNewTargetDevice() !== null || binding.target) {
+      @if (binding.cluster && binding.cluster.length > 0) {
+        <OptionPanelComponent
+          title="Cluster"
+          class="clusterlist"
+          [entities]="binding.cluster"
+          [panelIsOpen]="true"
+          (optionsChanged)="changeBinding($event, binding)"
+        ></OptionPanelComponent>
+      } @else {
+        <div class="device_row">
+          {{ 'NO_COMPATIBLE_CLUSTERS_FOUND' | translate }}
+        </div>
+      }
+    }
     <div class="sidbar_row">
       <div class="button w-full">
-        <button [disabled]="!isBindingDirty(binding)" class="button-link left" (click)="updateBinding(binding)">{{ 'UPDATE_BINDING' | translate }}</button>
+        <button [disabled]="!isBindingDirty(binding)" class="button-link left" (click)="updateBinding(binding)">
+          @if (binding.isNew === true) {
+            {{ 'CREATE_BINDING' | translate }}
+          } @else {
+            {{ 'UPDATE_BINDING' | translate }}
+          }
+        </button>
       </div>
-      <div class="button w-full">
-        <button class="button-link-danger left" (click)="removeBinding(binding)">{{ 'REMOVE_BINDING' | translate }}</button>
-      </div>
+      @if (binding.isNew !== true) {
+        <div class="button w-full">
+          <button class="button-link-danger left" (click)="removeBinding(binding)">{{ 'REMOVE_BINDING' | translate }}</button>
+        </div>
+      }
     </div>
   }
 }
-<div class="device_row">
+<div class="device_row flex-col">
+  <span class="label">{{ 'CREATE_A_NEW_BINDING' | translate }}</span>
   <div class="w-full">
     <DropdownComponent [items]="deviceEndpointSelections()" [title]="newSourceEndpointTitle()" (selected)="add($event)"></DropdownComponent>
   </div>

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DeviceStore } from '../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -27,6 +27,9 @@ export class LayoutComponent {
   logViewOpen = true;
   host = 'localhost';
   connectionDialogOpen = false;
+
+  leftSidebarWidth = signal<number>(256);
+  rightSidebarWidth = signal<number>(450);
 
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly applicationService = inject(ApplicationService);

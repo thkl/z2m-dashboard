@@ -7,6 +7,7 @@
 
 .layout_root {
   background-color: var(--app-background-raised-color);
+  position: relative;
 }
 
 aside {
@@ -41,5 +42,40 @@ aside {
   overflow: hidden;
   border-top: 1px solid var(--app-border-color);
   background-color: var(--app-background-raised-color);
+}
+
+// Left sidebar wrapper - smooth slide-in from left
+.left_sidebar_wrapper {
+  display: flex;
+  height: 100%;
+  flex-shrink: 0;
+  transition: width 0.3s ease-out;
+  position: relative;
+  z-index: 5;
+
+  &:not(.open) {
+    width: 64px !important;
+  }
+}
+
+// Right sidebar wrapper - smooth slide-in from right
+.right_sidebar_wrapper {
+  display: flex;
+  height: 100%;
+  flex-shrink: 0;
+  min-width: 0;
+  overflow: visible;
+  transition: width 0.3s ease-out;
+  pointer-events: none;
+  position: relative;
+  z-index: 10;
+
+  &:not(.open) {
+    width: 0 !important;
+  }
+
+  &.open {
+    pointer-events: auto;
+  }
 }
 

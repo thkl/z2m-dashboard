@@ -1,19 +1,51 @@
 <div class="flex h-screen w-screen dark:bg-unifi-bg text-gray-900 dark:text-gray-100 layout_root overflow-hidden">
-  <!-- Sidebar -->
-  @if (sidebarOpen) {
-    <app-resizable-container
-      resizeSide="right"
-      storageKey="leftSidebarWidth"
-      [defaultSize]="256"
-      [fullHeight]="true"
-      [minSize]="200"
-      [maxSize]="400"
-      [flexBehavior]="false"
-      class="flex-shrink-0"
-    >
-      <aside class="h-full border-r">
+  <!-- Left Sidebar -->
+  <div class="left_sidebar_wrapper" [class.open]="sidebarOpen" [style.width.px]="leftSidebarWidth()">
+    @if (sidebarOpen) {
+      <app-resizable-container
+        resizeSide="right"
+        storageKey="leftSidebarWidth"
+        [defaultSize]="256"
+        [fullHeight]="true"
+        [minSize]="200"
+        [maxSize]="400"
+        [flexBehavior]="false"
+        class="flex-shrink-0"
+        (sizeChange)="leftSidebarWidth.set($event)"
+      >
+        <aside class="h-full border-r">
+          <div class="flex items-center justify-between p-4">
+            <span class="text-lg font-bold text-unifi-accent">{{ 'APP_TITLE' | translate }}</span>
+            <button (click)="toggleSidebar()" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+
+          <nav class="mt-4">
+            <a routerLink="/dashboard" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <span class="material-symbols-outlined">dashboard</span>
+              <span>Dashboard</span>
+            </a>
+            <a routerLink="/devices" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <span class="material-symbols-outlined">router</span>
+              <span>Devices</span>
+            </a>
+            <a routerLink="/groups" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <span class="material-symbols-outlined">group_work</span>
+              <span>Groups</span>
+            </a>
+            <a routerLink="/network" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <span class="material-symbols-outlined">network_node</span>
+              <span>Network</span>
+            </a>
+          </nav>
+        </aside>
+      </app-resizable-container>
+    } @else {
+      <aside class="w-16 border-r flex-shrink-0">
         <div class="flex items-center justify-between p-4">
-          <span class="text-lg font-bold text-unifi-accent">{{ 'APP_TITLE' | translate }}</span>
           <button (click)="toggleSidebar()" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -24,49 +56,20 @@
         <nav class="mt-4">
           <a routerLink="/dashboard" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
             <span class="material-symbols-outlined">dashboard</span>
-            <span>Dashboard</span>
           </a>
           <a routerLink="/devices" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
             <span class="material-symbols-outlined">router</span>
-            <span>Devices</span>
           </a>
           <a routerLink="/groups" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
             <span class="material-symbols-outlined">group_work</span>
-            <span>Groups</span>
           </a>
           <a routerLink="/network" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
             <span class="material-symbols-outlined">network_node</span>
-            <span>Network</span>
           </a>
         </nav>
       </aside>
-    </app-resizable-container>
-  } @else {
-    <aside class="w-16 border-r flex-shrink-0">
-      <div class="flex items-center justify-between p-4">
-        <button (click)="toggleSidebar()" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
-
-      <nav class="mt-4">
-        <a routerLink="/dashboard" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-          <span class="material-symbols-outlined">dashboard</span>
-        </a>
-        <a routerLink="/devices" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-          <span class="material-symbols-outlined">router</span>
-        </a>
-        <a routerLink="/groups" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-          <span class="material-symbols-outlined">group_work</span>
-        </a>
-        <a routerLink="/network" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-          <span class="material-symbols-outlined">network_node</span>
-        </a>
-      </nav>
-    </aside>
-  }
+    }
+  </div>
 
   <!-- Main Content -->
   <main class="flex-1 flex flex-col min-w-0">
@@ -100,21 +103,24 @@
   </main>
 
   <!-- Right Sidebar for Device Properties -->
-  @if (rightSidebarOpen()) {
-    <app-resizable-container
-      resizeSide="left"
-      storageKey="rightSidebarWidth"
-      [defaultSize]="450"
-      [minSize]="450"
-      [maxSize]="800"
-      [flexBehavior]="false"
-      [fullHeight]="true"
-      containerClass="right_sidebar"
-      class="flex-shrink-0"
-    >
-      <aside class="h-full border-l overflow-y-auto scrollbar flex flex-col">
-        <TabContainerComponent></TabContainerComponent>
-      </aside>
-    </app-resizable-container>
-  }
+  <div class="right_sidebar_wrapper" [class.open]="rightSidebarOpen()" [style.width.px]="rightSidebarWidth()">
+    @if (rightSidebarOpen()) {
+      <app-resizable-container
+        resizeSide="left"
+        storageKey="rightSidebarWidth"
+        [defaultSize]="450"
+        [minSize]="450"
+        [maxSize]="800"
+        [flexBehavior]="false"
+        [fullHeight]="true"
+        containerClass="right_sidebar"
+        class="flex-shrink-0"
+        (sizeChange)="rightSidebarWidth.set($event)"
+      >
+        <aside class="h-full border-l overflow-y-auto scrollbar flex flex-col">
+          <TabContainerComponent></TabContainerComponent>
+        </aside>
+      </app-resizable-container>
+    }
+  </div>
 </div>
