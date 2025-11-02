@@ -237,6 +237,7 @@ export class DeviceBindingsComponent {
       binding.target = event.value;
       binding.targetName = event.label;
       binding.type = td.type;
+      binding.cluster = [];
       this.selectedNewTargetDevice.set(td);
       return;
     }
@@ -253,6 +254,7 @@ export class DeviceBindingsComponent {
   }
 
   selectNewEndPoint(event: any, binding: VisualBinding) {
+
     binding.targetEndpoint = event.value;
     this.selectedNewTargetEndpointId.set(binding.targetEndpoint);
     const targetDevice = this.selectedNewTargetDevice();
@@ -260,6 +262,8 @@ export class DeviceBindingsComponent {
       if ('ieee_address' in targetDevice) {
         const targetEndpoint = targetDevice?.endpoints[event.value];
         binding.cluster = this.deviceService.collectClusters(this.device()!,targetDevice, binding.endpoint, targetEndpoint, binding.type);
+        console.log(binding.cluster);
+      
       } 
     }
   }

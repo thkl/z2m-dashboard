@@ -27,7 +27,7 @@
             <OptionPanelComponent
               class="panel w-full"
               style="flex-grow: inherit"
-              title="{{ newSourceEndpointTitle() }}"
+              title="{{ targetEndPointSelectorTitle() }}"
               [entities]="selectedNewTargetDeviceEndPoints()"
               [options]="{ maxShown: 10, showSelection: false, multi: false }"
               (optionsChanged)="selectNewEndPoint($event, binding)"
@@ -46,13 +46,7 @@
         <span class="value">{{ binding.targetEndpoint }}</span>
       </div>
     }
-    <OptionPanelComponent
-      title="Cluster"
-      [entities]="binding.cluster"
-      title="Endoiunbg"
-      [panelIsOpen]="true"
-      (optionsChanged)="changeBinding($event, binding)"
-    ></OptionPanelComponent>
+    <OptionPanelComponent title="Cluster" [entities]="binding.cluster" [panelIsOpen]="true" (optionsChanged)="changeBinding($event, binding)"></OptionPanelComponent>
 
     <div class="sidbar_row">
       <div class="button w-full">

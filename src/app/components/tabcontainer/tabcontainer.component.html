@@ -16,7 +16,7 @@
 
     <div class="tab-content scrollbar">
       @for (tab of tabManager.allTabs(); track tab.id) {
-        <div class="tab-pane" [class.active]="tab.id === tabManager.activeId()">
+        <div class="tab-pane scrollbar" [class.active]="tab.id === tabManager.activeId()">
           <ng-container *ngComponentOutlet="tab.component; inputs: tab.data" />
         </div>
       }
