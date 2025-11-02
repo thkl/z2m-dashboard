@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, model, output, Signal, signal } from '@angular/core';
+import { Component, computed, effect, input, model, output, Signal, signal, HostListener, ElementRef } from '@angular/core';
 import { ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
 import { SelectOption } from '../../../models/types';
 
@@ -6,6 +6,7 @@ import { SelectOption } from '../../../models/types';
 @Component({
   selector: 'DropdownComponent',
   imports: [OverlayModule],
+  styleUrl:'./dropdown.scss',
   templateUrl: './dropdown.html',
 })
 export class DropdownComponent {
@@ -17,7 +18,11 @@ export class DropdownComponent {
 
   controlItems = signal<SelectOption[]>([]);
 
-  constructor() {
+  height=computed(()=>{
+    return `${this.items().length*32}px`;
+  })
+
+  constructor(private elementRef: ElementRef) {
 
     effect(() => {
       if (!this.isInitialized && this.items() && this.items().length>0) {
@@ -25,6 +30,13 @@ export class DropdownComponent {
         this.isInitialized = true;
       }
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.isOpen.set(false);
+    }
   }
 
   selectedLabel = computed(() => {
@@ -51,7 +63,12 @@ export class DropdownComponent {
     }
   ];
 
+  toggle():void {
+    this.isOpen.set(!this.isOpen())
+  }
+
   selectOne(event: any): void {
+    console.log(event);
     const items = this.controlItems().map(item => {
       item.isSelected = (item.label === event.label);
       return item;

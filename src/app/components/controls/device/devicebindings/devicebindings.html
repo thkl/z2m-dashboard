@@ -21,13 +21,13 @@
           ></OptionPanelComponent>
         </div>
       </div>
-      @if (selectedNewTargetDevice() !== null && selectedNewTargetDevice()?.endpoints) {
+      @if (isDeviceWithEndpoints(selectedNewTargetDevice())) {
         <div class="sidbar_row">
           <div class="mt-2 w-full">
             <OptionPanelComponent
               class="panel w-full"
               style="flex-grow: inherit"
-              title="{{ endPointSelectorTitle() }}"
+              title="{{ newSourceEndpointTitle() }}"
               [entities]="selectedNewTargetDeviceEndPoints()"
               [options]="{ maxShown: 10, showSelection: false, multi: false }"
               (optionsChanged)="selectNewEndPoint($event, binding)"
@@ -46,7 +46,13 @@
         <span class="value">{{ binding.targetEndpoint }}</span>
       </div>
     }
-    <OptionPanelComponent title="Cluster" [entities]="binding.cluster" [panelIsOpen]="true" (optionsChanged)="changeBinding($event, binding)"></OptionPanelComponent>
+    <OptionPanelComponent
+      title="Cluster"
+      [entities]="binding.cluster"
+      title="Endoiunbg"
+      [panelIsOpen]="true"
+      (optionsChanged)="changeBinding($event, binding)"
+    ></OptionPanelComponent>
 
     <div class="sidbar_row">
       <div class="button w-full">
@@ -60,7 +66,7 @@
 }
 <div class="device_row">
   <div class="w-full">
-    <DropdownComponent [items]="deviceEndpointSelections()" (selected)="add($event)"></DropdownComponent>
+    <DropdownComponent [items]="deviceEndpointSelections()" [title]="newSourceEndpointTitle()" (selected)="add($event)"></DropdownComponent>
   </div>
   <div class="button w-full">
     <button [disabled]="tmpNewEndpoint() === undefined" class="button-link left" (click)="createTemporaryBinding(tmpNewEndpoint()!)">{{ 'ADD_BINDING' | translate }}</button>

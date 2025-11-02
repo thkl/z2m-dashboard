@@ -47,6 +47,9 @@ export class OptionPanelComponent {
 
 
   toggle(entity: SelectOption): void {
+    if (entity.diabled===true) {
+      return;
+    }
     if (this.resolvedOptions().multi===true) {
     entity.isSelected = !entity.isSelected
     this.optionsChanged.emit(this.internalEntites);

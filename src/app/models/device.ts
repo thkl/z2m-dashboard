@@ -9,25 +9,25 @@ export interface DeviceOption {
     property: string;
     type: string;
     value_step?: number;
-    value_on?:string;
-    value_off?:string;
-    value:any;
-    enum?:any[];
+    value_on?: string;
+    value_off?: string;
+    value: any;
+    enum?: any[];
 }
 
 export interface DeviceFeatureVisual {
-    property:DeviceFeature;
-    value:any
-    subtype?:any
-    helper:any
-    validForScenes:boolean
-    validForDashboard:boolean
+    property: DeviceFeature;
+    value: any
+    subtype?: any
+    helper: any
+    validForScenes: boolean
+    validForDashboard: boolean
 }
 
 export interface FeaturePreset {
     description: string;
-    name:string;
-    value:any;
+    name: string;
+    value: any;
 }
 
 export enum AccessMode {
@@ -59,7 +59,7 @@ export enum AccessMode {
 
 
 export interface DeviceFeature {
-    features?:DeviceFeature[]
+    features?: DeviceFeature[]
     access: number;
     category: string;
     description: string;
@@ -71,13 +71,13 @@ export interface DeviceFeature {
     unit: string;
     value_max?: number;
     value_min?: number;
-    value_on?:string;
-    value_off?:string;
-    value_toggle?:string;
-    values?:any[];
-    endpoint?:string;
-    presets?:FeaturePreset[];
-    hidden:boolean;
+    value_on?: string;
+    value_off?: string;
+    value_toggle?: string;
+    values?: any[];
+    endpoint?: string;
+    presets?: FeaturePreset[];
+    hidden: boolean;
 }
 
 export interface DeviceDefinition {
@@ -85,7 +85,7 @@ export interface DeviceDefinition {
     exposes: DeviceFeature[];
     model: string;
     image: string;
-    icon?:string;
+    icon?: string;
     options: DeviceOption[];
     source: string;
     supports_ota: boolean;
@@ -93,32 +93,32 @@ export interface DeviceDefinition {
 }
 
 export interface DeviceState {
-    availability:string;   
-    lastseenhuman:string;
-    last_seen:string;
-    linkquality:number;
-    battery:number;
+    availability: string;
+    lastseenhuman: string;
+    last_seen: string;
+    linkquality: number;
+    battery: number;
     [key: string]: any;
 }
 
 export interface DeviceTargetState {
-        [key: string]: any;
+    [key: string]: any;
 }
 
 
 export interface DeviceUpdate {
     installed_version: number;
-    latest_version:    number;
-    state:             UpdateState;
-    progress?:         number;
-    remaining?:        number;
+    latest_version: number;
+    state: UpdateState;
+    progress?: number;
+    remaining?: number;
 }
 
 
 export interface Device {
     date_code: string;
     definition: DeviceDefinition;
-    description:string;
+    description: string;
     disabled: boolean;
     endpoints: { [key: string]: Endpoint };
     friendly_name: string;
@@ -133,41 +133,57 @@ export interface Device {
     software_build_id: string;
     supported: boolean;
     type: string;
-    state:DeviceState;
-    options: {[key: string]: any};
-    update?:DeviceUpdate;
+    state: DeviceState;
+    options: { [key: string]: any };
+    update?: DeviceUpdate;
 }
 
 export interface BindingTarget {
-    endpoint:string;
-    id?:string;
-    ieee_address?:string;
-    type:string;
+    endpoint: string;
+    id?: string;
+    ieee_address?: string;
+    type: string;
 }
 
 export interface Binding {
-    cluster:string;
-    target:BindingTarget
+    cluster: string;
+    target: BindingTarget
 }
 
 export interface Endpoint {
-    bindings:              Binding[];
-    clusters:              Clusters;
+    bindings: Binding[];
+    clusters: Clusters;
     configured_reportings: any[];
-    scenes:                any[];
+    scenes: any[];
 }
 
 export interface Clusters {
-    input:  string[];
+    input: string[];
     output: string[];
 }
 
 
 
- export interface DeviceBindingRequest {
-    clusters : string[];
-    from : string;
+export interface DeviceBindingRequest {
+    clusters: string[];
+    from: string;
     from_endpoint: string;
     to: string;
     to_endpoint: string;
-  }
+}
+
+
+export interface VisualCluster {
+    label: string;
+    isSelected: boolean;
+}
+
+export interface VisualBinding {
+    endpoint: string,
+    type: string,
+    target: string,
+    targetEndpoint: string,
+    targetName: string,
+    cluster: VisualCluster[],
+    isNew: boolean
+}

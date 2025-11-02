@@ -1,7 +1,7 @@
 import { computed, effect, inject, Injectable, signal } from "@angular/core";
 import { Websocket, WebSocketMessage } from "./websocket";
 import { DeviceStore } from "../datastore/device.store";
-import { Device, DeviceTargetState, DeviceFeature, DeviceOption, DeviceBindingRequest } from "../models/device";
+import { Device, DeviceTargetState, DeviceFeature, DeviceOption, DeviceBindingRequest, Endpoint, VisualCluster } from "../models/device";
 import { timeAgo } from "../utils/time.utils";
 import { TranslateService } from "@ngx-translate/core";
 import { ApplicationService } from "./app.service";
@@ -172,5 +172,51 @@ export class DeviceService {
 
   removeBinding(request: DeviceBindingRequest) {
     this.sendBridgeDeviceRequest("bridge/request/device/unbind", request);
+  }
+
+
+  //Some Utility Methods 
+
+
+  /** Helper function to create a deep copy of cluster objects */
+  copyClusterArray(clusters: VisualCluster[]): VisualCluster[] {
+    return clusters.map(c => ({ ...c }));
+  }
+
+
+  /**
+   * This will collect all valid clusters for a binding from the device with the given endpoint
+   * @param device the source device
+   * @param targetDevice  the target device
+   * @param sourceEndpoint the source endpoint
+   * @param targetEndpoint the target endpoint
+   * @param bindingType the type of the binding EndDevice Coordinator or Group
+   * @returns a list of valid Clusters
+   */
+
+  collectClusters(device:Device, targetDevice: Device | undefined, sourceEndpoint: string, targetEndpoint: Endpoint | undefined, bindingType: string) {
+    const endpoint = device.endpoints[sourceEndpoint]; // get the source endpoint
+    // get the source clusters and transform them into a list of vistual clusters
+    const clusters: VisualCluster[] = [...endpoint.clusters.input, ...endpoint.clusters.output].map(c => { return { label: c, isSelected: false } });
+    // if its the coordinator all clusters are our friend
+
+    const allValid = targetDevice?.type === 'Coordinator' || bindingType === 'group';
+    //
+    let validClusters: VisualCluster[] = [];
+    if (allValid) { // if all valid just go
+      validClusters = this.copyClusterArray(clusters);
+    } else {
+      for (const cluster of clusters) { // loop thru the clusters
+        //check if its a input to output cluster and its not allready there
+        if (endpoint.clusters.input.includes(cluster.label) && targetEndpoint?.clusters.output.includes(cluster.label) && (validClusters.find(c => c.label === cluster.label) === undefined)) {
+          validClusters.push({ ...cluster });
+        }
+        //check if its a output to input cluster and its not allready there
+        if (endpoint.clusters.output.includes(cluster.label) && targetEndpoint?.clusters.input.includes(cluster.label) && (validClusters.find(c => c.label === cluster.label) === undefined)) {
+          validClusters.push({ ...cluster });
+        }
+      }
+    }
+    return validClusters;
   }
 }

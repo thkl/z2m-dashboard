@@ -26,6 +26,7 @@ export class LayoutComponent {
   sidebarOpen = true;
   logViewOpen = true;
   host = 'localhost';
+  connectionDialogOpen = false;
 
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly applicationService = inject(ApplicationService);
@@ -85,6 +86,10 @@ export class LayoutComponent {
 
 
   openServerDialog(message: string) {
+    if (this.connectionDialogOpen) {
+      return;
+    }
+    this.connectionDialogOpen = true;
     let knownServerList: Z2MServer[] = [];
     try {
       const ks = this.settingsService.getPreference("saved_hosts");
@@ -107,6 +112,7 @@ export class LayoutComponent {
     });
 
     dialogRef.closed.subscribe((result: unknown) => {
+      this.connectionDialogOpen = false;
       if (result !== undefined) {
         const dr = result as ChooseServerDialogData
         console.log("Try connecting", dr.newServer)

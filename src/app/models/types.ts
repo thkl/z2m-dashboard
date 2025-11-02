@@ -56,7 +56,8 @@ export interface AddRemoveDeviceFromGroupOptions {
 export interface SelectOption {
   isSelected: boolean;
   label: string;
-  value?: string
+  value?: string;
+  diabled?:boolean;
 }
 
 /**

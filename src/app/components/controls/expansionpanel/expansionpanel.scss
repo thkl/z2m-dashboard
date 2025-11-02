@@ -20,12 +20,13 @@
   grid-template-rows: 1fr;
   opacity: 1;
   pointer-events: auto;
+  overflow: visible;
   transition: grid-template-rows 0.3s ease-out, opacity 0.3s ease-out;
 }
 
 .content > * {
   min-height: 0;
-  overflow: hidden;
+  //overflow: hidden;
 }
 
 .content > .options {

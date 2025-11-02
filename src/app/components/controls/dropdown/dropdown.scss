@@ -1,0 +1,83 @@
+.dropdown_container {
+  outline: none;
+  position: relative;
+  border-color: var(--app-border-color);
+  border-width: 1px;
+  border-style: solid;
+  overflow: visible;
+}
+
+.inputComponent {
+  color: var(--app-text-color);
+}
+
+.input {
+    text-align: left;
+}
+
+.optionsContainer {
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;   
+  display:block;
+  height: 100%;
+}
+
+ul.options {
+  width: 100%;
+  background-color: #282b2f;
+  box-shadow:
+    0 4px 12px 0 rgba(0, 0, 0, 0.4),
+    0 0 1px 0 hsla(214, 8%, 98%, 0.08);
+  color: #dee0e3;
+  display: none;
+  overflow-y: auto;
+  position: absolute;
+  z-index: 999;
+  left: 0;
+  top:100%;
+  transition: height .5s cubic-bezier(.25,0,.25,1);
+}
+
+ul.options.isOpen {
+  display: block;
+}
+
+.triggerContainer {
+  align-items: center;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  justify-content: space-between;
+  margin:0;
+  padding:4px;
+  width: 100%;
+}
+
+.trigger {
+    width: 100%;
+}
+
+.trigger>.input {
+    width: 100%;
+}
+
+.option {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  line-height: 20px;
+  min-height: 32px;
+  padding: 4px 12px;
+  position: relative;
+}
+
+.selection {
+  width: 25px;
+  font-weight: bold;
+  min-width: 25px;
+}

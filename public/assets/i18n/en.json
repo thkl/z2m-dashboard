@@ -22,6 +22,7 @@
   "DEVICE_VIEW": "Devices",
   "EDIT": "Edit",
   "ENDPOINT": "Endpoint",
+  "ENDPOINT_": "Endpoint: {{id}}",
   "FIRMWARE": "Firmware",
   "FIRMWARE_BUILD_DATE": "Firmware build date",
   "FIRMWARE_ID": "Firmware ID",
