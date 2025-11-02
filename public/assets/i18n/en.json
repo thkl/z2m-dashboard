@@ -1,4 +1,5 @@
 {
+  "ADD_BINDING": "Add binding",
   "ADD_DEVICE": "Add device",
   "ADD_GROUP": "Add new group",
   "ADD_GROUP_DATA": "Create a new group",
@@ -54,6 +55,7 @@
   "POWER": "Power",
   "RECONFIGURE": "Reconfigure",
   "REFRESH": "Refresh",
+  "REMOVE_BINDING": "Remove binding",
   "REMOVE_DEVICE": "Remove device",
   "REMOVE_DEVICE_CAPTION": "Remove {{name}}",
   "REMOVE_DEVICE_MESSAGE": "Are you sure, you want to delete the device {{name}} ?",
@@ -93,6 +95,7 @@
   "There is no last known connection. Choose one or create a new connection.": "",
   "UNKNOWN": "unknown",
   "UPDATE_AVAILABLE": "Update available",
+  "UPDATE_BINDING": "Update binding",
   "UPDATE_RUNNING": "Updating {{time}} left",
   "UPTIME": "Uptime",
   "UP_TO_DATE": "current",

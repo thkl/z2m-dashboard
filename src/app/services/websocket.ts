@@ -115,7 +115,11 @@ export class Websocket {
           console.warn('Invalid message format:', event.data);
           return;
         }
-
+        // if the message has a transaction id its a reply 
+        if (message.payload && message.payload.transaction) {
+          this.signalBusService.emit(`bridge-response-${message.payload.transaction}`,message);
+        }
+        
         // Check for exact topic match
         const topicSignal = this.topicSignals.get(message.topic);
         if (topicSignal) {

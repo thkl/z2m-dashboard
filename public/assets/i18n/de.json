@@ -1,5 +1,6 @@
 {
   "ADD": "Hinzufügen",
+  "ADD_BINDING": "Bindung hinzufügen",
   "ADD_DEVICE": "Gerät hinzufügen",
   "ADD_GROUP": "Neue Gruppe",
   "ADD_GROUP_DATA": "Neue Gruppe hinzufügen",
@@ -76,6 +77,7 @@
   "RECALL_SCENE": "Szene abrufen",
   "RECONFIGURE": "Neu konfigurieren",
   "REFRESH": "Aktualisieren",
+  "REMOVE_BINDING": "Bindung löschen",
   "REMOVE_DEVICE": "Gerät entfernen",
   "REMOVE_DEVICE_CAPTION": "{{name}} löschen",
   "REMOVE_DEVICE_MESSAGE": "Bist du sicher, dass du \"{{name}}\" löschen möchtest ?",
@@ -119,6 +121,7 @@
   "TOKEN_DESCRIPTION": "Wenn die Installation einen Logintoken verlangt kann dieser hier angegeben werde. Dieser wird im Browser gespeichert",
   "UNKNOWN": "unbekannt",
   "UPDATE_AVAILABLE": "Update verfügbar",
+  "UPDATE_BINDING": "Bindung aktualisieren",
   "UPDATE_RUNNING": "Aktualisierung {{time}}",
   "UPDATE_SCENE": "Szene aktualisieren",
   "UPTIME": "Betriebszeit",

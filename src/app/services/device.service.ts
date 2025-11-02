@@ -63,6 +63,7 @@ export class DeviceService {
 
 
   private sendBridgeDeviceRequest(topic: string, parameters: { [key: string]: any }) {
+
     const payload: any = {
       transaction: crypto.randomUUID()
     }
@@ -71,7 +72,7 @@ export class DeviceService {
       payload[key] = parameters[key];
     })
 
-    this.appService.sendBridgeRequest(topic, payload);
+   return this.appService.sendBridgeRequest(topic, payload);
   }
 
   startInterview(device: Device): void {
@@ -166,7 +167,7 @@ export class DeviceService {
 
 
   updateBinding(request: DeviceBindingRequest) {
-    this.sendBridgeDeviceRequest("bridge/request/device/bind", request);
+   return this.sendBridgeDeviceRequest("bridge/request/device/bind", request);
   }
 
   removeBinding(request: DeviceBindingRequest) {

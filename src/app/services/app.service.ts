@@ -55,6 +55,7 @@ export class ApplicationService {
             topic
         }
         this.ws.sendMessage(JSON.stringify(message));
+        return payload.transaction;
     }
 
 

@@ -140,7 +140,8 @@ export interface Device {
 
 export interface BindingTarget {
     endpoint:string;
-    ieee_address:string;
+    id?:string;
+    ieee_address?:string;
     type:string;
 }
 
