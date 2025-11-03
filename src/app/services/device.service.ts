@@ -171,7 +171,7 @@ export class DeviceService {
   }
 
   removeBinding(request: DeviceBindingRequest) {
-    this.sendBridgeDeviceRequest("bridge/request/device/unbind", request);
+    return this.sendBridgeDeviceRequest("bridge/request/device/unbind", request);
   }
 
 

@@ -185,5 +185,6 @@ export interface VisualBinding {
     targetEndpoint: string,
     targetName: string,
     cluster: VisualCluster[],
-    isNew: boolean
+    isNew: boolean,
+    updating:boolean,
 }

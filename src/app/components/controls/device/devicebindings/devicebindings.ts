@@ -2,7 +2,7 @@ import { DropdownComponent } from '@/app/components/controls/dropdown/dropdown';
 import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
 import { DeviceStore } from '@/app/datastore/device.store';
 import { GroupStore } from '@/app/datastore/group.store';
-import { Device, DeviceBindingRequest,   VisualBinding } from '@/app/models/device';
+import { Device, DeviceBindingRequest, VisualBinding } from '@/app/models/device';
 import { Group } from '@/app/models/group';
 import { SelectOption } from '@/app/models/types';
 import { DeviceService } from '@/app/services/device.service';
@@ -16,6 +16,12 @@ interface TemporaryBindingState {
 
 interface CachedClusterState {
   [bindingKey: string]: string[]; // Array of selected cluster labels
+}
+
+interface OperationState {
+  running:boolean;
+  target:string;
+  message:string;
 }
 
 @Component({
@@ -32,6 +38,7 @@ export class DeviceBindingsComponent {
 
   device = input.required<Device | null>()
   entities = this.deviceStore.entities();
+  operation = signal<OperationState|null>(null);
   tmpNewEndpoint = signal<string | undefined>(undefined);
 
   deviceEndpointSelections = computed(() => {
@@ -119,7 +126,7 @@ export class DeviceBindingsComponent {
           const validClusters = this.deviceService.collectClusters(this.device()!, targetDevice, epid, targetEndpoint, binding.target.type);
           //create get the binding visual or create a new one
           const cluster = this.deviceService.copyClusterArray(validClusters);
-          const b: VisualBinding = (ebid > -1) ? epbinding[ebid] : { endpoint: epid, targetEndpoint: binding.target.endpoint, type: binding.target.type, target: target, cluster:cluster, targetName: targetName ?? 'unknown', isNew: false };
+          const b: VisualBinding = (ebid > -1) ? epbinding[ebid] : { endpoint: epid, targetEndpoint: binding.target.endpoint, type: binding.target.type, target: target, cluster: cluster, targetName: targetName ?? 'unknown', isNew: false, updating: false };
           // set the cluster to inuse
           b.cluster.some(c => { if (c.label === binding.cluster) { c.isSelected = true } }); // set the selected attribute
           if (ebid > -1) {
@@ -177,7 +184,7 @@ export class DeviceBindingsComponent {
     }
   })
 
-  newSourceEndpointTitle = computed(()=>{
+  newSourceEndpointTitle = computed(() => {
     const sep = this.tmpNewEndpoint();
     return sep ? this.translate.instant("ENDPOINT_", { id: sep }) : this.translate.instant("ENDPOINT")
   })
@@ -228,7 +235,7 @@ export class DeviceBindingsComponent {
     return [...groupSpacer, ...groupOptions, ...deviceSpacer, ...deviceOptions];
   });
 
-  
+
 
   selectNewDevice(event: any, binding: VisualBinding) {
     // grab the device from the store and save it so we can pull the endpoints
@@ -247,7 +254,7 @@ export class DeviceBindingsComponent {
       binding.target = event.value;
       binding.type = "group";
       binding.targetName = event.label;
-      binding.cluster = this.deviceService.collectClusters(this.device()!,undefined, binding.endpoint, undefined, binding.type);
+      binding.cluster = this.deviceService.collectClusters(this.device()!, undefined, binding.endpoint, undefined, binding.type);
       this.selectedNewTargetDevice.set(gr);
       return;
     }
@@ -261,10 +268,10 @@ export class DeviceBindingsComponent {
     if (targetDevice) {
       if ('ieee_address' in targetDevice) {
         const targetEndpoint = targetDevice?.endpoints[event.value];
-        binding.cluster = this.deviceService.collectClusters(this.device()!,targetDevice, binding.endpoint, targetEndpoint, binding.type);
+        binding.cluster = this.deviceService.collectClusters(this.device()!, targetDevice, binding.endpoint, targetEndpoint, binding.type);
         console.log(binding.cluster);
-      
-      } 
+
+      }
     }
   }
 
@@ -308,7 +315,8 @@ export class DeviceBindingsComponent {
       targetName: '',
       cluster: [],
       type: '',
-      isNew: true
+      isNew: true,
+      updating: false
     };
     const tmp = tmpb[endpoint] ?? [];
     tmp.push(vb);
@@ -328,18 +336,37 @@ export class DeviceBindingsComponent {
       from_endpoint: binding.endpoint,
       to_endpoint: binding.targetEndpoint
     }
-    this.deviceService.removeBinding(request);
 
-    // Clean up the cache for this binding
-    const bindingKey = this.getBindingKey(binding.endpoint, binding.target, binding.targetEndpoint);
-    const newCache = { ...this.clusterStateCache() };
-    delete newCache[bindingKey];
-    this.clusterStateCache.set(newCache);
+    this.operation.set({target:binding.targetEndpoint,running:true,message:""});
 
-    // Remove from dirty bindings
-    const newDirty = new Set(this.dirtyBindings());
-    newDirty.delete(bindingKey);
-    this.dirtyBindings.set(newDirty);
+    const transactionId = this.deviceService.removeBinding(request);
+    const response$ = this.signalBusService.onState<any>(`bridge-response-${transactionId}`);
+    binding.updating = true;
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        const result = response$();
+        if (result) {
+          // Handle response
+          this.operation.set({target:binding.targetEndpoint,running:false,message:""});
+          this.signalBusService.reset(`bridge-response-${transactionId}`);
+
+          if (result && result.payload && result.payload.status === "error") {
+             this.operation.set({target:binding.targetEndpoint,running:false,message:"Error unbinding. You may try again after waking up the device."})
+          } else {
+            // Clean up the cache for this binding
+            const bindingKey = this.getBindingKey(binding.endpoint, binding.target, binding.targetEndpoint);
+            const newCache = { ...this.clusterStateCache() };
+            delete newCache[bindingKey];
+            this.clusterStateCache.set(newCache);
+
+            // Remove from dirty bindings
+            const newDirty = new Set(this.dirtyBindings());
+            newDirty.delete(bindingKey);
+            this.dirtyBindings.set(newDirty);
+          }
+        }
+      });
+    });
   }
 
   updateBinding(binding: VisualBinding) {
@@ -351,6 +378,7 @@ export class DeviceBindingsComponent {
       from_endpoint: binding.endpoint,
       to_endpoint: binding.targetEndpoint
     }
+    this.operation.set({target:binding.targetEndpoint,running:true,message:""});
     this.clearBindingDirty(binding);
     const transactionId = this.deviceService.updateBinding(request);
     const response$ = this.signalBusService.onState<any>(`bridge-response-${transactionId}`);
@@ -359,10 +387,17 @@ export class DeviceBindingsComponent {
         const result = response$();
         if (result) {
           // Handle response
-          this.clearBindingDirty(binding);
-          this.temporaryBindings.set({});
-          console.log(result);
+          this.operation.set({target:binding.targetEndpoint,running:false,message:""});
           this.signalBusService.reset(`bridge-response-${transactionId}`);
+          if (result && result.payload && result.payload.status === "error") {
+            this.operation.set({target:binding.targetEndpoint,running:false,message:"Error binding. You may try again after waking up the device."});
+          } else {
+            this.clearBindingDirty(binding);
+            this.temporaryBindings.set({});
+            this.tmpNewEndpoint.set(undefined);
+            this.selectedNewTargetDevice.set(null);
+            this.selectedNewTargetEndpointId.set(null);
+          }
         }
       });
     });
