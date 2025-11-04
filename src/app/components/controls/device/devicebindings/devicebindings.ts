@@ -337,21 +337,20 @@ export class DeviceBindingsComponent {
       to_endpoint: binding.targetEndpoint
     }
 
-    this.operation.set({target:binding.targetEndpoint,running:true,message:""});
+    this.operation.set({target:binding.targetName,running:true,message:""});
 
     const transactionId = this.deviceService.removeBinding(request);
     const response$ = this.signalBusService.onState<any>(`bridge-response-${transactionId}`);
-    binding.updating = true;
     runInInjectionContext(this.injector, () => {
       effect(() => {
         const result = response$();
         if (result) {
           // Handle response
-          this.operation.set({target:binding.targetEndpoint,running:false,message:""});
+          this.operation.set({target:binding.targetName,running:false,message:""});
           this.signalBusService.reset(`bridge-response-${transactionId}`);
 
           if (result && result.payload && result.payload.status === "error") {
-             this.operation.set({target:binding.targetEndpoint,running:false,message:"Error unbinding. You may try again after waking up the device."})
+             this.operation.set({target:binding.targetName,running:false,message:"Error unbinding. You may try again after waking up the device."})
           } else {
             // Clean up the cache for this binding
             const bindingKey = this.getBindingKey(binding.endpoint, binding.target, binding.targetEndpoint);
@@ -378,7 +377,7 @@ export class DeviceBindingsComponent {
       from_endpoint: binding.endpoint,
       to_endpoint: binding.targetEndpoint
     }
-    this.operation.set({target:binding.targetEndpoint,running:true,message:""});
+    this.operation.set({target:binding.targetName,running:true,message:""});
     this.clearBindingDirty(binding);
     const transactionId = this.deviceService.updateBinding(request);
     const response$ = this.signalBusService.onState<any>(`bridge-response-${transactionId}`);
@@ -387,10 +386,10 @@ export class DeviceBindingsComponent {
         const result = response$();
         if (result) {
           // Handle response
-          this.operation.set({target:binding.targetEndpoint,running:false,message:""});
+          this.operation.set({target:binding.targetName,running:false,message:""});
           this.signalBusService.reset(`bridge-response-${transactionId}`);
           if (result && result.payload && result.payload.status === "error") {
-            this.operation.set({target:binding.targetEndpoint,running:false,message:"Error binding. You may try again after waking up the device."});
+            this.operation.set({target:binding.targetName,running:false,message:"Error binding. You may try again after waking up the device."});
           } else {
             this.clearBindingDirty(binding);
             this.temporaryBindings.set({});
