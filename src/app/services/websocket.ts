@@ -74,7 +74,7 @@ export class Websocket {
   private timer?: number;
   private isConnecting: boolean = false;
   private failTimes: number = 0;
-  protected readonly  signalBusService = inject(SignalBusService);
+  protected readonly signalBusService = inject(SignalBusService);
   /**
    * Establishes a WebSocket connection to the specified URL.
    * Closes any existing connection before creating a new one.
@@ -90,7 +90,7 @@ export class Websocket {
   connect(connection: Connection): void {
     const { host, port, secure, token } = connection;
 
-    console.log("connect to",connection.host);
+    console.log("connect to", connection.host);
     const stripped = host.replace(/^(https?:\/\/)/, "");;
     this.clearWatchdog();
     let url = `${secure ? 'wss' : 'ws'}://${stripped}:${port}/api`;
@@ -117,9 +117,9 @@ export class Websocket {
         }
         // if the message has a transaction id its a reply 
         if (message.payload && message.payload.transaction) {
-          this.signalBusService.emit(`bridge-response-${message.payload.transaction}`,message);
+          this.signalBusService.emit(`bridge-response-${message.payload.transaction}`, message);
         }
-        
+
         // Check for exact topic match
         const topicSignal = this.topicSignals.get(message.topic);
         if (topicSignal) {
@@ -167,6 +167,8 @@ export class Websocket {
       this.failTimes = this.failTimes + 1;
       if (this.failTimes < 5) {
         this.reconnect();
+      } else {
+        this.signalBusService.emit("connection_error", 'error_connecting');
       }
     };
 
@@ -174,19 +176,24 @@ export class Websocket {
       console.log('WebSocket connection closed', event);
       switch (event.code) {
         case ERROR_UNAUTHORIZED:
-          this.signalBusService.emit("connection_error",'authentication_needed');
+          this.signalBusService.emit("connection_error", 'authentication_needed');
           break;
         case 1000:
           // normal closure
           this.clearWatchdog();
           break;
         case 1006:
-          this.signalBusService.emit("connection_error",'error_connecting');
+          this.failTimes = this.failTimes + 1;
+          if (this.failTimes < 5) {
+            this.reconnect();
+          } else {
+            this.signalBusService.emit("connection_error", 'error_connecting');
+          }
           break;
         default:
-        this.reconnect();
+          this.reconnect();
 
-        }
+      }
     };
 
     this.ws.onopen = () => {
