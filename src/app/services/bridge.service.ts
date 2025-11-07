@@ -163,31 +163,49 @@ export class BridgeService {
   }
 
   saveScene(groupName: string, data: GroupSceneData) {
-    this.appService.sendBridgeRequest(`${groupName}/set`, data, false);
+    return this.appService.sendBridgeRequest(`${groupName}/set`, data, false);
   }
 
   recallScene(groupName: string, sceneID: number) {
-    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_recall: sceneID }, false);
+    return this.appService.sendBridgeRequest(`${groupName}/set`, { scene_recall: sceneID }, false);
   }
 
   deleteScene(groupName: string, sceneID: number) {
-    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove: sceneID }, false);
+    return this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove: sceneID }, false);
   }
 
   deleteAllScenes(groupName: string) {
-    this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove_all: "" }, false);
+    return this.appService.sendBridgeRequest(`${groupName}/set`, { scene_remove_all: "" }, false);
   }
 
   addGroup(groupId: string, groupName: string) {
-    this.appService.sendBridgeRequest("bridge/request/group/add", { id: groupId, friendly_name: groupName });
+    return this.appService.sendBridgeRequest("bridge/request/group/add", { id: groupId, friendly_name: groupName });
   }
 
   deleteGroup(groupName: string) {
-    this.appService.sendBridgeRequest("bridge/request/group/remove", { id: groupName });
+    return this.appService.sendBridgeRequest("bridge/request/group/remove", { id: groupName });
   }
 
   renameGroup(groupName: string, newName: string) {
-    this.appService.sendBridgeRequest("bridge/request/group/rename", { from: groupName, to: newName });
+    return this.appService.sendBridgeRequest("bridge/request/group/rename", { from: groupName, to: newName });
   }
 
+  requestBackup() {
+    return this.appService.sendBridgeRequest("bridge/request/backup", {  });
+    /**
+     * result is 
+     * bridge/response/backup
+     * payload: {
+     *  data: {
+     *    zip:....
+     *  },
+     *  status: 'ok|error',
+     *  transaction: ...
+     * }
+     */
+  }
+
+  requestRestart() {
+    return this.appService.sendBridgeRequest("bridge/request/restart", {  });
+  }
 }

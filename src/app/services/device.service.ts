@@ -1,9 +1,8 @@
-import { computed, effect, inject, Injectable, signal } from "@angular/core";
-import { Websocket, WebSocketMessage } from "./websocket";
+import { inject, Injectable } from "@angular/core";
+import { Websocket } from "./websocket";
 import { DeviceStore } from "../datastore/device.store";
-import { Device, DeviceTargetState, DeviceFeature, DeviceOption, DeviceBindingRequest, Endpoint, VisualCluster } from "../models/device";
-import { timeAgo } from "../utils/time.utils";
-import { TranslateService } from "@ngx-translate/core";
+import { Device, DeviceTargetState, DeviceBindingRequest, Endpoint, VisualCluster } from "../models/device";
+
 import { ApplicationService } from "./app.service";
 import { BridgeService } from "./bridge.service";
 import { AddRemoveDeviceFromGroupOptions, RemoveDeviceOptions, RenameDeviceOptions } from "../models/types";
@@ -72,7 +71,7 @@ export class DeviceService {
       payload[key] = parameters[key];
     })
 
-   return this.appService.sendBridgeRequest(topic, payload);
+    return this.appService.sendBridgeRequest(topic, payload);
   }
 
   startInterview(device: Device): void {
@@ -167,7 +166,7 @@ export class DeviceService {
 
 
   updateBinding(request: DeviceBindingRequest) {
-   return this.sendBridgeDeviceRequest("bridge/request/device/bind", request);
+    return this.sendBridgeDeviceRequest("bridge/request/device/bind", request);
   }
 
   removeBinding(request: DeviceBindingRequest) {
@@ -194,7 +193,7 @@ export class DeviceService {
    * @returns a list of valid Clusters
    */
 
-  collectClusters(device:Device, targetDevice: Device | undefined, sourceEndpoint: string, targetEndpoint: Endpoint | undefined, bindingType: string) {
+  collectClusters(device: Device, targetDevice: Device | undefined, sourceEndpoint: string, targetEndpoint: Endpoint | undefined, bindingType: string) {
     const endpoint = device.endpoints[sourceEndpoint]; // get the source endpoint
     // get the source clusters and transform them into a list of vistual clusters
     const clusters: VisualCluster[] = [...endpoint.clusters.input, ...endpoint.clusters.output].map(c => { return { label: c, isSelected: false } });
