@@ -79,10 +79,11 @@
         {{ mainTitle() | translate }}
       </h1>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-4">
         <span class="cursor-pointer" (click)="openServerDialog('')">
           {{ connectedHost() ?? 'Connect to a host' }}
         </span>
+        <VersionDisplayComponent></VersionDisplayComponent>
       </div>
     </header>
 

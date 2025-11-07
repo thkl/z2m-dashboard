@@ -6,7 +6,8 @@
     "ng": "ng",
     "sec": "pnpm outdated",
     "start": "ng serve",
-    "build": "ng build",
+    "increment-version": "node scripts/increment-version.js",
+    "build": "pnpm increment-version && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
