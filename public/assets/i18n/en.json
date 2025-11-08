@@ -60,6 +60,7 @@
   "POWER": "Power",
   "RECONFIGURE": "Reconfigure",
   "REFRESH": "Refresh",
+  "REMOVE": "Remove",
   "REMOVE_BINDING": "Remove binding",
   "REMOVE_DEVICE": "Remove device",
   "REMOVE_DEVICE_CAPTION": "Remove {{name}}",

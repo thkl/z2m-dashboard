@@ -12,19 +12,23 @@
     }
   </button>
   <div class="content flex flex-col" [class.content-open]="isOpen()" style="flex-grow: inherit">
-    <div class="options flex flex-col" style="flex-grow: inherit">
-      @if (hasSearch() === true) {
-        <div class="root_control">
-          <div>
-            <SearchInput></SearchInput>
+    <div class="flex w-full">
+      <div class="options flex flex-col w-full" style="flex-grow: inherit">
+        @if (hasSearch() === true) {
+          <div class="root_control">
+            <div>
+              <SearchInput></SearchInput>
+            </div>
+            <div class="w-full min-w-0">
+              <ng-content></ng-content>
+            </div>
           </div>
-          <div>
+        } @else {
+          <div class="w-full min-w-0">
             <ng-content></ng-content>
           </div>
-        </div>
-      } @else {
-        <ng-content></ng-content>
-      }
+        }
+      </div>
     </div>
   </div>
 </div>

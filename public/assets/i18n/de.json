@@ -81,6 +81,7 @@
   "RECALL_SCENE": "Szene abrufen",
   "RECONFIGURE": "Neu konfigurieren",
   "REFRESH": "Aktualisieren",
+  "REMOVE": "Entfernen",
   "REMOVE_BINDING": "Bindung löschen",
   "REMOVE_DEVICE": "Gerät entfernen",
   "REMOVE_DEVICE_CAPTION": "{{name}} löschen",

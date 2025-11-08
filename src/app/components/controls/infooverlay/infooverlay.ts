@@ -12,6 +12,8 @@ export class InfoOverlayComponent {
   public isOpen = false;
   message = input.required<string>()
   pointer = 'tooltip-top';
+  icon = input<string>("info");
+  color = input<string>("#4797ff");
   private openTimeout?: ReturnType<typeof setTimeout>;
   private closeTimeout?: ReturnType<typeof setTimeout>;
 

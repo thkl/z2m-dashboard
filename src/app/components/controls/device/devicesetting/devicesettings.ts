@@ -1,16 +1,15 @@
 import { Component, effect, inject, input, signal, Signal } from '@angular/core';
-import { InfoOverlayComponent } from '../../infooverlay/infooverlay';
-import { OptionComponent } from '../../option/option';
-import { DeviceConfigSchema } from '../../../../models/bridge';
-import { AccessMode, Device, DeviceOption } from '../../../../models/device';
-import { DeviceService } from '../../../../services/device.service';
 import { ButtonComponent } from '@/app/components/controls/button/button';
-import { JSONStringifyPipe } from '@/app/pipes/json.pipe';
-import { HumanReadablePipe } from '@/app/pipes/human.pipe';
+import { ArrayInputComponent } from '@/app/components/controls/arrayinput/arrayinput';
+import { DeviceService } from '@/app/services/device.service';
+import { InfoOverlayComponent } from '@/app/components/controls/infooverlay/infooverlay';
+import { OptionComponent } from '@/app/components/controls/option/option';
+import { AccessMode, Device, DeviceOption } from '@/app/models/device';
+import { DeviceConfigSchema } from '@/app/models/bridge';
 
 @Component({
   selector: 'DeviceSettings',
-  imports: [InfoOverlayComponent, OptionComponent,ButtonComponent,HumanReadablePipe],
+  imports: [InfoOverlayComponent, OptionComponent,ButtonComponent,ArrayInputComponent],
   templateUrl: './devicesettings.html',
   styleUrl: './devicesettings.scss'
 })
@@ -57,7 +56,8 @@ export class DeviceSettings {
           access: 0, // Set appropriate access mode
           property: key,
           value: undefined,
-          accessor:schemaKey
+          accessor:schemaKey,
+          restartRequired:prop.requiresRestart
         }});
         this.buildExtendedOptions(options);
       } else if (Array.isArray(section)) {
@@ -76,7 +76,7 @@ export class DeviceSettings {
         option.type = `Array.${option.type[0]}`
       }
       if (states) {
-        option.value = states[option.name] ?? '?'
+        option.value = states[option.name] ?? ''
       }
     });
     this.deviceOptions.set(flattend);

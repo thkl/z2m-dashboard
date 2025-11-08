@@ -1,5 +1,13 @@
-
-<span (mouseenter)="open()" (mouseleave)="close()" (click)="toggle()" cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="infoicon material-symbols-outlined">info</span>
+<span
+  (mouseenter)="open()"
+  (mouseleave)="close()"
+  (click)="toggle()"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  class="infoicon material-symbols-outlined"
+  [style.color]="color()"
+  >{{ icon() }}</span
+>
 
 <ng-template
   (positionChange)="pos($event)"
@@ -8,6 +16,7 @@
   [cdkConnectedOverlayOpen]="isOpen"
   [cdkConnectedOverlayPositions]="positions"
   [cdkConnectedOverlayPanelClass]="'info-overlay-panel'"
-  (detach)="isOpen = false">
-  <span class="tooltip {{pointer}}" (mouseenter)="open()" (mouseleave)="close()">{{message()}}</span>
+  (detach)="isOpen = false"
+>
+  <span class="tooltip {{ pointer }}" (mouseenter)="open()" (mouseleave)="close()">{{ message() }}</span>
 </ng-template>

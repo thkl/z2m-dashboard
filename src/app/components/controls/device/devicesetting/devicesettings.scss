@@ -1,6 +1,5 @@
 .device_row {
-  display: flex;
-  min-height: 20px;
+   min-height: 20px;
   -webkit-box-pack: justify;
   justify-content: space-between;
   width: 100%;
@@ -10,6 +9,8 @@
   color: var(--app-text-color);
   border-bottom-width: 1px;
   border-bottom-color: var(--app-border-color);
+  display: grid;
+  grid-template-columns: 50% auto
 }
 
 .buttonBarLeft {
@@ -17,4 +18,9 @@
   background-color: transparent !important;
   display: flex;
   align-items: flex-start;
+}
+
+:host {
+  width: 100%;
+    display: flex;
 }

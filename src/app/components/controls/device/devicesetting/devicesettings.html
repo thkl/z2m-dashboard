@@ -1,4 +1,4 @@
-<div class="wrapper" style="display: flex; flex-direction: column">
+<div class="wrapper pr-1" style="display: flex; flex-direction: column; width: 100%">
   @for (option of deviceOptions(); track $index) {
     <div class="device_row">
       <div class="label flex flex-col">
@@ -6,6 +6,10 @@
           {{ option.label }}
           @if (option.description) {
             <InfoOverlayComponent [message]="option.description" style="min-width: 30px"> </InfoOverlayComponent>
+          }
+
+          @if (option.restartRequired) {
+            <InfoOverlayComponent message="CHANGE_OF_THIS_REQUIRES_A_RESTART" color="#FFFF00" icon="warning" style="min-width: 30px"> </InfoOverlayComponent>
           }
         </span>
       </div>
@@ -21,17 +25,25 @@
           }
         }
         @case ('string') {
-          <input class="w-full text-right panel" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
+          <input class="w-full text-right" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
         }
         @case ('Array.number') {
           {{ option.enum }}
         }
+
         @case ('numeric') {
-          <input class="w-full text-right panel" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
+          <input class="w-full text-right" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
+        }
+        @case ('number') {
+          <input class="w-full text-right" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
         }
 
         @case ('Array.object') {
-          <input class="w-full text-right panel" [value]="option.value[option.accessor!]" (change)="changeSetting(option, $event.target.value)" />
+          <input class="w-full text-right" [value]="option.value[option.accessor!] ?? ''" (change)="changeSetting(option, $event.target.value)" />
+        }
+
+        @case ('array') {
+          <ArrayInputComponent [items]="option.value"></ArrayInputComponent>
         }
 
         @default {
