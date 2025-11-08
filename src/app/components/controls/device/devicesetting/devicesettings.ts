@@ -47,7 +47,7 @@ export class DeviceSettings {
        
         const options: DeviceOption[] = Object.entries(schema.properties).map(([key, prop]) => 
         {
-          const schemaKey = prop.properties ? Object.keys(prop.properties)[0] : key;
+          const schemaKey = prop.properties ? Object.keys(prop.properties)[0] : undefined;
           return {
           name: key,
           label: prop.title || key,
@@ -88,18 +88,24 @@ export class DeviceSettings {
       const data: {[key: string]:any} = {}
       if ((option.value !== null) && (option.value !== '?')) {
         const propKey = option.property;
-        this.device()!.options[propKey] = option.value;
+        if (option.accessor) {
+          const v:any = {};
+          v[option.accessor] = option.value;
+          this.device()!.options[propKey] = v;
+        } else {
+          this.device()!.options[propKey] = option.value;
+        }
         this.settingsChanged.set(true);
-        console.log(option)
       }
     }
   }
 
   applySettings() {
         if (this.device()) {
+       
           this.deviceService.updateSetting(this.device()!, this.device()!.options);
           this.settingsChanged.set(false);
     }
   }
 }
-
+ 

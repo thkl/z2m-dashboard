@@ -100,7 +100,7 @@ export class DeviceService {
 
   updateSetting(device: Device, settings: { [key: string]: any }) {
     this.sendBridgeDeviceRequest("bridge/request/device/options", {
-      id: device.friendly_name,
+      id: device.ieee_address,
       options: settings
     });
   }

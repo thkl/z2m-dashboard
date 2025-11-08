@@ -13,7 +13,7 @@ export interface DeviceOption {
     value_off?: string;
     value: any;
     enum?: any[];
-    accessor:string
+    accessor?:string
 }
 
 export interface DeviceFeatureVisual {
