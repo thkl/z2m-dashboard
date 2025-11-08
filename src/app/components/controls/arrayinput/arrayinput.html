@@ -1,12 +1,12 @@
 <ExpansionPanelComponent [label]="title()" [setOpen]="panelIsOpen()" (setOpenChange)="panelIsOpen.set($event)" titleClass="left">
   <div class="toolbarInputAndClearContainer">
-    <input class="toolbarInput" placeholder="Add new" type="text" style="min-width: 20px" tabindex="0" [value]="inputText()" (change)="applyInput($event)" />
+    <input class="toolbarInput" placeholder="Add new" type="text" style="min-width: 20px" tabindex="0" [value]="inputText()" (input)="inputText.set($event.target.value)" (change)="applyInput($event)" />
   </div>
   <div class="options p-2">
     @for (item of items(); track $index) {
       <div class="item">
         <div>{{ item }}</div>
-        <button class="link">{{ 'REMOVE' | translate }}</button>
+        <button class="link" (click)="remove(item)">{{ 'REMOVE' | translate }}</button>
       </div>
     }
   </div>

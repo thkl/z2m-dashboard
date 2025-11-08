@@ -43,7 +43,7 @@
         }
 
         @case ('array') {
-          <ArrayInputComponent [items]="option.value"></ArrayInputComponent>
+          <ArrayInputComponent [items]="option.value" (changed)="changeSetting(option, $event)"></ArrayInputComponent>
         }
 
         @default {
