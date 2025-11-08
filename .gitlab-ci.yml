@@ -13,8 +13,6 @@
   :APP_NAME: zigbee2mqtt-ui
   :DEPLOY_PATH: "data/devserver/zigbee"
 
-include:
-  - template: Jobs/SAST.gitlab-ci.yml
 
 :build:
   :stage: build
@@ -28,6 +26,14 @@ include:
     :paths:
     - dist/zigbee2mqtt-ui/browser
     :expire_in: 1 day
+
+:test:
+  :stage: test
+  :image: node:20
+  include:
+  - template: Jobs/SAST.gitlab-ci.yml
+  :script:
+  - npm test
 
 :deploy:
   :stage: deploy
