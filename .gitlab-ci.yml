@@ -12,15 +12,17 @@
   :NODE_ENV: development
   :APP_NAME: zigbee2mqtt-ui
   :DEPLOY_PATH: "data/devserver/zigbee"
+
 include:
-  - component: gitlab.com/components/sast/sast@main
-  
+  - template: Jobs/SAST.gitlab-ci.yml
+
 :build:
   :stage: build
   :image: node:20
   :script:
   - npm install
   - npm audit
+
   - npm run build
   :artifacts:
     :paths:
