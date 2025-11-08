@@ -34,7 +34,8 @@ include:
 :test:
   :stage: test
   :image: node:20
-
+  :script:
+  - npm run test
 
 :deploy:
   :stage: deploy
