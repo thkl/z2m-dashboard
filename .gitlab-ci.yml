@@ -37,6 +37,16 @@ include:
   :script:
   - npm run test
 
+
+# If you need to customize, ensure the artifact is properly declared
+sast:
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+    paths:
+      - gl-sast-report.json
+    expire_in: 1 week
+
 :deploy:
   :stage: deploy
   :image: alpine:latest
