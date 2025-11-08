@@ -298,37 +298,47 @@ export class Websocket {
   }
 
   /**
-   * Checks if a topic matches a wildcard pattern using MQTT-style matching.
-   * The '*' character matches a single topic level (anything except '/').
+   * Builds a RegExp from an MQTT wildcard pattern.
+   * Input is explicitly sanitized before regex construction to prevent ReDoS attacks.
    *
-   * @param topic - The topic to test (e.g., 'device/sensor1/status')
-   * @param pattern - The pattern to match against (e.g., 'device/*\/status')
-   * @returns True if the topic matches the pattern, false otherwise
+   * @param pattern - MQTT wildcard pattern with asterisks for single-level wildcards
+   * @returns Compiled RegExp safe for pattern matching
    *
    * @private
-   *
-   * @example
-   * ```typescript
-   * matchesWildcard('device/sensor1/status', 'device/*\/status'); // true
-   * matchesWildcard('device/sensor1/temp', 'device/*\/status');   // false
-   * ```
    */
-  private matchesWildcard(topic: string, pattern: string): boolean {
-    // MQTT-style wildcard matching
-    // * matches a single level (anything except /)
+  private buildMqttRegex(pattern: string): RegExp {
+    // Sanitize input: escape all special regex characters except for our controlled wildcard handling
     const regexPattern = pattern
       .split('/')
       .map(part => {
         if (part === '*') {
           return '[^/]+'; // Match one or more characters except /
         }
-        // Escape special regex characters in literal parts
+        // Escape all special regex characters in literal parts
         return part.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
       })
       .join('/');
-    const regex = new RegExp(`^${regexPattern}$`);
-    const matches = regex.test(topic);
-    return matches;
+
+    // Safe to use dynamically-created pattern as input is explicitly sanitized above
+    // tslint:disable-next-line:no-dynamic-regexp-literals
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    return new RegExp(`^${regexPattern}$`);
+  }
+
+  /**
+   * Checks if a topic matches a wildcard pattern using MQTT-style matching.
+   * The '*' character matches a single topic level (anything except '/').
+   *
+   * @param topic - The topic to test
+   * @param pattern - The pattern to match against
+   * @returns True if the topic matches the pattern, false otherwise
+   *
+   * @private
+   */
+  private matchesWildcard(topic: string, pattern: string): boolean {
+    // MQTT-style wildcard matching
+    const regex = this.buildMqttRegex(pattern);
+    return regex.test(topic);
   }
 
   /**

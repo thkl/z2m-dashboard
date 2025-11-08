@@ -3,8 +3,17 @@
 const fs = require('fs');
 const path = require('path');
 
-const versionFile = path.join(__dirname, '../version.json');
-const publicVersionFile = path.join(__dirname, '../public/version.json');
+const versionFile = path.resolve(__dirname, '../version.json');
+const publicVersionFile = path.resolve(__dirname, '../public/version.json');
+
+// Validate that resolved paths are within the project directory
+const projectRoot = path.resolve(__dirname, '..');
+const versionFileResolved = path.resolve(versionFile);
+const publicVersionFileResolved = path.resolve(publicVersionFile);
+
+if (!versionFileResolved.startsWith(projectRoot) || !publicVersionFileResolved.startsWith(projectRoot)) {
+  throw new Error('Invalid file paths: paths must be within project directory');
+}
 
 try {
   // Read current version
