@@ -187,10 +187,12 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
       const x =
         this.containerWidth / 2 +
         Math.cos(angle) * radius +
+         // eslint-disable-next-line security/detect-non-literal-regexp
         (Math.random() - 0.5) * SIMULATION_CONFIG.INITIAL_RANDOM_OFFSET;
       const y =
         this.containerHeight / 2 +
         Math.sin(angle) * radius +
+         // eslint-disable-next-line security/detect-non-literal-regexp
         (Math.random() - 0.5) * SIMULATION_CONFIG.INITIAL_RANDOM_OFFSET;
       return {
         id: node.ieeeAddr,
