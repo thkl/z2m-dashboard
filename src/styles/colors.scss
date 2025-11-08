@@ -8,45 +8,54 @@
   --app-text-color-selected: rgb(8, 8, 8);
   --app-text-color-inactive: #737c87;
   --app-link-color: rgb(48, 106, 255);
-  
-  --app-link-good-color:rgb(48, 173, 85);
-  --app-link-warning-color:rgb(248, 231, 0);
+
+  --app-link-good-color: rgb(48, 173, 85);
+  --app-link-warning-color: rgb(248, 231, 0);
   --app-link-danger-color: #d60505;
   --app-border-color: rgba(49, 49, 49, 0.741);
   --app-navbar-color: rgb(28, 30, 33);
   --app-panel-color: rgb(28, 30, 33);
-  --app-header-background-color:  rgb(40, 43, 47);
+  --app-header-background-color: rgb(40, 43, 47);
 
   --tab-selected-background-color: rgb(25, 35, 50);
   --tab-header-shadow-color: rgb(52, 54, 58);
   --tab-header-border-color: rgb(52, 53, 54);
-  --tab-background-color:rgb(12, 15, 20);
+  --tab-background-color: rgb(12, 15, 20);
 
   --button-background-color: rgb(28, 30, 33);
   --button-selected-background-color: #282b2f;
   --button-text-color: rgb(48, 106, 255);
   --button-frame-color: #4797ff;
   --button-disabled-color: #424f61;
-  
-  --input-background-color:rgba(255,255,255,0.05);
+
+  --button-primary-background-color-disabled: #0b4ead;
+  --button-primary-border-color-disabled: #0b4ead;
+  --button-primary-text-color-disabled: hsla(0, 0%, 100%, 0.64);
+
+  --button-primary-background-color: #4797ff;
+  --button-primary-border-color: #4797ff;
+  --button-primary-text-color: rgb(255, 255, 255);
+
+
+  --input-background-color: rgba(255, 255, 255, 0.05);
   --input-background-highlighted: rgb(28, 34, 44);
-  --input-border-color:var(--app-text-color);
-  --input-text-color:var(--app-text-color);
+  --input-border-color: var(--app-text-color);
+  --input-text-color: var(--app-text-color);
 
   --dialog-button-text-color: rgb(255, 255, 255);
 
   --progressbar-status-color: #4797ff;
-  --progressbar-status-background-color:rgb(71, 151, 255);
+  --progressbar-status-background-color: rgb(71, 151, 255);
   --progressbar-background-color: rgb(78, 80, 87);
 
   --dropdown-background-inactive: #2d3135;
   --dropdown-panel-background: #282b2f;
   --dropdown-panel-background-hover: rgb(126, 123, 123);
-  
-  --option-panel-indicator-selected:#4797ff;
-  --option-panel-indicator-color:#FFF;
-  
-  --expansion-panel-trigger-focus-color:rgba(49, 49, 49, 0.741); //#0e65d8;
+
+  --option-panel-indicator-selected: #4797ff;
+  --option-panel-indicator-color: #fff;
+
+  --expansion-panel-trigger-focus-color: rgba(49, 49, 49, 0.741); //#0e65d8;
 
   --table-cell-text-color: rgb(182, 182, 182);
   --table-row-text-color: rgb(182, 182, 182);
@@ -62,16 +71,14 @@
   --network-graph-link-faded: #737c87;
   --network-graph-node-hover-shadow: rgba(71, 151, 255, 0.4);
   --network-graph-link-hover-shadow: rgba(71, 151, 255, 0.3);
-  
 
-  --app-font-size:.95rem;
-  --toolbar-font-size:1rem;
-  --input-font-size:1rem;
-  --label-font-size:1rem;
-  --sublabel-font-size:0.9rem;
-  --button-font-size:1rem;
-  --table-header-font-size:1rem;
-  --table-row-font-size:1rem;
-  --table-font-size:1rem;
-  
+  --app-font-size: 0.95rem;
+  --toolbar-font-size: 1rem;
+  --input-font-size: 1rem;
+  --label-font-size: 1rem;
+  --sublabel-font-size: 0.9rem;
+  --button-font-size: 1rem;
+  --table-header-font-size: 1rem;
+  --table-row-font-size: 1rem;
+  --table-font-size: 1rem;
 }

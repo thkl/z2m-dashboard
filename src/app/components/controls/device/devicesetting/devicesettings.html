@@ -29,7 +29,18 @@
         @case ('numeric') {
           <input class="w-full text-right panel" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
         }
+
+        @case ('Array.object') {
+          <input class="w-full text-right panel" [value]="option.value[option.accessor]" (change)="changeSetting(option, $event.target.value)" />
+        }
+
+        @default {
+          {{ option.type }}
+        }
       }
     </div>
   }
+  <div class="buttonBar buttonBarLeft">
+    <ButtonComponent title="APPLY_CHANGES" [disabled]="!settingsChanged()" (click)="applySettings()"></ButtonComponent>
+  </div>
 </div>

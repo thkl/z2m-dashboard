@@ -6,6 +6,7 @@
   "ADD_GROUP_DATA": "Neue Gruppe hinzufügen",
   "ADD_SCENE": "Szene hinzufügen",
   "ADD_SCENE_DATA": "Die Szene beinhaltet gleichzeitig alle aktuellen Zustände der Geräte in dieser Gruppe.",
+  "APPLY_CHANGES": "Änderungen speichern",
   "APP_TITLE": "Zigbee2MQTT Dashboard",
   "AVAILABILITY": "Verfügbarkeit",
   "BATTERY": "Batterie",

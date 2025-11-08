@@ -11,3 +11,10 @@
   border-bottom-width: 1px;
   border-bottom-color: var(--app-border-color);
 }
+
+.buttonBarLeft {
+  margin-top: 1em;
+  background-color: transparent !important;
+  display: flex;
+  align-items: flex-start;
+}

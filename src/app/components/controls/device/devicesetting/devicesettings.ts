@@ -4,10 +4,13 @@ import { OptionComponent } from '../../option/option';
 import { DeviceConfigSchema } from '../../../../models/bridge';
 import { AccessMode, Device, DeviceOption } from '../../../../models/device';
 import { DeviceService } from '../../../../services/device.service';
+import { ButtonComponent } from '@/app/components/controls/button/button';
+import { JSONStringifyPipe } from '@/app/pipes/json.pipe';
+import { HumanReadablePipe } from '@/app/pipes/human.pipe';
 
 @Component({
   selector: 'DeviceSettings',
-  imports: [InfoOverlayComponent, OptionComponent],
+  imports: [InfoOverlayComponent, OptionComponent,ButtonComponent,HumanReadablePipe],
   templateUrl: './devicesettings.html',
   styleUrl: './devicesettings.scss'
 })
@@ -18,6 +21,7 @@ export class DeviceSettings {
   deviceService = inject(DeviceService)
   deviceOptions = signal<DeviceOption[]>([]);
   hasInitialized = false;
+  settingsChanged = signal<boolean>(false);
 
   hasAccess(access: number, mode: AccessMode): boolean {
     return (access & mode) !== 0;
@@ -40,7 +44,11 @@ export class DeviceSettings {
         // Handle DeviceConfigSchema
         const schema = section as DeviceConfigSchema;
         // Convert schema properties to DeviceOption[] format
-        const options: DeviceOption[] = Object.entries(schema.properties).map(([key, prop]) => ({
+       
+        const options: DeviceOption[] = Object.entries(schema.properties).map(([key, prop]) => 
+        {
+          const schemaKey = prop.properties ? Object.keys(prop.properties)[0] : key;
+          return {
           name: key,
           label: prop.title || key,
           description: prop.description,
@@ -48,8 +56,9 @@ export class DeviceSettings {
           enum: prop.enum,
           access: 0, // Set appropriate access mode
           property: key,
-          value: undefined
-        }));
+          value: undefined,
+          accessor:schemaKey
+        }});
         this.buildExtendedOptions(options);
       } else if (Array.isArray(section)) {
         // Handle DeviceOption[]
@@ -78,9 +87,18 @@ export class DeviceSettings {
       option.value = item;
       const data: {[key: string]:any} = {}
       if ((option.value !== null) && (option.value !== '?')) {
-        data[option.property] = option.value;
+        const propKey = option.property;
+        this.device()!.options[propKey] = option.value;
+        this.settingsChanged.set(true);
+        console.log(option)
       }
-      this.deviceService.updateSetting(this.device()!, data)
+    }
+  }
+
+  applySettings() {
+        if (this.device()) {
+          this.deviceService.updateSetting(this.device()!, this.device()!.options);
+          this.settingsChanged.set(false);
     }
   }
 }
