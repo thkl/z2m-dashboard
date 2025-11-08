@@ -26,12 +26,13 @@
     :paths:
     - dist/zigbee2mqtt-ui/browser
     :expire_in: 1 day
+include:
+  - template: Jobs/SAST.gitlab-ci.yml
 
 :test:
   :stage: test
   :image: node:20
-  include:
-  - template: Jobs/SAST.gitlab-ci.yml
+
   :script:
   - npm test
 
