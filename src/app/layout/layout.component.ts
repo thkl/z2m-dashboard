@@ -7,7 +7,7 @@ import { BridgeService } from '../services/bridge.service';
 
 import { LogView } from '../components/logview/logview';
 import { ResizableContainerComponent } from '../components/controls/resizable-container/resizable-container';
-import { Dialog } from '@angular/cdk/dialog';
+import { Dialog, DialogRef } from '@angular/cdk/dialog';
 import { ChooseServerDialog, ChooseServerDialogData } from '../components/dialogs/chooseserver/chooseserver';
 import { Z2MServer } from '../models/types';
 import { TabContainerComponent } from '@/app/components/tabcontainer/tabcontainer.component';
@@ -27,6 +27,8 @@ import { AppMenuComponent } from '@/app/components/appmenu/appmenu';
 export class LayoutComponent {
   sidebarOpen = true;
   logViewOpen = true;
+  waitingForConnection = false;
+  connectionDialogReferecnce?:DialogRef<any,ChooseServerDialog>;
   host = 'localhost';
   connectionDialogOpen = false;
 
@@ -64,14 +66,23 @@ export class LayoutComponent {
   })
 
   noSavedConnectionSignal = this.signalBusService.onEvent<string>('connection_error');
+  connectionSignal = this.signalBusService.onEvent<string>('connection_connected');
 
   constructor() {
 
     effect(() => {
       const sgn = this.noSavedConnectionSignal();
+       console.log(sgn);
       if (sgn !== null && (sgn.data === "NO_LASTSAVED_CONNECTION" || sgn.data === "error_connecting")) {
-        this.openServerDialog(sgn.data)
+        this.openServerDialog(sgn.data);
         this.signalBusService.reset("connection_error");
+      } 
+    });
+
+    effect(()=>{
+      console.log("WFC",this.connectionSignal())
+      if (this.connectionSignal()!==null) {
+        this.connectionDialogReferecnce?.close();
       }
     });
   }
@@ -110,13 +121,13 @@ export class LayoutComponent {
       message
     }
 
-    const dialogRef = this.dialog.open(ChooseServerDialog, {
+    this.connectionDialogReferecnce = this.dialog.open(ChooseServerDialog, {
       height: '400px',
       width: '600px',
       data
     });
 
-    dialogRef.closed.subscribe((result: unknown) => {
+    this.connectionDialogReferecnce.closed.subscribe((result: unknown) => {
       this.connectionDialogOpen = false;
       if (result !== undefined) {
         const dr = result as ChooseServerDialogData
@@ -126,6 +137,8 @@ export class LayoutComponent {
         }, 500);
       }
     });
+
+
   }
 
 }

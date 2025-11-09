@@ -9,11 +9,10 @@ import { DeviceConfigSchema } from '@/app/models/bridge';
 import { DropdownComponent } from '@/app/components/controls/dropdown/dropdown';
 import { SelectOption } from '@/app/models/types';
 import { NgTemplateOutlet } from '@angular/common';
-import { HumanReadablePipe } from '@/app/pipes/human.pipe';
 
 @Component({
   selector: 'DeviceSettings',
-  imports: [InfoOverlayComponent, OptionComponent, ButtonComponent, ArrayInputComponent, DropdownComponent, NgTemplateOutlet, HumanReadablePipe],
+  imports: [InfoOverlayComponent, OptionComponent, ButtonComponent, ArrayInputComponent, DropdownComponent, NgTemplateOutlet],
   templateUrl: './devicesettings.html',
   styleUrl: './devicesettings.scss'
 })

@@ -74,6 +74,7 @@ export class Websocket {
   private timer?: number;
   private isConnecting: boolean = false;
   private failTimes: number = 0;
+  private reconTimer?:any;
   protected readonly signalBusService = inject(SignalBusService);
   /**
    * Establishes a WebSocket connection to the specified URL.
@@ -173,7 +174,8 @@ export class Websocket {
     };
 
     this.ws.onclose = (event: CloseEvent) => {
-      console.log('WebSocket connection closed', event);
+      this.isConnecting = false;
+      console.log('WebSocket connection closed', event, event.code);
       switch (event.code) {
         case ERROR_UNAUTHORIZED:
           this.signalBusService.emit("connection_error", 'authentication_needed');
@@ -181,10 +183,12 @@ export class Websocket {
         case 1000:
           // normal closure
           this.clearWatchdog();
+          this.signalBusService.emit("connection_error", 'error_connecting');
           break;
         case 1006:
           this.failTimes = this.failTimes + 1;
           if (this.failTimes < 5) {
+            console.log("try reconnection")
             this.reconnect();
           } else {
             this.signalBusService.emit("connection_error", 'error_connecting');
@@ -200,6 +204,7 @@ export class Websocket {
       this.shouldBeConnected = true;
       this.failTimes = 0;
       this.setWatchdog();
+      this.signalBusService.emit("connection_connected", host);
     }
 
 
@@ -288,11 +293,18 @@ export class Websocket {
    */
   private reconnect(): void {
     if (this.isConnecting) {
+      console.error("its connecting allready")
       return;
     }
-    setTimeout(() => {
+    if (this.reconTimer) {
+      clearTimeout(this.reconTimer);
+    }
+
+    this.reconTimer = setTimeout(() => {
       if ((this.connection) && (this.shouldBeConnected)) {
         this.connect(this.connection);
+      } else {
+        this.signalBusService.emit("connection_error", 'error_connecting');
       }
     }, 10000);
   }

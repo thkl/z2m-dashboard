@@ -1,10 +1,11 @@
 import { Z2MServer } from '@/app/models/types';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { Component, computed, inject, input, model } from '@angular/core';
+import { Component, computed, effect, inject, input, model } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OptionComponent } from '../../controls/option/option';
 import { InfoOverlayComponent } from '../../controls/infooverlay/infooverlay';
 import { TokenService } from '@/app/services/token.service';
+import { SignalBusService } from '@/app/services/sigbalbus.service';
 
 
 
@@ -25,7 +26,7 @@ export class ChooseServerDialog {
   dialogRef = inject<DialogRef<ChooseServerDialogData>>(DialogRef<ChooseServerDialogData>);
   dialogData = inject(DIALOG_DATA);
   tokenService = inject(TokenService);
-
+  
   host = model<string>("");
   port = model<number>(8080);
   secure = model<boolean>(false);
@@ -41,6 +42,7 @@ export class ChooseServerDialog {
       isActive: this.secure() === true
     }
   })
+ 
 
   async save(): Promise<void> {
     let encryptedToken: string | undefined;
