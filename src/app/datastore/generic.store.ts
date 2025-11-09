@@ -18,6 +18,13 @@ function deepMerge(target: any, source: any): any {
     return result;
 }
 
+function validatePropertyKey(key: string): void {
+    const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
+    if (dangerousKeys.includes(key)) {
+        throw new Error(`Invalid property name: ${key}`);
+    }
+}
+
 export interface BaseEntity {
     ieee_address?: string;
     [key: string]: any;
@@ -218,16 +225,22 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
 
                         // Navigate to the nested property, creating objects as needed
                         for (let i = 0; i < keys.length - 1; i++) {
-                            if (!current[keys[i]] || typeof current[keys[i]] !== 'object') {
-                                current[keys[i]] = {};
+                            const key = keys[i];
+                            validatePropertyKey(key);
+
+                            if (!Object.prototype.hasOwnProperty.call(current, key) || typeof current[key] !== 'object') {
+                                current[key] = {};
                             } else {
-                                current[keys[i]] = { ...current[keys[i]] };
+                                current[key] = { ...current[key] };
                             }
-                            current = current[keys[i]];
+                            const obj = current;
+                            current = obj[key];
                         }
 
                         // Set the final property
-                        current[keys[keys.length - 1]] = newValue;
+                        const finalKey = keys[keys.length - 1];
+                        validatePropertyKey(finalKey);
+                        current[finalKey] = newValue;
                         mergedEntity = updatedEntity as T;
                     } else {
                         mergedEntity = { ...existingEntity, [property]: newValue } as T;
@@ -263,16 +276,21 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
 
                         // Navigate to the nested property, creating objects as needed
                         for (let i = 0; i < keys.length - 1; i++) {
-                            if (!current[keys[i]] || typeof current[keys[i]] !== 'object') {
-                                current[keys[i]] = {};
+                            const key = keys[i];
+                            validatePropertyKey(key);
+
+                            if (!Object.prototype.hasOwnProperty.call(current, key) || typeof current[key] !== 'object') {
+                                current[key] = {};
                             } else {
-                                current[keys[i]] = { ...current[keys[i]] };
+                                current[key] = { ...current[key] };
                             }
-                            current = current[keys[i]];
+                            const obj = current;
+                            current = obj[key];
                         }
 
                         // Get the old value and merge if both are objects
                         const lastKey = keys[keys.length - 1];
+                        validatePropertyKey(lastKey);
                         const oldValue = current[lastKey];
                         const mergedValue = deepMerge(oldValue, newValue);
                         current[lastKey] = mergedValue;

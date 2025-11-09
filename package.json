@@ -6,6 +6,7 @@
     "ng": "ng",
     "sec": "pnpm outdated",
     "start": "ng serve",
+    "security-scan":"semgrep scan --config auto .",
     "increment-version": "node scripts/increment-version.js",
     "build": "npm run increment-version && ng build",
     "watch": "ng build --watch --configuration development",

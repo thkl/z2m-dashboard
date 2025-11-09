@@ -16,12 +16,13 @@ import { SignalBusService } from '@/app/services/sigbalbus.service';
 import { ConnectionManagerService } from '@/app/services/connectionmanager.service';
 import { SettingsService } from '@/app/services/settings.service';
 import { VersionDisplayComponent } from '../components/version-display/version-display.component';
+import { AppMenuComponent } from '@/app/components/appmenu/appmenu';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [RouterModule, TranslateModule, LogView, ResizableContainerComponent, TabContainerComponent, VersionDisplayComponent]
+  imports: [RouterModule, TranslateModule, LogView, ResizableContainerComponent, TabContainerComponent, VersionDisplayComponent,AppMenuComponent]
 })
 export class LayoutComponent {
   sidebarOpen = true;

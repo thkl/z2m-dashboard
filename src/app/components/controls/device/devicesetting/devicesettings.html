@@ -1,64 +1,70 @@
 <div class="wrapper pr-1" style="display: flex; flex-direction: column; width: 100%">
   @for (option of deviceOptions(); track $index) {
-    <div class="device_row">
-      <div class="label flex flex-col">
-        <span>
-          {{ option.label }}
-          @if (option.description) {
-            <InfoOverlayComponent [message]="option.description" style="min-width: 30px"> </InfoOverlayComponent>
-          }
-
-          @if (option.restartRequired) {
-            <InfoOverlayComponent message="CHANGE_OF_THIS_REQUIRES_A_RESTART" color="#FFFF00" icon="warning" style="min-width: 30px"> </InfoOverlayComponent>
-          }
-        </span>
-      </div>
-      @switch (option.type) {
-        @case ('boolean') {
-          <div class="optionCell">
-            <OptionComponent [active]="true" [item]="{ label: '', isActive: option.value === true }" (changed)="changeSetting(option, $event)"></OptionComponent>
-          </div>
-        }
-        @case ('binary') {
-          <div class="optionCell">
-            @if (hasAccess(option.access, AccessMode.SET)) {
-              <OptionComponent [active]="true" [item]="{ label: '', isActive: option.value === true }" (changed)="changeSetting(option, $event)"></OptionComponent>
-            } @else {
-              <span>{{ option.value }}</span>
-            }
-          </div>
-        }
-        @case ('string') {
-          <input class="w-full text-right" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
-        }
-        @case ('Array.number') {
-          <div class="w-full">
-            <DropdownComponent [items]="buildOptionItems(option.enum, option.value)" (changed)="changeSetting(option, $event)" class="w-full"></DropdownComponent>
-          </div>
-        }
-
-        @case ('numeric') {
-          <input class="w-full text-right" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
-        }
-        @case ('number') {
-          <input class="w-full text-right" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
-        }
-
-        @case ('Array.object') {
-          <input class="w-full text-right" [value]="option.value[option.accessor!] ?? ''" (change)="changeSetting(option, $event.target.value)" />
-        }
-
-        @case ('array') {
-          <ArrayInputComponent [items]="option.value" (changed)="changeSetting(option, $event)"></ArrayInputComponent>
-        }
-
-        @default {
-          {{ option.type }}
-        }
-      }
-    </div>
+    <ng-container *ngTemplateOutlet="optionTemplate; context: { option: option, parent: undefined }"></ng-container>
   }
   <div class="buttonBar buttonBarLeft">
     <ButtonComponent title="APPLY_CHANGES" [disabled]="!settingsChanged()" (click)="applySettings()"></ButtonComponent>
   </div>
 </div>
+
+<!-- Main template -->
+<ng-template #optionTemplate let-option="option" let-parent="parent">
+  <div class="device_row">
+    <div class="label flex flex-col">
+      <span>
+        {{ option.label }}
+        @if (option.description) {
+          <InfoOverlayComponent [message]="option.description" style="min-width: 30px"> </InfoOverlayComponent>
+        }
+        @if (option.restartRequired) {
+          <InfoOverlayComponent message="CHANGE_OF_THIS_REQUIRES_A_RESTART" color="#FFFF00" icon="warning" style="min-width: 30px"> </InfoOverlayComponent>
+        }
+      </span>
+    </div>
+    @switch (option.type) {
+      @case ('boolean') {
+        <div class="optionCell">
+          <OptionComponent [active]="true" [item]="{ label: '', isActive: option.value === true }" (changed)="changeSetting(option, $event, parent)"></OptionComponent>
+        </div>
+      }
+      @case ('binary') {
+        <div class="optionCell">
+          @if (hasAccess(option.access, AccessMode.SET)) {
+            <OptionComponent [active]="true" [item]="{ label: '', isActive: option.value === true }" (changed)="changeSetting(option, $event, parent)"></OptionComponent>
+          } @else {
+            <span>{{ option.value }}</span>
+          }
+        </div>
+      }
+      @case ('string') {
+        <input class="w-full text-right" [value]="option.value" (change)="changeSetting(option, $event.target.value, parent)" />
+      }
+      @case ('Array.number') {
+        <div class="w-full">
+          <DropdownComponent [items]="buildOptionItems(option.enum, option.value)" (changed)="changeSetting(option, $event, parent)" class="w-full"></DropdownComponent>
+        </div>
+      }
+      @case ('numeric') {
+        <input class="w-full text-right" [value]="option.value ?? ''" (change)="changeSetting(option, $event.target.value, parent)" />
+      }
+      @case ('number') {
+        <input class="w-full text-right" [value]="option.value ?? ''" (change)="changeSetting(option, $event.target.value, parent)" />
+      }
+      @case ('Array.object') {
+        <input class="w-full text-right" [value]="option.value[option.accessor!] ?? ''" (change)="changeSetting(option, $event.target.value, parent)" />
+      }
+      @case ('array') {
+        <ArrayInputComponent [items]="option.value" (changed)="changeSetting(option, $event, parent)"></ArrayInputComponent>
+      }
+      @case ('composite') {
+        @for (subitem of option.features; track $index) {
+          <ng-container *ngTemplateOutlet="optionTemplate; context: { option: subitem, parent: option }"></ng-container>
+          <div><!--This is a dummy for the sake of the grid--></div>
+        }
+      }
+      @default {
+        {{ option.type }}
+      }
+    }
+  </div>
+</ng-template>

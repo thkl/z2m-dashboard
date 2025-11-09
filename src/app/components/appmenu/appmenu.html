@@ -1,0 +1,19 @@
+<nav class="mt-4">
+  @for (item of menuItems(); track $index) {
+    @if (item.func) {
+      <a (click)="run(item.func)" class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+        <span class="material-symbols-outlined">{{ item.icon }}</span>
+        @if (open()) {
+          <span>{{ item.label | translate }}</span>
+        }
+      </a>
+    } @else {
+      <a [routerLink]="item.link" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+        <span class="material-symbols-outlined">{{ item.icon }}</span>
+        @if (open()) {
+          <span>{{ item.label | translate }}</span>
+        }
+      </a>
+    }
+  }
+</nav>

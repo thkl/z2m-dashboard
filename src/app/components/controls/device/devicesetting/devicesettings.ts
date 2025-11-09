@@ -8,10 +8,12 @@ import { AccessMode, Device, DeviceOption } from '@/app/models/device';
 import { DeviceConfigSchema } from '@/app/models/bridge';
 import { DropdownComponent } from '@/app/components/controls/dropdown/dropdown';
 import { SelectOption } from '@/app/models/types';
+import { NgTemplateOutlet } from '@angular/common';
+import { HumanReadablePipe } from '@/app/pipes/human.pipe';
 
 @Component({
   selector: 'DeviceSettings',
-  imports: [InfoOverlayComponent, OptionComponent,ButtonComponent,ArrayInputComponent,DropdownComponent],
+  imports: [InfoOverlayComponent, OptionComponent, ButtonComponent, ArrayInputComponent, DropdownComponent, NgTemplateOutlet, HumanReadablePipe],
   templateUrl: './devicesettings.html',
   styleUrl: './devicesettings.scss'
 })
@@ -45,22 +47,22 @@ export class DeviceSettings {
         // Handle DeviceConfigSchema
         const schema = section as DeviceConfigSchema;
         // Convert schema properties to DeviceOption[] format
-       
-        const options: DeviceOption[] = Object.entries(schema.properties).map(([key, prop]) => 
-        {
+
+        const options: DeviceOption[] = Object.entries(schema.properties).map(([key, prop]) => {
           const schemaKey = prop.properties ? Object.keys(prop.properties)[0] : undefined;
           return {
-          name: key,
-          label: prop.title || key,
-          description: prop.description,
-          type: prop.type,
-          enum: prop.enum,
-          access: 0, // Set appropriate access mode
-          property: key,
-          value: undefined,
-          accessor:schemaKey,
-          restartRequired:prop.requiresRestart
-        }});
+            name: key,
+            label: prop.title || key,
+            description: prop.description,
+            type: prop.type,
+            enum: prop.enum,
+            access: 0, // Set appropriate access mode
+            property: key,
+            value: undefined,
+            accessor: schemaKey,
+            restartRequired: prop.requiresRestart
+          }
+        });
         this.buildExtendedOptions(options);
       } else if (Array.isArray(section)) {
         // Handle DeviceOption[]
@@ -80,39 +82,62 @@ export class DeviceSettings {
       if (states) {
         option.value = states[option.name] ?? ''
       }
+      if (option.features) {
+        // find the feature with the matching name
+        option.features.forEach(ofe => {
+          console.log(ofe);
+          ofe.value = option.value[ofe.name];
+        })
+      }
     });
+
     this.deviceOptions.set(flattend);
   }
 
-  changeSetting(option: DeviceOption, item: any) {
+  convertValue(option: DeviceOption, value: any) {
+    if (option.type === 'number' || option.type === 'numeric') {
+      return parseFloat(value);
+    } else {
+      return value;
+    }
+
+  }
+
+  changeSetting(option: DeviceOption, item: any, parent: any) {
     if (this.device()) {
-      console.log(item);
-      option.value = item;
-      const data: {[key: string]:any} = {}
+      option.value = this.convertValue(option,item);
+      const data: { [key: string]: any } = {}
       if ((option.value !== null) && (option.value !== '?')) {
         const propKey = option.property;
         if (option.accessor) {
-          const v:any = {};
+          const v: any = {};
           v[option.accessor] = option.value;
           this.device()!.options[propKey] = v;
         } else {
-          this.device()!.options[propKey] = option.value;
+          if (parent) {
+            let po = this.device()!.options[parent.name]
+
+            po[option.name] = option.value;
+            this.device()!.options[parent.name] = po;
+          } else {
+              this.device()!.options[propKey] = option.value;
+          }
         }
         this.settingsChanged.set(true);
       }
     }
   }
 
-  buildOptionItems(items:string[]|undefined,value:any):SelectOption[] {
-    return items ? items.map(item=>{return {label:item,value:item,isSelected:item===value}}) : []
+  buildOptionItems(items: string[] | undefined, value: any): SelectOption[] {
+    return items ? items.map(item => { return { label: item, value: item, isSelected: item === value } }) : []
   }
 
   applySettings() {
-        if (this.device()) {
-       
-          this.deviceService.updateSetting(this.device()!, this.device()!.options);
-          this.settingsChanged.set(false);
+    if (this.device()) {
+
+      this.deviceService.updateSetting(this.device()!, this.device()!.options);
+      this.settingsChanged.set(false);
     }
   }
 }
- 
+

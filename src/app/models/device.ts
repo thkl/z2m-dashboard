@@ -1,6 +1,8 @@
 import { InterviewState, SubFeatureType, UpdateState } from "./constants";
 
 
+ 
+
 export interface DeviceOption {
     access: number;
     description: string;
@@ -15,6 +17,7 @@ export interface DeviceOption {
     enum?: any[];
     accessor?:string;
     restartRequired:boolean;
+    features?:DeviceOption[];
 }
 
 export interface DeviceFeatureVisual {

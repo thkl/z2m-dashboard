@@ -22,25 +22,7 @@
               </svg>
             </button>
           </div>
-
-          <nav class="mt-4">
-            <a routerLink="/dashboard" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-              <span class="material-symbols-outlined">dashboard</span>
-              <span>Dashboard</span>
-            </a>
-            <a routerLink="/devices" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-              <span class="material-symbols-outlined">router</span>
-              <span>Devices</span>
-            </a>
-            <a routerLink="/groups" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-              <span class="material-symbols-outlined">group_work</span>
-              <span>Groups</span>
-            </a>
-            <a routerLink="/network" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-              <span class="material-symbols-outlined">network_node</span>
-              <span>Network</span>
-            </a>
-          </nav>
+          <AppMenuComponent [open]="true"></AppMenuComponent>
         </aside>
       </app-resizable-container>
     } @else {
@@ -52,21 +34,7 @@
             </svg>
           </button>
         </div>
-
-        <nav class="mt-4">
-          <a routerLink="/dashboard" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-            <span class="material-symbols-outlined">dashboard</span>
-          </a>
-          <a routerLink="/devices" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-            <span class="material-symbols-outlined">router</span>
-          </a>
-          <a routerLink="/groups" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-            <span class="material-symbols-outlined">group_work</span>
-          </a>
-          <a routerLink="/network" routerLinkActive="selected text-white" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-            <span class="material-symbols-outlined">network_node</span>
-          </a>
-        </nav>
+        <AppMenuComponent [open]="false"></AppMenuComponent>
       </aside>
     }
   </div>
