@@ -6,10 +6,12 @@ import { InfoOverlayComponent } from '@/app/components/controls/infooverlay/info
 import { OptionComponent } from '@/app/components/controls/option/option';
 import { AccessMode, Device, DeviceOption } from '@/app/models/device';
 import { DeviceConfigSchema } from '@/app/models/bridge';
+import { DropdownComponent } from '@/app/components/controls/dropdown/dropdown';
+import { SelectOption } from '@/app/models/types';
 
 @Component({
   selector: 'DeviceSettings',
-  imports: [InfoOverlayComponent, OptionComponent,ButtonComponent,ArrayInputComponent],
+  imports: [InfoOverlayComponent, OptionComponent,ButtonComponent,ArrayInputComponent,DropdownComponent],
   templateUrl: './devicesettings.html',
   styleUrl: './devicesettings.scss'
 })
@@ -84,6 +86,7 @@ export class DeviceSettings {
 
   changeSetting(option: DeviceOption, item: any) {
     if (this.device()) {
+      console.log(item);
       option.value = item;
       const data: {[key: string]:any} = {}
       if ((option.value !== null) && (option.value !== '?')) {
@@ -98,6 +101,10 @@ export class DeviceSettings {
         this.settingsChanged.set(true);
       }
     }
+  }
+
+  buildOptionItems(items:string[]|undefined,value:any):SelectOption[] {
+    return items ? items.map(item=>{return {label:item,value:item,isSelected:item===value}}) : []
   }
 
   applySettings() {

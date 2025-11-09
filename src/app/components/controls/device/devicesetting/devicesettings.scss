@@ -1,5 +1,5 @@
 .device_row {
-   min-height: 20px;
+  min-height: 20px;
   -webkit-box-pack: justify;
   justify-content: space-between;
   width: 100%;
@@ -10,7 +10,7 @@
   border-bottom-width: 1px;
   border-bottom-color: var(--app-border-color);
   display: grid;
-  grid-template-columns: 50% auto
+  grid-template-columns: 50% 50%;
 }
 
 .buttonBarLeft {
@@ -22,5 +22,11 @@
 
 :host {
   width: 100%;
-    display: flex;
+  display: flex;
+}
+
+.optionCell {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
 }

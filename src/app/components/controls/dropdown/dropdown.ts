@@ -15,12 +15,18 @@ export class DropdownComponent {
   selected = output<SelectOption>();
   isInitialized = false;
   title=input<string>();
+  changed = output<any>();
 
   controlItems = signal<SelectOption[]>([]);
 
   height=computed(()=>{
     return `${this.items().length*32}px`;
   })
+
+  selectedTitle = computed(()=>{
+    const hasSelectedItems = this.items().filter(item=>item.isSelected);
+    return (hasSelectedItems.length>0) ? hasSelectedItems.map(item=>item.label).join("|") : this.title();
+  });
 
   constructor(private elementRef: ElementRef) {
 
@@ -68,7 +74,7 @@ export class DropdownComponent {
   }
 
   selectOne(event: any): void {
-    console.log(event);
+    const item: SelectOption = event;
     const items = this.controlItems().map(item => {
       item.isSelected = (item.label === event.label);
       return item;
@@ -76,6 +82,7 @@ export class DropdownComponent {
     this.controlItems.set(items);
 
     this.selected.emit(event);
+    this.changed.emit(item.value);
     this.isOpen.set(false);
     setTimeout(()=>{
       this.isInitialized = false;

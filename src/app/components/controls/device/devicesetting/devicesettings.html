@@ -15,20 +15,26 @@
       </div>
       @switch (option.type) {
         @case ('boolean') {
-          <OptionComponent [active]="hasAccess(option.access, AccessMode.SET)" [item]="{ label: '', isActive: option.value === true }"></OptionComponent>
+          <div class="optionCell">
+            <OptionComponent [active]="true" [item]="{ label: '', isActive: option.value === true }" (changed)="changeSetting(option, $event)"></OptionComponent>
+          </div>
         }
         @case ('binary') {
-          @if (hasAccess(option.access, AccessMode.SET)) {
-            <OptionComponent [active]="hasAccess(option.access, AccessMode.SET)" [item]="{ label: '', isActive: option.value === true }"></OptionComponent>
-          } @else {
-            <span>{{ option.value }}</span>
-          }
+          <div class="optionCell">
+            @if (hasAccess(option.access, AccessMode.SET)) {
+              <OptionComponent [active]="true" [item]="{ label: '', isActive: option.value === true }" (changed)="changeSetting(option, $event)"></OptionComponent>
+            } @else {
+              <span>{{ option.value }}</span>
+            }
+          </div>
         }
         @case ('string') {
           <input class="w-full text-right" [value]="option.value" (change)="changeSetting(option, $event.target.value)" />
         }
         @case ('Array.number') {
-          {{ option.enum }}
+          <div class="w-full">
+            <DropdownComponent [items]="buildOptionItems(option.enum, option.value)" (changed)="changeSetting(option, $event)" class="w-full"></DropdownComponent>
+          </div>
         }
 
         @case ('numeric') {

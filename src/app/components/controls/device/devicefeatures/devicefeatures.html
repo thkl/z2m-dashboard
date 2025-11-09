@@ -27,7 +27,7 @@
                 <OptionComponent
                   [active]="hasAccess(item.property.access, AccessMode.SET)"
                   [item]="{ label: '', isActive: item.value === 'ON' }"
-                  (clicked)="switch(item.property, $event)"
+                  (changed)="switch(item.property, $event)"
                 ></OptionComponent>
               } @else {
                 <span>{{ item.value }}</span>

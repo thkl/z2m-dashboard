@@ -10,8 +10,8 @@ import { SwitchElement } from '../../../models/types';
 export class OptionComponent {
   item = input.required<SwitchElement>();
   active = input<boolean>(false);
-  clicked = output<SwitchElement>();
-
+  changed = output<SwitchElement>();
+   
   controlItem = signal<SwitchElement>({ label: "ON", isActive: false });
 
   constructor(private cdr: ChangeDetectorRef) {
@@ -26,7 +26,7 @@ export class OptionComponent {
       const newItem = { ... this.controlItem(), isActive };
       this.controlItem.set(newItem);
       this.cdr.detectChanges();
-      this.clicked.emit(this.controlItem());
+      this.changed.emit(this.controlItem());
     }
   }
 }
