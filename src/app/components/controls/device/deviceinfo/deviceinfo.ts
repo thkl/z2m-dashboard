@@ -92,6 +92,9 @@ export class DeviceInfoComponent {
 
   checkUpdate() {
     if (this.device()) {
+      if (this.device()!.update) {
+        this.device()!.update!.check = true;
+      } 
       this.deviceService.checkUpdate(this.device()!);
     }
   }

@@ -110,7 +110,7 @@
 
         @if (device()?.update === undefined || device()?.update?.state !== 'updating') {
           <div class="button">
-            <button class="button-link left" (click)="checkUpdate()">{{ 'CHECK_FOR_UPDATE' | translate }}</button>
+            <button class="button-link left" [disabled]="device()?.update?.check === true" (click)="checkUpdate()">{{ 'CHECK_FOR_UPDATE' | translate }}</button>
           </div>
         }
 

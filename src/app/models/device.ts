@@ -1,7 +1,7 @@
 import { InterviewState, SubFeatureType, UpdateState } from "./constants";
 
 
- 
+
 
 export interface DeviceOption {
     access: number;
@@ -15,9 +15,9 @@ export interface DeviceOption {
     value_off?: string;
     value: any;
     enum?: any[];
-    accessor?:string;
-    restartRequired:boolean;
-    features?:DeviceOption[];
+    accessor?: string;
+    restartRequired: boolean;
+    features?: DeviceOption[];
 }
 
 export interface DeviceFeatureVisual {
@@ -117,6 +117,7 @@ export interface DeviceUpdate {
     state: UpdateState;
     progress?: number;
     remaining?: number;
+    check?: boolean;
 }
 
 
@@ -158,8 +159,21 @@ export interface Binding {
 export interface Endpoint {
     bindings: Binding[];
     clusters: Clusters;
-    configured_reportings: any[];
+    configured_reportings: Reporting[];
     scenes: any[];
+}
+
+
+export interface Reporting {
+    attribute: string;
+    cluster: string;
+    maximum_report_interval: number;
+    minimum_report_interval: number;
+    reportable_change: number;
+}
+
+export interface ReportingExt extends Reporting {
+    endpoint: string
 }
 
 export interface Clusters {
@@ -191,5 +205,5 @@ export interface VisualBinding {
     targetName: string,
     cluster: VisualCluster[],
     isNew: boolean,
-    updating:boolean,
+    updating: boolean,
 }

@@ -15,7 +15,7 @@ export class DeviceService {
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly appService = inject(ApplicationService);
   protected readonly bridgeService = inject(BridgeService);
-
+  protected readonly updateChecks: { [key: string]: string } = {};
 
 
   constructor() {
@@ -24,6 +24,23 @@ export class DeviceService {
     this.ws.subscribeTopicCallback('*/availability', (message) => {
       const { topic, payload } = message;
       this.updateAvailability(topic, payload.state);
+    });
+
+    this.ws.subscribeTopicCallback("bridge/response/device/ota_update/check",(message)=>{
+      const { topic, payload } = message;
+      const ta = payload.transaction;
+      if (ta) {
+        const runningCheck = this.updateChecks[ta];
+        if (runningCheck) {
+          //this is the deviceid reset the update flag
+          const device = this.deviceStore.entities().find(d=>d.ieee_address === runningCheck);
+          if (device && device.update) {
+            console.log("removing check",device)
+            device.update.check = false;
+          }
+          delete this.updateChecks[ta]
+        }
+      }
     });
 
     this.ws.subscribeCatchAllCallback((message) => {
@@ -106,20 +123,23 @@ export class DeviceService {
   }
 
   checkUpdate(device: Device) {
-    this.sendBridgeDeviceRequest("bridge/request/device/ota_update/check", {
+    const ta = this.sendBridgeDeviceRequest("bridge/request/device/ota_update/check", {
       id: device.friendly_name,
     });
+    console.log("Adding check",ta);
+    this.updateChecks[ta] = device.ieee_address;
+    return ta;
   }
 
   performUpdate(device: Device) {
-    this.sendBridgeDeviceRequest("bridge/request/device/ota_update/update", {
+    return this.sendBridgeDeviceRequest("bridge/request/device/ota_update/update", {
       id: device.friendly_name,
     });
   }
 
 
   scheduleUpdate(device: Device) {
-    this.sendBridgeDeviceRequest("bridge/request/device/ota_update/schedule", {
+    return this.sendBridgeDeviceRequest("bridge/request/device/ota_update/schedule", {
       id: device.friendly_name,
     });
   }

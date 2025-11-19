@@ -86,6 +86,9 @@ export class BridgeService {
         this.bridgeInfo.set({ ...bridgeInfo, networkMap: message.payload.data });
       }
     });
+
+    // "bridge/response/device/ota_update/check"
+
   }
 
   permitJoin(time?: number): void {

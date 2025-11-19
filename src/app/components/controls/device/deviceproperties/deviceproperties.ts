@@ -9,11 +9,12 @@ import { Device } from '@/app/models/device';
 import { createStoreView } from '@/app/datastore/generic-store-view';
 import { SearchOperator } from '@/app/datastore/generic.store';
 import { DeviceBindingsComponent } from '@/app/components/controls/device/devicebindings/devicebindings';
+import { DeviceReportingComponent } from '@/app/components/controls/device/devicereporting/devicereporting';
  
 
 @Component({
   selector: 'DevicePropertiesComponent',
-  imports: [DeviceEndpointComponent,ExpansionPanelComponent,DeviceSettings,DeviceBindingsComponent],
+  imports: [DeviceEndpointComponent,ExpansionPanelComponent,DeviceSettings,DeviceBindingsComponent,DeviceReportingComponent],
   templateUrl: './deviceproperties.html',
   styleUrl: './deviceproperties.scss'
 })
