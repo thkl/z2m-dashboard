@@ -1,3 +1,4 @@
+import { SelectOption } from "@/app/models/types";
 import { InterviewState, SubFeatureType, UpdateState } from "./constants";
 
 
@@ -173,7 +174,10 @@ export interface Reporting {
 }
 
 export interface ReportingExt extends Reporting {
-    endpoint: string
+    index:number;
+    endpoint: string;
+    clusters: string[];
+    availableClusters: SelectOption[];
 }
 
 export interface Clusters {

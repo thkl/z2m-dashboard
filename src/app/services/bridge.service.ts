@@ -1,7 +1,7 @@
 import { effect, inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
 import { ApplicationService } from "./app.service";
-import { Bridge, Networkmap } from "../models/bridge";
+import { Bridge, BridgeDefinitions, Networkmap } from "../models/bridge";
 import { BridgeEventStore } from "../datastore/logging.store";
 import * as dummy from '../pages/networkmap/dummy';
 import { Device } from "../models/device";
@@ -44,10 +44,22 @@ export class BridgeService {
       if (message) {
         const { payload } = message;
         if (payload !== null) {
-          this.bridgeInfo.set(payload);
+          this.mergeBridgeInfo(payload, null);
+          //this.bridgeInfo.set(payload);
         }
       }
     });
+
+    this.ws.subscribeTopicCallback('bridge/definitions', (message) => {
+      if (message) {
+        const { payload } = message;
+        if (payload !== null) {
+          this.mergeBridgeInfo(null, payload);
+          //this.bridgeInfo.set(payload);
+        }
+      }
+    })
+
 
     this.ws.subscribeTopicCallback('bridge/devices', (message) => {
       if (message) {
@@ -89,6 +101,18 @@ export class BridgeService {
 
     // "bridge/response/device/ota_update/check"
 
+  }
+
+  mergeBridgeInfo(bridge: Bridge | null, definitions: BridgeDefinitions | null) {
+    console.log("MBI",bridge,definitions)
+    const bi = this.bridgeInfo();
+    const bd = definitions ?? (bi !== null ? bi.definitions : null)
+    if (bridge) {
+      console.log(bd);
+      this.bridgeInfo.set({ ...bridge, definitions: bd });
+    } else {
+      this.bridgeInfo.set({ ...bi!, definitions: bd });
+    }
   }
 
   permitJoin(time?: number): void {
@@ -194,7 +218,7 @@ export class BridgeService {
   }
 
   requestBackup() {
-    return this.appService.sendBridgeRequest("bridge/request/backup", {  });
+    return this.appService.sendBridgeRequest("bridge/request/backup", {});
     /**
      * result is 
      * bridge/response/backup
@@ -209,6 +233,6 @@ export class BridgeService {
   }
 
   requestRestart() {
-    return this.appService.sendBridgeRequest("bridge/request/restart", {  });
+    return this.appService.sendBridgeRequest("bridge/request/restart", {});
   }
 }

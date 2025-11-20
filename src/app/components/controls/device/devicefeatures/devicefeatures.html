@@ -112,7 +112,7 @@
   }
   @if (displayMode() === 'settings') {
     <div class="pl-2 pr-2 flex flex-col grow">
-      <ExpansionPanelComponent label="Raw Data" style="flex-grow: inherit">
+      <ExpansionPanelComponent label="Raw Data" style="flex-grow: inherit" contentStyle="display: flex;flex-grow: inherit;height: 100%;">
         <textarea class="scrollbar w-full bg-transparent grow">{{ deviceFeatures() | human: '' : 2 }}</textarea>
       </ExpansionPanelComponent>
     </div>

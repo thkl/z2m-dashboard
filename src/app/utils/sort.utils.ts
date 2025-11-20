@@ -1,4 +1,5 @@
 import { SortDirection } from '../directives/table-sort.directive';
+import { SelectOption } from "@/app/models/types";
 
 export function sortData<T>(
   data: T[],
@@ -40,13 +41,17 @@ function compareValues(a: any, b: any): number {
 }
 
 
-export function findSmallestMissingNumber(arr: number[],start:number=0): number {
+export function findSmallestMissingNumber(arr: number[], start: number = 0): number {
   const set = new Set(arr);
   let num = start;
-  
+
   while (set.has(num)) {
     num++;
   }
-  
+
   return num;
+}
+
+export function createSelect(input: string[],selected:string[]): SelectOption[] {
+  return input.map((item) => { return { label: item, value: item, isSelected: selected.includes(item) } });
 }

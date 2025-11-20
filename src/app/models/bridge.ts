@@ -14,6 +14,7 @@ export interface Bridge {
     zigbee_herdsman:            ZigbeeHerdsman;
     zigbee_herdsman_converters: ZigbeeHerdsman;
     networkMap:                 Networkmap;
+    definitions:                BridgeDefinitions | null;
 }
 
 export interface Config {
@@ -317,3 +318,232 @@ export enum Type {
     EndDevice = "EndDevice",
     Router = "Router",
 }
+
+//https://github.com/Koenkk/zigbee-herdsman/blob/master/src/zspec/zcl/definition/tstype.ts
+
+export interface AttributeDefinition {
+    ID: number;
+    type: any; //!
+    manufacturerCode?: number;
+}
+
+export interface Parameter {
+    name: string;
+    type: any; //!
+}
+
+
+export enum ParameterCondition {
+    MINIMUM_REMAINING_BUFFER_BYTES = "minimumRemainingBufferBytes",
+    BITMASK_SET = "bitMaskSet",
+    BITFIELD_ENUM = "bitFieldEnum",
+    DATA_TYPE_CLASS_EQUAL = "dataTypeValueTypeEquals",
+    FIELD_EQUAL = "fieldEquals",
+    FIELD_GT = "fieldGT",
+}
+
+export enum DataTypeClass {
+    ANALOG = "ANALOG",
+    DISCRETE = "DISCRETE",
+}
+
+export interface ParameterDefinition extends Parameter {
+    conditions?: (
+        | {type: ParameterCondition.MINIMUM_REMAINING_BUFFER_BYTES; value: number}
+        | {type: ParameterCondition.BITMASK_SET; param: string; mask: number /* not set */; reversed?: boolean}
+        | {type: ParameterCondition.BITFIELD_ENUM; param: string; offset: number; size: number; value: number}
+        | {type: ParameterCondition.DATA_TYPE_CLASS_EQUAL; value: DataTypeClass}
+        | {type: ParameterCondition.FIELD_EQUAL; field: string; value: unknown; reversed?: boolean}
+        | {type: ParameterCondition.FIELD_GT; field: string; value: number /*; reversed?: boolean*/}
+    )[];
+}
+
+export interface CommandDefinition {
+    ID: number;
+    parameters: readonly ParameterDefinition[];
+    response?: number;
+}
+
+export interface ClusterDefinition {
+    ID: number;
+    manufacturerCode?: number;
+    attributes: Readonly<Record<string, Readonly<AttributeDefinition>>>;
+    commands: Readonly<Record<string, Readonly<CommandDefinition>>>;
+    commandsResponse: Readonly<Record<string, Readonly<CommandDefinition>>>;
+}
+
+export interface ClusterDefinition {
+    ID: number;
+    manufacturerCode?: number;
+    attributes: Readonly<Record<string, Readonly<AttributeDefinition>>>;
+    commands: Readonly<Record<string, Readonly<CommandDefinition>>>;
+    commandsResponse: Readonly<Record<string, Readonly<CommandDefinition>>>;
+}
+
+export interface CustomClusters {
+    [k: string]: ClusterDefinition;
+}
+
+export interface BridgeDefinitions {
+    clusters: Readonly<Record<ClusterName, Readonly<ClusterDefinition>>>;
+    custom_clusters: Record<string, CustomClusters>;
+}
+
+export type ClusterName =
+    | "genBasic"
+    | "genPowerCfg"
+    | "genDeviceTempCfg"
+    | "genIdentify"
+    | "genGroups"
+    | "genScenes"
+    | "genOnOff"
+    | "genOnOffSwitchCfg"
+    | "genLevelCtrl"
+    | "genAlarms"
+    | "genTime"
+    | "genRssiLocation"
+    | "genAnalogInput"
+    | "genAnalogOutput"
+    | "genAnalogValue"
+    | "genBinaryInput"
+    | "genBinaryOutput"
+    | "genBinaryValue"
+    | "genMultistateInput"
+    | "genMultistateOutput"
+    | "genMultistateValue"
+    | "genCommissioning"
+    | "genOta"
+    | "genPollCtrl"
+    | "greenPower"
+    | "mobileDeviceCfg"
+    | "neighborCleaning"
+    | "nearestGateway"
+    | "closuresShadeCfg"
+    | "closuresDoorLock"
+    | "closuresWindowCovering"
+    | "barrierControl"
+    | "hvacPumpCfgCtrl"
+    | "hvacThermostat"
+    | "hvacFanCtrl"
+    | "hvacDehumidificationCtrl"
+    | "hvacUserInterfaceCfg"
+    | "lightingColorCtrl"
+    | "lightingBallastCfg"
+    | "msIlluminanceMeasurement"
+    | "msIlluminanceLevelSensing"
+    | "msTemperatureMeasurement"
+    | "msPressureMeasurement"
+    | "msFlowMeasurement"
+    | "msRelativeHumidity"
+    | "msOccupancySensing"
+    | "msLeafWetness"
+    | "msSoilMoisture"
+    | "pHMeasurement"
+    | "msElectricalConductivity"
+    | "msWindSpeed"
+    | "msCarbonMonoxide"
+    | "msCO2"
+    | "msEthylene"
+    | "msEthyleneOxide"
+    | "msHydrogen"
+    | "msHydrogenSulfide"
+    | "msNitricOxide"
+    | "msNitrogenDioxide"
+    | "msOxygen"
+    | "msOzone"
+    | "msSulfurDioxide"
+    | "msDissolvedOxygen"
+    | "msBromate"
+    | "msChloramines"
+    | "msChlorine"
+    | "msFecalColiformAndEColi"
+    | "msFluoride"
+    | "msHaloaceticAcids"
+    | "msTotalTrihalomethanes"
+    | "msTotalColiformBacteria"
+    | "msTurbidity"
+    | "msCopper"
+    | "msLead"
+    | "msManganese"
+    | "msSulfate"
+    | "msBromodichloromethane"
+    | "msBromoform"
+    | "msChlorodibromomethane"
+    | "msChloroform"
+    | "msSodium"
+    | "pm25Measurement"
+    | "msFormaldehyde"
+    | "pm1Measurement"
+    | "pm10Measurement"
+    | "ssIasZone"
+    | "ssIasAce"
+    | "ssIasWd"
+    | "piGenericTunnel"
+    | "piBacnetProtocolTunnel"
+    | "piAnalogInputReg"
+    | "piAnalogInputExt"
+    | "piAnalogOutputReg"
+    | "piAnalogOutputExt"
+    | "piAnalogValueReg"
+    | "piAnalogValueExt"
+    | "piBinaryInputReg"
+    | "piBinaryInputExt"
+    | "piBinaryOutputReg"
+    | "piBinaryOutputExt"
+    | "piBinaryValueReg"
+    | "piBinaryValueExt"
+    | "piMultistateInputReg"
+    | "piMultistateInputExt"
+    | "piMultistateOutputReg"
+    | "piMultistateOutputExt"
+    | "piMultistateValueReg"
+    | "piMultistateValueExt"
+    | "pi11073ProtocolTunnel"
+    | "piIso7818ProtocolTunnel"
+    | "piRetailTunnel"
+    | "seMetering"
+    | "tunneling"
+    | "telecommunicationsInformation"
+    | "telecommunicationsVoiceOverZigbee"
+    | "telecommunicationsChatting"
+    | "haApplianceIdentification"
+    | "haMeterIdentification"
+    | "haApplianceEventsAlerts"
+    | "haApplianceStatistics"
+    | "haElectricalMeasurement"
+    | "haDiagnostic"
+    | "touchlink"
+    | "manuSpecificClusterAduroSmart"
+    | "manuSpecificOsram"
+    | "manuSpecificPhilips"
+    | "manuSpecificPhilips2"
+    | "manuSpecificSinope"
+    | "manuSpecificLegrandDevices"
+    | "manuSpecificLegrandDevices2"
+    | "manuSpecificLegrandDevices3"
+    | "wiserDeviceInfo"
+    | "manuSpecificTuya"
+    | "manuSpecificLumi"
+    | "liXeePrivate"
+    | "manuSpecificTuya2"
+    | "manuSpecificTuya3"
+    | "manuSpecificCentraliteHumidity"
+    | "manuSpecificSmartThingsArrivalSensor"
+    | "manuSpecificSamsungAccelerometer"
+    | "tradfriButton"
+    | "schneiderSpecificPilotMode"
+    | "elkoOccupancySettingClusterServer"
+    | "elkoSwitchConfigurationClusterServer"
+    | "manuSpecificSchneiderLightSwitchConfiguration"
+    | "manuSpecificSchneiderFanSwitchConfiguration"
+    | "sprutVoc"
+    | "sprutNoise"
+    | "sprutIrBlaster"
+    | "manuSpecificSiglisZigfred"
+    | "owonClearMetering"
+    | "zosungIRTransmit"
+    | "zosungIRControl"
+    | "manuSpecificAssaDoorLock"
+    | "manuSpecificDoorman"
+    | "manuSpecificProfalux1"
+    | "manuSpecificAmazonWWAH";

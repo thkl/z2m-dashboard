@@ -32,9 +32,9 @@ import { TranslateModule } from '@ngx-translate/core';
 const allColumns: ColumnDef<Device>[] = [
   { id: 'status', label: 'STATUS', hideLabel: true, minWidth: 30, maxWidth: 30, sortable: false },
   { id: 'icon', label: 'ICON', hideLabel: true, minWidth: 50, maxWidth: 50, sortable: false },
-  { id: 'name', label: 'NAME', minWidth: 250, maxWidth: 450, sortable: true },
-  { id: 'vendor', label: 'MANUFACTURER', minWidth: 150, maxWidth: 250, sortable: true },
-  { id: 'model', label: 'MODEL', minWidth: 200, maxWidth: 400, sortable: true },
+  { id: 'name', label: 'NAME', minWidth: 150, maxWidth: 350, sortable: true },
+  { id: 'vendor', label: 'MANUFACTURER', minWidth: 80, maxWidth: 150, sortable: true },
+  { id: 'model', label: 'MODEL', minWidth: 100, maxWidth: 150, sortable: true },
   { id: 'linkquality', label: 'LQI', minWidth: 60, maxWidth: 80, sortable: true },
   { id: 'battery', label: 'BATTERY', minWidth: 80, maxWidth: 120, sortable: true },
   { id: 'lastseenhuman', label: 'LAST_SEEN', minWidth: 120, maxWidth: 150, sortable: true },

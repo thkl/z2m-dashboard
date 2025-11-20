@@ -1,0 +1,19 @@
+.report_row {
+  display: flex;
+  min-height: 20px;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  gap: 8px;
+  color: var(--app-text-color);
+  align-items: center;
+}
+
+
+.reporting {
+    margin:5px;
+    border: 1px solid var(--app-border-color);
+    gap: 2px
+}

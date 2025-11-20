@@ -16,3 +16,9 @@
   border-bottom-width: 1px;
   border-bottom-color: var(--app-border-color);
 }
+
+.rawData {
+  display: flex;
+  flex-grow: inherit;
+  height: 100%;
+}

@@ -17,6 +17,7 @@ export class ExpansionPanelComponent {
 
   colorTrigger = input<boolean>(true);
   contentClass = input<string>();
+  contentStyle = input<string>();
   titleClass = input<string>();
 
   constructor() {

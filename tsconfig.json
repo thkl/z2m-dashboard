@@ -18,6 +18,8 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "incremental": true,
+    "tsBuildInfoFile": "./.tsbuildinfo"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
