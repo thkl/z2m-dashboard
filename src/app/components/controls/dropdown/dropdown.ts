@@ -75,6 +75,12 @@ export class DropdownComponent {
 
   selectOne(event: any): void {
     const item: SelectOption = event;
+
+    // items with value starting with --sep-- are seperators 
+    if (item.value?.indexOf('--sep--')===0) {
+      return
+    }
+
     const items = this.controlItems().map(item => {
       item.isSelected = (item.label === event.label);
       return item;

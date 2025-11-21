@@ -4,7 +4,7 @@ import { ApplicationService } from "./app.service";
 import { Bridge, BridgeDefinitions, Networkmap } from "../models/bridge";
 import { BridgeEventStore } from "../datastore/logging.store";
 import * as dummy from '../pages/networkmap/dummy';
-import { Device } from "../models/device";
+import { Device, ReportingExt } from "../models/device";
 import { createDeviceStoreExtensions, DeviceStore } from "../datastore/device.store";
 import { GroupStore } from "../datastore/group.store";
 import { TranslateService } from "@ngx-translate/core";
@@ -234,5 +234,18 @@ export class BridgeService {
 
   requestRestart() {
     return this.appService.sendBridgeRequest("bridge/request/restart", {});
+  }
+
+  configureReporting(deviceName:string,repData:ReportingExt) {
+    const data  = {
+      attribute : repData.attribute,
+      cluster : repData.cluster,
+      endpoint : repData.endpoint,
+      id : deviceName,
+      maximum_report_interval:repData.maximum_report_interval,
+      minimum_report_interval:repData.minimum_report_interval,
+      reportable_change:repData.reportable_change
+    }
+    return this.appService.sendBridgeRequest("bridge/request/device/configure_reporting", data);
   }
 }

@@ -177,7 +177,7 @@ export interface ReportingExt extends Reporting {
     index:number;
     endpoint: string;
     clusters: string[];
-    availableClusters: SelectOption[];
+    visualClusterList: SelectOption[];
 }
 
 export interface Clusters {

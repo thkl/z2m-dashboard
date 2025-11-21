@@ -202,7 +202,7 @@ export class DeviceBindingsComponent {
   availabelDevices = computed(() => { return this.deviceStore.entities().filter(d => d.ieee_address !== this.device()?.ieee_address); })
 
   deviceNameList = computed(() => {
-    const groupSpacer = [{ isSelected: false, label: `--------${this.translate.instant("GROUPS")}--------`, value: '', disabled: true }]
+    const groupSpacer = [{ isSelected: false, label: `--------${this.translate.instant("GROUPS")}--------`, value: '--sep--groups', disabled: true }]
     const gv = this.groupStore.entities();
     const groupOptions = gv.map((g: Group) => {
       return {
@@ -217,7 +217,7 @@ export class DeviceBindingsComponent {
       return 0;
     });
 
-    const deviceSpacer = [{ isSelected: false, label: `--------${this.translate.instant("DEVICES")}--------`, value: '', disabled: true }]
+    const deviceSpacer = [{ isSelected: false, label: `--------${this.translate.instant("DEVICES")}--------`, value: '--sep--device', disabled: true }]
     const dv = this.availabelDevices();
     const deviceOptions = dv.map((d: Device) => {
       return {

@@ -1,11 +1,10 @@
 import { DropdownComponent } from '@/app/components/controls/dropdown/dropdown';
-import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
 import { DeviceStore } from '@/app/datastore/device.store';
 import { ClusterName, DeviceConfigSchema } from '@/app/models/bridge';
 import { Device, ReportingExt } from '@/app/models/device';
 import { SelectOption } from '@/app/models/types';
 import { BridgeService } from '@/app/services/bridge.service';
-import { createSelect } from '@/app/utils/sort.utils';
+import { createSelect, updateSelect } from '@/app/utils/sort.utils';
 import { Component, computed, effect, inject, input, signal, Signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -20,7 +19,7 @@ export class DeviceReportingComponent {
   device = input.required<Device | null>()
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly bridgeService = inject(BridgeService);
-  firstChange = false;
+  private readonly firstChange = signal(false);
 
   intDevice = signal<Device | null>(null);
   reportings = signal<ReportingExt[]>([]);
@@ -32,20 +31,19 @@ export class DeviceReportingComponent {
 
   constructor() {
     effect(() => {
-      if (!this.firstChange) {
+      if (!this.firstChange()) {
         this.intDevice.set(this.device());
       }
     })
 
     effect(() => {
-      if (!this.firstChange) {
+      if (!this.firstChange()) {
         const device = this.intDevice();
         const reps: ReportingExt[] = [];
         let index = 0;
         if (device) {
           // Iterate thru the endpoints
-          Object.keys(device.endpoints).forEach(epid => {
-            const endpoint = device.endpoints[epid];
+          Object.entries(device.endpoints).forEach(([epid, endpoint]) => {
             const configured_reportings = endpoint.configured_reportings;
             if (Array.isArray(configured_reportings)) {
               configured_reportings.forEach(rep => {
@@ -63,7 +61,11 @@ export class DeviceReportingComponent {
                   }
                 }
 
-                const merged = new Set([...possibleClusters, ...availableClusters]);
+                const clusterList = [
+                  ...[{ label: ' --- Available Cluster ---', value: '--sep-- avail', isSelected: false }],
+                  ...createSelect(Array.from(availableClusters), [rep.cluster]),
+                  ...[{ label: ' --- Possible Cluster ---', value: '--sep-- possible', isSelected: false }],
+                  ...createSelect(Array.from(possibleClusters), [rep.cluster])]
 
                 reps.push({
                   index,
@@ -73,8 +75,8 @@ export class DeviceReportingComponent {
                   maximum_report_interval: rep.maximum_report_interval,
                   minimum_report_interval: rep.minimum_report_interval,
                   reportable_change: rep.reportable_change,
-                  clusters:Array.from(merged),
-                  availableClusters: createSelect(Array.from(merged), [rep.cluster])
+                  clusters: Array.from(new Set([...possibleClusters, ...availableClusters])),
+                  visualClusterList: clusterList
                 });
                 index = index + 1;
               })
@@ -91,6 +93,9 @@ export class DeviceReportingComponent {
     return bi()?.config_schema.definitions.device;
   });
 
+
+
+
   attributesForCluster(cluster: string, selected: string): SelectOption[] {
     const bi = this.bridgeService.bridgeInfo()
     if (bi && bi.definitions) {
@@ -103,18 +108,69 @@ export class DeviceReportingComponent {
     return [];
   }
 
-  changeCluster(index: number, change: SelectOption) {
-    const cluster = change.value!;
-    this.firstChange = true;
+  private updateReporting(index: number, updater: (rep: ReportingExt) => void): void {
+    this.firstChange.set(true);
     const rep = this.reportings();
     if (rep) {
-      const selRep = rep.find(r=>r.index===index);
+      const selRep = rep.find(r => r.index === index);
       if (selRep) {
-        selRep.cluster = cluster;
-        selRep.availableClusters = createSelect(selRep.clusters, [cluster])
+        updater(selRep);
       }
     }
     this.reportings.set(rep);
   }
 
+  changeCluster(index: number, change: SelectOption) {
+    this.updateReporting(index, (rep) => {
+      rep.cluster = change.value!;
+      rep.visualClusterList = updateSelect(rep.visualClusterList, [change.value!]);
+    });
+  }
+
+  changeAttribute(index: number, change: SelectOption) {
+    this.updateReporting(index, (rep) => {
+      rep.attribute = change.value!;
+    });
+  }
+
+  changeMinRep(index: number, minRep: string) {
+    this.updateReporting(index, (rep) => {
+      rep.minimum_report_interval = parseInt(minRep);
+    });
+  }
+
+  changeMaxRep(index: number, maxRep: string) {
+    this.updateReporting(index, (rep) => {
+      rep.maximum_report_interval = parseInt(maxRep);
+    });
+  }
+
+  changeMinRepChange(index: number, rchange: string) {
+    this.updateReporting(index, (rep) => {
+      rep.reportable_change = parseInt(rchange);
+    });
+  }
+
+  configureReporting(index: number) {
+    if (this.device()) {
+      const rep = this.reportings();
+      const selected = rep.find(r => r.index === index);
+      if (selected) {
+        this.firstChange.set(false);
+        this.bridgeService.configureReporting(this.device()!.friendly_name, selected);
+      }
+    }
+  }
+
+  
+  deactivateReporting(index: number) {
+    if (this.device()) {
+      const rep = this.reportings();
+      const selected = rep.find(r => r.index === index);
+      if (selected) {
+        this.firstChange.set(false);
+        this.bridgeService.configureReporting(this.device()!.friendly_name, {...selected,maximum_report_interval:65535});
+      }
+    }
+  }
 }

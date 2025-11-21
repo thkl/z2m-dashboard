@@ -52,6 +52,10 @@ export function findSmallestMissingNumber(arr: number[], start: number = 0): num
   return num;
 }
 
-export function createSelect(input: string[],selected:string[]): SelectOption[] {
+export function createSelect(input: string[], selected: string[]): SelectOption[] {
   return input.map((item) => { return { label: item, value: item, isSelected: selected.includes(item) } });
+}
+
+export function updateSelect(input: SelectOption[], selected: string[]): SelectOption[] {
+  return input.map((option) => { return { ...option, isSelected: (option.value) ? selected.includes(option.value) : false } });
 }
