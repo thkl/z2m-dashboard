@@ -20,7 +20,7 @@
   :stage: build
   :image: node:20
   :script:
-  - npm install
+  - npm install --legacy-peer-deps
   - npm audit
 
   - npm run build
