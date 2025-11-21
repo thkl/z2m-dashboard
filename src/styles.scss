@@ -548,11 +548,19 @@ button.right {
 
 .button-link:disabled {
   color: var(--button-disabled-color);
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .button-link-danger {
   color: var(--app-link-danger-color);
   font-size: var(--app-font-size);
+}
+
+.button-link-danger:disabled {
+  color: var(--button-disabled-color);
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .button-link.disabled {
@@ -659,6 +667,10 @@ nav.inspector {
 
 .button.hint {
   height: 68px;
+}
+
+.button:disabled {
+
 }
 
 .cdk-overlay-backdrop-showing {

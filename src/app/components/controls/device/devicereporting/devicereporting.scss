@@ -17,3 +17,26 @@
     border: 1px solid var(--app-border-color);
     gap: 2px
 }
+
+.icon-overlay {
+  animation: spin 2s linear infinite;
+  max-width: 30px;
+}
+
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.indicator_container {
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 50px;
+  position: relative;
+}
