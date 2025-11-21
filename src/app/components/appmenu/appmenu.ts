@@ -1,5 +1,5 @@
 import { BridgeService } from '@/app/services/bridge.service';
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, inject, input, Signal, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';

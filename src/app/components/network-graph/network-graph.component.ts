@@ -9,7 +9,7 @@ import {
   signal,
   effect,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import * as d3 from 'd3';
 import { Link, Node, Networkmap, NetworkNodeData } from '../../models/bridge';
 
@@ -65,7 +65,7 @@ const SIMULATION_CONFIG = {
 @Component({
   selector: 'app-network-graph',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './network-graph.component.html',
   styleUrls: ['./network-graph.component.scss'],
 })
