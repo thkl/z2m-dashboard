@@ -1,29 +1,29 @@
 <div class="container">
-  <ExpansionPanelComponent label="Cluster" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
+  <ExpansionPanelComponent label="{{ 'CLUSTER' | translate }}" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
     <div class="wrapper">
       <DeviceEndpointComponent [endpoints]="device()?.endpoints ?? {}"></DeviceEndpointComponent>
     </div>
   </ExpansionPanelComponent>
 
-  <ExpansionPanelComponent label="Settings" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
+  <ExpansionPanelComponent label="{{ 'SETTINGS' | translate }}" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
     <div class="wrapper">
       <DeviceSettings [device]="device()" [section]="bridgeDeviceOptions()"></DeviceSettings>
     </div>
   </ExpansionPanelComponent>
 
-  <ExpansionPanelComponent label="Extended Settings" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
+  <ExpansionPanelComponent label="{{ 'EXTENDED_SETTINGS' | translate }}" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
     <div class="wrapper">
       <DeviceSettings [device]="device()" [section]="device()?.definition?.options ?? []"></DeviceSettings>
     </div>
   </ExpansionPanelComponent>
 
-  <ExpansionPanelComponent label="Bindings" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
+  <ExpansionPanelComponent label="{{ 'BINDINGS' | translate }}" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
     <div class="wrapper">
       <DeviceBindingsComponent [device]="device()"></DeviceBindingsComponent>
     </div>
   </ExpansionPanelComponent>
 
-  <ExpansionPanelComponent label="Reportings" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
+  <ExpansionPanelComponent label="{{ 'REPORTINGS' | translate }}" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
     <div class="wrapper">
       <DeviceReportingComponent [device]="device()"></DeviceReportingComponent>
     </div>

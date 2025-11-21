@@ -1,6 +1,6 @@
 @if (reportings().length === 0) {
   <div class="report_row">
-    <p class="label">No reportings found</p>
+    <p class="label">{{ 'NO_REPORTINGS' | translate }}</p>
   </div>
 } @else {
   @for (rep of reportings(); track rep.index) {

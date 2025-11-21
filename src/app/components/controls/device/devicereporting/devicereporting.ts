@@ -6,7 +6,7 @@ import { SelectOption } from '@/app/models/types';
 import { BridgeService } from '@/app/services/bridge.service';
 import { SignalBusService } from '@/app/services/sigbalbus.service';
 import { createSelect, updateSelect } from '@/app/utils/sort.utils';
-import { Component, computed, effect, inject, Injector, input, runInInjectionContext, signal, Signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, Signal, ChangeDetectionStrategy } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -46,7 +46,6 @@ export class DeviceReportingComponent {
   /** Tracks if this is the first change to prevent processing initial state */
   private readonly firstChange = signal(false);
   protected readonly signalBusService = inject(SignalBusService);
-  private injector = inject(Injector);
 
   /** List of configured reportings for the device */
   reportings = signal<ReportingExt[]>([]);
@@ -60,6 +59,13 @@ export class DeviceReportingComponent {
   private responseHandler = signal<((result: any) => void) | null>(null);
   /** Indicates whether a request is currently running (derived from responseTransactionId) */
   protected readonly requestRunning = computed(() => this.responseTransactionId() !== null);
+  /** Holds the response signal for the current transaction */
+  private responseSignal = signal<Signal<any> | null>(null);
+  /** Computed response value from the active response signal */
+  private responseValue = computed(() => {
+    const respSig = this.responseSignal();
+    return respSig ? respSig() : null;
+  });
 
   /**
    * Computed list of available device endpoints for dropdown selection.
@@ -111,20 +117,22 @@ export class DeviceReportingComponent {
 
     effect(() => {
       const transactionId = this.responseTransactionId();
-      const handler = this.responseHandler();
-      if (transactionId && handler) {
+      if (transactionId) {
         const response$ = this.signalBusService.onState<any>(`bridge-response-${transactionId}`);
-        runInInjectionContext(this.injector, () => {
-          effect(() => {
-            const result = response$();
-            if (result) {
-              this.responseTransactionId.set(null);
-              this.responseHandler.set(null);
-              handler(result);
-              this.signalBusService.reset(`bridge-response-${transactionId}`);
-            }
-          });
-        });
+        this.responseSignal.set(response$);
+      }
+    })
+
+    effect(() => {
+      const result = this.responseValue();
+      const handler = this.responseHandler();
+      const transactionId = this.responseTransactionId();
+      if (result && handler && transactionId) {
+        handler(result);
+        this.signalBusService.reset(`bridge-response-${transactionId}`);
+        this.responseTransactionId.set(null);
+        this.responseHandler.set(null);
+        this.responseSignal.set(null);
       }
     })
   }
