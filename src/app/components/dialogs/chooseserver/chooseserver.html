@@ -53,7 +53,7 @@
         <div class="col-20">
           <label for="input_newSecure">{{ 'IS_SECURE' | translate }}</label>
           <div class="input-container">
-            <OptionComponent class="w-full text-left panel" id="input_newSecure" [active]="true" [item]="isSecure()" (clicked)="changeIsSecure($event)" />
+            <OptionComponent class="w-full text-left panel" id="input_newSecure" [active]="true" [item]="isSecure()" (changed)="changeIsSecure($event)" />
             <InfoOverlayComponent message="{{ 'IS_SECURE_DESCRIPTION' | translate }}" style="min-width: 30px"> </InfoOverlayComponent>
           </div>
         </div>

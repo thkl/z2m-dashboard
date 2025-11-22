@@ -19,7 +19,10 @@ export class VersionService {
 
   private async initializeVersion(): Promise<void> {
     try {
-      const versionData = await firstValueFrom(this.http.get<VersionInfo>('/version.json'));
+      const currentPath = window.location.pathname;
+      const directory = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+      const versionUrl = `${directory}version.json`;
+      const versionData = await firstValueFrom(this.http.get<VersionInfo>(versionUrl));
       this.versionSignal.set(versionData.version);
     } catch (error) {
       console.warn('Failed to load version.json:', error);

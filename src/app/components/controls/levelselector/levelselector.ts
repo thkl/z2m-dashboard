@@ -1,4 +1,4 @@
-import { Component, input, output, ElementRef, viewChild, signal, effect } from '@angular/core';
+import { Component, input, output, ElementRef, viewChild, signal, effect, AfterViewInit, OnDestroy } from '@angular/core';
 
 export interface LevelMarkOption {
   percent : number;
@@ -12,7 +12,7 @@ export interface LevelMarkOption {
   templateUrl: './levelselector.html',
   styleUrl: './levelselector.scss'
 })
-export class LevelSelectorComponent {
+export class LevelSelectorComponent implements AfterViewInit, OnDestroy {
 
     marks = input<LevelMarkOption[]>([]);
     value = input<number>(0);
@@ -20,6 +20,7 @@ export class LevelSelectorComponent {
     max = input<number>(100);
     valueChange = output<number>();
 
+    thumbElement = viewChild<ElementRef>('thumb');
     trackElement = viewChild<ElementRef>('track');
     currentValue = signal<number>(0); // Internal percentage (0-100)
 
@@ -34,6 +35,20 @@ export class LevelSelectorComponent {
                 this.currentValue.set(percent);
             }
         });
+    }
+
+    ngAfterViewInit() {
+        const thumb = this.thumbElement()?.nativeElement;
+        if (thumb) {
+            thumb.addEventListener('touchstart', this.onThumbTouchStart, { passive: true });
+        }
+    }
+
+    ngOnDestroy() {
+        const thumb = this.thumbElement()?.nativeElement;
+        if (thumb) {
+            thumb.removeEventListener('touchstart', this.onThumbTouchStart);
+        }
     }
 
     private valueToPercent(value: number): number {
@@ -58,12 +73,11 @@ export class LevelSelectorComponent {
         document.addEventListener('mouseup', this.onMouseUp);
     }
 
-    onThumbTouchStart(event: TouchEvent) {
-        event.preventDefault();
+    private onThumbTouchStart = () => {
         this.isDragging = true;
 
         // Add global touch event listeners
-        document.addEventListener('touchmove', this.onTouchMove);
+        document.addEventListener('touchmove', this.onTouchMove, { passive: false });
         document.addEventListener('touchend', this.onTouchEnd);
     }
 
@@ -74,6 +88,7 @@ export class LevelSelectorComponent {
 
     private onTouchMove = (event: TouchEvent) => {
         if (!this.isDragging || event.touches.length === 0) return;
+        event.preventDefault();
         this.updatePosition(event.touches[0].clientX);
     }
 

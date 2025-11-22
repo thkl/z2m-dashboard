@@ -9,6 +9,9 @@ import { DropdownComponent } from '../controls/dropdown/dropdown';
 import { LogLevels } from '../../models/constants';
 import { ApplicationService } from '../../services/app.service';
 import { SettingsService } from '@/app/services/settings.service';
+import { BridgeEvent } from '@/app/models/bridge';
+import { Dialog } from '@angular/cdk/dialog';
+import { LogViewDialog } from '@/app/components/dialogs/logview/logview';
 
 @Component({
   selector: 'LogView',
@@ -21,7 +24,8 @@ export class LogView {
   protected readonly bridgeService = inject(BridgeService);
   protected readonly appService = inject(ApplicationService);
   protected readonly settingsService = inject(SettingsService);
-  
+  protected readonly dialog = inject(Dialog)
+
   selectedLevels = signal<string[]>([]);
   serverOptions = signal<SelectOption[]>([]);
   log_level = signal<string>('');
@@ -61,6 +65,7 @@ export class LogView {
 
   protected readonly reversedEntries = computed(() => {
     const selectedLevels = this.selectedLevels();
+    console.log(this.eventStore.entities().length)
     return [...this.eventStore.entities()].reverse().filter(e => selectedLevels ? selectedLevels.indexOf(e.level) > -1 : true);
   });
 
@@ -86,5 +91,13 @@ export class LogView {
     const levels = selected.map((e) => e.value ?? '');
     this.settingsService.setPreference("log_levels", levels);
     this.selectedLevels.set(levels);
+  }
+
+  openLog(logItem: BridgeEvent): void {
+    const dialogRef = this.dialog.open(LogViewDialog, {
+      height: '400px',
+      width: '600px',
+      data: logItem
+    });
   }
 }

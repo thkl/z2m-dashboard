@@ -1,0 +1,17 @@
+<div class="modal">
+  <header>
+    <div class="title">{{ 'EVENT_DETAILS' | translate }}</div>
+  </header>
+  <div class="message">
+    <p class="ml-2 message-date">{{ data.date | date: 'HH:mm:ss' }}</p>
+    <p class="ml-2 message-text">{{ data.message }}</p>
+  </div>
+  <footer>
+    <div class="buttonGroup">
+      <div class="warp"></div>
+      <div class="ml-auto flex flex-row gap-2">
+        <button class="primary min-w-20" (click)="close()">{{ 'CLOSE' | translate }}</button>
+      </div>
+    </div>
+  </footer>
+</div>

@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withHashLocation, withRouterConfig } from '@angular/router';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 
@@ -10,7 +10,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes,withHashLocation()),
     provideHttpClient(),
     provideTranslateService({
       loader: {

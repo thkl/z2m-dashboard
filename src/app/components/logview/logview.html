@@ -23,7 +23,7 @@
   <div class="logSection-content scrollbar">
     <div class="logcontent overflow-y-auto scrollbar">
       @for (item of reversedEntries(); track $index) {
-        <div class="flex flex-row items-center logline">
+        <div class="flex flex-row items-center logline cursor-pointer" (click)="openLog(item)">
           <div class="level ml-2">
             <div class="ll">
               <div class="level_container">

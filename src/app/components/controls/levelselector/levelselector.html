@@ -11,11 +11,11 @@
           }
         </div>
         <div
+          #thumb
           class="thumb"
           [style.top.px]="4"
           [style.left.%]="currentValue()"
           (mousedown)="onThumbMouseDown($event)"
-          (touchstart)="onThumbTouchStart($event)"
         >
           <div
             style="
