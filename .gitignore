@@ -41,3 +41,7 @@ testem.log
 .DS_Store
 Thumbs.db
 gl-sast-report.json
+.claude/*
+.vscode/*
+analyse.sast.json
+*-sast-report.*
