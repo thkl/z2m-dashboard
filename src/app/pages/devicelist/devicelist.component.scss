@@ -1,4 +1,6 @@
-
+:host {
+  width: 100%;
+}
 
 .icon {
     max-width: 30px;
@@ -55,4 +57,9 @@ span{
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Allow table container to shrink below content width in flexbox */
+.scrollbar {
+  min-width: 0;
 }

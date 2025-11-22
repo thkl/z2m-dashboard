@@ -1,4 +1,4 @@
-<table cdk-table [dataSource]="dataSource() || []" [trackBy]="trackBy.bind(this)">
+<table cdk-table [dataSource]="dataSource() || []" [trackBy]="trackBy.bind(this)" [style.width]="'100%'" [style.min-width.px]="totalTableWidth()">
   <!-- Dynamic column definitions -->
   @for (column of visibleColumns(); track column.id) {
     <ng-container [cdkColumnDef]="column.id">

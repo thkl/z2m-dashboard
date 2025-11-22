@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, Signal, signal } from "@angular/core";
+import { computed, effect, inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
 import { ApplicationService } from "./app.service";
 import { Bridge, BridgeDefinitions, Networkmap } from "../models/bridge";
@@ -11,6 +11,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { Group } from "../models/group";
 import { GroupSceneData } from "../models/types";
 import { SignalBusService } from "@/app/services/sigbalbus.service";
+import { NGXLogger } from "ngx-logger";
 
 @Injectable({
   providedIn: 'root'
@@ -23,18 +24,24 @@ export class BridgeService {
   protected readonly groupStore = inject(GroupStore);
   private translate = inject(TranslateService);
   protected readonly signalBusService = inject(SignalBusService);
-  public bridgeInfo = signal<Bridge | null>(null);
+  private intBridgeInfo = signal<Bridge | null>(null);
   private lastSeenTimer?: number;
-
+  private logger = inject(NGXLogger);
   private extensions = createDeviceStoreExtensions(this.deviceStore, this.translate);
   private clearSignal = this.signalBusService.onEvent<any>("clear_stores");
+
+
+
+  public bridgeInfo = computed(() => {
+    return this.intBridgeInfo();
+  });
 
   constructor() {
 
     effect(() => {
       const cs = this.clearSignal();
       if (cs !== null && cs.data) {
-        this.bridgeInfo.set(null);
+        this.intBridgeInfo.set(null);
         this.deviceStore.clear();
         this.groupStore.clear();
       }
@@ -45,7 +52,6 @@ export class BridgeService {
         const { payload } = message;
         if (payload !== null) {
           this.mergeBridgeInfo(payload, null);
-          //this.bridgeInfo.set(payload);
         }
       }
     });
@@ -55,7 +61,6 @@ export class BridgeService {
         const { payload } = message;
         if (payload !== null) {
           this.mergeBridgeInfo(null, payload);
-          //this.bridgeInfo.set(payload);
         }
       }
     })
@@ -90,28 +95,50 @@ export class BridgeService {
       }
     });
 
+    this.ws.subscribeTopicCallback('bridge/health', (message) => {
+      if (message) {
+        const { payload } = message;
+        if (payload !== null) {
+          this.updateBridgeHealth(payload);
+        }
+      }
+    })
+
 
     this.ws.subscribeTopicCallback('bridge/response/networkmap', (message) => {
-      const bridgeInfo = this.bridgeInfo();
+      const bridgeInfo = this.intBridgeInfo();
       if (bridgeInfo) {
-        console.log("set new bridgeinfo")
-        this.bridgeInfo.set({ ...bridgeInfo, networkMap: message.payload.data });
+        this.logger.debug("set new bridgeinfo")
+        this.intBridgeInfo.set({ ...bridgeInfo, networkMap: message.payload.data });
       }
     });
 
     // "bridge/response/device/ota_update/check"
-
   }
 
+  updateBridgeHealth(payload: any) {
+    const bi = this.intBridgeInfo();
+    if (bi !== null) {
+      this.intBridgeInfo.set({
+        ...bi, health: {
+          mqtt: payload.mqtt,
+          os: payload.os,
+          process: payload.process,
+          response_time: payload.response_time
+        }
+      });
+    }
+  }
+
+
   mergeBridgeInfo(bridge: Bridge | null, definitions: BridgeDefinitions | null) {
-    console.log("MBI",bridge,definitions)
-    const bi = this.bridgeInfo();
+    this.logger.debug("mergeBridgeInfo", bridge, definitions)
+    const bi = this.intBridgeInfo();
     const bd = definitions ?? (bi !== null ? bi.definitions : null)
     if (bridge) {
-      console.log(bd);
-      this.bridgeInfo.set({ ...bridge, definitions: bd });
+      this.intBridgeInfo.set({ ...bridge, definitions: bd });
     } else {
-      this.bridgeInfo.set({ ...bi!, definitions: bd });
+      this.intBridgeInfo.set({ ...bi!, definitions: bd });
     }
   }
 
@@ -143,14 +170,14 @@ export class BridgeService {
   }
 
   addDevices(deviceList: Device[]): void {
-    console.log("Set All Devices")
+    this.logger.debug("Set All Devices")
     const devicelist = this.deviceStore.entities();
 
     // copy the old state or create an empty one
     deviceList.forEach(device => {
 
       // set the device option values from the bridge info devices 
-      const bridgeDevice = this.bridgeInfo()?.config.devices[device.ieee_address];
+      const bridgeDevice = this.intBridgeInfo()?.config.devices[device.ieee_address];
       if (bridgeDevice) {
         device.options = bridgeDevice;
       }
@@ -186,7 +213,7 @@ export class BridgeService {
   }
 
   clear(): void {
-    this.bridgeInfo.set(null);
+    this.intBridgeInfo.set(null);
   }
 
   saveScene(groupName: string, data: GroupSceneData) {
@@ -236,15 +263,15 @@ export class BridgeService {
     return this.appService.sendBridgeRequest("bridge/request/restart", {});
   }
 
-  configureReporting(deviceName:string,repData:ReportingExt) {
-    const data  = {
-      attribute : repData.attribute,
-      cluster : repData.cluster,
-      endpoint : repData.endpoint,
-      id : deviceName,
-      maximum_report_interval:repData.maximum_report_interval,
-      minimum_report_interval:repData.minimum_report_interval,
-      reportable_change:repData.reportable_change
+  configureReporting(deviceName: string, repData: ReportingExt) {
+    const data = {
+      attribute: repData.attribute,
+      cluster: repData.cluster,
+      endpoint: repData.endpoint,
+      id: deviceName,
+      maximum_report_interval: repData.maximum_report_interval,
+      minimum_report_interval: repData.minimum_report_interval,
+      reportable_change: repData.reportable_change
     }
     return this.appService.sendBridgeRequest("bridge/request/device/configure_reporting", data);
   }

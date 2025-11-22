@@ -43,6 +43,10 @@ const allColumns: ColumnDef<Device>[] = [
   { id: 'type', label: 'DEVICE_TYPE', minWidth: 50, maxWidth: 100, sortable: true },
   { id: 'firmware_state', label: 'FIRMWARE_STATE', minWidth: 100, maxWidth: 100, sortable: true },
   { id: 'availability', label: 'AVAILABILITY', minWidth: 50, maxWidth: 100, sortable: true },
+  { id: 'health_messages', label: 'HEALTH_MESSAGE', minWidth: 80, maxWidth: 80, sortable: true },
+  { id: 'health_messages_sec', label: 'HEALTH_MESSAGE_PERSEC', minWidth: 80, maxWidth: 80, sortable: true },
+  { id: 'health_adr_change', label: 'HEALTH_ADRCHG', minWidth: 80, maxWidth: 80, sortable: true },
+  { id: 'health_leave_count', label: 'HEALTH_LEAVECNT', minWidth: 80, maxWidth: 80, sortable: true },
 
 ];
 

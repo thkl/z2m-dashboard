@@ -2,8 +2,6 @@ import { SelectOption } from "@/app/models/types";
 import { InterviewState, SubFeatureType, UpdateState } from "./constants";
 
 
-
-
 export interface DeviceOption {
     access: number;
     description: string;
@@ -122,6 +120,13 @@ export interface DeviceUpdate {
 }
 
 
+export interface DeviceHealth {
+    leave_count: number;
+    messages: number;
+    messages_per_sec: number;
+    network_address_changes: number;
+}
+
 export interface Device {
     date_code: string;
     definition: DeviceDefinition;
@@ -143,6 +148,7 @@ export interface Device {
     state: DeviceState;
     options: { [key: string]: any };
     update?: DeviceUpdate;
+    health?: DeviceHealth;
 }
 
 export interface BindingTarget {
@@ -174,7 +180,7 @@ export interface Reporting {
 }
 
 export interface ReportingExt extends Reporting {
-    index:number;
+    index: number;
     endpoint: string;
     clusters: string[];
     visualClusterList: SelectOption[];

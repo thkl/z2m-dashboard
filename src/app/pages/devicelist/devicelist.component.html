@@ -1,4 +1,4 @@
-<div class="flex w-full overflow-x-hidden h-full">
+<div class="flex w-full h-full">
   <SettingsBarComponent>
     <span class="mt-2">Filter</span>
     <SearchInput class="mt-2" (searchChange)="applySearch($event)"></SearchInput>
@@ -27,7 +27,7 @@
     </div>
   </SettingsBarComponent>
 
-  <div class="w-full ml-2 overflow-y-auto scrollbar">
+  <div class="flex-1 ml-2 overflow-auto scrollbar">
     <TableComponent
       [dataSource]="datasource"
       [config]="tableConfig()"
@@ -82,6 +82,26 @@
       <!-- availability cell -->
       <ng-template appTableCell="availability" let-device>
         <DeviceAvailability [device]="device" />
+      </ng-template>
+
+      <!-- health_messages cell -->
+      <ng-template appTableCell="health_messages" let-device>
+        {{ device.health ? (device.health.messages ?? '-') : '-' }}
+      </ng-template>
+
+      <!-- health_messages_sec cell -->
+      <ng-template appTableCell="health_messages_sec" let-device>
+        {{ device.health ? (device.health.messages_per_sec ?? '-') : '-' }}
+      </ng-template>
+
+      <!-- health_adr_change cell -->
+      <ng-template appTableCell="health_adr_change" let-device>
+        {{ device.health ? (device.health.network_address_changes ?? '-') : '-' }}
+      </ng-template>
+
+      <!-- health_leave_count cell -->
+      <ng-template appTableCell="health_leave_count" let-device>
+        {{ device.health ? (device.health.leave_count ?? '-') : '-' }}
       </ng-template>
 
       <!-- supported cell -->

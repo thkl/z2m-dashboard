@@ -1,74 +1,101 @@
 export interface Bridge {
-    commit:                     string;
-    config:                     Config;
-    config_schema:              {definitions:BridgeConfigSchema};
-    coordinator:                Coordinator;
-    log_level:                  string;
-    mqtt:                       BridgeMqtt;
-    network:                    Network;
-    os:                         OS;
-    permit_join:                boolean;
-    permit_join_end?:           number;
-    restart_required:           boolean;
-    version:                    string;
-    zigbee_herdsman:            ZigbeeHerdsman;
+    commit: string;
+    config: Config;
+    config_schema: { definitions: BridgeConfigSchema };
+    coordinator: Coordinator;
+    log_level: string;
+    mqtt: BridgeMqtt;
+    network: Network;
+    os: OS;
+    permit_join: boolean;
+    permit_join_end?: number;
+    restart_required: boolean;
+    version: string;
+    zigbee_herdsman: ZigbeeHerdsman;
     zigbee_herdsman_converters: ZigbeeHerdsman;
-    networkMap:                 Networkmap;
-    definitions:                BridgeDefinitions | null;
+    networkMap: Networkmap;
+    definitions: BridgeDefinitions | null;
+    health?: BridgeHealth
+}
+
+export interface MQTTHealth {
+    connected: boolean;
+    published: number;
+    queued: number;
+    received: number;
+}
+
+export interface OSHealth {
+    load_average: number[];
+    memory_percent: number;
+    memory_used_mb: number;
+}
+
+export interface ProcessHealth {
+    memory_percent: number;
+    memory_used_mb: number;
+    uptime_sec: number
+}
+
+export interface BridgeHealth {
+    mqtt: MQTTHealth;
+    os: OSHealth;
+    process: ProcessHealth;
+    response_time: number;
 }
 
 export interface Config {
-    advanced:       Advanced;
-    availability:   Availability;
-    blocklist:      any[];
+    advanced: Advanced;
+    availability: Availability;
+    blocklist: any[];
     device_options: ConfigSchema;
-    devices:        ConfigSchema;
-    frontend:       Frontend;
-    groups:         ConfigSchema;
-    health:         Health;
-    homeassistant:  Homeassistant;
-    map_options:    MapOptions;
-    mqtt:           ConfigMqtt;
-    ota:            Ota;
-    passlist:       any[];
-    serial:         Serial;
-    version:        number;
+    devices: ConfigSchema;
+    frontend: Frontend;
+    groups: ConfigSchema;
+    health: Health;
+    homeassistant: Homeassistant;
+    map_options: MapOptions;
+    mqtt: ConfigMqtt;
+    ota: Ota;
+    passlist: any[];
+    serial: Serial;
+    version: number;
 }
 
 export interface Advanced {
-    cache_state:                 boolean;
-    cache_state_persistent:      boolean;
+    cache_state: boolean;
+    cache_state_persistent: boolean;
     cache_state_send_on_startup: boolean;
-    channel:                     number;
-    elapsed:                     boolean;
-    ext_pan_id:                  number[];
-    last_seen:                   string;
-    log_console_json:            boolean;
-    log_debug_namespace_ignore:  string;
-    log_debug_to_mqtt_frontend:  boolean;
-    log_directories_to_keep:     number;
-    log_directory:               string;
-    log_file:                    string;
-    log_level:                   string;
-    log_namespaced_levels:       ConfigSchema;
-    log_output:                  string[];
-    log_rotation:                boolean;
-    log_symlink_current:         boolean;
-    log_syslog:                  ConfigSchema;
-    output:                      string;
-    pan_id:                      number;
-    timestamp_format:            string;
+    channel: number;
+    elapsed: boolean;
+    ext_pan_id: number[];
+    last_seen: string;
+    log_console_json: boolean;
+    log_debug_namespace_ignore: string;
+    log_debug_to_mqtt_frontend: boolean;
+    log_directories_to_keep: number;
+    log_directory: string;
+    log_file: string;
+    log_level: string;
+    log_namespaced_levels: ConfigSchema;
+    log_output: string[];
+    log_rotation: boolean;
+    log_symlink_current: boolean;
+    log_syslog: ConfigSchema;
+    output: string;
+    pan_id: number;
+    timestamp_format: string;
 }
 
 export interface BridgeConfigSchema {
     device: DeviceConfigSchema;
-    group:  Group;
+    group: Group;
 }
 
 export interface DeviceConfigSchema {
     properties: DevicePropertySchema;
-    required:   string[];
-    type:       string;
+    required: string[];
+    type: string;
 }
 
 export interface DevicePropertySchema {
@@ -76,73 +103,73 @@ export interface DevicePropertySchema {
 }
 
 export interface BridgeDeviceProperty {
-    description : string;
+    description: string;
     requiresRestart: boolean;
     title: string;
     type: string;
-    examples?:any[];
-    items?:any[];
-    enum?:any[];
-    properties?:BridgeDeviceProperty
+    examples?: any[];
+    items?: any[];
+    enum?: any[];
+    properties?: BridgeDeviceProperty
 }
- 
+
 
 export interface FriendlyName {
     type: string;
 }
- 
+
 export interface Qos {
     description: string;
-    enum:        number[];
-    title:       string;
-    type:        string[];
+    enum: number[];
+    title: string;
+    type: string[];
 }
 
 export interface Group {
     properties: GroupProperties;
-    required:   string[];
-    type:       string;
+    required: string[];
+    type: string;
 }
 
 export interface GroupProperties {
     filtered_attributes: FilteredAttributes;
-    friendly_name:       FriendlyName;
-    off_state:           OffState;
-    optimistic:          FriendlyName;
-    qos:                 Qos;
-    retain:              FriendlyName;
+    friendly_name: FriendlyName;
+    off_state: OffState;
+    optimistic: FriendlyName;
+    qos: Qos;
+    retain: FriendlyName;
 }
 
 export interface FilteredAttributes {
     items: FriendlyName;
-    type:  string;
+    type: string;
 }
 
 export interface OffState {
-    default:         string;
-    description:     string;
-    enum:            string[];
+    default: string;
+    description: string;
+    enum: string[];
     requiresRestart: boolean;
-    title:           string;
-    type:            string[];
+    title: string;
+    type: string[];
 }
 
 
 export interface ConfigSchema {
-      [key: string]: any;
+    [key: string]: any;
 }
 
 export interface Availability {
-    active:  Active;
+    active: Active;
     enabled: boolean;
     passive: Passive;
 }
 
 export interface Active {
-    backoff:             boolean;
-    max_jitter:          number;
+    backoff: boolean;
+    max_jitter: number;
     pause_on_backoff_gt: number;
-    timeout:             number;
+    timeout: number;
 }
 
 export interface Passive {
@@ -151,22 +178,22 @@ export interface Passive {
 
 export interface Frontend {
     base_url: string;
-    enabled:  boolean;
-    package:  string;
-    port:     number;
+    enabled: boolean;
+    package: string;
+    port: number;
 }
 
 export interface Health {
-    interval:       number;
+    interval: number;
     reset_on_check: boolean;
 }
 
 export interface Homeassistant {
-    discovery_topic:             string;
-    enabled:                     boolean;
+    discovery_topic: string;
+    enabled: boolean;
     experimental_event_entities: boolean;
-    legacy_action_sensor:        boolean;
-    status_topic:                string;
+    legacy_action_sensor: boolean;
+    status_topic: string;
 }
 
 export interface MapOptions {
@@ -185,72 +212,72 @@ export interface Colors {
 
 export interface Fill {
     coordinator: string;
-    enddevice:   string;
-    router:      string;
+    enddevice: string;
+    router: string;
 }
 
 export interface Line {
-    active:   string;
+    active: string;
     inactive: string;
 }
 
 export interface ConfigMqtt {
-    base_topic:                 string;
-    force_disable_retain:       boolean;
+    base_topic: string;
+    force_disable_retain: boolean;
     include_device_information: boolean;
-    keepalive:                  number;
-    maximum_packet_size:        number;
-    reject_unauthorized:        boolean;
-    server:                     string;
-    user:                       string;
-    version:                    number;
+    keepalive: number;
+    maximum_packet_size: number;
+    reject_unauthorized: boolean;
+    server: string;
+    user: string;
+    version: number;
 }
 
 export interface Ota {
-    default_maximum_data_size:      number;
+    default_maximum_data_size: number;
     disable_automatic_update_check: boolean;
-    image_block_response_delay:     number;
-    update_check_interval:          number;
+    image_block_response_delay: number;
+    update_check_interval: number;
 }
 
 export interface Serial {
-    adapter:     string;
-    baudrate:    number;
+    adapter: string;
+    baudrate: number;
     disable_led: boolean;
-    port:        string;
+    port: string;
 }
 
 export interface Coordinator {
     ieee_address: string;
-    meta:         Meta;
-    type:         string;
+    meta: Meta;
+    type: string;
 }
 
 export interface Meta {
-    maintrel:     number;
-    majorrel:     number;
-    minorrel:     number;
-    product:      number;
-    revision:     number;
+    maintrel: number;
+    majorrel: number;
+    minorrel: number;
+    product: number;
+    revision: number;
     transportrev: number;
 }
 
 export interface BridgeMqtt {
-    server:  string;
+    server: string;
     version: number;
 }
 
 export interface Network {
-    channel:         number;
+    channel: number;
     extended_pan_id: string;
-    pan_id:          number;
+    pan_id: number;
 }
 
 export interface OS {
-    cpus:         string;
-    memory_mb:    number;
+    cpus: string;
+    memory_mb: number;
     node_version: string;
-    version:      string;
+    version: string;
 }
 
 export interface ZigbeeHerdsman {
@@ -259,16 +286,16 @@ export interface ZigbeeHerdsman {
 
 
 export interface BridgeEvent {
-    uuid:string;
-    date:Date;
-    level:string;
-    message:string;
+    uuid: string;
+    date: Date;
+    level: string;
+    message: string;
 }
 
 export interface Networkmap {
     routes: boolean;
-    type:   string;
-    value:  NetworkNodeData;
+    type: string;
+    value: NetworkNodeData;
 }
 
 export interface NetworkNodeData {
@@ -277,40 +304,40 @@ export interface NetworkNodeData {
 }
 
 export interface Link {
-    depth:          number;
-    linkquality:    number;
-    lqi:            number;
-    relationship:   number;
-    routes:         any[];
-    source:         Source;
+    depth: number;
+    linkquality: number;
+    lqi: number;
+    relationship: number;
+    routes: any[];
+    source: Source;
     sourceIeeeAddr: string;
-    sourceNwkAddr:  number;
-    target:         Source;
+    sourceNwkAddr: number;
+    target: Source;
     targetIeeeAddr: string;
 }
 
 export interface Source {
-    ieeeAddr:       string;
+    ieeeAddr: string;
     networkAddress: number;
 }
 
 export interface Node {
-    failed?:           any[];
-    friendlyName:      string;
-    ieeeAddr:          string;
-    lastSeen:          number;
-    networkAddress:    number;
-    type:              Type;
-    definition?:       Definition;
+    failed?: any[];
+    friendlyName: string;
+    ieeeAddr: string;
+    lastSeen: number;
+    networkAddress: number;
+    type: Type;
+    definition?: Definition;
     manufacturerName?: string;
-    modelID?:          string;
+    modelID?: string;
 }
 
 export interface Definition {
     description: string;
-    model:       string;
-    supports:    string;
-    vendor:      string;
+    model: string;
+    supports: string;
+    vendor: string;
 }
 
 export enum Type {
@@ -349,12 +376,12 @@ export enum DataTypeClass {
 
 export interface ParameterDefinition extends Parameter {
     conditions?: (
-        | {type: ParameterCondition.MINIMUM_REMAINING_BUFFER_BYTES; value: number}
-        | {type: ParameterCondition.BITMASK_SET; param: string; mask: number /* not set */; reversed?: boolean}
-        | {type: ParameterCondition.BITFIELD_ENUM; param: string; offset: number; size: number; value: number}
-        | {type: ParameterCondition.DATA_TYPE_CLASS_EQUAL; value: DataTypeClass}
-        | {type: ParameterCondition.FIELD_EQUAL; field: string; value: unknown; reversed?: boolean}
-        | {type: ParameterCondition.FIELD_GT; field: string; value: number /*; reversed?: boolean*/}
+        | { type: ParameterCondition.MINIMUM_REMAINING_BUFFER_BYTES; value: number }
+        | { type: ParameterCondition.BITMASK_SET; param: string; mask: number /* not set */; reversed?: boolean }
+        | { type: ParameterCondition.BITFIELD_ENUM; param: string; offset: number; size: number; value: number }
+        | { type: ParameterCondition.DATA_TYPE_CLASS_EQUAL; value: DataTypeClass }
+        | { type: ParameterCondition.FIELD_EQUAL; field: string; value: unknown; reversed?: boolean }
+        | { type: ParameterCondition.FIELD_GT; field: string; value: number /*; reversed?: boolean*/ }
     )[];
 }
 

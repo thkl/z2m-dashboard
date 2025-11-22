@@ -87,6 +87,12 @@ export class TableComponent<T> implements AfterViewInit {
     return order.filter(id => visible.some(col => col.id === id));
   });
 
+  /** Total width of all visible columns */
+  totalTableWidth = computed(() => {
+    const visible = this.visibleColumns();
+    return visible.reduce((sum, col) => sum + (col.maxWidth || 0), 0);
+  });
+
   constructor(private cdr: ChangeDetectorRef) {
     // Sync internal columnOrder signal with input columnOrderSignal
     effect(() => {

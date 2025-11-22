@@ -8,7 +8,7 @@
     <p class="text-sm opacity-70">{{ deviceStore.entities().length }}</p>
   </div>
   <div class="p-6 rounded-2xl panel shadow">
-    <h2 class="text-lg font-semibold mb-2">Version {{ info()?.version }}</h2>
+    <h2 class="text-lg font-semibold mb-2" (click)="openSysInfo()">Version {{ info()?.version }}</h2>
     <p class="text-sm opacity-70">
       <a target="_blank" class="link" href="https://github.com/Koenkk/zigbee2mqtt/releases/">Commit {{ info()?.commit }}</a>
     </p>

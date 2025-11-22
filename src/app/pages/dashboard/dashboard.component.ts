@@ -10,6 +10,8 @@ import { SearchInput } from '@/app/components/controls/searchinput/searchinput';
 import { Device } from '@/app/models/device';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 import { DeviceImage } from '@/app/components/controls/device/device-image/device-image';
+import { Dialog } from '@angular/cdk/dialog';
+import { SystemInfoDialog } from '@/app/components/dialogs/systeminfo/systeminfo';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +26,7 @@ export class DashboardComponent {
   protected readonly groupStore = inject(GroupStore);
   protected readonly router = inject(Router);
   protected readonly tabManager = inject(PropertyTabManagerService);
+  protected readonly dialog = inject(Dialog);
 
   search = signal('');
 
@@ -78,5 +81,12 @@ export class DashboardComponent {
 
   goToGroups(): void {
     this.router.navigate(["groups"]);
+  }
+
+  openSysInfo():void {
+      const dialogRef = this.dialog.open(SystemInfoDialog, {
+          height: '400px',
+          width: '600px',
+        });
   }
 }

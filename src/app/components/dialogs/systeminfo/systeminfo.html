@@ -1,0 +1,40 @@
+<div class="modal">
+  <header>
+    <div class="title">{{ 'SYSTEM_INFO' | translate }}</div>
+  </header>
+  <div class="message">
+    <div class="row">
+      <div class="w-1/3">{{ 'SYSTEM' | translate }}</div>
+      <div class="w-2/3">{{ bridgeInfo?.os?.version }}</div>
+    </div>
+    <div class="row">
+      <div class="w-1/3">{{ 'CPU/MEMORY' | translate }}</div>
+      <div class="w-2/3">{{ bridgeInfo?.os?.cpus }} / Memory: {{ bridgeInfo?.os?.memory_mb }} MB</div>
+    </div>
+    <div class="row">
+      <div class="w-1/3">{{ 'NODE_VERSION' | translate }}</div>
+      <div class="w-2/3">{{ bridgeInfo?.os?.node_version }}</div>
+    </div>
+
+    <div class="row">
+      <div class="w-1/3">{{ 'MQTT' | translate }}</div>
+      <div class="w-2/3">{{ bridgeInfo?.mqtt?.server }} / Version: {{ bridgeInfo?.mqtt?.version }}</div>
+    </div>
+    <div class="row">
+      <div class="w-1/3">{{ 'COORDINATOR' | translate }}</div>
+      <div class="w-2/3">{{ bridgeInfo?.coordinator?.type }} / Address: {{ bridgeInfo?.coordinator?.ieee_address }}</div>
+    </div>
+    <div class="row">
+      <div class="w-1/3">{{ 'NETWORK' | translate }}</div>
+      <div class="w-2/3">Channel: {{ bridgeInfo?.network?.channel }} PanId: {{ bridgeInfo?.network?.pan_id }} ({{ bridgeInfo?.network?.extended_pan_id }})</div>
+    </div>
+  </div>
+  <footer>
+    <div class="buttonGroup">
+      <div class="warp"></div>
+      <div class="ml-auto flex flex-row gap-2">
+        <button class="primary min-w-20" (click)="close()">{{ 'CLOSE' | translate }}</button>
+      </div>
+    </div>
+  </footer>
+</div>

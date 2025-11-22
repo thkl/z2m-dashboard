@@ -1,5 +1,4 @@
 table {
-  width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
   border-spacing: 0;
@@ -42,6 +41,7 @@ tr {
 th {
   display: table-cell;
   box-sizing: border-box;
+  word-wrap:break-word;
   font-size: var(--table-header-font-size);
 }
 
@@ -83,7 +83,6 @@ tr.selected {
 /* Last column stretches to fill remaining space */
 th.last-column,
 td.last-column {
-  flex: 1;
   overflow: visible;
   text-overflow: clip;
 }
@@ -91,12 +90,6 @@ td.last-column {
 td.last-column {
   word-break: break-word;
   white-space: normal;
-}
-
-/* Non-last columns: prevent flex growth, maintain their configured width */
-th:not(.last-column),
-td:not(.last-column) {
-  flex: 0 0 auto;
 }
 
 /* Drag and drop styles */
