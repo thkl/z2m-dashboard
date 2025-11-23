@@ -55,7 +55,7 @@ const allColumns: ColumnDef<Device>[] = [
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar, TimeToPipe, DeviceAvailability,SettingsBarComponent]
+  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar, TimeToPipe, DeviceAvailability, SettingsBarComponent]
 })
 export class DeviceListComponent {
 
@@ -66,7 +66,7 @@ export class DeviceListComponent {
   protected readonly bridgeService = inject(BridgeService);
   protected readonly tabManager = inject(PropertyTabManagerService);
   protected readonly settingsService = inject(SettingsService);
-  
+
   // Displayed columns signal for column visibility management
   displayedColumns = signal<string[]>([]);
 
@@ -78,7 +78,7 @@ export class DeviceListComponent {
     const sortDir = this.sortDirection();
     return {
       columns: allColumns,
-      trackByFn: (index: number, device: Device) => { 
+      trackByFn: (index: number, device: Device) => {
         const t = device.ieee_address || index;
         return t;
       },
@@ -304,6 +304,14 @@ export class DeviceListComponent {
         return device.update?.state ?? 0;
       case 'ieee_address':
         return device.ieee_address ?? '';
+      case 'health_messages':
+        return device.health ? (device.health.messages ?? -1) : -1;
+      case 'health_messages_sec':
+        return device.health ? (device.health.messages_per_sec ?? -1) : -1;
+      case 'health_adr_change':
+        return device.health ? (device.health.network_address_changes ?? -1) : -1;
+      case 'health_leave_count':
+        return  device.health ? (device.health.leave_count ?? -1) : -1 ;
 
 
       default:
@@ -329,18 +337,18 @@ export class DeviceListComponent {
   selectDevice(deviceID: string) {
     this.deviceStore.setSelectedEntityById(deviceID);
     this.applicationService.inspector = 'device';
-    const device = this.deviceStore.entities().find(e=>e.ieee_address===deviceID);
+    const device = this.deviceStore.entities().find(e => e.ieee_address === deviceID);
     if (device) {
-     this.tabManager.openTab({
-      id: deviceID,
-      label: device.friendly_name,
+      this.tabManager.openTab({
+        id: deviceID,
+        label: device.friendly_name,
 
-      data:{ieee_address:deviceID},
-      component: DeviceInspectorComponent,
-      iconComponent:DeviceImage,
-      iconData:{device}
-    });
-  }
+        data: { ieee_address: deviceID },
+        component: DeviceInspectorComponent,
+        iconComponent: DeviceImage,
+        iconData: { device }
+      });
+    }
   }
 
   vendorsSelectionChanged(selected: SelectOption | SelectOption[]) {
