@@ -17,6 +17,12 @@
     </div>
   </ExpansionPanelComponent>
 
+  <ExpansionPanelComponent label="{{ 'GROUPS' | translate }}" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
+    <div class="wrapper">
+      <DeviceGroupsComponent [ieee_address]="device()?.ieee_address"></DeviceGroupsComponent>
+    </div>
+  </ExpansionPanelComponent>
+
   <ExpansionPanelComponent label="{{ 'BINDINGS' | translate }}" style="flex-grow: inherit" class="panel" contentClass="content_filled" [colorTrigger]="false">
     <div class="wrapper">
       <DeviceBindingsComponent [device]="device()"></DeviceBindingsComponent>

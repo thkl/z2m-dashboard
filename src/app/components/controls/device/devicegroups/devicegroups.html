@@ -1,0 +1,15 @@
+<div class="containerwrapper" style="display: flex; flex-direction: column">
+  <div class="label">{{ 'CURRENT_GROUPS' | translate }}</div>
+  <div class="container">
+    @for (group of groups(); track group.id) {
+      <div class="row items-center">
+        <div class="w-2/3">{{ group.friendly_name }}</div>
+        <div class="w-1/3">
+          <div class="button ml-2">
+            <button class="button-link-danger left" (click)="removeDeviceFromGroup(group.id)">{{ 'REMOVE_DEVICE' | translate }}</button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

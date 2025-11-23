@@ -94,6 +94,24 @@
         <span class="value">{{ `zigbee.${device()?.interview_state}` | translate }}</span>
       </div>
 
+      <div class="device_row" style="margin-top: 3em">
+        <span class="label">{{ 'HEALTH_MESSAGE' | translate }}</span>
+        <span class="value">{{ device()?.health ? device()!.health!.messages : '-' }}</span>
+      </div>
+
+      <div class="device_row">
+        <span class="label">{{ 'HEALTH_MESSAGE_PERSEC' | translate }}</span>
+        <span class="value">{{ device()?.health ? device()!.health!.messages_per_sec : '-' }}</span>
+      </div>
+      <div class="device_row">
+        <span class="label">{{ 'HEALTH_ADRCHG' | translate }}</span>
+        <span class="value">{{ device()?.health ? device()!.health!.network_address_changes : '-' }}</span>
+      </div>
+      <div class="device_row" style="margin-bottom: 3em">
+        <span class="label">{{ 'HEALTH_LEAVECNT' | translate }}</span>
+        <span class="value">{{ device()?.health ? device()!.health!.leave_count : '-' }}</span>
+      </div>
+
       <div class="buttonBar mt-3 panel">
         @if (device()?.update && device()?.update?.state === 'available') {
           <div class="button">

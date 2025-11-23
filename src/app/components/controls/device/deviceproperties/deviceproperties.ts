@@ -11,11 +11,12 @@ import { SearchOperator } from '@/app/datastore/generic.store';
 import { DeviceBindingsComponent } from '@/app/components/controls/device/devicebindings/devicebindings';
 import { DeviceReportingComponent } from '@/app/components/controls/device/devicereporting/devicereporting';
 import { TranslateModule } from '@ngx-translate/core';
+import { DeviceGroupsComponent } from "../devicegroups/devicegroups";
  
 
 @Component({
   selector: 'DevicePropertiesComponent',
-  imports: [DeviceEndpointComponent,ExpansionPanelComponent,DeviceSettings,DeviceBindingsComponent,DeviceReportingComponent,TranslateModule],
+  imports: [DeviceEndpointComponent, ExpansionPanelComponent, DeviceSettings, DeviceBindingsComponent, DeviceReportingComponent, TranslateModule, DeviceGroupsComponent],
   templateUrl: './deviceproperties.html',
   styleUrl: './deviceproperties.scss'
 })
@@ -41,6 +42,4 @@ export class DevicePropertiesComponent {
 
     return devicesView().length > 0 ? devicesView()[0] : null
   });
-
-
 }
