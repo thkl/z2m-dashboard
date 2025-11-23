@@ -1,0 +1,5 @@
+{
+    "zigbee.SUCCESSFUL": "Erfolgreich",
+    "zigbee.IN_PROGRESS": "wird ausgeführt",
+    "zigbee.UNKNOWN":"unbekannt"
+}
