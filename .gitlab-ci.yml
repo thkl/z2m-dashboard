@@ -26,7 +26,7 @@
   - npm run build
   :artifacts:
     :paths:
-    - dist/zigbee2mqtt-ui/browser
+    - dist
     :expire_in: 1 day
 include:
   - template: Jobs/SAST.gitlab-ci.yml
@@ -59,12 +59,12 @@ sast:
         {
           echo "cd $DEPLOY_PATH"
           # Create all directories first (in order of depth)
-          find dist/zigbee2mqtt-ui/browser -type d ! -name browser | sed 's|dist/zigbee2mqtt-ui/browser/||' | sed '/^$/d' | sort | while read dir; do
+          find dist/ -type d ! -name browser | sed 's|dist/||' | sed '/^$/d' | sort | while read dir; do
             echo "mkdir $dir"
           done
           # Upload all files
-          find dist/zigbee2mqtt-ui/browser -type f | while read file; do
-            relpath="${file#dist/zigbee2mqtt-ui/browser/}"
+          find dist/ -type f | while read file; do
+            relpath="${file#dist/}"
             echo "put $file $relpath"
           done
           echo "quit"
