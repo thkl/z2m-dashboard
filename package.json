@@ -7,7 +7,7 @@
     "sec": "pnpm outdated",
     "start": "ng serve",
     "security-scan": "semgrep scan --config auto .",
-    "build-page":"ng build  --base-href /z2m-dashboard/",
+    "build-page":"npm run increment-version && ng build  --base-href /z2m-dashboard/;npx angular-cli-ghpages --dir=dist --repo=https://github.com/thkl/z2m-dashboard.git",
     "increment-version": "node scripts/increment-version.js",
     "build": "npm run increment-version && ng build",
     "watch": "ng build --watch --configuration development",
