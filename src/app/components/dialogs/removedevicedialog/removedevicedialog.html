@@ -5,10 +5,10 @@
   <div class="message">
     <span>{{ 'REMOVE_DEVICE_MESSAGE' | translate: { name: data.device.friendly_name } }}</span>
     <div class="mt-3">
-      <OptionComponent [item]="forceDelete" [active]="true" (clicked)="forceDeleteChanged($event)"></OptionComponent>
+      <OptionComponent [item]="forceDelete" [active]="true" (changed)="forceDeleteChanged($event)"></OptionComponent>
     </div>
     <div class="mt-3">
-      <OptionComponent [item]="blockDevice" [active]="true" (clicked)="blockDeviceChanged($event)"></OptionComponent>
+      <OptionComponent [item]="blockDevice" [active]="true" (changed)="blockDeviceChanged($event)"></OptionComponent>
     </div>
   </div>
   <footer>

@@ -69,6 +69,7 @@ export class DeviceInfoComponent {
 
     dialogRef.closed.subscribe(result => {
       if (result !== undefined && this.device() !== null) {
+        console.log(result);
         this.deviceService.removeDevice(result as RemoveDeviceOptions);
         this.deviceStore.setSelectedEntity(null);
         this.applicationService.inspector = null;
