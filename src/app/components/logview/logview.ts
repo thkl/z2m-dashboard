@@ -95,8 +95,8 @@ export class LogView {
 
   openLog(logItem: BridgeEvent): void {
     const dialogRef = this.dialog.open(LogViewDialog, {
-      height: '400px',
       width: '600px',
+      panelClass: 'overlay',
       data: logItem
     });
   }

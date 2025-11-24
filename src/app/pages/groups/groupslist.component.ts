@@ -153,8 +153,8 @@ export class GroupListComponent {
 
 
     const dialogRef = this.dialog.open(AddObjectDialog, {
-      height: '400px',
       width: '600px',
+      panelClass: 'overlay',
       data: dialogData
     });
 

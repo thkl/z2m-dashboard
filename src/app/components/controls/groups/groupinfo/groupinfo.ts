@@ -115,8 +115,8 @@ export class GroupInfoComponent {
       }
 
       const dialogRef = this.dialog.open(DeleteObjectDialog, {
-        height: '400px',
         width: '600px',
+        panelClass: 'overlay',
         data
       });
 

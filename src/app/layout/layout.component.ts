@@ -122,8 +122,8 @@ export class LayoutComponent {
     }
 
     this.connectionDialogReferecnce = this.dialog.open(ChooseServerDialog, {
-      height: '400px',
       width: '600px',
+      panelClass: 'overlay',
       data
     });
 

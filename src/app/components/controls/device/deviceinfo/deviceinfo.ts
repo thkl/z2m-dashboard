@@ -62,8 +62,8 @@ export class DeviceInfoComponent {
   deleteDevice() {
 
     const dialogRef = this.dialog.open(RemoveDeviceDialog, {
-      height: '400px',
       width: '600px',
+      panelClass: 'overlay',
       data: { device: this.device() }
     });
 
@@ -109,8 +109,8 @@ export class DeviceInfoComponent {
       }
 
       const dialogRef = this.dialog.open(RenamedeviceDialog, {
-        height: '400px',
         width: '600px',
+        panelClass: 'overlay',
         data
       });
 

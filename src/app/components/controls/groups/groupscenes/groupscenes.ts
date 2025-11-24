@@ -65,8 +65,8 @@ export class GroupSceneComponent {
     }
 
     const dialogRef = this.dialog.open(DeleteObjectDialog, {
-      height: '400px',
       width: '600px',
+      panelClass: 'overlay',
       data
     });
 
@@ -104,8 +104,8 @@ export class GroupSceneComponent {
 
 
     const dialogRef = this.dialog.open(AddObjectDialog, {
-      height: '400px',
       width: '600px',
+      panelClass: 'overlay',
       data: dialogData
     });
 
@@ -132,8 +132,8 @@ export class GroupSceneComponent {
     }
 
     const dialogRef = this.dialog.open(DeleteObjectDialog, {
-      height: '400px',
       width: '600px',
+      panelClass: 'overlay',
       data
     });
 

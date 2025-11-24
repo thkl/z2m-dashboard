@@ -85,8 +85,8 @@ export class DashboardComponent {
 
   openSysInfo():void {
       const dialogRef = this.dialog.open(SystemInfoDialog, {
-          height: '400px',
           width: '600px',
+          panelClass: 'overlay',
         });
   }
 }
