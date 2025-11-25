@@ -182,8 +182,8 @@ export class DeviceService {
    *
    * @param device - The device to interview
    */
-  startInterview(device: Device): void {
-    this.sendBridgeDeviceRequest("bridge/request/device/interview", {
+  startInterview(device: Device) {
+   return  this.sendBridgeDeviceRequest("bridge/request/device/interview", {
       id: device.friendly_name,
     });
   }

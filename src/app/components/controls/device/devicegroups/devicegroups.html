@@ -1,5 +1,10 @@
 <div class="containerwrapper" style="display: flex; flex-direction: column">
-  <div class="label">{{ 'CURRENT_GROUPS' | translate }}</div>
+  <div class="label">
+    {{ 'CURRENT_GROUPS' | translate }}
+    @if (groups().length === 0) {
+      : {{ 'NONE' | translate }}
+    }
+  </div>
   <div class="container">
     @for (group of groups(); track group.id) {
       <div class="row items-center">
@@ -11,5 +16,14 @@
         </div>
       </div>
     }
+    <div class="row items-center">
+      <div class="w-2/3">
+        <DropdownComponent title="{{ 'SELECT_NEW_GROUP' | translate }}" [items]="knownGroups()" (changed)="selectGroup($event)"></DropdownComponent>
+      </div>
+      <div class="w-1/3"><DropdownComponent title="{{ 'ENDPOINT' | translate }}" [items]="knownEndpoints()" (changed)="selectEndpoint($event)"></DropdownComponent></div>
+    </div>
+    <div class="button ml-2">
+      <button class="button-link left" (click)="addToGroup()">{{ 'ADD_TO_GROUP' | translate }}</button>
+    </div>
   </div>
 </div>

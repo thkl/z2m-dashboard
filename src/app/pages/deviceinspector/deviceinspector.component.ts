@@ -7,7 +7,7 @@ import { SearchOperator } from '@/app/datastore/generic.store';
 import { Device } from '@/app/models/device';
 import { DeviceService } from '@/app/services/device.service';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
-import { Component, computed, inject, input, output, Signal, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, Signal, signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -37,7 +37,13 @@ export class DeviceInspectorComponent {
     return devicesView().length > 0 ? devicesView()[0] : null
   });
 
-
+  constructor() {
+    effect(()=>{
+      if (this.device() === null) {
+         this.tabManager.closeTab(this.ieee_address()!);
+      }
+    })
+  }
 
   closeSidebar(): void {
     this.tabManager.closeTab(this.ieee_address()!);

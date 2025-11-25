@@ -208,6 +208,43 @@ export function createEntitySignalStore<T extends BaseEntity>(config: StoreConfi
                     });
                 },
 
+                upsertAndMerge: (updateData: UpdateRequest<T, typeof idField>) => {
+                    const entities = store.entities() || [];
+                    const entityId = updateData[idField];
+                    const existingEntity = entities.find((e) => e[idField] === entityId);
+
+                    if (existingEntity) {
+                        // Entity exists - merge and update
+                        const mergedEntity = { ...existingEntity, ...updateData } as T;
+                        patchState(store, {
+                            entities: entities.map((e) => (e[idField] === entityId ? mergedEntity : e)),
+                            lastUpdated: mergedEntity,
+                            selectedEntity:
+                                store.selectedEntity()?.[idField] === entityId ? mergedEntity : store.selectedEntity()
+                        });
+                    } else {
+                        // Entity doesn't exist - add it
+                        let updatedEntities = [...entities, updateData as T];
+
+                        // Remove oldest entries if maxNumberOfEntities is configured
+                        if (config.maxNumberOfEntities && updatedEntities.length > config.maxNumberOfEntities) {
+                            const entriesToRemove = updatedEntities.length - config.maxNumberOfEntities;
+                            updatedEntities = updatedEntities.slice(entriesToRemove);
+                        }
+
+                        patchState(store, {
+                            entities: updatedEntities,
+                            totalCount: updatedEntities.length,
+                            lastUpdated: updateData as T,
+                        });
+                    }
+                },
+
+                upsertAndMergeItems: (updateDataArray: UpdateRequest<T, typeof idField>[]) => {
+                    updateDataArray.forEach((item) => methods.upsertAndMerge(item));
+                },
+
+
                 updateBySearch: (property: string, newValue: any, field: string, search: string) => {
                     const entities = store.entities() || [];
                     const existingEntity = entities.find((e) => e[field] === search);

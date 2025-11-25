@@ -1,7 +1,7 @@
 import { computed, effect, inject, Injectable, Signal, signal } from "@angular/core";
 import { Websocket } from "./websocket";
 import { ApplicationService } from "./app.service";
-import { Bridge, BridgeDefinitions, Networkmap } from "../models/bridge";
+import { Bridge, BridgeDefinitions, ConfigSchema, GroupConfig, Networkmap } from "../models/bridge";
 import { BridgeEventStore } from "../datastore/logging.store";
 import * as dummy from '../pages/networkmap/dummy';
 import { Device, ReportingExt } from "../models/device";
@@ -29,8 +29,6 @@ export class BridgeService {
   private logger = inject(NGXLogger);
   private extensions = createDeviceStoreExtensions(this.deviceStore, this.translate);
   private clearSignal = this.signalBusService.onEvent<any>("clear_stores");
-
-
 
   public bridgeInfo = computed(() => {
     return this.intBridgeInfo();
@@ -137,9 +135,18 @@ export class BridgeService {
     const bd = definitions ?? (bi !== null ? bi.definitions : null)
     if (bridge) {
       this.intBridgeInfo.set({ ...bridge, definitions: bd });
+      this.updateGroupData(bridge.config.groups);
     } else {
       this.intBridgeInfo.set({ ...bi!, definitions: bd });
     }
+  }
+
+  updateGroupData(groupData: {[key:string]:GroupConfig}) {
+    // this is the group config 
+    const items:any = Object.entries(groupData).map(([id,group]) =>{
+      return {...group,id:parseInt(id)}
+    })
+    this.groupStore.upsertAndMergeItems(items);
   }
 
   permitJoin(time?: number): void {
@@ -199,9 +206,9 @@ export class BridgeService {
       this.setDeviceTimeUpdater();
     }, 1000);
   }
-
+  
   addGroups(groupList: Group[]): void {
-    // we have to do a weird little conversion .. the endpoint is everywhere a string
+    // we have to do a weird little conversion .. the endpoint a string
     // but the api will send here a number .. so just convert this little sckr
     const converted = groupList.map(group => {
       const members = group.members.map(member => {
@@ -209,7 +216,8 @@ export class BridgeService {
       })
       return { ...group, members }
     })
-    this.groupStore.addAll(converted);
+    console.log(converted);
+    this.groupStore.upsertAndMergeItems(converted);
   }
 
   clear(): void {

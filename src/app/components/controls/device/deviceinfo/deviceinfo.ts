@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, Signal, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, Signal, signal } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Dialog } from '@angular/cdk/dialog';
 import { HexPipe } from '@/app/pipes/hex.pipe';
@@ -18,6 +18,7 @@ import { DeviceAvailability } from '../device-availability/device-availability';
 import { ModelLink } from '../../modellink/modellink';
 import { DeviceImage } from '../device-image/device-image';
 import { ApplicationService } from '@/app/services/app.service';
+import { SignalBusService } from '@/app/services/sigbalbus.service';
 
 @Component({
   selector: 'DeviceInfoComponent',
@@ -31,8 +32,18 @@ export class DeviceInfoComponent {
   protected readonly dialog = inject(Dialog)
   private readonly translate = inject(TranslateService);
   private readonly applicationService = inject(ApplicationService)
+  private responseHandler = signal<((result: any) => void) | null>(null);
+  private responseSignal = signal<Signal<any> | null>(null);
+  protected readonly signalBusService = inject(SignalBusService);
+    private responseTransactionId = signal<string | null>(null);
+
+ private responseValue = computed(() => {
+    const respSig = this.responseSignal();
+    return respSig ? respSig() : null;
+  });
 
   ieee_address = input.required<string | undefined>();
+  interviewRunning = signal<boolean>(false);
 
   device = computed(() => {
     //Filter the coordinator from the devices
@@ -46,10 +57,39 @@ export class DeviceInfoComponent {
     return devicesView().length > 0 ? devicesView()[0] : null
   });
 
+  constructor(){
+     effect(() => {
+      const result = this.responseValue();
+      const handler = this.responseHandler();
+      const transactionId = this.responseTransactionId();
+      if (result && handler && transactionId) {
+        handler(result);
+        this.signalBusService.reset(`bridge-response-${transactionId}`);
+        this.responseTransactionId.set(null);
+        this.responseHandler.set(null);
+        this.responseSignal.set(null);
+      }
+    })
+
+     effect(() => {
+      const transactionId = this.responseTransactionId();
+      if (transactionId) {
+        const response$ = this.signalBusService.onState<any>(`bridge-response-${transactionId}`);
+        this.responseSignal.set(response$);
+      }
+    })
+  };
 
   startInterview() {
     if (this.device() !== null) {
-      this.deviceService.startInterview(this.device()!);
+      this.interviewRunning.set(true);
+      let transactionId =  this.deviceService.startInterview(this.device()!);
+      if (transactionId) {
+        this.responseHandler.set((result: any) => {
+          console.log(result)
+           this.interviewRunning.set(false);
+        });
+      }  
     }
   }
 

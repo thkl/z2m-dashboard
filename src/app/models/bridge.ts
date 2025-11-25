@@ -44,6 +44,14 @@ export interface BridgeHealth {
     response_time: number;
 }
 
+export interface GroupConfig {
+    friendly_name: string;
+    off_state?: string;
+    optimistic?: boolean;
+    qos?: number;
+    retain?: boolean;
+}
+
 export interface Config {
     advanced: Advanced;
     availability: Availability;
@@ -51,7 +59,7 @@ export interface Config {
     device_options: ConfigSchema;
     devices: ConfigSchema;
     frontend: Frontend;
-    groups: ConfigSchema;
+    groups: {[key:string]:GroupConfig};
     health: Health;
     homeassistant: Homeassistant;
     map_options: MapOptions;

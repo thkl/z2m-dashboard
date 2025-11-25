@@ -104,6 +104,7 @@ export class DeviceSettings {
 
   changeSetting(option: DeviceOption, item: any, parent: any) {
     if (this.device()) {
+      const device = this.device();
       option.value = this.convertValue(option,item);
       const data: { [key: string]: any } = {}
       if ((option.value !== null) && (option.value !== '?')) {
@@ -115,7 +116,9 @@ export class DeviceSettings {
         } else {
           if (parent) {
             let po = this.device()!.options[parent.name]
-
+            if (!po) {
+              po = {};
+            }
             po[option.name] = option.value;
             this.device()!.options[parent.name] = po;
           } else {

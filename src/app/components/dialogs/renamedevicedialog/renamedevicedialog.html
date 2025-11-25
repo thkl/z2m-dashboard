@@ -7,7 +7,7 @@
       <input class="w-full text-left panel" (change)="changeName($event)" [value]="deviceName" />
     </div>
     <div class="mt-3">
-      <OptionComponent [item]="homeAssistantSwitch" [active]="true" (clicked)="haOptionChanged($event)"></OptionComponent>
+      <OptionComponent [item]="homeAssistantSwitch" [active]="true" (changed)="haOptionChanged($event)"></OptionComponent>
     </div>
   </div>
   <footer>
