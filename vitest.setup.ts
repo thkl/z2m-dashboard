@@ -1,6 +1,6 @@
 import 'zone.js';
 import 'zone.js/testing';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
 import { getTestBed } from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
@@ -8,14 +8,14 @@ import {
 } from '@angular/platform-browser-dynamic/testing';
 
 // Initialize the Angular testing environment
-try {
-  getTestBed().initTestEnvironment(
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
-  );
-} catch (e) {
-  // Test environment already initialized
-}
+getTestBed().initTestEnvironment(
+  BrowserDynamicTestingModule,
+  platformBrowserDynamicTesting()
+);
+
+afterEach(() => {
+  getTestBed().resetTestingModule();
+});
 
 Object.defineProperty(window, 'CSS', { value: null });
 Object.defineProperty(window, 'getComputedStyle', {
