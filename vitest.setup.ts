@@ -7,11 +7,15 @@ import {
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
 
-// Initialize the Angular testing environment
-getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting()
-);
+// Initialize the Angular testing environment once per worker
+try {
+  getTestBed().initTestEnvironment(
+    BrowserDynamicTestingModule,
+    platformBrowserDynamicTesting()
+  );
+} catch {
+  // Already initialized in this worker
+}
 
 afterEach(() => {
   getTestBed().resetTestingModule();
