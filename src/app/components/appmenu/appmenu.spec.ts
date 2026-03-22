@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AppMenuComponent } from './appmenu';
+import { appConfig } from '../../app.config';
 
 describe('AppMenuComponent', () => {
   let component: AppMenuComponent;
@@ -9,7 +10,8 @@ describe('AppMenuComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [AppMenuComponent]
+      imports: [AppMenuComponent],
+      providers: appConfig.providers,
     });
     fixture = TestBed.createComponent(AppMenuComponent);
     component = fixture.componentInstance;
