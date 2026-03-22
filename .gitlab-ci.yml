@@ -21,8 +21,8 @@
   :image: node:20
   :script:
   - npm install --legacy-peer-deps
-  - npm audit
-
+  - npm audit -fix
+  - npm install --legacy-peer-deps
   - npm run build
   :artifacts:
     :paths:
