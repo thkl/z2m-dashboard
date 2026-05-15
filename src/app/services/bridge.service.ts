@@ -88,7 +88,7 @@ export class BridgeService {
         const { payload } = message;
         if (payload !== null) {
           const record = { date: new Date(), level: payload.level, message: payload.message };
-          this.eventStore.addLocal(record, crypto.randomUUID());
+          this.eventStore.addLocal(record, this.appService.generateUUID());
         }
       }
     });

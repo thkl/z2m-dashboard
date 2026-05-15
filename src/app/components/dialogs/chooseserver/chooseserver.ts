@@ -6,6 +6,7 @@ import { OptionComponent } from '../../controls/option/option';
 import { InfoOverlayComponent } from '../../controls/infooverlay/infooverlay';
 import { TokenService } from '@/app/services/token.service';
 import { SignalBusService } from '@/app/services/sigbalbus.service';
+import { ApplicationService } from '@/app/services/app.service';
 
 
 
@@ -26,13 +27,14 @@ export class ChooseServerDialog {
   dialogRef = inject<DialogRef<ChooseServerDialogData>>(DialogRef<ChooseServerDialogData>);
   dialogData = inject(DIALOG_DATA);
   tokenService = inject(TokenService);
-  
+  protected readonly appService = inject(ApplicationService);
+
   host = model<string>("");
   port = model<number>(8080);
   secure = model<boolean>(false);
   name = model<string>('localhost');
   token = model<string | undefined>();
-  selectedId : string = crypto.randomUUID();
+  selectedId : string = this.appService.generateUUID();
 
   isSecure = computed(() => {
 
@@ -97,7 +99,7 @@ export class ChooseServerDialog {
     this.port.set(server.port);
     this.name.set(server.name);
     this.secure.set(server.secure);
-    this.selectedId = server.id ?? crypto.randomUUID();
+    this.selectedId = server.id ?? this.appService.generateUUID();
     if (server.token) {
       let decryptedToken = await this.tokenService.decryptToken(server.token);
       console.log(server.token,decryptedToken)

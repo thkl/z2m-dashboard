@@ -166,7 +166,7 @@ export class DeviceService {
   private sendBridgeDeviceRequest(topic: string, parameters: { [key: string]: any }) {
     // Generate a unique transaction ID for tracking responses
     const payload: any = {
-      transaction: crypto.randomUUID()
+      transaction: this.appService.generateUUID()
     }
 
     // Merge all parameters into the payload

@@ -46,9 +46,20 @@ export class ApplicationService {
         this.inspectorSignal.set(item);
     }
 
+    generateUUID(): string {
+        if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+            return crypto.randomUUID();
+        }
+        // Fallback for non-secure contexts (HTTP on local network)
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+            const r = Math.random() * 16 | 0;
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
     sendBridgeRequest(topic: string, payload: any, useTransaction: boolean = true) {
         if (payload && payload.transaction === undefined && useTransaction === true) {
-            payload.transaction = crypto.randomUUID();
+            payload.transaction = this.generateUUID();
         }
         const message: any = {
             payload,
