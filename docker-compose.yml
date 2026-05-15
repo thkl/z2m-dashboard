@@ -1,0 +1,6 @@
+services:
+  zigbee2mqtt-dashboard:
+    build: .
+    ports:
+      - "8081:80"
+    restart: unless-stopped
