@@ -28,8 +28,7 @@
     :expire_in: 1 day
 include:
   - template: Jobs/SAST.gitlab-ci.yml
-  - project: 'renovate-bot/renovate-runner'
-    file: '/templates/renovate.gitlab-ci.yml'
+
 
 :test:
   :stage: test
