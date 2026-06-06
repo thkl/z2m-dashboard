@@ -29,6 +29,7 @@
 include:
   - template: Jobs/SAST.gitlab-ci.yml
 
+
 :test:
   :stage: test
   :image: node:20
