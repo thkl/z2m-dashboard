@@ -44,3 +44,4 @@ gl-sast-report.json
 .vscode/*
 analyse.sast.json
 *-sast-report.*
+pnpm-lock.yaml
