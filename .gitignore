@@ -45,3 +45,4 @@ gl-sast-report.json
 analyse.sast.json
 *-sast-report.*
 pnpm-lock.yaml
+pnpm-lock.yaml

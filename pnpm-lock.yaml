@@ -127,6 +127,12 @@ importers:
         specifier: 22.0.0
         version: 22.0.0(chokidar@5.0.0)
 
+  .angular/cache/angular-cli-tmp-packages-AaNb3C:
+    dependencies:
+      '@angular/cli':
+        specifier: 22.0.0
+        version: 22.0.0(chokidar@5.0.0)
+
   .angular/cache/angular-cli-tmp-packages-Fe1tff:
     dependencies:
       '@angular/cli':
