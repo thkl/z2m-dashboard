@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { VersionService } from '../../services/version.service';
 
@@ -7,6 +7,7 @@ import { VersionService } from '../../services/version.service';
   standalone: true,
   imports: [],
   template: `<div class="text-xs text-gray-500 dark:text-gray-400">Dashboard v{{ version() }}</div>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [],
 })
 export class VersionDisplayComponent {

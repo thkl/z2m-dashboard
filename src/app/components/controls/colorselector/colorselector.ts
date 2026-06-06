@@ -1,15 +1,14 @@
 import { ColorOption } from '@/app/models/types';
-import { Component, input, model, output, signal } from '@angular/core';
- 
- 
+import { Component, input, model, output, signal, ChangeDetectionStrategy } from '@angular/core';
+
 @Component({
   selector: 'ColorSelectorComponent',
   imports: [],
   templateUrl: './colorselector.html',
-  styleUrl: './colorselector.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './colorselector.scss',
 })
 export class ColorSelectorComponent {
-
   selectedColor = model<string>('#007bff');
   buttonText = input<string>('Color');
   size = input<'sm' | 'md' | 'lg'>('sm');
@@ -31,11 +30,11 @@ export class ColorSelectorComponent {
     { name: 'Indigo', value: '#6610f2' },
     { name: 'Cyan', value: '#17a2b8' },
     { name: 'Gray', value: '#6c757d' },
-    { name: 'Dark', value: '#343a40' }
+    { name: 'Dark', value: '#343a40' },
   ];
 
   toggleDropdown() {
-    this.isOpen.update(value => !value);
+    this.isOpen.update((value) => !value);
   }
 
   selectColor(color: string) {
@@ -60,5 +59,4 @@ export class ColorSelectorComponent {
   closeDropdown() {
     this.isOpen.set(false);
   }
-  
 }

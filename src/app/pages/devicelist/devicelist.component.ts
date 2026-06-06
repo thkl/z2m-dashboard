@@ -25,9 +25,8 @@ import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 import { SettingsService } from '@/app/services/settings.service';
 import { filterData } from '@/app/utils/filter.utils';
 import { sortData } from '@/app/utils/sort.utils';
-import { Component, computed, inject, signal, effect, Signal, Injector, viewChild } from '@angular/core';
+import { Component, computed, inject, signal, effect, Signal, Injector, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-
 
 const allColumns: ColumnDef<Device>[] = [
   { id: 'status', label: 'STATUS', hideLabel: true, minWidth: 30, maxWidth: 30, sortable: false },
@@ -47,18 +46,30 @@ const allColumns: ColumnDef<Device>[] = [
   { id: 'health_messages_sec', label: 'HEALTH_MESSAGE_PERSEC', minWidth: 80, maxWidth: 80, sortable: true },
   { id: 'health_adr_change', label: 'HEALTH_ADRCHG', minWidth: 80, maxWidth: 80, sortable: true },
   { id: 'health_leave_count', label: 'HEALTH_LEAVECNT', minWidth: 80, maxWidth: 80, sortable: true },
-
 ];
-
 
 @Component({
   selector: 'DeviceListComponent',
   templateUrl: './devicelist.component.html',
   styleUrl: './devicelist.component.scss',
-  imports: [TranslateModule, SearchInput, OptionPanelComponent, DeviceImage, TableComponent, TableCellDirective, HexPipe, HumanReadablePipe, TableSettingsControl, ProgessBar, TimeToPipe, DeviceAvailability, SettingsBarComponent]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    TranslateModule,
+    SearchInput,
+    OptionPanelComponent,
+    DeviceImage,
+    TableComponent,
+    TableCellDirective,
+    HexPipe,
+    HumanReadablePipe,
+    TableSettingsControl,
+    ProgessBar,
+    TimeToPipe,
+    DeviceAvailability,
+    SettingsBarComponent,
+  ],
 })
 export class DeviceListComponent {
-
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly applicationService = inject(ApplicationService);
   protected readonly injector = inject(Injector);
@@ -86,18 +97,16 @@ export class DeviceListComponent {
       onRowClick: (device: Device) => this.selectDevice(device.ieee_address),
       initialSort: {
         column: this.sortColumn(),
-        direction: (sortDir === 'asc' || sortDir === 'desc') ? sortDir : 'asc'
+        direction: sortDir === 'asc' || sortDir === 'desc' ? sortDir : 'asc',
       },
-      settingsControl: this.tableSettings()
+      settingsControl: this.tableSettings(),
     };
   });
-
 
   bridgeInfo = computed(() => {
     const bi = this.bridgeService.bridgeInfo;
     return bi();
-  })
-
+  });
 
   // Sorting state
   sortColumn = signal<string>('name');
@@ -111,59 +120,51 @@ export class DeviceListComponent {
   selectedAvailability = signal<SelectOption[]>([]);
 
   //Filter the coordinator from the devices
-  devicesView = createStoreView(this.deviceStore, {
-    criteria: [
-      { property: "type", value: "Coordinator", operator: "not" }
-    ],
-    logicalOperator: SearchOperator.AND
-  }, false, undefined);
+  devicesView = createStoreView(
+    this.deviceStore,
+    {
+      criteria: [{ property: 'type', value: 'Coordinator', operator: 'not' }],
+      logicalOperator: SearchOperator.AND,
+    },
+    false,
+    undefined,
+  );
 
   // Filtered and sorted devices
   devices = computed<Device[]>(() => {
-    const filtered = filterData<Device>(
-      this.devicesView(),
-      this.searchText(),
-      (device) => this.getSearchableFields(device)
-    );
+    const filtered = filterData<Device>(this.devicesView(), this.searchText(), (device) => this.getSearchableFields(device));
 
-    return sortData<Device>(
-      filtered,
-      this.sortColumn(),
-      this.sortDirection(),
-      (device, column) => this.getDeviceValue(device, column)
-    );
+    return sortData<Device>(filtered, this.sortColumn(), this.sortDirection(), (device, column) => this.getDeviceValue(device, column));
   });
 
   finalyFilter = computed(() => {
     let prefiltered = this.devices();
-    let selVendorNames = this.selectedVendors().map(v => v.label);
-    let selModelNames = this.selectedModels().map(v => v.label);
-    let selPowering = this.selectedPowering().map(v => v.label);
-    let selAvailability = this.selectedAvailability().map(v => v.label);
+    let selVendorNames = this.selectedVendors().map((v) => v.label);
+    let selModelNames = this.selectedModels().map((v) => v.label);
+    let selPowering = this.selectedPowering().map((v) => v.label);
+    let selAvailability = this.selectedAvailability().map((v) => v.label);
 
     if (selVendorNames.length > 0) {
-
-      prefiltered = prefiltered.filter(d => {
-        return selVendorNames.indexOf(d.definition?.vendor) !== -1
+      prefiltered = prefiltered.filter((d) => {
+        return selVendorNames.indexOf(d.definition?.vendor) !== -1;
       });
     }
 
-
     if (selModelNames.length > 0) {
-      prefiltered = prefiltered.filter(d => {
-        return selModelNames.indexOf(d.definition?.model) !== -1
+      prefiltered = prefiltered.filter((d) => {
+        return selModelNames.indexOf(d.definition?.model) !== -1;
       });
     }
 
     if (selPowering.length > 0) {
-      prefiltered = prefiltered.filter(d => {
-        return selPowering.indexOf(d.power_source) !== -1
+      prefiltered = prefiltered.filter((d) => {
+        return selPowering.indexOf(d.power_source) !== -1;
       });
     }
 
     if (selAvailability.length > 0) {
-      prefiltered = prefiltered.filter(d => {
-        return selAvailability.indexOf(d.state?.availability) !== -1
+      prefiltered = prefiltered.filter((d) => {
+        return selAvailability.indexOf(d.state?.availability) !== -1;
       });
     }
 
@@ -183,11 +184,16 @@ export class DeviceListComponent {
   private avaliMap = new Map<string, SelectOption>();
 
   vendorList = computed(() => {
-    const entitys = Array.from(new Set(this.deviceStore.entities()
-      .map(entity => entity.definition ? entity.definition.vendor : undefined)
-      .filter((e): e is string => e !== '' && e !== undefined)));
+    const entitys = Array.from(
+      new Set(
+        this.deviceStore
+          .entities()
+          .map((entity) => (entity.definition ? entity.definition.vendor : undefined))
+          .filter((e): e is string => e !== '' && e !== undefined),
+      ),
+    );
 
-    return entitys.map(vendor => {
+    return entitys.map((vendor) => {
       if (!this.vendorsMap.has(vendor)) {
         this.vendorsMap.set(vendor, { label: vendor, isSelected: false });
       }
@@ -196,11 +202,16 @@ export class DeviceListComponent {
   });
 
   modelList = computed(() => {
-    const entitys = Array.from(new Set(this.deviceStore.entities()
-      .map(entity => entity.definition ? entity.definition.model : undefined)
-      .filter((e): e is string => e !== '' && e !== undefined)));
+    const entitys = Array.from(
+      new Set(
+        this.deviceStore
+          .entities()
+          .map((entity) => (entity.definition ? entity.definition.model : undefined))
+          .filter((e): e is string => e !== '' && e !== undefined),
+      ),
+    );
 
-    return entitys.map(model => {
+    return entitys.map((model) => {
       if (!this.modelMap.has(model)) {
         this.modelMap.set(model, { label: model, isSelected: false });
       }
@@ -208,13 +219,17 @@ export class DeviceListComponent {
     });
   });
 
-
   powerOptionList = computed(() => {
-    const entitys = Array.from(new Set(this.deviceStore.entities()
-      .map(entity => entity.power_source)
-      .filter((e): e is string => e !== '' && e !== undefined)));
+    const entitys = Array.from(
+      new Set(
+        this.deviceStore
+          .entities()
+          .map((entity) => entity.power_source)
+          .filter((e): e is string => e !== '' && e !== undefined),
+      ),
+    );
 
-    return entitys.map(pwsr => {
+    return entitys.map((pwsr) => {
       if (!this.powerMap.has(pwsr)) {
         this.powerMap.set(pwsr, { label: pwsr, isSelected: false });
       }
@@ -223,11 +238,16 @@ export class DeviceListComponent {
   });
 
   availabilityList = computed(() => {
-    const entitys = Array.from(new Set(this.deviceStore.entities()
-      .map(entity => entity.state?.availability)
-      .filter((e): e is string => e !== '' && e !== undefined)));
+    const entitys = Array.from(
+      new Set(
+        this.deviceStore
+          .entities()
+          .map((entity) => entity.state?.availability)
+          .filter((e): e is string => e !== '' && e !== undefined),
+      ),
+    );
 
-    return entitys.map(avent => {
+    return entitys.map((avent) => {
       if (!this.avaliMap.has(avent)) {
         this.avaliMap.set(avent, { label: avent, isSelected: false });
       }
@@ -235,11 +255,9 @@ export class DeviceListComponent {
     });
   });
 
-
-
   selectedDevice = computed(() => {
     return this.deviceStore.selectedEntity();
-  })
+  });
 
   constructor() {
     // Initialize datasource
@@ -257,24 +275,22 @@ export class DeviceListComponent {
       const devices = this.devices();
     });
 
-    const cl = this.settingsService.getPreference("devicelist_columns");
+    const cl = this.settingsService.getPreference('devicelist_columns');
     if (cl) {
       this.displayedColumns.set(cl);
     }
 
-    this.applicationService.mainTitle = "DEVICE_VIEW";
+    this.applicationService.mainTitle = 'DEVICE_VIEW';
   }
 
   trackByFn(index: number, item: Device): string {
     return item.friendly_name || item.ieee_address; // Use unique identifier
   }
 
-
   onSort(event: SortEvent) {
     this.sortColumn.set(event.column);
     this.sortDirection.set(event.direction);
   }
-
 
   columnOrderChange(newOrder: any): void {
     this.settingsService.setPreference('devicelist_columns', newOrder);
@@ -311,8 +327,7 @@ export class DeviceListComponent {
       case 'health_adr_change':
         return device.health ? (device.health.network_address_changes ?? -1) : -1;
       case 'health_leave_count':
-        return  device.health ? (device.health.leave_count ?? -1) : -1 ;
-
+        return device.health ? (device.health.leave_count ?? -1) : -1;
 
       default:
         return '';
@@ -324,20 +339,13 @@ export class DeviceListComponent {
   }
 
   getSearchableFields(device: Device): any[] {
-    return [
-      device.friendly_name,
-      device.ieee_address,
-      device.definition?.model,
-      device.definition?.vendor,
-      device.definition?.description,
-      device.state?.availability
-    ];
+    return [device.friendly_name, device.ieee_address, device.definition?.model, device.definition?.vendor, device.definition?.description, device.state?.availability];
   }
 
   selectDevice(deviceID: string) {
     this.deviceStore.setSelectedEntityById(deviceID);
     this.applicationService.inspector = 'device';
-    const device = this.deviceStore.entities().find(e => e.ieee_address === deviceID);
+    const device = this.deviceStore.entities().find((e) => e.ieee_address === deviceID);
     if (device) {
       this.tabManager.openTab({
         id: deviceID,
@@ -346,35 +354,34 @@ export class DeviceListComponent {
         data: { ieee_address: deviceID },
         component: DeviceInspectorComponent,
         iconComponent: DeviceImage,
-        iconData: { device }
+        iconData: { device },
       });
     }
   }
 
   vendorsSelectionChanged(selected: SelectOption | SelectOption[]) {
     if (Array.isArray(selected)) {
-      this.selectedVendors.set(selected.filter(v => v.isSelected));
+      this.selectedVendors.set(selected.filter((v) => v.isSelected));
     }
   }
 
   modelSelectionChanged(selected: SelectOption | SelectOption[]) {
     if (Array.isArray(selected)) {
-      this.selectedModels.set(selected.filter(v => v.isSelected));
+      this.selectedModels.set(selected.filter((v) => v.isSelected));
     }
   }
 
   powerSelectionChanged(selected: SelectOption | SelectOption[]) {
     if (Array.isArray(selected)) {
-      this.selectedPowering.set(selected.filter(v => v.isSelected));
+      this.selectedPowering.set(selected.filter((v) => v.isSelected));
     }
   }
 
   availabilitySelectionChanged(selected: SelectOption | SelectOption[]) {
     if (Array.isArray(selected)) {
-      this.selectedAvailability.set(selected.filter(v => v.isSelected));
+      this.selectedAvailability.set(selected.filter((v) => v.isSelected));
     }
   }
-
 
   permitJoin() {
     this.bridgeService.permitJoin(this.bridgeInfo()?.permit_join ? 0 : 254);
@@ -385,6 +392,4 @@ export class DeviceListComponent {
       this.deviceService.checkUpdate(device);
     });
   }
-
 }
-

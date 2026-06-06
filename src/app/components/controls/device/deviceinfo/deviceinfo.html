@@ -47,7 +47,7 @@
       </div>
       <div class="device_row">
         <span class="label">{{ 'SUPPORT_STATUS' | translate }}</span>
-        <span class="value">{{ device()?.supported | human }} {{ device()?.definition ? (device()?.definition)!.source : '' }}</span>
+        <span class="value">{{ $safeNavigationMigration(device()?.supported) | human }} {{ device()?.definition ? (device()?.definition)!.source : '' }}</span>
       </div>
       <div class="device_row">
         <span class="label">{{ 'IEEE_ADDRESS' | translate }}</span>
@@ -91,7 +91,7 @@
       </div>
       <div class="device_row">
         <span class="label">{{ 'INTERVIEW_STATE' | translate }}</span>
-        <span class="value">{{ `zigbee.${device()?.interview_state}` | translate }}</span>
+        <span class="value">{{ `zigbee.${$safeNavigationMigration(device()?.interview_state)}` | translate }}</span>
       </div>
 
       <div class="device_row" style="margin-top: 3em">
@@ -121,12 +121,12 @@
 
         @if (device()?.update && device()?.update?.state === 'updating') {
           <div class="button flex flex-col min-h-20">
-            <span>{{ 'UPDATE_RUNNING' | translate: { time: device()?.update?.remaining | secondsToTime } }}</span>
+            <span>{{ 'UPDATE_RUNNING' | translate: { time: $safeNavigationMigration(device()?.update?.remaining) | secondsToTime } }}</span>
             <ProgessBar [percent]="device()?.update?.progress ?? 0" [showLabel]="true"></ProgessBar>
           </div>
         }
 
-        @if (device()?.update === undefined || device()?.update?.state !== 'updating') {
+        @if ($safeNavigationMigration(device()?.update) === undefined || device()?.update?.state !== 'updating') {
           <div class="button">
             <button class="button-link left" [disabled]="device()?.update?.check === true" (click)="checkUpdate()">{{ 'CHECK_FOR_UPDATE' | translate }}</button>
           </div>

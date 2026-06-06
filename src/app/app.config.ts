@@ -1,6 +1,6 @@
 import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withHashLocation, withRouterConfig } from '@angular/router';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withXhr } from '@angular/common/http';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import { LoggerModule } from 'ngx-logger';
 import { NgxLoggerLevel } from 'ngx-logger';
@@ -13,17 +13,19 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes,withHashLocation()),
-    provideHttpClient(),
+    provideRouter(routes, withHashLocation()),
+    provideHttpClient(withXhr()),
     provideTranslateService({
       loader: {
         provide: TranslateLoader,
         useFactory: (http: HttpClient) => new MultiTranslateHttpLoader(http),
-        deps: [HttpClient]
-      }
+        deps: [HttpClient],
+      },
     }),
-    importProvidersFrom(LoggerModule.forRoot({
-      level: isDevMode() ? NgxLoggerLevel.DEBUG : NgxLoggerLevel.ERROR,
-    })),
-  ]
+    importProvidersFrom(
+      LoggerModule.forRoot({
+        level: isDevMode() ? NgxLoggerLevel.DEBUG : NgxLoggerLevel.ERROR,
+      }),
+    ),
+  ],
 };

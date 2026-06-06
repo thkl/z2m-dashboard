@@ -1,14 +1,4 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  OnDestroy,
-  viewChild,
-  ElementRef,
-  input,
-  signal,
-  effect,
-} from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, viewChild, ElementRef, input, signal, effect, ChangeDetectionStrategy } from '@angular/core';
 
 import * as d3 from 'd3';
 import { Link, Node, Networkmap, NetworkNodeData } from '../../models/bridge';
@@ -67,6 +57,7 @@ const SIMULATION_CONFIG = {
   standalone: true,
   imports: [],
   templateUrl: './network-graph.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./network-graph.component.scss'],
 })
 export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -104,7 +95,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     const container = this.networkContainer();
@@ -134,11 +125,9 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
     this.svgGroup = svg.append('g');
 
     // Add zoom behavior
-    this.zoomBehavior = d3
-      .zoom<SVGSVGElement, unknown>()
-      .on('zoom', (event) => {
-        this.svgGroup.attr('transform', event.transform);
-      });
+    this.zoomBehavior = d3.zoom<SVGSVGElement, unknown>().on('zoom', (event) => {
+      this.svgGroup.attr('transform', event.transform);
+    });
 
     svg.call(this.zoomBehavior);
 
@@ -147,52 +136,47 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
       svg
         .transition()
         .duration(750)
-        .call(
-          this.zoomBehavior.transform as any,
-          d3.zoomIdentity.translate(this.containerWidth / 2, this.containerHeight / 2)
-        );
+        .call(this.zoomBehavior.transform as any, d3.zoomIdentity.translate(this.containerWidth / 2, this.containerHeight / 2));
     });
   }
 
-  prepareData():NetworkNodeData | null {
+  prepareData(): NetworkNodeData | null {
     const data = this.networkData();
     if (!data || !data.nodes || !data.links) {
       return null;
     }
     //loop thru all links and make sure every link has a node
-    const links = data.links.filter(link=> {
+    const links = data.links.filter((link) => {
       const source = link.sourceIeeeAddr;
       const target = link.targetIeeeAddr;
       // check if we have the nodes
-      const sourcenode = data.nodes.find(node=>node.ieeeAddr===source);
-      const targetnode = data.nodes.find(node=>node.ieeeAddr===target);
+      const sourcenode = data.nodes.find((node) => node.ieeeAddr === source);
+      const targetnode = data.nodes.find((node) => node.ieeeAddr === target);
       return sourcenode !== undefined && targetnode !== undefined;
     });
-    return {... data, links};
+    return { ...data, links };
   }
 
   private initializeGraph(): void {
-   
     const data = this.prepareData();
-    if (data===null) {
+    if (data === null) {
       return;
     }
 
     // Convert to D3 format with better initial spacing
-    const radius =
-      Math.min(this.containerWidth, this.containerHeight) * SIMULATION_CONFIG.INITIAL_SPACING_RADIUS_RATIO;
+    const radius = Math.min(this.containerWidth, this.containerHeight) * SIMULATION_CONFIG.INITIAL_SPACING_RADIUS_RATIO;
     this.d3Nodes = data.nodes.map((node: Node, index: number) => {
       // Distribute nodes in a circle initially to reduce jiggling
       const angle = (index / data.nodes!.length) * Math.PI * 2;
       const x =
         this.containerWidth / 2 +
         Math.cos(angle) * radius +
-         // eslint-disable-next-line security/detect-non-literal-regexp
+        // eslint-disable-next-line security/detect-non-literal-regexp
         (Math.random() - 0.5) * SIMULATION_CONFIG.INITIAL_RANDOM_OFFSET;
       const y =
         this.containerHeight / 2 +
         Math.sin(angle) * radius +
-         // eslint-disable-next-line security/detect-non-literal-regexp
+        // eslint-disable-next-line security/detect-non-literal-regexp
         (Math.random() - 0.5) * SIMULATION_CONFIG.INITIAL_RANDOM_OFFSET;
       return {
         id: node.ieeeAddr,
@@ -228,24 +212,14 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
           .forceLink<D3Node, D3Link>(this.d3Links)
           .id((d) => d.id)
           .distance(SIMULATION_CONFIG.LINK_DISTANCE)
-          .strength(SIMULATION_CONFIG.LINK_STRENGTH)
+          .strength(SIMULATION_CONFIG.LINK_STRENGTH),
       )
       .force(
         'charge',
-        d3
-          .forceManyBody()
-          .strength(SIMULATION_CONFIG.CHARGE_STRENGTH)
-          .distanceMin(SIMULATION_CONFIG.CHARGE_DISTANCE_MIN)
-          .distanceMax(SIMULATION_CONFIG.CHARGE_DISTANCE_MAX)
+        d3.forceManyBody().strength(SIMULATION_CONFIG.CHARGE_STRENGTH).distanceMin(SIMULATION_CONFIG.CHARGE_DISTANCE_MIN).distanceMax(SIMULATION_CONFIG.CHARGE_DISTANCE_MAX),
       )
-      .force(
-        'center',
-        d3
-          .forceCenter(this.containerWidth / 2, this.containerHeight / 2)
-          .strength(SIMULATION_CONFIG.CENTER_FORCE_STRENGTH)
-      )
+      .force('center', d3.forceCenter(this.containerWidth / 2, this.containerHeight / 2).strength(SIMULATION_CONFIG.CENTER_FORCE_STRENGTH))
       .force('collision', d3.forceCollide(SIMULATION_CONFIG.COLLISION_RADIUS).strength(SIMULATION_CONFIG.COLLISION_STRENGTH));
-
 
     // Render links
     this.linkSelection = this.svgGroup
@@ -259,7 +233,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
             .attr('stroke-width', 2)
             .attr('class', 'network-link'),
         (update) => update.attr('stroke', (d) => this.getLinkColor(d)),
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
 
     // Render LQI labels - background boxes AND text together in groups
@@ -284,7 +258,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
             .attr('pointer-events', 'none');
 
           // Add text to each group using raw DOM
-          g.each(function(d: any) {
+          g.each(function (d: any) {
             const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             textEl.setAttribute('class', 'lqi-label-text');
             textEl.setAttribute('text-anchor', 'middle');
@@ -304,7 +278,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         (update) => {
           // Update text content for existing groups
-          update.each(function(d: any) {
+          update.each(function (d: any) {
             const textEl = d3.select(this).select('text.lqi-label-text').node() as SVGTextElement;
             if (textEl) {
               const lqi = d.data?.lqi ?? d.linkquality ?? 0;
@@ -313,7 +287,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
           });
           return update;
         },
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
 
     // Render nodes
@@ -334,7 +308,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
             .on('dblclick', (event, d) => this.onNodeDoubleClick(event, d))
             .call((selection) => this.addDragBehavior(selection)),
         (update) => update,
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
 
     // Render labels (node name labels, not LQI labels)
@@ -354,7 +328,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
             .attr('pointer-events', 'none')
             .text((d) => d.label),
         (update) => update,
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
 
     // Update positions on simulation tick
@@ -366,27 +340,19 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
         .attr('y2', (d) => (d.target as D3Node).y || 0);
 
       // Update LQI label group positions (positions both rect and text inside)
-      this.svgGroup
-        .selectAll<SVGGElement, D3Link>('g.lqi-label-group')
-        .attr('transform', (d) => {
-          const x = (((d.source as D3Node).x || 0) + ((d.target as D3Node).x || 0)) / 2;
-          const y = (((d.source as D3Node).y || 0) + ((d.target as D3Node).y || 0)) / 2;
-          return `translate(${x},${y})`;
-        });
+      this.svgGroup.selectAll<SVGGElement, D3Link>('g.lqi-label-group').attr('transform', (d) => {
+        const x = (((d.source as D3Node).x || 0) + ((d.target as D3Node).x || 0)) / 2;
+        const y = (((d.source as D3Node).y || 0) + ((d.target as D3Node).y || 0)) / 2;
+        return `translate(${x},${y})`;
+      });
 
-      this.nodeSelection
-        .attr('cx', (d) => d.x || 0)
-        .attr('cy', (d) => d.y || 0);
+      this.nodeSelection.attr('cx', (d) => d.x || 0).attr('cy', (d) => d.y || 0);
 
-      this.labelSelection
-        .attr('x', (d) => d.x || 0)
-        .attr('y', (d) => d.y || 0);
+      this.labelSelection.attr('x', (d) => d.x || 0).attr('y', (d) => d.y || 0);
     });
   }
 
-  private addDragBehavior(
-    selection: d3.Selection<SVGCircleElement, D3Node, SVGGElement, unknown>
-  ): void {
+  private addDragBehavior(selection: d3.Selection<SVGCircleElement, D3Node, SVGGElement, unknown>): void {
     const dragStarted = (_event: d3.D3DragEvent<SVGCircleElement, D3Node, any>, d: D3Node) => {
       // Restart simulation so it's running during drag
       this.simulation.alphaTarget(SIMULATION_CONFIG.DRAG_ALPHA_TARGET).restart();
@@ -410,12 +376,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
       this.draggedNode = null;
     };
 
-    selection.call(
-      d3.drag<SVGCircleElement, D3Node>()
-        .on('start', dragStarted)
-        .on('drag', dragged)
-        .on('end', dragEnded)
-    );
+    selection.call(d3.drag<SVGCircleElement, D3Node>().on('start', dragStarted).on('drag', dragged).on('end', dragEnded));
   }
 
   private onNodeClick(event: MouseEvent, node: D3Node): void {
@@ -512,9 +473,7 @@ export class NetworkGraphComponent implements OnInit, AfterViewInit, OnDestroy {
       .attr('stroke', (d) => {
         const sourceId = typeof d.source === 'string' ? d.source : (d.source as D3Node).id;
         const targetId = typeof d.target === 'string' ? d.target : (d.target as D3Node).id;
-        return connected.has(sourceId) && connected.has(targetId)
-          ? this.getLinkColor(d)
-          : '#737c87';
+        return connected.has(sourceId) && connected.has(targetId) ? this.getLinkColor(d) : '#737c87';
       });
   }
 

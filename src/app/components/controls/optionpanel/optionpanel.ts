@@ -1,21 +1,22 @@
-import { Component, computed, effect, input, model, output, signal } from '@angular/core';
+import { Component, computed, effect, input, model, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ExpansionPanelComponent } from '../expansionpanel/expansionpanel';
 import { SearchInput } from '../searchinput/searchinput';
 import { SelectOption } from '../../../models/types';
 import { TranslateModule } from '@ngx-translate/core';
 
 export interface PanelOptions {
-  useSearch?: boolean,
-  showSelection?: boolean,
-  multi?: boolean,
-  maxShown?: number,
+  useSearch?: boolean;
+  showSelection?: boolean;
+  multi?: boolean;
+  maxShown?: number;
 }
 
 @Component({
   selector: 'OptionPanelComponent',
   imports: [ExpansionPanelComponent, SearchInput, TranslateModule],
   templateUrl: './optionpanel.html',
-  styleUrl: './optionpanel.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './optionpanel.scss',
 })
 export class OptionPanelComponent {
   title = input.required<string>();
@@ -30,29 +31,32 @@ export class OptionPanelComponent {
   }));
 
   internalEntites: SelectOption[] = [];
-  panelIsOpen = model<boolean|null>(null);
+  panelIsOpen = model<boolean | null>(null);
   searchText = signal<string>('');
   optionsChanged = output<SelectOption | SelectOption[]>();
 
   length = computed(() => {
     const entities = this.entities();
     return Array.isArray(entities) ? entities.length : 0;
-  })
+  });
 
   constructor() {
     effect(() => {
-      this.internalEntites = [... this.entities().filter(e => (this.searchText() === null && this.searchText() === '') || e.label.toLocaleLowerCase().indexOf(this.searchText().toLocaleLowerCase()) > -1)];
-    })
+      this.internalEntites = [
+        ...this.entities().filter(
+          (e) => (this.searchText() === null && this.searchText() === '') || e.label.toLocaleLowerCase().indexOf(this.searchText().toLocaleLowerCase()) > -1,
+        ),
+      ];
+    });
   }
 
-
   toggle(entity: SelectOption): void {
-    if (entity.diabled===true) {
+    if (entity.diabled === true) {
       return;
     }
-    if (this.resolvedOptions().multi===true) {
-    entity.isSelected = !entity.isSelected
-    this.optionsChanged.emit(this.internalEntites);
+    if (this.resolvedOptions().multi === true) {
+      entity.isSelected = !entity.isSelected;
+      this.optionsChanged.emit(this.internalEntites);
     } else {
       this.optionsChanged.emit(entity);
       this.panelIsOpen.set(false);

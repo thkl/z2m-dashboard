@@ -1,15 +1,15 @@
-import { Component, effect, input, model, output, signal } from '@angular/core';
+import { Component, effect, input, model, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ColorTemperatureOption } from '../../../models/types';
 import { miredToHtmlRgb, miredToKelvin } from '../../../utils/color.util';
- 
+
 @Component({
   selector: 'ColorTemperatureSelectorComponent',
   imports: [],
   templateUrl: './colortemperatureselector.html',
-  styleUrl: './colortemperatureselector.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './colortemperatureselector.scss',
 })
 export class ColorTemperatureSelectorComponent {
-
   selectedMireds = model<number>(250); // Default to ~4000K
   buttonText = model<string>('Temperature');
   size = input<'sm' | 'md' | 'lg'>('sm');
@@ -21,16 +21,16 @@ export class ColorTemperatureSelectorComponent {
   private debounceTimer: any = null;
 
   constructor() {
-  effect(()=>{
-    const matchedPreset = this.presetTemperatures().find(p=>p.value===this.selectedMireds()); 
-    if (matchedPreset) {
-      this.buttonText.set(matchedPreset.name);
-    }
-  });
-}
+    effect(() => {
+      const matchedPreset = this.presetTemperatures().find((p) => p.value === this.selectedMireds());
+      if (matchedPreset) {
+        this.buttonText.set(matchedPreset.name);
+      }
+    });
+  }
 
   toggleDropdown() {
-    this.isOpen.update(value => !value);
+    this.isOpen.update((value) => !value);
   }
 
   selectTemperature(mireds: number) {
@@ -63,5 +63,4 @@ export class ColorTemperatureSelectorComponent {
   getTemperatureKelvin(mireds: number): number {
     return miredToKelvin(mireds);
   }
-
 }

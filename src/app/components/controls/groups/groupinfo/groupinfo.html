@@ -17,7 +17,7 @@
       @for (member of members(); track $index) {
         <div class="sidbar_row flex">
           <ExpansionPanelDeviceComponent
-            [device]="member?.device!"
+            [device]="$safeNavigationMigration(member?.device)!"
             label="{{ member?.device?.friendly_name }} ({{ 'ENDPOINT_' | translate: { id: member.endpoint } }})"
             style="flex-grow: inherit"
             titleClass="center"
@@ -26,7 +26,11 @@
             [colorTrigger]="false"
           >
             <div class="wrapper">
-              <DeviceFeaturesComponent [ieee_address]="member?.device?.ieee_address" [filterEndpoints]="[member.endpoint]" displayMode="scene"></DeviceFeaturesComponent>
+              <DeviceFeaturesComponent
+                [ieee_address]="$safeNavigationMigration(member?.device?.ieee_address)"
+                [filterEndpoints]="[member.endpoint]"
+                displayMode="scene"
+              ></DeviceFeaturesComponent>
               <div class="button ml-2">
                 <button class="button-link-danger left" (click)="removeDeviceFromGroup(member.device!, member.endpoint)">{{ 'REMOVE_DEVICE' | translate }}</button>
               </div>

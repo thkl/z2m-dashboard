@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DeviceService } from './services/device.service';
 import { ApplicationService } from './services/app.service';
@@ -10,7 +10,8 @@ import { BridgeService } from './services/bridge.service';
   imports: [RouterOutlet, TranslateModule],
   providers: [],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './app.scss',
 })
 export class App {
   protected readonly title = signal('sigbee2mqtt-dashboard');
@@ -22,7 +23,6 @@ export class App {
   private readonly storageKey = 'theme';
 
   constructor() {
- 
     // Setup translations
     this.translate.setFallbackLang('en');
 

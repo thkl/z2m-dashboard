@@ -1,12 +1,12 @@
-import { Component, computed, effect, input, model, output, Signal, signal, HostListener, ElementRef } from '@angular/core';
+import { Component, computed, effect, input, model, output, Signal, signal, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
 import { SelectOption } from '../../../models/types';
-
 
 @Component({
   selector: 'DropdownComponent',
   imports: [OverlayModule],
-  styleUrl:'./dropdown.scss',
+  styleUrl: './dropdown.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './dropdown.html',
 })
 export class DropdownComponent {
@@ -14,24 +14,23 @@ export class DropdownComponent {
   items = model.required<SelectOption[]>();
   selected = output<SelectOption>();
   isInitialized = false;
-  title=input<string>();
+  title = input<string>();
   changed = output<any>();
 
   controlItems = signal<SelectOption[]>([]);
 
-  height=computed(()=>{
-    return `${this.items().length*32}px`;
-  })
+  height = computed(() => {
+    return `${this.items().length * 32}px`;
+  });
 
-  selectedTitle = computed(()=>{
-    const hasSelectedItems = this.items().filter(item=>item.isSelected);
-    return (hasSelectedItems.length>0) ? hasSelectedItems.map(item=>item.label).join("|") : this.title();
+  selectedTitle = computed(() => {
+    const hasSelectedItems = this.items().filter((item) => item.isSelected);
+    return hasSelectedItems.length > 0 ? hasSelectedItems.map((item) => item.label).join('|') : this.title();
   });
 
   constructor(private elementRef: ElementRef) {
-
     effect(() => {
-      if (!this.isInitialized && this.items() && this.items().length>0) {
+      if (!this.isInitialized && this.items() && this.items().length > 0) {
         this.controlItems.set(this.items());
         this.isInitialized = true;
       }
@@ -47,10 +46,10 @@ export class DropdownComponent {
 
   selectedLabel = computed(() => {
     const items = this.controlItems();
-    const sel = items.find(i => i.isSelected === true);
-    console.log(sel)
+    const sel = items.find((i) => i.isSelected === true);
+    console.log(sel);
     return sel ? sel.label : '---';
-  })
+  });
 
   positions: ConnectedPosition[] = [
     {
@@ -58,40 +57,40 @@ export class DropdownComponent {
       originY: 'bottom',
       overlayX: 'end',
       overlayY: 'top',
-      offsetX: 0
+      offsetX: 0,
     },
     {
       originX: 'start',
       originY: 'bottom',
       overlayX: 'start',
       overlayY: 'top',
-      offsetX: 0
-    }
+      offsetX: 0,
+    },
   ];
 
-  toggle():void {
-    this.isOpen.set(!this.isOpen())
+  toggle(): void {
+    this.isOpen.set(!this.isOpen());
   }
 
   selectOne(event: any): void {
     const item: SelectOption = event;
 
-    // items with value starting with --sep-- are seperators 
-    if (item.value?.indexOf('--sep--')===0) {
-      return
+    // items with value starting with --sep-- are seperators
+    if (item.value?.indexOf('--sep--') === 0) {
+      return;
     }
 
-    const items = this.controlItems().map(item => {
-      item.isSelected = (item.label === event.label);
+    const items = this.controlItems().map((item) => {
+      item.isSelected = item.label === event.label;
       return item;
-    })
+    });
     this.controlItems.set(items);
 
     this.selected.emit(event);
     this.changed.emit(item.value);
     this.isOpen.set(false);
-    setTimeout(()=>{
+    setTimeout(() => {
       this.isInitialized = false;
-    },2000);
+    }, 2000);
   }
 }

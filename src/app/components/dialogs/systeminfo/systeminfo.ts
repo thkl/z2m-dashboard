@@ -1,13 +1,13 @@
- 
 import { BridgeService } from '@/app/services/bridge.service';
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'SystemInfoDialog',
   imports: [TranslateModule],
   templateUrl: './systeminfo.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './systeminfo.scss',
 })
 export class SystemInfoDialog {
@@ -16,7 +16,7 @@ export class SystemInfoDialog {
 
   bridgeInfo = this.bridgeService.bridgeInfo();
 
-  close():void {
-     this.dialogRef.close();
+  close(): void {
+    this.dialogRef.close();
   }
 }

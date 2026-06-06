@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DeviceStore } from '../datastore/device.store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -22,13 +22,14 @@ import { AppMenuComponent } from '@/app/components/appmenu/appmenu';
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [RouterModule, TranslateModule, LogView, ResizableContainerComponent, TabContainerComponent, VersionDisplayComponent,AppMenuComponent]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [RouterModule, TranslateModule, LogView, ResizableContainerComponent, TabContainerComponent, VersionDisplayComponent, AppMenuComponent],
 })
 export class LayoutComponent {
   sidebarOpen = true;
   logViewOpen = true;
   waitingForConnection = false;
-  connectionDialogReferecnce?:DialogRef<any,ChooseServerDialog>;
+  connectionDialogReferecnce?: DialogRef<any, ChooseServerDialog>;
   host = 'localhost';
   connectionDialogOpen = false;
 
@@ -46,42 +47,41 @@ export class LayoutComponent {
 
   mainTitle = computed(() => {
     return this.applicationService.mainTitle();
-  })
+  });
 
   inspector = computed(() => {
     return this.applicationService.inspector();
-  })
+  });
 
   connectedHost = computed(() => {
     return this.connectionManager.connectedHost();
-  })
+  });
 
   info = computed(() => {
     const bi = this.bs.bridgeInfo;
     return bi();
-  })
+  });
 
   rightSidebarOpen = computed(() => {
     return this.tabManager.numberOfTabs() > 0;
-  })
+  });
 
   noSavedConnectionSignal = this.signalBusService.onEvent<string>('connection_error');
   connectionSignal = this.signalBusService.onEvent<string>('connection_connected');
 
   constructor() {
-
     effect(() => {
       const sgn = this.noSavedConnectionSignal();
-       console.log(sgn);
-      if (sgn !== null && (sgn.data === "NO_LASTSAVED_CONNECTION" || sgn.data === "error_connecting")) {
+      console.log(sgn);
+      if (sgn !== null && (sgn.data === 'NO_LASTSAVED_CONNECTION' || sgn.data === 'error_connecting')) {
         this.openServerDialog(sgn.data);
-        this.signalBusService.reset("connection_error");
-      } 
+        this.signalBusService.reset('connection_error');
+      }
     });
 
-    effect(()=>{
-      console.log("WFC",this.connectionSignal())
-      if (this.connectionSignal()!==null) {
+    effect(() => {
+      console.log('WFC', this.connectionSignal());
+      if (this.connectionSignal() !== null) {
         this.connectionDialogReferecnce?.close();
       }
     });
@@ -100,7 +100,6 @@ export class LayoutComponent {
     this.applicationService.inspector = null;
   }
 
-
   openServerDialog(message: string) {
     if (this.connectionDialogOpen) {
       return;
@@ -108,37 +107,36 @@ export class LayoutComponent {
     this.connectionDialogOpen = true;
     let knownServerList: Z2MServer[] = [];
     try {
-      const ks = this.settingsService.getPreference("saved_hosts");
+      const ks = this.settingsService.getPreference('saved_hosts');
       if (ks) {
-        Object.keys(ks).forEach(sn => {
-          knownServerList.push(ks[sn])
-        })
+        Object.keys(ks).forEach((sn) => {
+          knownServerList.push(ks[sn]);
+        });
       }
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+    }
 
     const data: ChooseServerDialogData = {
       knownServer: knownServerList,
-      message
-    }
+      message,
+    };
 
     this.connectionDialogReferecnce = this.dialog.open(ChooseServerDialog, {
       width: '600px',
       panelClass: 'overlay',
-      data
+      data,
     });
 
     this.connectionDialogReferecnce.closed.subscribe((result: unknown) => {
       this.connectionDialogOpen = false;
       if (result !== undefined) {
-        const dr = result as ChooseServerDialogData
-        console.log("Try connecting", dr.newServer)
+        const dr = result as ChooseServerDialogData;
+        console.log('Try connecting', dr.newServer);
         setTimeout(() => {
-          this.connectionManager.saveAndConnect(dr.newServer!)
+          this.connectionManager.saveAndConnect(dr.newServer!);
         }, 500);
       }
     });
-
-
   }
-
 }

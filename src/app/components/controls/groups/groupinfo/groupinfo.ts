@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal, Signal } from '@angular/core';
+import { Component, computed, inject, input, signal, Signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -18,15 +18,14 @@ import { BridgeService } from '@/app/services/bridge.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 
-
 @Component({
   selector: 'GroupInfoComponent',
   imports: [TranslateModule, ExpansionPanelDeviceComponent, DeviceFeaturesComponent, OptionPanelComponent],
   templateUrl: './groupinfo.html',
-  styleUrl: './groupinfo.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './groupinfo.scss',
 })
 export class GroupInfoComponent {
-
   protected readonly groupStore = inject(GroupStore);
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly deviceService = inject(DeviceService);
@@ -38,22 +37,25 @@ export class GroupInfoComponent {
   group_id = input.required<number | undefined>();
   group = computed(() => {
     //Filter the coordinator from the devices
-    let groupView: Signal<Group[]> = createStoreView(this.groupStore, {
-      criteria: [
-        { property: "id", value: this.group_id(), operator: "equals" }
-      ],
-      logicalOperator: SearchOperator.AND
-    }, false, undefined);
+    let groupView: Signal<Group[]> = createStoreView(
+      this.groupStore,
+      {
+        criteria: [{ property: 'id', value: this.group_id(), operator: 'equals' }],
+        logicalOperator: SearchOperator.AND,
+      },
+      false,
+      undefined,
+    );
 
-    return groupView().length > 0 ? groupView()[0] : null
+    return groupView().length > 0 ? groupView()[0] : null;
   });
 
   members = computed(() => {
     const mb = this.group()?.members;
     const dv = this.deviceStore.entities();
-    return mb?.map(m => {
-      return { device: dv.find(d => d.ieee_address === m.ieee_address), endpoint: m.endpoint };
-    })
+    return mb?.map((m) => {
+      return { device: dv.find((d) => d.ieee_address === m.ieee_address), endpoint: m.endpoint };
+    });
   });
 
   selectedDevice = signal<Device | null>(null);
@@ -61,45 +63,49 @@ export class GroupInfoComponent {
 
   deviceSelectorTitle = computed(() => {
     const d = this.selectedDevice();
-    return d !== null ? d.friendly_name : this.translate.instant("SELECT_DEVICE")
+    return d !== null ? d.friendly_name : this.translate.instant('SELECT_DEVICE');
   });
 
   selectedDeviceEndPoints = computed(() => {
     const d = this.selectedDevice();
-    return (d !== null) ? Object.keys(d.endpoints).map((e: string) => {
-      return { label: e, value: e, isSelected: false }
-    }) : [];
-  })
-
+    return d !== null
+      ? Object.keys(d.endpoints).map((e: string) => {
+          return { label: e, value: e, isSelected: false };
+        })
+      : [];
+  });
 
   endPointSelectorTitle = computed(() => {
     const epd = this.selectedEndpointId();
-    return epd !== null ? this.translate.instant("ENDPOINT_", { id: epd }) : this.translate.instant("ENDPOINT")
+    return epd !== null ? this.translate.instant('ENDPOINT_', { id: epd }) : this.translate.instant('ENDPOINT');
   });
 
-
-  availabelDevices = createStoreView(this.deviceStore, {
-    criteria: [
-      { property: "type", value: "Coordinator", operator: "not" }
-    ],
-    logicalOperator: SearchOperator.AND
-  }, false, undefined);
+  availabelDevices = createStoreView(
+    this.deviceStore,
+    {
+      criteria: [{ property: 'type', value: 'Coordinator', operator: 'not' }],
+      logicalOperator: SearchOperator.AND,
+    },
+    false,
+    undefined,
+  );
 
   deviceNameList = computed(() => {
     const dv = this.availabelDevices();
-    return dv.map((d: Device) => {
-      return {
-        isSelected: false,
-        label: d.friendly_name,
-        value: d.ieee_address
-      } as SelectOption
-    }
-    ).sort((a: SelectOption, b: SelectOption) => {
-      if (a.label > b.label) return 1;
-      if (a.label < b.label) return -1;
-      return 0;
-    });
-  })
+    return dv
+      .map((d: Device) => {
+        return {
+          isSelected: false,
+          label: d.friendly_name,
+          value: d.ieee_address,
+        } as SelectOption;
+      })
+      .sort((a: SelectOption, b: SelectOption) => {
+        if (a.label > b.label) return 1;
+        if (a.label < b.label) return -1;
+        return 0;
+      });
+  });
 
   renameGroup() {
     console.log(this.group());
@@ -108,16 +114,16 @@ export class GroupInfoComponent {
   deleteGroup() {
     if (this.group()) {
       const data: DeleteObjectOptions = {
-        title: "DELETE_GROUP",
-        message: "WANT_DELETE_GROUP",
+        title: 'DELETE_GROUP',
+        message: 'WANT_DELETE_GROUP',
         objectName: this.group()?.friendly_name!,
         delete: false,
-      }
+      };
 
       const dialogRef = this.dialog.open(DeleteObjectDialog, {
         width: '600px',
         panelClass: 'overlay',
-        data
+        data,
       });
 
       dialogRef.closed.subscribe((result: any) => {
@@ -135,8 +141,8 @@ export class GroupInfoComponent {
       const options: AddRemoveDeviceFromGroupOptions = {
         device: device.friendly_name,
         group: this.group()!.friendly_name,
-        endpoint
-      }
+        endpoint,
+      };
       this.deviceService.removeDeviceFromGroup(options);
     }
   }
@@ -146,12 +152,11 @@ export class GroupInfoComponent {
     const endpoint = this.selectedEndpointId();
     const group = this.group();
     if (device && endpoint && group) {
-
       const options: AddRemoveDeviceFromGroupOptions = {
         device: device.friendly_name,
         group: group.friendly_name,
-        endpoint: endpoint
-      }
+        endpoint: endpoint,
+      };
 
       this.deviceService.addDeviceToGroup(options);
       this.selectedDevice.set(null);

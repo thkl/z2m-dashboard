@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ElementRef, viewChild, AfterViewInit, HostBinding, input, output, effect, inject } from '@angular/core';
+import { Component, OnDestroy, ElementRef, viewChild, AfterViewInit, HostBinding, input, output, effect, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ApplicationService } from '../../../services/app.service';
 import { SettingsService } from '@/app/services/settings.service';
 
@@ -8,7 +8,8 @@ export type ResizeSide = 'top' | 'right' | 'bottom' | 'left';
   selector: 'app-resizable-container',
   standalone: true,
   templateUrl: './resizable-container.html',
-  styleUrl: './resizable-container.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './resizable-container.scss',
 })
 export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
   resizeSide = input<ResizeSide>('right');
@@ -22,8 +23,12 @@ export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
 
   sizeChange = output<number>();
 
-  @HostBinding('class.flex-mode') get isFlexMode() { return this.flexBehavior(); }
-  @HostBinding('class.full-height-mode') get isFullHeightMode() { return this.fullHeight(); }
+  @HostBinding('class.flex-mode') get isFlexMode() {
+    return this.flexBehavior();
+  }
+  @HostBinding('class.full-height-mode') get isFullHeightMode() {
+    return this.fullHeight();
+  }
 
   containerRef = viewChild.required<ElementRef<HTMLDivElement>>('container');
 
@@ -33,8 +38,8 @@ export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
   private startSize = 0;
 
   containerStyle = '';
-  protected readonly settingsService = inject(SettingsService);   
-  
+  protected readonly settingsService = inject(SettingsService);
+
   constructor() {
     // Load saved size from localStorage using effect
     effect(() => {
@@ -124,7 +129,7 @@ export class ResizableContainerComponent implements OnDestroy, AfterViewInit {
     document.body.style.cursor = '';
 
     // Save to localStorage
-    this.settingsService.setPreference(`size_${this.storageKey()}`,this.currentSize.toString());
+    this.settingsService.setPreference(`size_${this.storageKey()}`, this.currentSize.toString());
   };
 
   private removeEventListeners() {

@@ -17,7 +17,7 @@
               }
               <div class="root">
                 <div>
-                  <span class="label">{{ entity?.label | translate }}</span>
+                  <span class="label">{{ $safeNavigationMigration(entity?.label) | translate }}</span>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OptionComponent } from '../../controls/option/option';
 import { RemoveDeviceOptions, SwitchElement } from '../../../models/types';
@@ -8,11 +8,10 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
   selector: 'RemoveDeviceDialog',
   imports: [TranslateModule, OptionComponent],
   templateUrl: './removedevicedialog.html',
-  styleUrl: './removedevicedialog.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './removedevicedialog.scss',
 })
-
 export class RemoveDeviceDialog {
-
   blockDevice: SwitchElement;
   forceDelete: SwitchElement;
 
@@ -21,10 +20,8 @@ export class RemoveDeviceDialog {
   data = inject(DIALOG_DATA);
 
   constructor() {
-
-    this.blockDevice = {label: this.translate.instant("DELETE_BLOCK_DEVICE"), isActive: this.data.blockDevice};
-    this.forceDelete =  {label: this.translate.instant("DELETE_FORCE_DELETE"), isActive: this.data.forceDelete};
-
+    this.blockDevice = { label: this.translate.instant('DELETE_BLOCK_DEVICE'), isActive: this.data.blockDevice };
+    this.forceDelete = { label: this.translate.instant('DELETE_FORCE_DELETE'), isActive: this.data.forceDelete };
   }
 
   blockDeviceChanged(event: any) {
@@ -38,7 +35,6 @@ export class RemoveDeviceDialog {
   cancel(): void {
     this.dialogRef.close();
   }
-
 
   ok(): void {
     this.dialogRef.close(this.data);

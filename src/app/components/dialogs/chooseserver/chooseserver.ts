@@ -1,6 +1,6 @@
 import { Z2MServer } from '@/app/models/types';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { Component, computed, effect, inject, input, model } from '@angular/core';
+import { Component, computed, effect, inject, input, model, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OptionComponent } from '../../controls/option/option';
 import { InfoOverlayComponent } from '../../controls/infooverlay/infooverlay';
@@ -8,11 +8,9 @@ import { TokenService } from '@/app/services/token.service';
 import { SignalBusService } from '@/app/services/sigbalbus.service';
 import { ApplicationService } from '@/app/services/app.service';
 
-
-
 export interface ChooseServerDialogData {
-  knownServer: Z2MServer[],
-  newServer?: Z2MServer,
+  knownServer: Z2MServer[];
+  newServer?: Z2MServer;
   message?: string;
 }
 
@@ -20,7 +18,8 @@ export interface ChooseServerDialogData {
   selector: 'ChooseServerDialog',
   imports: [TranslateModule, OptionComponent, InfoOverlayComponent],
   templateUrl: './chooseserver.html',
-  styleUrl: './chooseserver.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './chooseserver.scss',
 })
 export class ChooseServerDialog {
   translate = inject(TranslateService);
@@ -29,22 +28,20 @@ export class ChooseServerDialog {
   tokenService = inject(TokenService);
   protected readonly appService = inject(ApplicationService);
 
-  host = model<string>("");
+  host = model<string>('');
   port = model<number>(8080);
   secure = model<boolean>(false);
   name = model<string>('localhost');
   token = model<string | undefined>();
-  selectedId : string = this.appService.generateUUID();
+  selectedId: string = this.appService.generateUUID();
 
   isSecure = computed(() => {
-
     return {
       label: '',
-      value: "true",
-      isActive: this.secure() === true
-    }
-  })
- 
+      value: 'true',
+      isActive: this.secure() === true,
+    };
+  });
 
   async save(): Promise<void> {
     let encryptedToken: string | undefined;
@@ -55,23 +52,23 @@ export class ChooseServerDialog {
     }
 
     const newServer: Z2MServer = {
-      id:this.selectedId,
+      id: this.selectedId,
       name: this.name(),
       host: this.host(),
       port: this.port(),
       secure: this.secure() ?? false,
-      token: encryptedToken
-    }
-    
+      token: encryptedToken,
+    };
+
     this.dialogRef.close({ ...this.dialogData, newServer });
   }
 
   changeHost(event: any) {
-    this.host.set(event.target.value)
+    this.host.set(event.target.value);
   }
 
   changePort(event: any) {
-    this.port.set(event.target.value)
+    this.port.set(event.target.value);
   }
 
   changeName(event: any) {
@@ -102,10 +99,10 @@ export class ChooseServerDialog {
     this.selectedId = server.id ?? this.appService.generateUUID();
     if (server.token) {
       let decryptedToken = await this.tokenService.decryptToken(server.token);
-      console.log(server.token,decryptedToken)
+      console.log(server.token, decryptedToken);
       this.token.set(decryptedToken!);
     } else {
-      this.token.set("")
+      this.token.set('');
     }
   }
 }

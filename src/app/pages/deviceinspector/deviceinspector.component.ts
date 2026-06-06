@@ -7,46 +7,49 @@ import { SearchOperator } from '@/app/datastore/generic.store';
 import { Device } from '@/app/models/device';
 import { DeviceService } from '@/app/services/device.service';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
-import { Component, computed, effect, inject, input, output, Signal, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, Signal, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'DeviceInspectorComponent',
   imports: [TranslateModule, DeviceInfoComponent, DeviceFeaturesComponent, DevicePropertiesComponent],
   templateUrl: './deviceinspector.component.html',
-  styleUrl: './deviceinspector.component.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './deviceinspector.component.scss',
 })
 export class DeviceInspectorComponent {
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly deviceService = inject(DeviceService);
   tabManager = inject(PropertyTabManagerService);
-  
+
   panel = signal<number>(1);
 
   ieee_address = input.required<string | undefined>();
 
   device = computed(() => {
     //Filter the coordinator from the devices
-    let devicesView: Signal<Device[]> = createStoreView(this.deviceStore, {
-      criteria: [
-        { property: "ieee_address", value: this.ieee_address(), operator: "equals" }
-      ],
-      logicalOperator: SearchOperator.AND
-    }, false, undefined);
- 
-    return devicesView().length > 0 ? devicesView()[0] : null
+    let devicesView: Signal<Device[]> = createStoreView(
+      this.deviceStore,
+      {
+        criteria: [{ property: 'ieee_address', value: this.ieee_address(), operator: 'equals' }],
+        logicalOperator: SearchOperator.AND,
+      },
+      false,
+      undefined,
+    );
+
+    return devicesView().length > 0 ? devicesView()[0] : null;
   });
 
   constructor() {
-    effect(()=>{
+    effect(() => {
       if (this.device() === null) {
-         this.tabManager.closeTab(this.ieee_address()!);
+        this.tabManager.closeTab(this.ieee_address()!);
       }
-    })
+    });
   }
 
   closeSidebar(): void {
     this.tabManager.closeTab(this.ieee_address()!);
   }
-
 }

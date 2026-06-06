@@ -1,16 +1,16 @@
 import { Endpoint } from '@/app/models/device';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'DeviceEndpointComponent',
   imports: [TranslateModule],
   templateUrl: './endpoints.html',
-  styleUrl: './endpoints.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './endpoints.scss',
 })
 export class DeviceEndpointComponent {
-
-  endpoints = input.required<{ [key: string]: Endpoint }>()
+  endpoints = input.required<{ [key: string]: Endpoint }>();
 
   // Make Object available in template
   Object = Object;
@@ -19,7 +19,7 @@ export class DeviceEndpointComponent {
   endpointsArray = computed(() =>
     Object.entries(this.endpoints()).map(([key, value]) => ({
       key,
-      endpoint: value as Endpoint
-    }))
+      endpoint: value as Endpoint,
+    })),
   );
 }

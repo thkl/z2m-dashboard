@@ -1,21 +1,19 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, output, signal, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'SearchInput',
   imports: [],
   templateUrl: './searchinput.html',
-  styleUrl: './searchinput.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './searchinput.scss',
 })
 export class SearchInput {
-
-
   searchText = signal<string>('');
   searchChange = output<string>();
 
-
   applySearch(event: any): void {
     if (event !== null) {
-      this.searchText.set(event.target.value)
+      this.searchText.set(event.target.value);
     } else {
       this.searchText.set('');
     }

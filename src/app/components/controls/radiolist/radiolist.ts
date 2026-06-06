@@ -1,15 +1,16 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 
 export interface RadioElement {
-  label:string;
-  value?:string;
-  isActive:boolean;
-  _id?:number;
+  label: string;
+  value?: string;
+  isActive: boolean;
+  _id?: number;
 }
 
 @Component({
   selector: 'RadiolistComponent',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './radiolist.html',
 })
 export class RadiolistComponent {
@@ -18,7 +19,7 @@ export class RadiolistComponent {
   selected = output<RadioElement>();
 
   controlItems = computed(() => {
-    return this.items().map((item, idx) => ({...item, _id: idx}));
+    return this.items().map((item, idx) => ({ ...item, _id: idx }));
   });
 
   private clickedIndex = signal<number | null>(null);
@@ -28,8 +29,8 @@ export class RadiolistComponent {
     return item.isActive || this.clickedIndex() === index;
   }
 
-  click(index: number):void {
-    if (this.active()===true) {
+  click(index: number): void {
+    if (this.active() === true) {
       if (this.clickTimeout) {
         clearTimeout(this.clickTimeout);
       }

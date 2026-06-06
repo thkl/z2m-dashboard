@@ -22,7 +22,7 @@
     @for (device of filteredDevices(); track $index) {
       <div class="p-2 w-full flex flex-col">
         <span (click)="visitDevice(device)" class="cursor-pointer text-center w-full device_name">{{ device.friendly_name }}</span>
-        <DeviceFeaturesComponent [ieee_address]="device?.ieee_address" displayMode="dashboard"></DeviceFeaturesComponent>
+        <DeviceFeaturesComponent [ieee_address]="$safeNavigationMigration(device?.ieee_address)" displayMode="dashboard"></DeviceFeaturesComponent>
       </div>
     }
   </div>

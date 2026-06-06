@@ -8,7 +8,7 @@ import { HumanReadablePipe } from '@/app/pipes/human.pipe';
 import { DeviceService } from '@/app/services/device.service';
 import { hsvToHtmlRgb, xyToHtmlRgb } from '@/app/utils/color.util';
 import { flattenExposures, isValidForDashboard, isValidForScenes } from '@/app/utils/filter.utils';
-import { Component, computed, effect, inject, input, model, signal, Signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model, signal, Signal, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { ColorSelectorComponent } from '../../colorselector/colorselector';
 import { ColorTemperatureSelectorComponent } from '../../colortemperatureselector/colortemperatureselector';
@@ -21,14 +21,24 @@ import { RadiolistComponent, RadioElement } from '../../radiolist/radiolist';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 import { DeviceImage } from '@/app/components/controls/device/device-image/device-image';
 
-
 @Component({
   selector: 'DeviceFeaturesComponent',
-  imports: [TranslateModule, HumanReadablePipe, LevelSelectorComponent, InfoOverlayComponent, ExpansionPanelComponent, RadiolistComponent, OptionComponent, ColorSelectorComponent, ColorTemperatureSelectorComponent, DropdownComponent],
+  imports: [
+    TranslateModule,
+    HumanReadablePipe,
+    LevelSelectorComponent,
+    InfoOverlayComponent,
+    ExpansionPanelComponent,
+    RadiolistComponent,
+    OptionComponent,
+    ColorSelectorComponent,
+    ColorTemperatureSelectorComponent,
+    DropdownComponent,
+  ],
   templateUrl: './devicefeatures.html',
-  styleUrl: './devicefeatures.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './devicefeatures.scss',
 })
-
 export class DeviceFeaturesComponent {
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly deviceService = inject(DeviceService);
@@ -40,19 +50,28 @@ export class DeviceFeaturesComponent {
 
   filterEndpoints = input<string[]>();
 
-  levelMarks: LevelMarkOption[] = [{ percent: 0, label: "0" }, { percent: 25, label: "25" }, { percent: 50, label: "50" }, { percent: 75, label: "75" }, { percent: 100, label: "100" }];
+  levelMarks: LevelMarkOption[] = [
+    { percent: 0, label: '0' },
+    { percent: 25, label: '25' },
+    { percent: 50, label: '50' },
+    { percent: 75, label: '75' },
+    { percent: 100, label: '100' },
+  ];
 
   ieee_address = input.required<string | undefined>();
   device = computed(() => {
     //Filter the coordinator from the devices
-    let devicesView: Signal<Device[]> = createStoreView(this.deviceStore, {
-      criteria: [
-        { property: "ieee_address", value: this.ieee_address(), operator: "equals" }
-      ],
-      logicalOperator: SearchOperator.AND
-    }, false, undefined);
+    let devicesView: Signal<Device[]> = createStoreView(
+      this.deviceStore,
+      {
+        criteria: [{ property: 'ieee_address', value: this.ieee_address(), operator: 'equals' }],
+        logicalOperator: SearchOperator.AND,
+      },
+      false,
+      undefined,
+    );
 
-    return devicesView().length > 0 ? devicesView()[0] : null
+    return devicesView().length > 0 ? devicesView()[0] : null;
   });
 
   constructor() {
@@ -66,26 +85,34 @@ export class DeviceFeaturesComponent {
       } else {
         const result = flattenExposures(expos || [], states || []);
 
-        const filtered = result.filter(f => (endpointFilter?.includes(f.property.endpoint!) || f.property.endpoint === undefined));
+        const filtered = result.filter((f) => endpointFilter?.includes(f.property.endpoint!) || f.property.endpoint === undefined);
         this.deviceFeatures.set(filtered);
       }
-    })
+    });
   }
 
   radioItems(property: DeviceFeature, currentValue: any): RadioElement[] {
-    return property.values ? property.values.map(v => { return { label: v, isActive: v === currentValue } }) : [];
+    return property.values
+      ? property.values.map((v) => {
+          return { label: v, isActive: v === currentValue };
+        })
+      : [];
   }
 
   selectItems(property: DeviceFeature, currentValue: any): SelectOption[] {
-    return property.values ? property.values.map(v => { return { label: v, isSelected: v === currentValue } }) : [];
+    return property.values
+      ? property.values.map((v) => {
+          return { label: v, isSelected: v === currentValue };
+        })
+      : [];
   }
 
   switch(property: DeviceFeature, item: SwitchElement): void {
     if (this.device()) {
       const device = this.device()!;
       const state: DeviceTargetState = {};
-      state[property.property || property.name] = item.isActive ? property.value_on ?? "ON" : property.value_off ?? "OFF"
-      this.deviceService.updateDeviceState(device.friendly_name, state)
+      state[property.property || property.name] = item.isActive ? (property.value_on ?? 'ON') : (property.value_off ?? 'OFF');
+      this.deviceService.updateDeviceState(device.friendly_name, state);
     }
   }
 
@@ -93,8 +120,8 @@ export class DeviceFeaturesComponent {
     if (this.device()) {
       const device = this.device()!;
       const state: DeviceTargetState = {};
-      state[property.property || property.name] = item ? item.label : ''
-      this.deviceService.updateDeviceState(device.friendly_name, state)
+      state[property.property || property.name] = item ? item.label : '';
+      this.deviceService.updateDeviceState(device.friendly_name, state);
     }
   }
 
@@ -102,8 +129,8 @@ export class DeviceFeaturesComponent {
     if (this.device()) {
       const device = this.device()!;
       const state: DeviceTargetState = {};
-      state[property.property || property.name] = item ? item.label : ''
-      this.deviceService.updateDeviceState(device.friendly_name, state)
+      state[property.property || property.name] = item ? item.label : '';
+      this.deviceService.updateDeviceState(device.friendly_name, state);
     }
   }
 
@@ -117,15 +144,14 @@ export class DeviceFeaturesComponent {
   }
 
   colorChange(property: DeviceFeature, newColor: string): void {
-    console.log("colorChange",property)
-    if (property && (property.subtype === "composite" || property.type==='composite' ) && property.features) {
+    console.log('colorChange', property);
+    if (property && (property.subtype === 'composite' || property.type === 'composite') && property.features) {
       const state: DeviceTargetState = {};
-      state[property.property] = { "hex": newColor }
+      state[property.property] = { hex: newColor };
       if (this.device()) {
         this.deviceService.updateDeviceState(this.device()!.friendly_name, state);
       }
     }
-
   }
 
   valueChange(property: DeviceFeature, newValue: number): void {
@@ -141,8 +167,8 @@ export class DeviceFeaturesComponent {
   }
 
   async visitDevice(): Promise<void> {
-     const { DeviceInspectorComponent } = await import('@/app/pages/deviceinspector/deviceinspector.component');
-   
+    const { DeviceInspectorComponent } = await import('@/app/pages/deviceinspector/deviceinspector.component');
+
     const device = this.device();
     if (device) {
       this.tabManager.openTab({
@@ -152,7 +178,7 @@ export class DeviceFeaturesComponent {
         data: { ieee_address: device.ieee_address },
         component: DeviceInspectorComponent,
         iconComponent: DeviceImage,
-        iconData: { device }
+        iconData: { device },
       });
     }
   }

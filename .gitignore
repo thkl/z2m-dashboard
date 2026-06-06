@@ -3,6 +3,7 @@
 # Compiled output
 /tmp
 /out-tsc
+
 /bazel-out
 
 # Node
@@ -44,5 +45,3 @@ gl-sast-report.json
 .vscode/*
 analyse.sast.json
 *-sast-report.*
-pnpm-lock.yaml
-pnpm-lock.yaml

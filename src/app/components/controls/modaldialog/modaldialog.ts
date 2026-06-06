@@ -1,37 +1,32 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { Component, inject, input } from '@angular/core';
-
-
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 export interface ModalDialogData {
   title: string;
   message: string;
   okMessage?: string;
-  okClass?:string;
+  okClass?: string;
   cancelMessage?: string;
-  cancelClass?:string;
-  showCancel:boolean;
+  cancelClass?: string;
+  showCancel: boolean;
 }
-
 
 @Component({
   selector: 'ModalDialog',
   imports: [],
   templateUrl: './modaldialog.html',
-  styleUrl: './modaldialog.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './modaldialog.scss',
 })
-
-
 export class ModalDialog {
   dialogRef = inject<DialogRef<ModalDialogData>>(DialogRef<ModalDialogData>);
   data = inject(DIALOG_DATA);
 
-
-  cancel():void {
+  cancel(): void {
     this.dialogRef.close();
   }
 
-  ok():void {
+  ok(): void {
     this.dialogRef.close(this.data);
   }
 }

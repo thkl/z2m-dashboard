@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { Device } from '../../../models/device';
 import { DEVICES_ROOT_URL, SUPPORT_NEW_DEVICES_URL } from '../../../models/constants';
 import { normalizeDeviceModel } from '../../../utils/filter.utils';
@@ -7,34 +7,27 @@ import { normalizeDeviceModel } from '../../../utils/filter.utils';
   selector: 'ModelLink',
   imports: [],
   templateUrl: './modellink.html',
-  styles:`
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styles: `
     .link {
-      color:var(--button-text-color)
+      color: var(--button-text-color);
     }
-  `
+  `,
 })
 export class ModelLink {
-
   device = input.required<Device>();
-
 
   url = computed(() => {
     const device = this.device();
     let url = SUPPORT_NEW_DEVICES_URL;
 
     if (device.supported && device.definition) {
-      const detailData = [
-        encodeURIComponent(device.definition.vendor.toLowerCase()),
-        encodeURIComponent(device.definition.model.toLowerCase()),
-      ].join("-");
+      const detailData = [encodeURIComponent(device.definition.vendor.toLowerCase()), encodeURIComponent(device.definition.model.toLowerCase())].join('-');
 
-      url = DEVICES_ROOT_URL.replace("{id}", `${encodeURIComponent(
-        normalizeDeviceModel(device.definition.model),
-      )}.html#${encodeURIComponent(normalizeDeviceModel(detailData))}`)
-
+      url = DEVICES_ROOT_URL.replace('{id}', `${encodeURIComponent(normalizeDeviceModel(device.definition.model))}.html#${encodeURIComponent(normalizeDeviceModel(detailData))}`);
     }
     return url;
-  })
+  });
 
   label = computed(() => {
     const device = this.device();
@@ -45,5 +38,3 @@ export class ModelLink {
     return label;
   });
 }
-
-

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, model, output, Signal, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model, output, Signal, signal, ChangeDetectionStrategy } from '@angular/core';
 import { BridgeEventStore } from '../../datastore/logging.store';
 import { DatePipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
@@ -17,14 +17,15 @@ import { LogViewDialog } from '@/app/components/dialogs/logview/logview';
   selector: 'LogView',
   imports: [DatePipe, TranslateModule, OptionPanelComponent, DropdownComponent],
   templateUrl: './logview.html',
-  styleUrl: './logview.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './logview.scss',
 })
 export class LogView {
   protected readonly eventStore = inject(BridgeEventStore);
   protected readonly bridgeService = inject(BridgeService);
   protected readonly appService = inject(ApplicationService);
   protected readonly settingsService = inject(SettingsService);
-  protected readonly dialog = inject(Dialog)
+  protected readonly dialog = inject(Dialog);
 
   selectedLevels = signal<string[]>([]);
   serverOptions = signal<SelectOption[]>([]);
@@ -35,7 +36,7 @@ export class LogView {
   logOptions = signal<SelectOption[]>([]);
 
   constructor() {
-    const selLevel = this.settingsService.getPreference("log_levels");
+    const selLevel = this.settingsService.getPreference('log_levels');
     this.selectedLevels.set(selLevel);
 
     effect(() => {
@@ -43,11 +44,13 @@ export class LogView {
       if (bi() !== null) {
         this.log_level.set(bi()!.log_level);
         const lvlval = this.log_level();
-        if (lvlval !== "") {
-          console.log("current", lvlval)
-          this.serverOptions = signal([...LogLevels].map(level => {
-            return { ...level, isSelected: level.value === lvlval };
-          }));
+        if (lvlval !== '') {
+          console.log('current', lvlval);
+          this.serverOptions = signal(
+            [...LogLevels].map((level) => {
+              return { ...level, isSelected: level.value === lvlval };
+            }),
+          );
         }
       }
     });
@@ -55,22 +58,25 @@ export class LogView {
     effect(() => {
       const sl = this.selectedLevels();
       if (sl) {
-        this.logOptions = signal([...LogLevels].map(ll => { return { ...ll, isSelected: sl.indexOf(ll.value) > -1 } }));
+        this.logOptions = signal(
+          [...LogLevels].map((ll) => {
+            return { ...ll, isSelected: sl.indexOf(ll.value) > -1 };
+          }),
+        );
       } else {
         this.logOptions = signal([...LogLevels]);
       }
     });
-
   }
 
   protected readonly reversedEntries = computed(() => {
     const selectedLevels = this.selectedLevels();
-    console.log(this.eventStore.entities().length)
-    return [...this.eventStore.entities()].reverse().filter(e => selectedLevels ? selectedLevels.indexOf(e.level) > -1 : true);
+    console.log(this.eventStore.entities().length);
+    return [...this.eventStore.entities()].reverse().filter((e) => (selectedLevels ? selectedLevels.indexOf(e.level) > -1 : true));
   });
 
   toggleView() {
-    this.toggleLogView.emit()
+    this.toggleLogView.emit();
   }
 
   clearLog() {
@@ -79,17 +85,17 @@ export class LogView {
 
   changeBridgeLogging(event: any) {
     const options = {
-      "advanced": {
-        "log_level": event.value
-      }
-    }
+      advanced: {
+        log_level: event.value,
+      },
+    };
     this.bridgeService.updateOptions({ options });
   }
 
   logOptionChange(event: any) {
     const selected: SelectOption[] = event.filter((e: SelectOption) => e.isSelected);
     const levels = selected.map((e) => e.value ?? '');
-    this.settingsService.setPreference("log_levels", levels);
+    this.settingsService.setPreference('log_levels', levels);
     this.selectedLevels.set(levels);
   }
 
@@ -97,7 +103,7 @@ export class LogView {
     const dialogRef = this.dialog.open(LogViewDialog, {
       width: '600px',
       panelClass: 'overlay',
-      data: logItem
+      data: logItem,
     });
   }
 }

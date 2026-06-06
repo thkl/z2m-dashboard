@@ -1,4 +1,4 @@
-import { Component, computed, inject, Injector, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, Injector, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { AddObjectDialogData, ColumnDef, TableConfig } from '../../models/types';
 import { Group } from '../../models/group';
 import { GroupStore } from '../../datastore/group.store';
@@ -22,11 +22,10 @@ import { BridgeService } from '@/app/services/bridge.service';
   selector: 'GroupListComponent',
   imports: [TableComponent, TableCellDirective, TableSettingsControl, TranslateModule, SettingsBarComponent],
   templateUrl: './groupslist.component.html',
-  styleUrl: './groupslist.component.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './groupslist.component.scss',
 })
 export class GroupListComponent {
-
-
   protected readonly injector = inject(Injector);
   protected readonly groupStore = inject(GroupStore);
   protected readonly applicationService = inject(ApplicationService);
@@ -49,7 +48,7 @@ export class GroupListComponent {
 
     // Hide columns that are not in the displayedColumns list
     const displayed = this.displayedColumns();
-    allColumns.forEach(col => {
+    allColumns.forEach((col) => {
       col.hidden = !displayed.includes(col.id);
     });
 
@@ -62,9 +61,9 @@ export class GroupListComponent {
       onRowClick: (group: Group) => this.selectGroup(group.id),
       initialSort: {
         column: this.sortColumn(),
-        direction: (sortDir === 'asc' || sortDir === 'desc') ? sortDir : 'asc'
+        direction: sortDir === 'asc' || sortDir === 'desc' ? sortDir : 'asc',
       },
-      settingsControl: this.tableSettings()
+      settingsControl: this.tableSettings(),
     };
   });
 
@@ -74,43 +73,33 @@ export class GroupListComponent {
 
   selectedGroup = computed(() => {
     return this.groupStore.selectedEntity();
-  })
+  });
 
   datasourceSignal = signal<CDKDataSource<Group> | null>(null);
 
   groups = computed(() => {
     const data = this.groupStore.entities();
-    return sortData<Group>(
-      data,
-      this.sortColumn(),
-      this.sortDirection(),
-      (group, column) => this.getGroupValue(group, column)
-    );
-  }
-  )
+    return sortData<Group>(data, this.sortColumn(), this.sortDirection(), (group, column) => this.getGroupValue(group, column));
+  });
   get datasource(): CDKDataSource<Group> {
     return this.datasourceSignal() || new CDKDataSource(this.groups, this.injector);
   }
 
   constructor() {
-    this.applicationService.mainTitle = "GROUP_VIEW";
+    this.applicationService.mainTitle = 'GROUP_VIEW';
   }
-
-
 
   trackByFn(index: number, item: Group): string {
     return item.friendly_name || String(item.id); // Use unique identifier
   }
-
 
   onSort(event: SortEvent) {
     this.sortColumn.set(event.column);
     this.sortDirection.set(event.direction);
   }
 
-
   selectGroup(groupId: number) {
-    const group = this.groupStore.entities().find(g => g.id === groupId);
+    const group = this.groupStore.entities().find((g) => g.id === groupId);
     if (group) {
       this.tabManager.openTab({
         id: String(groupId),
@@ -119,7 +108,7 @@ export class GroupListComponent {
         data: { groupid: String(groupId) },
         component: GroupInspectorComponent,
         iconComponent: GroupImage,
-        iconData: { group }
+        iconData: { group },
       });
     }
   }
@@ -129,39 +118,39 @@ export class GroupListComponent {
       case 'friendly_name':
         return group.friendly_name?.toLowerCase() || '';
       case 'id':
-        return group.id || 0
+        return group.id || 0;
     }
   }
 
   createGroup(): void {
-
-    const groupids = (this.groupStore && this.groupStore?.entities()) ? this.groupStore?.entities().map(g => g.id) : [];
+    const groupids = this.groupStore && this.groupStore?.entities() ? this.groupStore?.entities().map((g) => g.id) : [];
     console.log(groupids);
     const data = {
-      id: findSmallestMissingNumber(groupids ?? [],1),
-      name: ''
+      id: findSmallestMissingNumber(groupids ?? [], 1),
+      name: '',
     };
-
 
     const dialogData: AddObjectDialogData = {
       data,
-      title: "ADD_GROUP",
-      message: "ADD_GROUP_DATA",
-      control: [{ name: "id", label: "GROUP_ID" }, { name: "name", label: "GROUP_NAME" }],
-      created: false
-    }
-
+      title: 'ADD_GROUP',
+      message: 'ADD_GROUP_DATA',
+      control: [
+        { name: 'id', label: 'GROUP_ID' },
+        { name: 'name', label: 'GROUP_NAME' },
+      ],
+      created: false,
+    };
 
     const dialogRef = this.dialog.open(AddObjectDialog, {
       width: '600px',
       panelClass: 'overlay',
-      data: dialogData
+      data: dialogData,
     });
 
     dialogRef.closed.subscribe((result: any) => {
       if (result !== undefined && result.created === true) {
         this.bridgeService.addGroup(result.data['id'], result.data['name']);
       }
-    })
+    });
   }
 }

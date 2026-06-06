@@ -1,19 +1,20 @@
 import { OverlayModule, ConnectedPosition } from '@angular/cdk/overlay';
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'InfoOverlayComponent',
   standalone: true,
   imports: [OverlayModule],
   templateUrl: './infooverlay.html',
-  styleUrl: './infooverlay.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './infooverlay.scss',
 })
 export class InfoOverlayComponent {
   public isOpen = false;
-  message = input.required<string>()
+  message = input.required<string>();
   pointer = 'tooltip-top';
-  icon = input<string>("info");
-  color = input<string>("#4797ff");
+  icon = input<string>('info');
+  color = input<string>('#4797ff');
   private openTimeout?: ReturnType<typeof setTimeout>;
   private closeTimeout?: ReturnType<typeof setTimeout>;
 
@@ -23,18 +24,18 @@ export class InfoOverlayComponent {
       originY: 'top',
       overlayX: 'center',
       overlayY: 'bottom',
-      offsetY: -8
+      offsetY: -8,
     },
     {
       originX: 'center',
       originY: 'bottom',
       overlayX: 'center',
       overlayY: 'top',
-      offsetY: 8
-    }
+      offsetY: 8,
+    },
   ];
 
-  toggle():void {
+  toggle(): void {
     if (this.isOpen) {
       this.closeImmediate();
     } else {
@@ -42,7 +43,7 @@ export class InfoOverlayComponent {
     }
   }
 
-  openImmediate():void {
+  openImmediate(): void {
     if (this.closeTimeout) {
       clearTimeout(this.closeTimeout);
       this.closeTimeout = undefined;
@@ -54,7 +55,7 @@ export class InfoOverlayComponent {
     this.isOpen = true;
   }
 
-  closeImmediate():void {
+  closeImmediate(): void {
     if (this.openTimeout) {
       clearTimeout(this.openTimeout);
       this.openTimeout = undefined;
@@ -66,7 +67,7 @@ export class InfoOverlayComponent {
     this.isOpen = false;
   }
 
-  open():void {
+  open(): void {
     if (this.closeTimeout) {
       clearTimeout(this.closeTimeout);
       this.closeTimeout = undefined;
@@ -79,7 +80,7 @@ export class InfoOverlayComponent {
     }, 200);
   }
 
- close():void {
+  close(): void {
     if (this.openTimeout) {
       clearTimeout(this.openTimeout);
       this.openTimeout = undefined;
@@ -92,7 +93,7 @@ export class InfoOverlayComponent {
     }, 300);
   }
 
-  pos(event:any) {
-    this.pointer = event.connectionPair.originY === 'top' ? 'tooltip-top':'tooltip-bottom'
+  pos(event: any) {
+    this.pointer = event.connectionPair.originY === 'top' ? 'tooltip-top' : 'tooltip-bottom';
   }
 }

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, Signal, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, Signal, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Dialog } from '@angular/cdk/dialog';
 import { HexPipe } from '@/app/pipes/hex.pipe';
@@ -24,20 +24,21 @@ import { SignalBusService } from '@/app/services/sigbalbus.service';
   selector: 'DeviceInfoComponent',
   imports: [TranslateModule, HexPipe, HumanReadablePipe, SecondsToTimePipe, ModelLink, VendorLink, DeviceImage, DeviceAvailability, ProgessBar],
   templateUrl: './deviceinfo.html',
-  styleUrl: './deviceinfo.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './deviceinfo.scss',
 })
 export class DeviceInfoComponent {
   protected readonly deviceStore = inject(DeviceStore);
   protected readonly deviceService = inject(DeviceService);
-  protected readonly dialog = inject(Dialog)
+  protected readonly dialog = inject(Dialog);
   private readonly translate = inject(TranslateService);
-  private readonly applicationService = inject(ApplicationService)
+  private readonly applicationService = inject(ApplicationService);
   private responseHandler = signal<((result: any) => void) | null>(null);
   private responseSignal = signal<Signal<any> | null>(null);
   protected readonly signalBusService = inject(SignalBusService);
-    private responseTransactionId = signal<string | null>(null);
+  private responseTransactionId = signal<string | null>(null);
 
- private responseValue = computed(() => {
+  private responseValue = computed(() => {
     const respSig = this.responseSignal();
     return respSig ? respSig() : null;
   });
@@ -47,18 +48,21 @@ export class DeviceInfoComponent {
 
   device = computed(() => {
     //Filter the coordinator from the devices
-    let devicesView: Signal<Device[]> = createStoreView(this.deviceStore, {
-      criteria: [
-        { property: "ieee_address", value: this.ieee_address(), operator: "equals" }
-      ],
-      logicalOperator: SearchOperator.AND
-    }, false, undefined);
+    let devicesView: Signal<Device[]> = createStoreView(
+      this.deviceStore,
+      {
+        criteria: [{ property: 'ieee_address', value: this.ieee_address(), operator: 'equals' }],
+        logicalOperator: SearchOperator.AND,
+      },
+      false,
+      undefined,
+    );
 
-    return devicesView().length > 0 ? devicesView()[0] : null
+    return devicesView().length > 0 ? devicesView()[0] : null;
   });
 
-  constructor(){
-     effect(() => {
+  constructor() {
+    effect(() => {
       const result = this.responseValue();
       const handler = this.responseHandler();
       const transactionId = this.responseTransactionId();
@@ -69,27 +73,27 @@ export class DeviceInfoComponent {
         this.responseHandler.set(null);
         this.responseSignal.set(null);
       }
-    })
+    });
 
-     effect(() => {
+    effect(() => {
       const transactionId = this.responseTransactionId();
       if (transactionId) {
         const response$ = this.signalBusService.onState<any>(`bridge-response-${transactionId}`);
         this.responseSignal.set(response$);
       }
-    })
-  };
+    });
+  }
 
   startInterview() {
     if (this.device() !== null) {
       this.interviewRunning.set(true);
-      let transactionId =  this.deviceService.startInterview(this.device()!);
+      let transactionId = this.deviceService.startInterview(this.device()!);
       if (transactionId) {
         this.responseHandler.set((result: any) => {
-          console.log(result)
-           this.interviewRunning.set(false);
+          console.log(result);
+          this.interviewRunning.set(false);
         });
-      }  
+      }
     }
   }
 
@@ -100,14 +104,13 @@ export class DeviceInfoComponent {
   }
 
   deleteDevice() {
-
     const dialogRef = this.dialog.open(RemoveDeviceDialog, {
       width: '600px',
       panelClass: 'overlay',
-      data: { device: this.device() }
+      data: { device: this.device() },
     });
 
-    dialogRef.closed.subscribe(result => {
+    dialogRef.closed.subscribe((result) => {
       if (result !== undefined && this.device() !== null) {
         console.log(result);
         this.deviceService.removeDevice(result as RemoveDeviceOptions);
@@ -135,27 +138,26 @@ export class DeviceInfoComponent {
     if (this.device()) {
       if (this.device()!.update) {
         this.device()!.update!.check = true;
-      } 
+      }
       this.deviceService.checkUpdate(this.device()!);
     }
   }
 
   renameDevice() {
     if (this.device()) {
-
       const data: RenameDeviceOptions = {
         device: this.device()!,
         newName: this.device()!.friendly_name,
-        renameHomeAssiatant: false
-      }
+        renameHomeAssiatant: false,
+      };
 
       const dialogRef = this.dialog.open(RenamedeviceDialog, {
         width: '600px',
         panelClass: 'overlay',
-        data
+        data,
       });
 
-      dialogRef.closed.subscribe(result => {
+      dialogRef.closed.subscribe((result) => {
         if (result !== undefined && this.device() !== null) {
           this.deviceService.renameDevice(data);
         }
