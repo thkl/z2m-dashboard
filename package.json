@@ -15,7 +15,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"
   },
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@11.8.0",
   "prettier": {
     "printWidth": 180,
     "singleQuote": true,
