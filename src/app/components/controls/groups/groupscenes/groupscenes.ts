@@ -3,7 +3,7 @@ import { SearchOperator } from '@/app/datastore/generic.store';
 import { GroupStore } from '@/app/datastore/group.store';
 import { Group } from '@/app/models/group';
 import { Component, computed, inject, input, Signal, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ExpansionPanelComponent } from '../../expansionpanel/expansionpanel';
 import { BridgeService } from '@/app/services/bridge.service';
 import { Dialog } from '@angular/cdk/dialog';
@@ -14,7 +14,7 @@ import { findSmallestMissingNumber } from '@/app/utils/sort.utils';
 
 @Component({
   selector: 'GroupSceneComponent',
-  imports: [TranslateModule, ExpansionPanelComponent],
+  imports: [TranslatePipe, ExpansionPanelComponent],
   templateUrl: './groupscenes.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './groupscenes.scss',

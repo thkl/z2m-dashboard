@@ -26,7 +26,7 @@ import { SettingsService } from '@/app/services/settings.service';
 import { filterData } from '@/app/utils/filter.utils';
 import { sortData } from '@/app/utils/sort.utils';
 import { Component, computed, inject, signal, effect, Signal, Injector, viewChild, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 const allColumns: ColumnDef<Device>[] = [
   { id: 'status', label: 'STATUS', hideLabel: true, minWidth: 30, maxWidth: 30, sortable: false },
@@ -54,7 +54,7 @@ const allColumns: ColumnDef<Device>[] = [
   styleUrl: './devicelist.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    TranslateModule,
+    TranslatePipe,
     SearchInput,
     OptionPanelComponent,
     DeviceImage,

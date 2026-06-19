@@ -1,10 +1,10 @@
 import { Device } from '@/app/models/device';
 import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'DeviceAvailability',
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
   templateUrl: './device-availability.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './device-availability.scss',

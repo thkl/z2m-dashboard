@@ -9,7 +9,7 @@ import { CDKDataSource } from '../../datastore/generic-store-ui';
 import { ApplicationService } from '../../services/app.service';
 import { TableSettingsControl } from '../../components/tablesettings/tablesettings';
 import { findSmallestMissingNumber, sortData } from '../../utils/sort.utils';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 import { GroupInspectorComponent } from '@/app/pages/groupinspector/groupinspector.component';
 import { GroupImage } from '@/app/components/controls/groups/groupimage/groupimage';
@@ -20,7 +20,7 @@ import { BridgeService } from '@/app/services/bridge.service';
 
 @Component({
   selector: 'GroupListComponent',
-  imports: [TableComponent, TableCellDirective, TableSettingsControl, TranslateModule, SettingsBarComponent],
+  imports: [TableComponent, TableCellDirective, TableSettingsControl, TranslatePipe, SettingsBarComponent],
   templateUrl: './groupslist.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './groupslist.component.scss',

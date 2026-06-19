@@ -1,13 +1,13 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { RenameDeviceOptions, SwitchElement } from '../../../models/types';
 import { OptionComponent } from '../../controls/option/option';
 
 @Component({
   selector: 'RenamedeviceDialog',
-  imports: [TranslateModule, OptionComponent],
+  imports: [TranslatePipe, OptionComponent],
   templateUrl: './renamedevicedialog.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './renamedevicedialog.scss',

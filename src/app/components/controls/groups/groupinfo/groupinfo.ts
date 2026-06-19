@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, signal, Signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { OptionPanelComponent } from '@/app/components/controls/optionpanel/optionpanel';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DeviceFeaturesComponent } from '@/app/components/controls/device/devicefeatures/devicefeatures';
 import { GroupStore } from '@/app/datastore/group.store';
 import { DeviceStore } from '@/app/datastore/device.store';
@@ -20,7 +20,7 @@ import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 
 @Component({
   selector: 'GroupInfoComponent',
-  imports: [TranslateModule, ExpansionPanelDeviceComponent, DeviceFeaturesComponent, OptionPanelComponent],
+  imports: [TranslatePipe, ExpansionPanelDeviceComponent, DeviceFeaturesComponent, OptionPanelComponent],
   templateUrl: './groupinfo.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './groupinfo.scss',

@@ -7,11 +7,11 @@ import { Device } from '@/app/models/device';
 import { AddRemoveDeviceFromGroupOptions } from '@/app/models/types';
 import { DeviceService } from '@/app/services/device.service';
 import { Component, computed, inject, input, signal, Signal, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'DeviceGroupsComponent',
-  imports: [TranslateModule, DropdownComponent],
+  imports: [TranslatePipe, DropdownComponent],
   templateUrl: './devicegroups.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './devicegroups.scss',

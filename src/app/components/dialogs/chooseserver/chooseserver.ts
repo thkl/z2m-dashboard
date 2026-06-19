@@ -1,7 +1,7 @@
 import { Z2MServer } from '@/app/models/types';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, computed, effect, inject, input, model, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { OptionComponent } from '../../controls/option/option';
 import { InfoOverlayComponent } from '../../controls/infooverlay/infooverlay';
 import { TokenService } from '@/app/services/token.service';
@@ -16,7 +16,7 @@ export interface ChooseServerDialogData {
 
 @Component({
   selector: 'ChooseServerDialog',
-  imports: [TranslateModule, OptionComponent, InfoOverlayComponent],
+  imports: [TranslatePipe, OptionComponent, InfoOverlayComponent],
   templateUrl: './chooseserver.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chooseserver.scss',

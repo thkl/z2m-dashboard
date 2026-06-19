@@ -1,11 +1,11 @@
 import { Component, computed, input, output, Signal, signal, ChangeDetectionStrategy } from '@angular/core';
 import { OptionPanelComponent } from '../controls/optionpanel/optionpanel';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ColumnDef, SelectOption } from '../../models/types';
 
 @Component({
   selector: 'TableSettingsControl',
-  imports: [OptionPanelComponent, TranslateModule],
+  imports: [OptionPanelComponent, TranslatePipe],
   templateUrl: './tablesettings.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tablesettings.scss',

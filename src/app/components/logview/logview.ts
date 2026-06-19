@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, input, model, output, Signal, signal, ChangeDetectionStrategy } from '@angular/core';
 import { BridgeEventStore } from '../../datastore/logging.store';
 import { DatePipe } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { OptionPanelComponent } from '../controls/optionpanel/optionpanel';
 import { SelectOption } from '../../models/types';
 import { BridgeService } from '../../services/bridge.service';
@@ -15,7 +15,7 @@ import { LogViewDialog } from '@/app/components/dialogs/logview/logview';
 
 @Component({
   selector: 'LogView',
-  imports: [DatePipe, TranslateModule, OptionPanelComponent, DropdownComponent],
+  imports: [DatePipe, TranslatePipe, OptionPanelComponent, DropdownComponent],
   templateUrl: './logview.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './logview.scss',

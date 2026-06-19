@@ -10,12 +10,12 @@ import { createStoreView } from '@/app/datastore/generic-store-view';
 import { SearchOperator } from '@/app/datastore/generic.store';
 import { DeviceBindingsComponent } from '@/app/components/controls/device/devicebindings/devicebindings';
 import { DeviceReportingComponent } from '@/app/components/controls/device/devicereporting/devicereporting';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { DeviceGroupsComponent } from '../devicegroups/devicegroups';
 
 @Component({
   selector: 'DevicePropertiesComponent',
-  imports: [DeviceEndpointComponent, ExpansionPanelComponent, DeviceSettings, DeviceBindingsComponent, DeviceReportingComponent, TranslateModule, DeviceGroupsComponent],
+  imports: [DeviceEndpointComponent, ExpansionPanelComponent, DeviceSettings, DeviceBindingsComponent, DeviceReportingComponent, TranslatePipe, DeviceGroupsComponent],
   templateUrl: './deviceproperties.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './deviceproperties.scss',

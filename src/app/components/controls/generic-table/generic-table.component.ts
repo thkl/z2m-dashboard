@@ -1,7 +1,7 @@
 import { Component, input, output, signal, computed, ContentChildren, QueryList, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, effect } from '@angular/core';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { SortDirection, SortEvent, TableSortDirective } from '@/app/directives/table-sort.directive';
 import { CDKDataSource } from '@/app/datastore/generic-store-ui';
 import { ColumnDef, TableConfig } from '@/app/models/types';
@@ -12,7 +12,7 @@ import { TableCellDirective } from '@/app/directives/table-cell.directive';
   templateUrl: './generic-table.component.html',
   styleUrl: './generic-table.component.scss',
   standalone: true,
-  imports: [CdkTableModule, CommonModule, TranslateModule, TableSortDirective],
+  imports: [CdkTableModule, CommonModule, TranslatePipe, TableSortDirective],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableComponent<T> implements AfterViewInit {

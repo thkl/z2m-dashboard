@@ -2,12 +2,12 @@ import { Component, effect, inject, signal, ChangeDetectionStrategy } from '@ang
 import { RouterOutlet } from '@angular/router';
 import { DeviceService } from './services/device.service';
 import { ApplicationService } from './services/app.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { BridgeService } from './services/bridge.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TranslateModule],
+  imports: [RouterOutlet],
   providers: [],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.Eager,

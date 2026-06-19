@@ -2,7 +2,7 @@ import { BridgeService } from '@/app/services/bridge.service';
 
 import { Component, computed, inject, input, Signal, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 interface MenuItem {
   link: string;
@@ -22,7 +22,7 @@ const restartLink = { link: '#', func: 'restart', icon: 'reset_settings', label:
 
 @Component({
   selector: 'AppMenuComponent',
-  imports: [TranslateModule, RouterModule],
+  imports: [TranslatePipe, RouterModule],
   templateUrl: './appmenu.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './appmenu.scss',

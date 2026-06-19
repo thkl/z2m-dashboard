@@ -2,7 +2,7 @@ import { Component, computed, effect, input, model, output, signal, ChangeDetect
 import { ExpansionPanelComponent } from '../expansionpanel/expansionpanel';
 import { SearchInput } from '../searchinput/searchinput';
 import { SelectOption } from '../../../models/types';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export interface PanelOptions {
   useSearch?: boolean;
@@ -13,7 +13,7 @@ export interface PanelOptions {
 
 @Component({
   selector: 'OptionPanelComponent',
-  imports: [ExpansionPanelComponent, SearchInput, TranslateModule],
+  imports: [ExpansionPanelComponent, SearchInput, TranslatePipe],
   templateUrl: './optionpanel.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './optionpanel.scss',

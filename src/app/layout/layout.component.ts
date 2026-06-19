@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DeviceStore } from '../datastore/device.store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ApplicationService } from '../services/app.service';
 import { BridgeService } from '../services/bridge.service';
 
@@ -23,7 +23,7 @@ import { AppMenuComponent } from '@/app/components/appmenu/appmenu';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [RouterModule, TranslateModule, LogView, ResizableContainerComponent, TabContainerComponent, VersionDisplayComponent, AppMenuComponent],
+  imports: [RouterModule, TranslatePipe, LogView, ResizableContainerComponent, TabContainerComponent, VersionDisplayComponent, AppMenuComponent],
 })
 export class LayoutComponent {
   sidebarOpen = true;

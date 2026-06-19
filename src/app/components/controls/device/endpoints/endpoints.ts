@@ -1,10 +1,10 @@
 import { Endpoint } from '@/app/models/device';
 import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'DeviceEndpointComponent',
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
   templateUrl: './endpoints.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './endpoints.scss',

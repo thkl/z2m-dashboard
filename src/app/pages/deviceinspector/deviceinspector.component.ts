@@ -8,11 +8,10 @@ import { Device } from '@/app/models/device';
 import { DeviceService } from '@/app/services/device.service';
 import { PropertyTabManagerService } from '@/app/services/propertytab.service';
 import { Component, computed, effect, inject, input, output, Signal, signal, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'DeviceInspectorComponent',
-  imports: [TranslateModule, DeviceInfoComponent, DeviceFeaturesComponent, DevicePropertiesComponent],
+  imports: [DeviceInfoComponent, DeviceFeaturesComponent, DevicePropertiesComponent],
   templateUrl: './deviceinspector.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './deviceinspector.component.scss',

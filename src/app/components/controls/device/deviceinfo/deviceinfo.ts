@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, Signal, signal, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Dialog } from '@angular/cdk/dialog';
 import { HexPipe } from '@/app/pipes/hex.pipe';
 import { HumanReadablePipe } from '@/app/pipes/human.pipe';
@@ -22,7 +22,7 @@ import { SignalBusService } from '@/app/services/sigbalbus.service';
 
 @Component({
   selector: 'DeviceInfoComponent',
-  imports: [TranslateModule, HexPipe, HumanReadablePipe, SecondsToTimePipe, ModelLink, VendorLink, DeviceImage, DeviceAvailability, ProgessBar],
+  imports: [TranslatePipe, HexPipe, HumanReadablePipe, SecondsToTimePipe, ModelLink, VendorLink, DeviceImage, DeviceAvailability, ProgessBar],
   templateUrl: './deviceinfo.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './deviceinfo.scss',

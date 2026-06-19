@@ -1,10 +1,10 @@
 import { ExpansionPanelComponent } from '@/app/components/controls/expansionpanel/expansionpanel';
 import { Component, computed, effect, input, model, output, signal, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'ArrayInputComponent',
-  imports: [ExpansionPanelComponent, TranslateModule],
+  imports: [ExpansionPanelComponent, TranslatePipe],
   templateUrl: './arrayinput.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './arrayinput.scss',

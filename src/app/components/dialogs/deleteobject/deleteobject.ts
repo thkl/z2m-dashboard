@@ -1,11 +1,11 @@
 import { DeleteObjectOptions } from '@/app/models/types';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'DeleteObjectDialog',
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
   templateUrl: './deleteobject.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './deleteobject.scss',

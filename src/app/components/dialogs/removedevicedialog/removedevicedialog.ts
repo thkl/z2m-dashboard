@@ -1,12 +1,12 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { OptionComponent } from '../../controls/option/option';
 import { RemoveDeviceOptions, SwitchElement } from '../../../models/types';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'RemoveDeviceDialog',
-  imports: [TranslateModule, OptionComponent],
+  imports: [TranslatePipe, OptionComponent],
   templateUrl: './removedevicedialog.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './removedevicedialog.scss',

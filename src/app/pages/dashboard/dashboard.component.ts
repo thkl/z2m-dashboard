@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DeviceStore } from '../../datastore/device.store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { BridgeService } from '../../services/bridge.service';
 import { GroupStore } from '../../datastore/group.store';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ import { SystemInfoDialog } from '@/app/components/dialogs/systeminfo/systeminfo
 
 @Component({
   selector: 'app-dashboard',
-  imports: [TranslateModule, DeviceFeaturesComponent, SearchInput],
+  imports: [TranslatePipe, DeviceFeaturesComponent, SearchInput],
   templateUrl: './dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.component.scss',

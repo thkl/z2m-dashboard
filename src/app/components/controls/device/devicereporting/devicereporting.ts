@@ -8,7 +8,7 @@ import { SignalBusService } from '@/app/services/sigbalbus.service';
 import { createSelect, updateSelect } from '@/app/utils/sort.utils';
 import { Component, computed, effect, inject, input, signal, Signal, ChangeDetectionStrategy } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 const emptyReporting = {
   index: 0,
@@ -33,7 +33,7 @@ const emptyReporting = {
  */
 @Component({
   selector: 'DeviceReportingComponent',
-  imports: [TranslateModule, DropdownComponent, NgTemplateOutlet],
+  imports: [TranslatePipe, DropdownComponent, NgTemplateOutlet],
   templateUrl: './devicereporting.html',
   styleUrl: './devicereporting.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

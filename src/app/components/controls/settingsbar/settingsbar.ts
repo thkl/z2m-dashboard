@@ -1,9 +1,9 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'SettingsBarComponent',
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
   templateUrl: './settingsbar.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './settingsbar.scss',

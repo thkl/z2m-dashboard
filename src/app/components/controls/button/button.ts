@@ -1,9 +1,9 @@
 import { Component, input, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'ButtonComponent',
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
   templateUrl: './button.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './button.scss',

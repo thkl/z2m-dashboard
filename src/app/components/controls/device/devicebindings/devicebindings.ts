@@ -8,7 +8,7 @@ import { SelectOption } from '@/app/models/types';
 import { DeviceService } from '@/app/services/device.service';
 import { SignalBusService } from '@/app/services/sigbalbus.service';
 import { Component, computed, effect, inject, Injector, input, runInInjectionContext, signal, Signal, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 interface TemporaryBindingState {
   [endpoint: string]: VisualBinding[];
@@ -26,7 +26,7 @@ interface OperationState {
 
 @Component({
   selector: 'DeviceBindingsComponent',
-  imports: [OptionPanelComponent, TranslateModule, DropdownComponent],
+  imports: [OptionPanelComponent, TranslatePipe, DropdownComponent],
   templateUrl: './devicebindings.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './devicebindings.scss',

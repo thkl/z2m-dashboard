@@ -9,7 +9,7 @@ import { DeviceService } from '@/app/services/device.service';
 import { hsvToHtmlRgb, xyToHtmlRgb } from '@/app/utils/color.util';
 import { flattenExposures, isValidForDashboard, isValidForScenes } from '@/app/utils/filter.utils';
 import { Component, computed, effect, inject, input, model, signal, Signal, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ColorSelectorComponent } from '../../colorselector/colorselector';
 import { ColorTemperatureSelectorComponent } from '../../colortemperatureselector/colortemperatureselector';
 import { DropdownComponent } from '../../dropdown/dropdown';
@@ -24,7 +24,7 @@ import { DeviceImage } from '@/app/components/controls/device/device-image/devic
 @Component({
   selector: 'DeviceFeaturesComponent',
   imports: [
-    TranslateModule,
+    TranslatePipe,
     HumanReadablePipe,
     LevelSelectorComponent,
     InfoOverlayComponent,
